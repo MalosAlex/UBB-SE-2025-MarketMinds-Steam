@@ -23,8 +23,6 @@
           "Microsoft.WindowsAppSDK": "1.4.231219000",
           "System.Configuration.ConfigurationManager": "9.0.3",
           "System.Data.SqlClient": "4.8.6",
-          "Microsoft.Data.Tools.Schema.Sql.UnitTesting": "17.0.0.0",
-          "Microsoft.Data.Tools.Schema.Sql.UnitTestingAdapter": "17.0.0.0",
           "runtimepack.Microsoft.NETCore.App.Runtime.win-x64": "8.0.14",
           "runtimepack.Microsoft.Windows.SDK.NET.Ref": "10.0.19041.57"
         },
@@ -2261,22 +2259,6 @@
           "System.Threading": "4.3.0",
           "System.Xml.ReaderWriter": "4.3.0"
         }
-      },
-      "Microsoft.Data.Tools.Schema.Sql.UnitTesting/17.0.0.0": {
-        "runtime": {
-          "Microsoft.Data.Tools.Schema.Sql.UnitTesting.dll": {
-            "assemblyVersion": "17.0.0.0",
-            "fileVersion": "17.13.3.1"
-          }
-        }
-      },
-      "Microsoft.Data.Tools.Schema.Sql.UnitTestingAdapter/17.0.0.0": {
-        "runtime": {
-          "Microsoft.Data.Tools.Schema.Sql.UnitTestingAdapter.dll": {
-            "assemblyVersion": "17.0.0.0",
-            "fileVersion": "17.13.3.1"
-          }
-        }
       }
     }
   },
@@ -3464,16 +3446,6 @@
       "sha512": "sha512-5zJ0XDxAIg8iy+t4aMnQAu0MqVbqyvfoUVl1yDV61xdo3Vth45oA2FoY4pPkxYAH5f8ixpmTqXeEIya95x0aCQ==",
       "path": "system.xml.xdocument/4.3.0",
       "hashPath": "system.xml.xdocument.4.3.0.nupkg.sha512"
-    },
-    "Microsoft.Data.Tools.Schema.Sql.UnitTesting/17.0.0.0": {
-      "type": "reference",
-      "serviceable": false,
-      "sha512": ""
-    },
-    "Microsoft.Data.Tools.Schema.Sql.UnitTestingAdapter/17.0.0.0": {
-      "type": "reference",
-      "serviceable": false,
-      "sha512": ""
     }
   },
   "runtimes": {

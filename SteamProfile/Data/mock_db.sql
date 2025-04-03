@@ -11,6 +11,7 @@ INSERT INTO Users (email, username, hashed_password, developer, last_login) VALU
 	('ivy@example.com', 'IvyNinja', 'hashed_password_9', 0, '2025-03-22 09:30:00'),
 	('jack@example.com', 'JackHacks', 'hashed_password_10', 1, '2025-03-24 23:55:00');
 
+
 INSERT INTO Wallet (user_id, points, money_for_games) VALUES
 	(1, 10, 200),
 	(2, 10, 200),
@@ -136,11 +137,6 @@ select * from OwnedGames;
 
 select * from users;
 
-INSERT INTO Friendships (user_id, friend_id)
-VALUES 
-	(11, 12),
-	(12, 11);
-GO
 
 INSERT INTO Feature_User (user_id, feature_id, equipped) VALUES
 	(11, 1, 0),
@@ -156,7 +152,9 @@ insert into UserAchievements (user_id, achievement_id, unlocked_at) values
 INSERT INTO Friendships (user_id, friend_id)
 VALUES 
     (11, 12),
-    (11, 13);
+	(12, 11),
+    (11, 13),
+	(13,11);
 GO
 
 insert into UserAchievements (user_id, achievement_id, unlocked_at) values
