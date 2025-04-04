@@ -2,6 +2,7 @@
 using Microsoft.UI.Xaml.Documents;
 using SteamProfile.Data;
 using SteamProfile.Models;
+using SteamProfile.Repositories.Interfaces;
 using System;
 using System.Collections.Generic;
 using System.Data;
@@ -14,7 +15,7 @@ using Windows.Security.Cryptography.Certificates;
 
 namespace SteamProfile.Repositories
 {
-    public class AchievementsRepository
+    public class AchievementsRepository : IAchievementsRepository
     {
         private readonly DataLink _dataLink;
 

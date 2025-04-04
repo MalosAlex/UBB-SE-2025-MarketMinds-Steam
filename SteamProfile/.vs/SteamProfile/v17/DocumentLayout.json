@@ -1,38 +1,74 @@
 {
   "Version": 1,
-  "WorkspaceRootPath": "C:\\Users\\Ghaster\\IdeaProjects\\UBB-SE-2025-MarketMinds-Steam\\SteamProfile\\",
+  "WorkspaceRootPath": "C:\\Users\\Robi\\Desktop\\ISS 922\\UBB-SE-2025-MarketMinds-Steam\\SteamProfile\\",
   "Documents": [
     {
-      "AbsoluteMoniker": "D:0:0:{09B961A1-8938-4CC5-AF4E-5D1AA01F3036}|SteamProfile.csproj|c:\\users\\ghaster\\ideaprojects\\ubb-se-2025-marketminds-steam\\steamprofile\\repositories\\achievementsrepository.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "AbsoluteMoniker": "D:0:0:{09B961A1-8938-4CC5-AF4E-5D1AA01F3036}|SteamProfile.csproj|c:\\users\\robi\\desktop\\iss 922\\ubb-se-2025-marketminds-steam\\steamprofile\\services\\achievementsservice.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{09B961A1-8938-4CC5-AF4E-5D1AA01F3036}|SteamProfile.csproj|solutionrelative:services\\achievementsservice.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{09B961A1-8938-4CC5-AF4E-5D1AA01F3036}|SteamProfile.csproj|c:\\users\\robi\\desktop\\iss 922\\ubb-se-2025-marketminds-steam\\steamprofile\\services\\interfaces\\iachievementsservice.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{09B961A1-8938-4CC5-AF4E-5D1AA01F3036}|SteamProfile.csproj|solutionrelative:services\\interfaces\\iachievementsservice.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{09B961A1-8938-4CC5-AF4E-5D1AA01F3036}|SteamProfile.csproj|c:\\users\\robi\\desktop\\iss 922\\ubb-se-2025-marketminds-steam\\steamprofile\\repositories\\achievementsrepository.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
       "RelativeMoniker": "D:0:0:{09B961A1-8938-4CC5-AF4E-5D1AA01F3036}|SteamProfile.csproj|solutionrelative:repositories\\achievementsrepository.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
     },
     {
-      "AbsoluteMoniker": "D:0:0:{09B961A1-8938-4CC5-AF4E-5D1AA01F3036}|SteamProfile.csproj|c:\\users\\ghaster\\ideaprojects\\ubb-se-2025-marketminds-steam\\steamprofile\\data\\profileschema.sql||{3B902123-F8A7-4915-9F01-361F908088D0}",
-      "RelativeMoniker": "D:0:0:{09B961A1-8938-4CC5-AF4E-5D1AA01F3036}|SteamProfile.csproj|solutionrelative:data\\profileschema.sql||{3B902123-F8A7-4915-9F01-361F908088D0}"
+      "AbsoluteMoniker": "D:0:0:{09B961A1-8938-4CC5-AF4E-5D1AA01F3036}|SteamProfile.csproj|c:\\users\\robi\\desktop\\iss 922\\ubb-se-2025-marketminds-steam\\steamprofile\\repositories\\interfaces\\iachievementsrepository.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{09B961A1-8938-4CC5-AF4E-5D1AA01F3036}|SteamProfile.csproj|solutionrelative:repositories\\interfaces\\iachievementsrepository.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
     },
     {
-      "AbsoluteMoniker": "D:0:0:{09B961A1-8938-4CC5-AF4E-5D1AA01F3036}|SteamProfile.csproj|c:\\users\\ghaster\\ideaprojects\\ubb-se-2025-marketminds-steam\\steamprofile\\models\\achievement.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
-      "RelativeMoniker": "D:0:0:{09B961A1-8938-4CC5-AF4E-5D1AA01F3036}|SteamProfile.csproj|solutionrelative:models\\achievement.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+      "AbsoluteMoniker": "D:0:0:{09B961A1-8938-4CC5-AF4E-5D1AA01F3036}|SteamProfile.csproj|c:\\users\\robi\\desktop\\iss 922\\ubb-se-2025-marketminds-steam\\steamprofile\\viewmodels\\achievementsviewmodel.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{09B961A1-8938-4CC5-AF4E-5D1AA01F3036}|SteamProfile.csproj|solutionrelative:viewmodels\\achievementsviewmodel.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
     },
     {
-      "AbsoluteMoniker": "D:0:0:{09B961A1-8938-4CC5-AF4E-5D1AA01F3036}|SteamProfile.csproj|c:\\users\\ghaster\\ideaprojects\\ubb-se-2025-marketminds-steam\\steamprofile\\views\\achievementspage.xaml||{F11ACC28-31D1-4C80-A34B-F4E09D3D753C}",
+      "AbsoluteMoniker": "D:0:0:{09B961A1-8938-4CC5-AF4E-5D1AA01F3036}|SteamProfile.csproj|c:\\users\\robi\\desktop\\iss 922\\ubb-se-2025-marketminds-steam\\steamprofile\\mainwindow.xaml.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{09B961A1-8938-4CC5-AF4E-5D1AA01F3036}|SteamProfile.csproj|solutionrelative:mainwindow.xaml.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{09B961A1-8938-4CC5-AF4E-5D1AA01F3036}|SteamProfile.csproj|c:\\users\\robi\\desktop\\iss 922\\ubb-se-2025-marketminds-steam\\steamprofile\\app.xaml.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{09B961A1-8938-4CC5-AF4E-5D1AA01F3036}|SteamProfile.csproj|solutionrelative:app.xaml.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{09B961A1-8938-4CC5-AF4E-5D1AA01F3036}|SteamProfile.csproj|c:\\users\\robi\\desktop\\iss 922\\ubb-se-2025-marketminds-steam\\steamprofile\\app.xaml||{F11ACC28-31D1-4C80-A34B-F4E09D3D753C}",
+      "RelativeMoniker": "D:0:0:{09B961A1-8938-4CC5-AF4E-5D1AA01F3036}|SteamProfile.csproj|solutionrelative:app.xaml||{F11ACC28-31D1-4C80-A34B-F4E09D3D753C}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{09B961A1-8938-4CC5-AF4E-5D1AA01F3036}|SteamProfile.csproj|c:\\users\\robi\\desktop\\iss 922\\ubb-se-2025-marketminds-steam\\steamprofile\\views\\achievementspage.xaml.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{09B961A1-8938-4CC5-AF4E-5D1AA01F3036}|SteamProfile.csproj|solutionrelative:views\\achievementspage.xaml.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{09B961A1-8938-4CC5-AF4E-5D1AA01F3036}|SteamProfile.csproj|c:\\users\\robi\\desktop\\iss 922\\ubb-se-2025-marketminds-steam\\steamprofile\\appsettings.json||{90A6B3A7-C1A3-4009-A288-E2FF89E96FA0}",
+      "RelativeMoniker": "D:0:0:{09B961A1-8938-4CC5-AF4E-5D1AA01F3036}|SteamProfile.csproj|solutionrelative:appsettings.json||{90A6B3A7-C1A3-4009-A288-E2FF89E96FA0}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{09B961A1-8938-4CC5-AF4E-5D1AA01F3036}|SteamProfile.csproj|c:\\users\\robi\\desktop\\iss 922\\ubb-se-2025-marketminds-steam\\steamprofile\\data\\datalink.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{09B961A1-8938-4CC5-AF4E-5D1AA01F3036}|SteamProfile.csproj|solutionrelative:data\\datalink.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{09B961A1-8938-4CC5-AF4E-5D1AA01F3036}|SteamProfile.csproj|c:\\users\\robi\\desktop\\iss 922\\ubb-se-2025-marketminds-steam\\steamprofile\\views\\achievementspage.xaml||{F11ACC28-31D1-4C80-A34B-F4E09D3D753C}",
       "RelativeMoniker": "D:0:0:{09B961A1-8938-4CC5-AF4E-5D1AA01F3036}|SteamProfile.csproj|solutionrelative:views\\achievementspage.xaml||{F11ACC28-31D1-4C80-A34B-F4E09D3D753C}"
     },
     {
-      "AbsoluteMoniker": "D:0:0:{09B961A1-8938-4CC5-AF4E-5D1AA01F3036}|SteamProfile.csproj|c:\\users\\ghaster\\ideaprojects\\ubb-se-2025-marketminds-steam\\steamprofile\\data\\database_schema.sql||{3B902123-F8A7-4915-9F01-361F908088D0}",
+      "AbsoluteMoniker": "D:0:0:{09B961A1-8938-4CC5-AF4E-5D1AA01F3036}|SteamProfile.csproj|c:\\users\\robi\\desktop\\iss 922\\ubb-se-2025-marketminds-steam\\steamprofile\\data\\profileschema.sql||{3B902123-F8A7-4915-9F01-361F908088D0}",
+      "RelativeMoniker": "D:0:0:{09B961A1-8938-4CC5-AF4E-5D1AA01F3036}|SteamProfile.csproj|solutionrelative:data\\profileschema.sql||{3B902123-F8A7-4915-9F01-361F908088D0}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{09B961A1-8938-4CC5-AF4E-5D1AA01F3036}|SteamProfile.csproj|c:\\users\\robi\\desktop\\iss 922\\ubb-se-2025-marketminds-steam\\steamprofile\\models\\achievement.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{09B961A1-8938-4CC5-AF4E-5D1AA01F3036}|SteamProfile.csproj|solutionrelative:models\\achievement.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{09B961A1-8938-4CC5-AF4E-5D1AA01F3036}|SteamProfile.csproj|c:\\users\\robi\\desktop\\iss 922\\ubb-se-2025-marketminds-steam\\steamprofile\\data\\database_schema.sql||{3B902123-F8A7-4915-9F01-361F908088D0}",
       "RelativeMoniker": "D:0:0:{09B961A1-8938-4CC5-AF4E-5D1AA01F3036}|SteamProfile.csproj|solutionrelative:data\\database_schema.sql||{3B902123-F8A7-4915-9F01-361F908088D0}"
     },
     {
-      "AbsoluteMoniker": "D:0:0:{09B961A1-8938-4CC5-AF4E-5D1AA01F3036}|SteamProfile.csproj|c:\\users\\ghaster\\ideaprojects\\ubb-se-2025-marketminds-steam\\steamprofile\\utils\\passwordhasher.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "AbsoluteMoniker": "D:0:0:{09B961A1-8938-4CC5-AF4E-5D1AA01F3036}|SteamProfile.csproj|c:\\users\\robi\\desktop\\iss 922\\ubb-se-2025-marketminds-steam\\steamprofile\\utils\\passwordhasher.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
       "RelativeMoniker": "D:0:0:{09B961A1-8938-4CC5-AF4E-5D1AA01F3036}|SteamProfile.csproj|solutionrelative:utils\\passwordhasher.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
     },
     {
-      "AbsoluteMoniker": "D:0:0:{09B961A1-8938-4CC5-AF4E-5D1AA01F3036}|SteamProfile.csproj|c:\\users\\ghaster\\ideaprojects\\ubb-se-2025-marketminds-steam\\steamprofile\\services\\walletservice.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "AbsoluteMoniker": "D:0:0:{09B961A1-8938-4CC5-AF4E-5D1AA01F3036}|SteamProfile.csproj|c:\\users\\robi\\desktop\\iss 922\\ubb-se-2025-marketminds-steam\\steamprofile\\services\\walletservice.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
       "RelativeMoniker": "D:0:0:{09B961A1-8938-4CC5-AF4E-5D1AA01F3036}|SteamProfile.csproj|solutionrelative:services\\walletservice.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
-    },
-    {
-      "AbsoluteMoniker": "D:0:0:{09B961A1-8938-4CC5-AF4E-5D1AA01F3036}|SteamProfile.csproj|c:\\users\\ghaster\\ideaprojects\\ubb-se-2025-marketminds-steam\\steamprofile\\appsettings.json||{90A6B3A7-C1A3-4009-A288-E2FF89E96FA0}",
-      "RelativeMoniker": "D:0:0:{09B961A1-8938-4CC5-AF4E-5D1AA01F3036}|SteamProfile.csproj|solutionrelative:appsettings.json||{90A6B3A7-C1A3-4009-A288-E2FF89E96FA0}"
     }
   ],
   "DocumentGroupContainers": [
@@ -41,177 +77,137 @@
       "VerticalTabListWidth": 256,
       "DocumentGroups": [
         {
-          "DockedWidth": 435,
-          "SelectedChildIndex": 25,
+          "DockedWidth": 239,
+          "SelectedChildIndex": 2,
           "Children": [
             {
               "$type": "Bookmark",
-              "Name": "ST:1:0:{fabf9319-47eb-497e-b8f6-d9f73fba5f55}"
-            },
-            {
-              "$type": "Bookmark",
-              "Name": "ST:18:0:{fabf9319-47eb-497e-b8f6-d9f73fba5f55}"
-            },
-            {
-              "$type": "Bookmark",
-              "Name": "ST:17:0:{fabf9319-47eb-497e-b8f6-d9f73fba5f55}"
-            },
-            {
-              "$type": "Bookmark",
-              "Name": "ST:16:0:{fabf9319-47eb-497e-b8f6-d9f73fba5f55}"
-            },
-            {
-              "$type": "Bookmark",
-              "Name": "ST:15:0:{fabf9319-47eb-497e-b8f6-d9f73fba5f55}"
-            },
-            {
-              "$type": "Bookmark",
-              "Name": "ST:14:0:{fabf9319-47eb-497e-b8f6-d9f73fba5f55}"
-            },
-            {
-              "$type": "Bookmark",
-              "Name": "ST:13:0:{fabf9319-47eb-497e-b8f6-d9f73fba5f55}"
-            },
-            {
-              "$type": "Bookmark",
-              "Name": "ST:12:0:{fabf9319-47eb-497e-b8f6-d9f73fba5f55}"
-            },
-            {
-              "$type": "Bookmark",
-              "Name": "ST:11:0:{fabf9319-47eb-497e-b8f6-d9f73fba5f55}"
-            },
-            {
-              "$type": "Bookmark",
-              "Name": "ST:10:0:{fabf9319-47eb-497e-b8f6-d9f73fba5f55}"
-            },
-            {
-              "$type": "Bookmark",
-              "Name": "ST:9:0:{fabf9319-47eb-497e-b8f6-d9f73fba5f55}"
-            },
-            {
-              "$type": "Bookmark",
-              "Name": "ST:8:0:{fabf9319-47eb-497e-b8f6-d9f73fba5f55}"
-            },
-            {
-              "$type": "Bookmark",
-              "Name": "ST:6:0:{fabf9319-47eb-497e-b8f6-d9f73fba5f55}"
-            },
-            {
-              "$type": "Bookmark",
-              "Name": "ST:5:0:{fabf9319-47eb-497e-b8f6-d9f73fba5f55}"
-            },
-            {
-              "$type": "Bookmark",
-              "Name": "ST:4:0:{fabf9319-47eb-497e-b8f6-d9f73fba5f55}"
-            },
-            {
-              "$type": "Bookmark",
-              "Name": "ST:7:0:{fabf9319-47eb-497e-b8f6-d9f73fba5f55}"
-            },
-            {
-              "$type": "Bookmark",
-              "Name": "ST:1337958495:0:{bf84ea66-d821-4dba-b1b1-2777d8574775}"
-            },
-            {
-              "$type": "Bookmark",
-              "Name": "ST:3:0:{fabf9319-47eb-497e-b8f6-d9f73fba5f55}"
-            },
-            {
-              "$type": "Bookmark",
-              "Name": "ST:2:0:{fabf9319-47eb-497e-b8f6-d9f73fba5f55}"
-            },
-            {
-              "$type": "Bookmark",
-              "Name": "ST:0:0:{e1b7d1f8-9b3c-49b1-8f4f-bfc63a88835d}"
-            },
-            {
-              "$type": "Bookmark",
-              "Name": "ST:0:0:{3ae79031-e1bc-11d0-8f78-00a0c9110057}"
-            },
-            {
-              "$type": "Bookmark",
-              "Name": "ST:128:0:{116d2292-e37d-41cd-a077-ebacac4c8cc4}"
-            },
-            {
-              "$type": "Bookmark",
-              "Name": "ST:0:0:{e506b91c-c606-466a-90a9-123d1d1e12b3}"
-            },
-            {
-              "$type": "Bookmark",
-              "Name": "ST:0:0:{aa2115a1-9712-457b-9047-dbb71ca2cdd2}"
+              "Name": "ST:0:0:{1c4feeaa-4718-4aa9-859d-94ce25d182ba}"
             },
             {
               "$type": "Document",
               "DocumentIndex": 1,
-              "Title": "profileSchema.sql",
-              "DocumentMoniker": "C:\\Users\\Ghaster\\IdeaProjects\\UBB-SE-2025-MarketMinds-Steam\\SteamProfile\\Data\\profileSchema.sql",
-              "RelativeDocumentMoniker": "Data\\profileSchema.sql",
-              "ToolTip": "C:\\Users\\Ghaster\\IdeaProjects\\UBB-SE-2025-MarketMinds-Steam\\SteamProfile\\Data\\profileSchema.sql",
-              "RelativeToolTip": "Data\\profileSchema.sql",
-              "ViewState": "AgIAAB0GAAAAAAAAAAAAAB0GAAAEAAAAAAAAAA==",
-              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000826|",
-              "WhenOpened": "2025-04-03T18:19:15.224Z",
+              "Title": "IAchievementsService.cs",
+              "DocumentMoniker": "C:\\Users\\Robi\\Desktop\\ISS 922\\UBB-SE-2025-MarketMinds-Steam\\SteamProfile\\Services\\Interfaces\\IAchievementsService.cs",
+              "RelativeDocumentMoniker": "Services\\Interfaces\\IAchievementsService.cs",
+              "ToolTip": "C:\\Users\\Robi\\Desktop\\ISS 922\\UBB-SE-2025-MarketMinds-Steam\\SteamProfile\\Services\\Interfaces\\IAchievementsService.cs*",
+              "RelativeToolTip": "Services\\Interfaces\\IAchievementsService.cs*",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAkAAAALAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-04-04T11:29:15.373Z",
               "EditorCaption": ""
             },
             {
               "$type": "Document",
               "DocumentIndex": 0,
-              "Title": "AchievementsRepository.cs",
-              "DocumentMoniker": "C:\\Users\\Ghaster\\IdeaProjects\\UBB-SE-2025-MarketMinds-Steam\\SteamProfile\\Repositories\\AchievementsRepository.cs",
-              "RelativeDocumentMoniker": "Repositories\\AchievementsRepository.cs",
-              "ToolTip": "C:\\Users\\Ghaster\\IdeaProjects\\UBB-SE-2025-MarketMinds-Steam\\SteamProfile\\Repositories\\AchievementsRepository.cs",
-              "RelativeToolTip": "Repositories\\AchievementsRepository.cs",
-              "ViewState": "AgIAAMAAAAAAAAAAAAA3wHMAAAANAAAAAAAAAA==",
+              "Title": "AchievementsService.cs",
+              "DocumentMoniker": "C:\\Users\\Robi\\Desktop\\ISS 922\\UBB-SE-2025-MarketMinds-Steam\\SteamProfile\\Services\\AchievementsService.cs",
+              "RelativeDocumentMoniker": "Services\\AchievementsService.cs",
+              "ToolTip": "C:\\Users\\Robi\\Desktop\\ISS 922\\UBB-SE-2025-MarketMinds-Steam\\SteamProfile\\Services\\AchievementsService.cs*",
+              "RelativeToolTip": "Services\\AchievementsService.cs*",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAABQAAAAJAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2025-04-03T17:28:03.791Z",
-              "EditorCaption": ""
-            },
-            {
-              "$type": "Document",
-              "DocumentIndex": 2,
-              "Title": "Achievement.cs",
-              "DocumentMoniker": "C:\\Users\\Ghaster\\IdeaProjects\\UBB-SE-2025-MarketMinds-Steam\\SteamProfile\\Models\\Achievement.cs",
-              "RelativeDocumentMoniker": "Models\\Achievement.cs",
-              "ToolTip": "C:\\Users\\Ghaster\\IdeaProjects\\UBB-SE-2025-MarketMinds-Steam\\SteamProfile\\Models\\Achievement.cs",
-              "RelativeToolTip": "Models\\Achievement.cs",
-              "ViewState": "AgIAAA0AAAAAAAAAAAAgwAAAAAAAAAAAAAAAAA==",
-              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2025-04-03T18:17:57.127Z",
+              "WhenOpened": "2025-04-04T11:23:41.087Z",
               "EditorCaption": ""
             },
             {
               "$type": "Document",
               "DocumentIndex": 3,
-              "Title": "AchievementsPage.xaml",
-              "DocumentMoniker": "C:\\Users\\Ghaster\\IdeaProjects\\UBB-SE-2025-MarketMinds-Steam\\SteamProfile\\Views\\AchievementsPage.xaml",
-              "RelativeDocumentMoniker": "Views\\AchievementsPage.xaml",
-              "ToolTip": "C:\\Users\\Ghaster\\IdeaProjects\\UBB-SE-2025-MarketMinds-Steam\\SteamProfile\\Views\\AchievementsPage.xaml",
-              "RelativeToolTip": "Views\\AchievementsPage.xaml",
-              "ViewState": "AgIAABIAAAAAAAAAAAAAACAAAAAxAAAAAAAAAA==",
-              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.003549|",
-              "WhenOpened": "2025-04-03T18:10:09.958Z",
+              "Title": "IAchievementsRepository.cs",
+              "DocumentMoniker": "C:\\Users\\Robi\\Desktop\\ISS 922\\UBB-SE-2025-MarketMinds-Steam\\SteamProfile\\Repositories\\Interfaces\\IAchievementsRepository.cs",
+              "RelativeDocumentMoniker": "Repositories\\Interfaces\\IAchievementsRepository.cs",
+              "ToolTip": "C:\\Users\\Robi\\Desktop\\ISS 922\\UBB-SE-2025-MarketMinds-Steam\\SteamProfile\\Repositories\\Interfaces\\IAchievementsRepository.cs*",
+              "RelativeToolTip": "Repositories\\Interfaces\\IAchievementsRepository.cs*",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAABMAAABCAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-04-04T11:16:28.531Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 2,
+              "Title": "AchievementsRepository.cs",
+              "DocumentMoniker": "C:\\Users\\Robi\\Desktop\\ISS 922\\UBB-SE-2025-MarketMinds-Steam\\SteamProfile\\Repositories\\AchievementsRepository.cs",
+              "RelativeDocumentMoniker": "Repositories\\AchievementsRepository.cs",
+              "ToolTip": "C:\\Users\\Robi\\Desktop\\ISS 922\\UBB-SE-2025-MarketMinds-Steam\\SteamProfile\\Repositories\\AchievementsRepository.cs",
+              "RelativeToolTip": "Repositories\\AchievementsRepository.cs",
+              "ViewState": "AgIAALUBAAAAAAAAAAAAAOUBAAAAAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-04-04T11:21:04.252Z",
               "EditorCaption": ""
             },
             {
               "$type": "Document",
               "DocumentIndex": 4,
-              "Title": "database_schema.sql",
-              "DocumentMoniker": "C:\\Users\\Ghaster\\IdeaProjects\\UBB-SE-2025-MarketMinds-Steam\\SteamProfile\\Data\\database_schema.sql",
-              "RelativeDocumentMoniker": "Data\\database_schema.sql",
-              "ToolTip": "C:\\Users\\Ghaster\\IdeaProjects\\UBB-SE-2025-MarketMinds-Steam\\SteamProfile\\Data\\database_schema.sql",
-              "RelativeToolTip": "Data\\database_schema.sql",
-              "ViewState": "AgIAAHUCAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA==",
-              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000826|",
-              "WhenOpened": "2025-04-03T17:35:47.087Z",
+              "Title": "AchievementsViewModel.cs",
+              "DocumentMoniker": "C:\\Users\\Robi\\Desktop\\ISS 922\\UBB-SE-2025-MarketMinds-Steam\\SteamProfile\\ViewModels\\AchievementsViewModel.cs",
+              "RelativeDocumentMoniker": "ViewModels\\AchievementsViewModel.cs",
+              "ToolTip": "C:\\Users\\Robi\\Desktop\\ISS 922\\UBB-SE-2025-MarketMinds-Steam\\SteamProfile\\ViewModels\\AchievementsViewModel.cs",
+              "RelativeToolTip": "ViewModels\\AchievementsViewModel.cs",
+              "ViewState": "AgIAAAkAAAAAAAAAAAAAAD4AAABDAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-04-04T10:49:48.987Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 5,
+              "Title": "MainWindow.xaml.cs",
+              "DocumentMoniker": "C:\\Users\\Robi\\Desktop\\ISS 922\\UBB-SE-2025-MarketMinds-Steam\\SteamProfile\\MainWindow.xaml.cs",
+              "RelativeDocumentMoniker": "MainWindow.xaml.cs",
+              "ToolTip": "C:\\Users\\Robi\\Desktop\\ISS 922\\UBB-SE-2025-MarketMinds-Steam\\SteamProfile\\MainWindow.xaml.cs",
+              "RelativeToolTip": "MainWindow.xaml.cs",
+              "ViewState": "AgIAAAkAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-04-04T10:49:39.779Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 6,
+              "Title": "App.xaml.cs",
+              "DocumentMoniker": "C:\\Users\\Robi\\Desktop\\ISS 922\\UBB-SE-2025-MarketMinds-Steam\\SteamProfile\\App.xaml.cs",
+              "RelativeDocumentMoniker": "App.xaml.cs",
+              "ToolTip": "C:\\Users\\Robi\\Desktop\\ISS 922\\UBB-SE-2025-MarketMinds-Steam\\SteamProfile\\App.xaml.cs",
+              "RelativeToolTip": "App.xaml.cs",
+              "ViewState": "AgIAAEMAAAAAAAAAAAAkwAAAAAAAAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-04-04T10:49:23.477Z",
               "EditorCaption": ""
             },
             {
               "$type": "Document",
               "DocumentIndex": 7,
+              "Title": "App.xaml",
+              "DocumentMoniker": "C:\\Users\\Robi\\Desktop\\ISS 922\\UBB-SE-2025-MarketMinds-Steam\\SteamProfile\\App.xaml",
+              "RelativeDocumentMoniker": "App.xaml",
+              "ToolTip": "C:\\Users\\Robi\\Desktop\\ISS 922\\UBB-SE-2025-MarketMinds-Steam\\SteamProfile\\App.xaml",
+              "RelativeToolTip": "App.xaml",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.003549|",
+              "WhenOpened": "2025-04-04T10:49:20.754Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 10,
+              "Title": "DataLink.cs",
+              "DocumentMoniker": "C:\\Users\\Robi\\Desktop\\ISS 922\\UBB-SE-2025-MarketMinds-Steam\\SteamProfile\\Data\\DataLink.cs",
+              "RelativeDocumentMoniker": "Data\\DataLink.cs",
+              "ToolTip": "C:\\Users\\Robi\\Desktop\\ISS 922\\UBB-SE-2025-MarketMinds-Steam\\SteamProfile\\Data\\DataLink.cs",
+              "RelativeToolTip": "Data\\DataLink.cs",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-04-04T10:03:51.098Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 9,
               "Title": "appsettings.json",
-              "DocumentMoniker": "C:\\Users\\Ghaster\\IdeaProjects\\UBB-SE-2025-MarketMinds-Steam\\SteamProfile\\appsettings.json",
+              "DocumentMoniker": "C:\\Users\\Robi\\Desktop\\ISS 922\\UBB-SE-2025-MarketMinds-Steam\\SteamProfile\\appsettings.json",
               "RelativeDocumentMoniker": "appsettings.json",
-              "ToolTip": "C:\\Users\\Ghaster\\IdeaProjects\\UBB-SE-2025-MarketMinds-Steam\\SteamProfile\\appsettings.json",
+              "ToolTip": "C:\\Users\\Robi\\Desktop\\ISS 922\\UBB-SE-2025-MarketMinds-Steam\\SteamProfile\\appsettings.json",
               "RelativeToolTip": "appsettings.json",
               "ViewState": "AgIAAAAAAAAAAAAAAAAAAAQAAAAAAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.001642|",
@@ -220,29 +216,98 @@
             },
             {
               "$type": "Document",
-              "DocumentIndex": 6,
-              "Title": "WalletService.cs",
-              "DocumentMoniker": "C:\\Users\\Ghaster\\IdeaProjects\\UBB-SE-2025-MarketMinds-Steam\\SteamProfile\\Services\\WalletService.cs",
-              "RelativeDocumentMoniker": "Services\\WalletService.cs",
-              "ToolTip": "C:\\Users\\Ghaster\\IdeaProjects\\UBB-SE-2025-MarketMinds-Steam\\SteamProfile\\Services\\WalletService.cs",
-              "RelativeToolTip": "Services\\WalletService.cs",
-              "ViewState": "AgIAABQAAAAAAAAAAAAIwCMAAAAAAAAAAAAAAA==",
+              "DocumentIndex": 8,
+              "Title": "AchievementsPage.xaml.cs",
+              "DocumentMoniker": "C:\\Users\\Robi\\Desktop\\ISS 922\\UBB-SE-2025-MarketMinds-Steam\\SteamProfile\\Views\\AchievementsPage.xaml.cs",
+              "RelativeDocumentMoniker": "Views\\AchievementsPage.xaml.cs",
+              "ToolTip": "C:\\Users\\Robi\\Desktop\\ISS 922\\UBB-SE-2025-MarketMinds-Steam\\SteamProfile\\Views\\AchievementsPage.xaml.cs",
+              "RelativeToolTip": "Views\\AchievementsPage.xaml.cs",
+              "ViewState": "AgIAAAMAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2025-04-03T16:01:53.328Z",
+              "WhenOpened": "2025-04-03T19:56:26.067Z",
               "EditorCaption": ""
             },
             {
               "$type": "Document",
-              "DocumentIndex": 5,
+              "DocumentIndex": 11,
+              "Title": "AchievementsPage.xaml",
+              "DocumentMoniker": "C:\\Users\\Robi\\Desktop\\ISS 922\\UBB-SE-2025-MarketMinds-Steam\\SteamProfile\\Views\\AchievementsPage.xaml",
+              "RelativeDocumentMoniker": "Views\\AchievementsPage.xaml",
+              "ToolTip": "C:\\Users\\Robi\\Desktop\\ISS 922\\UBB-SE-2025-MarketMinds-Steam\\SteamProfile\\Views\\AchievementsPage.xaml",
+              "RelativeToolTip": "Views\\AchievementsPage.xaml",
+              "ViewState": "AgIAAAYAAAAAAAAAAAAAACAAAAAxAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.003549|",
+              "WhenOpened": "2025-04-03T18:10:09.958Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 13,
+              "Title": "Achievement.cs",
+              "DocumentMoniker": "C:\\Users\\Robi\\Desktop\\ISS 922\\UBB-SE-2025-MarketMinds-Steam\\SteamProfile\\Models\\Achievement.cs",
+              "RelativeDocumentMoniker": "Models\\Achievement.cs",
+              "ToolTip": "C:\\Users\\Robi\\Desktop\\ISS 922\\UBB-SE-2025-MarketMinds-Steam\\SteamProfile\\Models\\Achievement.cs",
+              "RelativeToolTip": "Models\\Achievement.cs",
+              "ViewState": "AgIAAA0AAAAAAAAAAAAgwAAAAAAAAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-04-03T18:17:57.127Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 14,
+              "Title": "database_schema.sql",
+              "DocumentMoniker": "C:\\Users\\Robi\\Desktop\\ISS 922\\UBB-SE-2025-MarketMinds-Steam\\SteamProfile\\Data\\database_schema.sql",
+              "RelativeDocumentMoniker": "Data\\database_schema.sql",
+              "ToolTip": "C:\\Users\\Robi\\Desktop\\ISS 922\\UBB-SE-2025-MarketMinds-Steam\\SteamProfile\\Data\\database_schema.sql",
+              "RelativeToolTip": "Data\\database_schema.sql",
+              "ViewState": "AgIAAHUCAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000826|",
+              "WhenOpened": "2025-04-03T17:35:47.087Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 12,
+              "Title": "profileSchema.sql",
+              "DocumentMoniker": "C:\\Users\\Robi\\Desktop\\ISS 922\\UBB-SE-2025-MarketMinds-Steam\\SteamProfile\\Data\\profileSchema.sql",
+              "RelativeDocumentMoniker": "Data\\profileSchema.sql",
+              "ToolTip": "C:\\Users\\Robi\\Desktop\\ISS 922\\UBB-SE-2025-MarketMinds-Steam\\SteamProfile\\Data\\profileSchema.sql",
+              "RelativeToolTip": "Data\\profileSchema.sql",
+              "ViewState": "AgIAAB0GAAAAAAAAAAAAAB0GAAAEAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000826|",
+              "WhenOpened": "2025-04-03T18:19:15.224Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 16,
+              "Title": "WalletService.cs",
+              "DocumentMoniker": "C:\\Users\\Robi\\Desktop\\ISS 922\\UBB-SE-2025-MarketMinds-Steam\\SteamProfile\\Services\\WalletService.cs",
+              "RelativeDocumentMoniker": "Services\\WalletService.cs",
+              "ToolTip": "C:\\Users\\Robi\\Desktop\\ISS 922\\UBB-SE-2025-MarketMinds-Steam\\SteamProfile\\Services\\WalletService.cs",
+              "RelativeToolTip": "Services\\WalletService.cs",
+              "ViewState": "AgIAABQAAAAAAAAAAAAIwCMAAAAAAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-04-03T16:01:53.328Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 15,
               "Title": "PasswordHasher.cs",
-              "DocumentMoniker": "C:\\Users\\Ghaster\\IdeaProjects\\UBB-SE-2025-MarketMinds-Steam\\SteamProfile\\Utils\\PasswordHasher.cs",
+              "DocumentMoniker": "C:\\Users\\Robi\\Desktop\\ISS 922\\UBB-SE-2025-MarketMinds-Steam\\SteamProfile\\Utils\\PasswordHasher.cs",
               "RelativeDocumentMoniker": "Utils\\PasswordHasher.cs",
-              "ToolTip": "C:\\Users\\Ghaster\\IdeaProjects\\UBB-SE-2025-MarketMinds-Steam\\SteamProfile\\Utils\\PasswordHasher.cs",
+              "ToolTip": "C:\\Users\\Robi\\Desktop\\ISS 922\\UBB-SE-2025-MarketMinds-Steam\\SteamProfile\\Utils\\PasswordHasher.cs",
               "RelativeToolTip": "Utils\\PasswordHasher.cs",
               "ViewState": "AgIAAAAAAAAAAAAAAAAAABgAAAAAAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2025-04-03T15:45:03.21Z",
-              "EditorCaption": ""
+              "WhenOpened": "2025-04-03T15:45:03.21Z"
+            }
+          ]
+        },
+        {
+          "DockedWidth": 235,
+          "SelectedChildIndex": -1,
+          "Children": [
+            {
+              "$type": "Bookmark",
+              "Name": "ST:1:0:{d212f56b-c48a-434c-a121-1c5d80b59b9f}"
             }
           ]
         }
