@@ -7,10 +7,11 @@ using System.Linq;
 using System.Threading.Tasks;
 using BCrypt.Net;
 using SteamProfile.Utils;
+using SteamProfile.Services.interfaces;
 
 namespace SteamProfile.Services
 {
-    public class UserService
+    public class UserService : IUserService
     {
         private readonly UsersRepository _usersRepository;
         private readonly SessionService _sessionService;
@@ -69,7 +70,7 @@ namespace SteamProfile.Services
             _usersRepository.DeleteUser(userId);
 
         }
-        public bool acceptChanges(int user_id, string givenPassword)
+        public bool AcceptChanges(int user_id, string givenPassword)
         {
             User user = _usersRepository.GetUserById(user_id);
 
@@ -80,15 +81,15 @@ namespace SteamProfile.Services
             return false;
         }
 
-        public void updateUserEmail(int userId, string newEmail)
+        public void UpdateUserEmail(int userId, string newEmail)
         {
             _usersRepository.ChangeEmail(userId, newEmail);
         }
-        public void updateUserPassword(int userId, string newPassword)
+        public void UpdateUserPassword(int userId, string newPassword)
         {
             _usersRepository.ChangePassword(userId, newPassword);
         }
-        public void updateUserUsername(int userId, string newUsername)
+        public void UpdateUserUsername(int userId, string newUsername)
         {
             _usersRepository.ChangeUsername(userId, newUsername);
         }
@@ -126,7 +127,7 @@ namespace SteamProfile.Services
             return _sessionService.IsUserLoggedIn();
         }
 
-        internal bool UpdateUserUsername(string username, string currentPassword)
+        public bool UpdateUserUsername(string username, string currentPassword)
         {
             if (this.VerifyUserPassword(currentPassword))
             {
@@ -136,7 +137,7 @@ namespace SteamProfile.Services
             return false;
         }
 
-        internal bool UpdateUserPassword(string password, string currentPassword)
+        public bool UpdateUserPassword(string password, string currentPassword)
         {
             if (this.VerifyUserPassword(currentPassword))
             {
@@ -146,7 +147,7 @@ namespace SteamProfile.Services
             return false;
         }
 
-        internal bool UpdateUserEmail(string email, string currentPassword)
+        public bool UpdateUserEmail(string email, string currentPassword)
         {
             if (this.VerifyUserPassword(currentPassword))
             {
@@ -156,7 +157,7 @@ namespace SteamProfile.Services
             return false;
         }
 
-        internal bool VerifyUserPassword(string password)
+        public bool VerifyUserPassword(string password)
         {
             string email = this.GetCurrentUser().Email;
             var user = _usersRepository.VerifyCredentials(email);

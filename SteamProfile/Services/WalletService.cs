@@ -8,7 +8,7 @@ using System.Threading.Tasks;
 
 namespace SteamProfile.Services
 {
-    public class WalletService
+    public class WalletService : IWalletService
     {
         private readonly WalletRepository _walletRepository;
         private readonly UserService _userService;
@@ -19,22 +19,22 @@ namespace SteamProfile.Services
             _userService = userService;
         }
 
-        internal void AddMoney(decimal amount)
+        public void AddMoney(decimal amount)
         {
             _walletRepository.AddMoneyToWallet(amount, _userService.GetCurrentUser().UserId);
         }
 
-        internal void AddPoints(int points)
+        public void AddPoints(int points)
         {
             _walletRepository.AddPointsToWallet(points, _userService.GetCurrentUser().UserId);
         }
 
-        internal decimal GetBalance()
+        public decimal GetBalance()
         {
             return _walletRepository.GetMoneyFromWallet(_walletRepository.GetWalletIdByUserId(_userService.GetCurrentUser().UserId));
         }
 
-        internal int GetPoints()
+        public int GetPoints()
         {
             int userId = _userService.GetCurrentUser().UserId;
             int walletId = _walletRepository.GetWalletIdByUserId(userId);

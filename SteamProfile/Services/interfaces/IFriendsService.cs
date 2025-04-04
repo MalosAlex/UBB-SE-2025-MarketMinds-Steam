@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using System.Threading.Tasks;
 
-namespace SteamProfile.Services
+namespace SteamProfile.Services.interfaces
 {
     public interface IFriendsService
     {

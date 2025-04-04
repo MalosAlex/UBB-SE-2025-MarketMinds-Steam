@@ -6,10 +6,11 @@ using System.Data.SqlClient;
 using System.Threading.Tasks;
 using Dapper;
 using Windows.System;
+using SteamProfile.Repositories.interfaces;
 
 namespace SteamProfile.Repositories
 {
-    public class UserProfilesRepository
+    public class UserProfilesRepository : IUserProfilesRepository
     {
         private readonly DataLink _dataLink;
 

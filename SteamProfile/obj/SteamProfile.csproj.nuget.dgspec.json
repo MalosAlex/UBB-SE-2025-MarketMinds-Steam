@@ -72,7 +72,7 @@
             },
             "Microsoft.Data.SqlClient": {
               "target": "Package",
-              "version": "[5.1.6, )"
+              "version": "[6.0.1, )"
             },
             "Microsoft.Extensions.Configuration": {
               "target": "Package",
@@ -97,6 +97,14 @@
             "Microsoft.WindowsAppSDK": {
               "target": "Package",
               "version": "[1.4.231219000, )"
+            },
+            "NUnit": {
+              "target": "Package",
+              "version": "[4.3.2, )"
+            },
+            "NUnit3TestAdapter": {
+              "target": "Package",
+              "version": "[5.0.0, )"
             },
             "System.Configuration.ConfigurationManager": {
               "target": "Package",
