@@ -2,6 +2,10 @@
 /obj/project.nuget.cache
 /obj/SteamProfile.csproj.nuget.g.props
 /obj/SteamProfile.csproj.nuget.g.json
-/obj/
-/bin/
 /.vs/
+/bin/
+/obj/
+*.user
+*.suo
+*.cache
+*.bin
