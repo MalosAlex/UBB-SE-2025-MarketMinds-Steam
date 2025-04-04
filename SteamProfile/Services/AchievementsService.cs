@@ -1,5 +1,7 @@
 ﻿using SteamProfile.Models;
 using SteamProfile.Repositories;
+using SteamProfile.Repositories.Interfaces;
+using SteamProfile.Services.Interfaces;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -11,11 +13,11 @@ using static SteamProfile.Repositories.AchievementsRepository;
 
 namespace SteamProfile.Services
 {
-    public class AchievementsService
+    public class AchievementsService : IAchievementsService
     {
-        private readonly AchievementsRepository _achievementsRepository;
+        private readonly IAchievementsRepository _achievementsRepository;
 
-        public AchievementsService(AchievementsRepository achievementsRepository)
+        public AchievementsService(IAchievementsRepository achievementsRepository)
         {
             _achievementsRepository = achievementsRepository ?? throw new ArgumentNullException(nameof(achievementsRepository));
         }
