@@ -9,16 +9,17 @@ using System.Threading.Tasks;
 using System.Linq;
 using SteamProfile.Exceptions;
 using SteamProfile.Validators;
-using SteamProfile.Repositories;
 using Windows.UI.WebUI;
+using SteamProfile.Repositories.interfaces;
+using SteamProfile.Services.interfaces;
 
 namespace SteamProfile.ViewModels
 {
     public partial class RegisterViewModel : ObservableObject
     {
-        private readonly WalletService _walletService;
-        private readonly UserService _userService;
-        private readonly UserProfilesRepository _userProfilesRepository;
+        private IWalletService _walletService { get; set; }
+        private IUserService _userService {  get; set; }
+        private IUserProfilesRepository _userProfilesRepository { get; set; }
         private readonly Frame _frame;
 
         [ObservableProperty]
