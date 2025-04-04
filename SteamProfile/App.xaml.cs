@@ -11,15 +11,15 @@ using Microsoft.UI.Xaml.Input;
 using Microsoft.UI.Xaml.Media;
 using Microsoft.UI.Xaml.Navigation;
 using Microsoft.UI.Xaml.Shapes;
-using SteamProfile.Data;
-using SteamProfile.Repositories;
-using SteamProfile.Services;
+using BusinessLayer.Data;
+using BusinessLayer.Repositories;
+using BusinessLayer.Services;
 using SteamProfile.Views;
+using SteamProfile.ViewModels;
 using Windows.ApplicationModel;
 using Windows.ApplicationModel.Activation;
 using Windows.Foundation;
 using Windows.Foundation.Collections;
-using SteamProfile.Views;
 
 namespace SteamProfile
 {
@@ -33,7 +33,7 @@ namespace SteamProfile
         public static readonly FriendsService FriendsService;
         public static readonly OwnedGamesService OwnedGamesService;
         public static readonly AuthenticationService AuthenticationService;
-        public static IPasswordResetService PasswordResetService { get; private set; }
+        public static PasswordResetService PasswordResetService { get; private set; }
         public static readonly SessionService SessionService;
         public static UserProfilesRepository UserProfileRepository { get; private set; }
         public static CollectionsRepository CollectionsRepository { get;  }

@@ -1,4 +1,4 @@
-﻿using SteamProfile.Services;
+﻿using BusinessLayer.Services;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -6,7 +6,7 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Collections.ObjectModel;
 using System.ComponentModel;
-using SteamProfile.Models;
+using BusinessLayer.Models;
 using Microsoft.UI.Xaml.Media;
 using Microsoft.UI;
 using System.IO;
@@ -16,7 +16,7 @@ using CommunityToolkit.Mvvm.Input;
 using SteamProfile.Views;
 using System.Diagnostics;
 using Microsoft.UI.Xaml.Media.Imaging;
-using SteamProfile.Repositories;
+using BusinessLayer.Repositories;
 
 namespace SteamProfile.ViewModels
 {

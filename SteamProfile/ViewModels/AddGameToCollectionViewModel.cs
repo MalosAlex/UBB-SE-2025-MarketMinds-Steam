@@ -1,7 +1,7 @@
 using CommunityToolkit.Mvvm.ComponentModel;
 using Microsoft.UI.Xaml.Controls;
-using SteamProfile.Models;
-using SteamProfile.Services;
+using BusinessLayer.Models;
+using BusinessLayer.Services;
 using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;

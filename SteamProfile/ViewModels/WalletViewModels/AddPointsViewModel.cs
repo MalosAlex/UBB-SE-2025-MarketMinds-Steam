@@ -2,8 +2,8 @@
 using CommunityToolkit.Mvvm.Input;
 using Microsoft.UI.Xaml;
 using Microsoft.UI.Xaml.Controls;
-using SteamProfile.Models;
-using SteamProfile.Repositories;
+using BusinessLayer.Models;
+using BusinessLayer.Repositories;
 using System;
 using System.Collections.ObjectModel;
 using System.Threading.Tasks;

@@ -1,17 +1,16 @@
 ﻿using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
 using Microsoft.UI.Dispatching;
-using SteamProfile.Models;
-using SteamProfile.Services;
+using BusinessLayer.Models;
+using BusinessLayer.Services;
 using SteamProfile.Views;
 using System;
 using System.Collections.ObjectModel;
 using System.Diagnostics;
 using System.Globalization;
 using System.Threading.Tasks;
-using SteamProfile.Views;
 using Microsoft.UI.Xaml;
-using SteamProfile.Repositories;
+using BusinessLayer.Repositories;
 using System.Linq;
 using System.Collections.Generic;
 

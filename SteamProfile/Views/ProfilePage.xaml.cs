@@ -14,12 +14,12 @@ using System.Runtime.InteropServices.WindowsRuntime;
 using Windows.Foundation;
 using Windows.Foundation.Collections;
 using System.Diagnostics;
-using SteamProfile.Data;
-using SteamProfile.Repositories;
-using SteamProfile.Services;
+using BusinessLayer.Data;
+using BusinessLayer.Repositories;
+using BusinessLayer.Services;
 using System.Threading.Tasks;
 using SteamProfile.Views;
-using SteamProfile.Services;
+using BusinessLayer.Services;
 using Microsoft.UI;
 using System.Data.SqlClient;
 

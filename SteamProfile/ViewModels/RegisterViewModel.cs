@@ -1,17 +1,17 @@
 using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
 using Microsoft.UI.Xaml.Controls;
-using SteamProfile.Models;
-using SteamProfile.Services;
+using BusinessLayer.Models;
+using BusinessLayer.Services;
 using SteamProfile.Views;
 using System;
 using System.Threading.Tasks;
 using System.Linq;
-using SteamProfile.Exceptions;
-using SteamProfile.Validators;
+using BusinessLayer.Exceptions;
+using BusinessLayer.Validators;
 using Windows.UI.WebUI;
-using SteamProfile.Repositories.interfaces;
-using SteamProfile.Services.interfaces;
+using BusinessLayer.Repositories.Interfaces;
+using BusinessLayer.Services.Interfaces;
 
 namespace SteamProfile.ViewModels
 {

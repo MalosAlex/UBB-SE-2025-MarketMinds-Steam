@@ -1,3 +1,5 @@
+using NUnit.Framework;
+
 namespace Tests
 {
     public class Tests
@@ -11,7 +13,8 @@ namespace Tests
         public void Test1()
         {
             int a = 5;
-            Assert.AreEqual(5, a);
+            Assert.That(a, Is.EqualTo(5));
+
         }
     }
 }

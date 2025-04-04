@@ -4,7 +4,7 @@ using Microsoft.UI.Xaml.Navigation;
 using SteamProfile.ViewModels;
 using System;
 using SteamProfile.Views.WalletViews;
-using SteamProfile.Services;
+using BusinessLayer.Services;
 
 namespace SteamProfile.Views
 {

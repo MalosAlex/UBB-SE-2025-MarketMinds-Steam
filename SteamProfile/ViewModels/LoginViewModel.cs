@@ -1,8 +1,8 @@
 ﻿using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
 using Microsoft.UI.Xaml.Controls;
-using SteamProfile.Models;
-using SteamProfile.Services;
+using BusinessLayer.Models;
+using BusinessLayer.Services;
 using SteamProfile.Views;
 using System;
 using System.Threading.Tasks;

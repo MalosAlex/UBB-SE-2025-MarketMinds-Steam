@@ -1,6 +1,6 @@
 ﻿using CommunityToolkit.Mvvm.ComponentModel;
 using Microsoft.UI.Xaml;
-using SteamProfile.Models;
+using BusinessLayer.Models;
 using System;
 using System.Collections.Generic;
 using System.Text.RegularExpressions;

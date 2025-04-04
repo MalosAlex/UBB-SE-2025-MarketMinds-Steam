@@ -6,7 +6,7 @@ using Microsoft.UI.Xaml.Input;
 using Microsoft.UI.Xaml.Media;
 using Microsoft.UI.Xaml.Navigation;
 using SteamProfile.ViewModels;
-using SteamProfile.Models;
+using BusinessLayer.Models;
 using System;
 using System.Collections.Generic;
 using System.IO;

@@ -1,4 +1,4 @@
-﻿using SteamProfile.Services;
+﻿using BusinessLayer.Services;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -13,8 +13,9 @@ using CommunityToolkit.Mvvm.Input;
 using SteamProfile.ViewModels.Base;
 using Microsoft.UI.Xaml.Controls;
 using SteamProfile.Views;
+using BusinessLayer.Services;
 using System.ComponentModel.DataAnnotations;
-using SteamProfile.Validators;
+using BusinessLayer.Validators;
 using CommunityToolkit.WinUI.UI.Controls.TextToolbarSymbols;
 using Microsoft.UI.Xaml.Media.Animation;
 using static System.Runtime.InteropServices.JavaScript.JSType;
@@ -24,7 +25,7 @@ namespace SteamProfile.ViewModels
 {
     public class ForgotPasswordViewModel : INotifyPropertyChanged
     {
-        private readonly IPasswordResetService _passwordResetService;
+        private readonly PasswordResetService _passwordResetService;
         private readonly string _resetCodesPath;
         private string _email = string.Empty;
         private string _resetCode = string.Empty;
@@ -145,7 +146,7 @@ namespace SteamProfile.ViewModels
         public ICommand ResetPasswordCommand { get; }
         public ICommand NavigateToLoginCommand { get; }
 
-        public ForgotPasswordViewModel(IPasswordResetService passwordResetService)
+        public ForgotPasswordViewModel(PasswordResetService passwordResetService)
         {
             _passwordResetService = passwordResetService;
             _resetCodesPath = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "ResetCodes");

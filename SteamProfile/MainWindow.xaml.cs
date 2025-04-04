@@ -4,7 +4,8 @@ using SteamProfile.Views;
 using Microsoft.UI.Windowing;
 using Microsoft.UI;
 using System;
-using SteamProfile.Services;
+using BusinessLayer.Services;
+using SteamProfile.ViewModels;
 
 namespace SteamProfile
 {

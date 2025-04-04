@@ -6,7 +6,7 @@
     xmlns:local="using:SteamProfile.Views"
     xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
-    xmlns:models="using:SteamProfile.Models"
+    xmlns:models="using:BusinessLayer.Models"
     xmlns:controls="using:CommunityToolkit.WinUI.UI.Controls"
     xmlns:converters="using:SteamProfile.Converters"
     mc:Ignorable="d"
@@ -50,13 +50,13 @@
                         </ItemsPanelTemplate>
                     </ItemsControl.ItemsPanel>
                     <ItemsControl.ItemTemplate>
-                        <DataTemplate x:Key="GameItemTemplate" x:DataType="models:OwnedGame">
+                        <DataTemplate>
                             <Border Background="{ThemeResource CardBackgroundFillColorDefaultBrush}"
-                                    CornerRadius="8"
-                                    Padding="12"
-                                    Margin="12,12,12,12"
-                                    Width="400"
-                                    Height="152">
+                CornerRadius="8"
+                Padding="12"
+                Margin="12,12,12,12"
+                Width="400"
+                Height="152">
                                 <Grid>
                                     <Grid.ColumnDefinitions>
                                         <ColumnDefinition Width="120"/>
@@ -65,34 +65,34 @@
 
                                     <!-- Game Cover Picture -->
                                     <Grid Grid.Column="0" 
-                                          Width="120" 
-                                          Height="120"
-                                          Background="{ThemeResource CardBackgroundFillColorDefaultBrush}"
-                                          CornerRadius="8">
+                      Width="120" 
+                      Height="120"
+                      Background="{ThemeResource CardBackgroundFillColorDefaultBrush}"
+                      CornerRadius="8">
                                         <Image Source="{Binding CoverPicture}"
-                                               Stretch="UniformToFill"
-                                               Height="120"
-                                               Width="120"/>
+                           Stretch="UniformToFill"
+                           Height="120"
+                           Width="120"/>
                                     </Grid>
 
                                     <StackPanel Grid.Column="1" 
-                                              Margin="12,0,0,0"
-                                              VerticalAlignment="Center">
+                          Margin="12,0,0,0"
+                          VerticalAlignment="Center">
                                         <TextBlock Text="{Binding Title}"
-                                                 Style="{ThemeResource BodyStrongTextBlockStyle}"
-                                                 TextWrapping="NoWrap"
-                                                 TextTrimming="CharacterEllipsis"/>
+                             Style="{ThemeResource BodyStrongTextBlockStyle}"
+                             TextWrapping="NoWrap"
+                             TextTrimming="CharacterEllipsis"/>
                                         <TextBlock Text="{Binding Description}"
-                                                 Style="{ThemeResource CaptionTextBlockStyle}"
-                                                 TextWrapping="Wrap"
-                                                 MaxLines="2"
-                                                 TextTrimming="CharacterEllipsis"
-                                                 Opacity="0.8"/>
+                             Style="{ThemeResource CaptionTextBlockStyle}"
+                             TextWrapping="Wrap"
+                             MaxLines="2"
+                             TextTrimming="CharacterEllipsis"
+                             Opacity="0.8"/>
                                         <Button Content="Add to Collection"
-                                                Click="AddGame_Click"
-                                                Style="{StaticResource AccentButtonStyle}"
-                                                Margin="0,8,0,0"
-                                                Tag="{Binding GameId}"/>
+                            Click="AddGame_Click"
+                            Style="{StaticResource AccentButtonStyle}"
+                            Margin="0,8,0,0"
+                            Tag="{Binding GameId}"/>
                                     </StackPanel>
                                 </Grid>
                             </Border>

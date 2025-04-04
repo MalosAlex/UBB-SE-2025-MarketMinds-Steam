@@ -14,7 +14,7 @@ using System.Runtime.InteropServices.WindowsRuntime;
 using Windows.Foundation;
 using Windows.Foundation.Collections;
 using System.Diagnostics;
-using SteamProfile.Services;
+using BusinessLayer.Services;
 
 namespace SteamProfile.Views
 {

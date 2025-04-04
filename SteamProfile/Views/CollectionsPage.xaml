@@ -6,7 +6,7 @@
     xmlns:local="using:SteamProfile.Views"
     xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
-    xmlns:models="using:SteamProfile.Models"
+    xmlns:models="using:BusinessLayer.Models"
     xmlns:controls="using:CommunityToolkit.WinUI.UI.Controls"
     xmlns:converters="using:SteamProfile.Converters"
     mc:Ignorable="d"

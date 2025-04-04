@@ -1,8 +1,8 @@
 ﻿using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
-using SteamProfile.Models;
-using SteamProfile.Repositories;
-using SteamProfile.Services;
+using BusinessLayer.Models;
+using BusinessLayer.Repositories;
+using BusinessLayer.Services;
 using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;

@@ -38,7 +38,7 @@ namespace SteamProfile.Views
                 _viewModel.ErrorMessage = string.Empty;
                 
                 var collections = App.CollectionsService.GetPublicCollectionsForUser(_userId);
-                _viewModel.Collections = new System.Collections.ObjectModel.ObservableCollection<Models.Collection>(collections);
+                _viewModel.Collections = new System.Collections.ObjectModel.ObservableCollection<BusinessLayer.Models.Collection>(collections);
             }
             catch (Exception ex)
             {
