@@ -42,10 +42,6 @@ namespace BusinessLayer.Services
             try
             {
                 var collection = _collectionsRepository.GetCollectionById(collectionId, userId);
-                if (collection == null)
-                {
-                    return null;
-                }
 
                 // Load games for the collection.
                 collection.Games = _collectionsRepository.GetGamesInCollection(collectionId, userId);

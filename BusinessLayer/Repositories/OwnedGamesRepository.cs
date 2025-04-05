@@ -21,31 +21,21 @@ namespace BusinessLayer.Repositories
         {
             try
             {
-                Debug.WriteLine($"Getting owned games for user {userId}");
                 var parameters = new SqlParameter[]
                 {
                     new SqlParameter("@user_id", userId)
                 };
 
-                Debug.WriteLine("Executing GetAllOwnedGames stored procedure");
                 var dataTable = _dataLink.ExecuteReader("GetAllOwnedGames", parameters);
-                Debug.WriteLine($"Got {dataTable.Rows.Count} rows from database");
-
                 var games = MapDataTableToOwnedGames(dataTable);
-                Debug.WriteLine($"Mapped {games.Count} owned games");
                 return games;
             }
             catch (SqlException ex)
             {
-                Debug.WriteLine($"SQL Error: {ex.Message}");
-                Debug.WriteLine($"Error Number: {ex.Number}");
-                Debug.WriteLine($"Stack Trace: {ex.StackTrace}");
                 throw new RepositoryException("Database error while retrieving owned games.", ex);
             }
             catch (Exception ex)
             {
-                Debug.WriteLine($"Unexpected Error: {ex.Message}");
-                Debug.WriteLine($"Stack Trace: {ex.StackTrace}");
                 throw new RepositoryException("An unexpected error occurred while retrieving owned games.", ex);
             }
         }
@@ -85,45 +75,31 @@ namespace BusinessLayer.Repositories
             }
             catch (SqlException ex)
             {
-                Debug.WriteLine($"SQL Error: {ex.Message}");
                 throw new RepositoryException("Database error while removing owned game.", ex);
             }
             catch (Exception ex)
             {
-                Debug.WriteLine($"Unexpected Error: {ex.Message}");
                 throw new RepositoryException("An unexpected error occurred while removing owned game.", ex);
             }
         }
 
         private static List<OwnedGame> MapDataTableToOwnedGames(DataTable dataTable)
         {
-            try
+            var games = dataTable.AsEnumerable().Select(row =>
             {
-                Debug.WriteLine("Starting to map DataTable to OwnedGames");
-                var games = dataTable.AsEnumerable().Select(row =>
-                {
-                    // Create a new OwnedGame using the new constructor
-                    var game = new OwnedGame(
-                        Convert.ToInt32(row["user_id"]),
-                        row["title"].ToString(),
-                        row["description"]?.ToString(),
-                        row["cover_picture"]?.ToString());
+                // Create a new OwnedGame using the new constructor
+                var game = new OwnedGame(
+                    Convert.ToInt32(row["user_id"]),
+                    row["title"].ToString(),
+                    row["description"]?.ToString(),
+                    row["cover_picture"]?.ToString());
                     
-                    // Set the GameId separately
-                    game.GameId = Convert.ToInt32(row["game_id"]);
+                // Set the GameId separately
+                game.GameId = Convert.ToInt32(row["game_id"]);
                     
-                    Debug.WriteLine($"Loaded game with GameId: {game.GameId} and cover picture: {game.CoverPicture}");
-                    return game;
-                }).ToList();
-                Debug.WriteLine($"Successfully mapped {games.Count} owned games");
-                return games;
-            }
-            catch (Exception ex)
-            {
-                Debug.WriteLine($"Error mapping DataTable: {ex.Message}");
-                Debug.WriteLine($"Stack Trace: {ex.StackTrace}");
-                throw;
-            }
+                return game;
+            }).ToList();
+            return games;
         }
 
         private static OwnedGame MapDataRowToOwnedGame(DataRow row)

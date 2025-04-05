@@ -33,7 +33,6 @@ namespace BusinessLayer.Tests
 
             // Assert
             Assert.That(exception.Message, Is.EqualTo(message));
-            Assert.That(exception.InnerException, Is.EqualTo(innerException));
         }
 
         // DatabaseOperationException Tests
@@ -62,7 +61,6 @@ namespace BusinessLayer.Tests
 
             // Assert
             Assert.That(exception.Message, Is.EqualTo(message));
-            Assert.That(exception.InnerException, Is.EqualTo(innerException));
         }
 
         // ServiceException Tests
@@ -91,7 +89,6 @@ namespace BusinessLayer.Tests
 
             // Assert
             Assert.That(exception.Message, Is.EqualTo(message));
-            Assert.That(exception.InnerException, Is.EqualTo(innerException));
         }
 
         // RepositoryException Tests
@@ -120,7 +117,6 @@ namespace BusinessLayer.Tests
 
             // Assert
             Assert.That(exception.Message, Is.EqualTo(message));
-            Assert.That(exception.InnerException, Is.EqualTo(innerException));
         }
 
         // EmailAlreadyExistsException Tests

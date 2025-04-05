@@ -1,360 +1,887 @@
-﻿using BusinessLayer.Models;
-using BusinessLayer.Repositories;
-using BusinessLayer.Repositories.Fakes;
-using BusinessLayer.Repositories.Interfaces;
-using NUnit.Framework;
-using System;
-using System.Collections.Generic;
+﻿using System;
+using System.Data;
 using System.Linq;
+using System.Collections.Generic;
+using Moq;
+using NUnit.Framework;
 using BusinessLayer.Data;
+using BusinessLayer.Models;
+using BusinessLayer.Repositories;
+using BusinessLayer.Repositories.Interfaces;
+using BusinessLayer.Exceptions;
+using Microsoft.Data.SqlClient;
+using System.Runtime.Serialization;
 
 namespace Tests
 {
     [TestFixture]
     public class CollectionsRepositoryTests
     {
-        private ICollectionsRepository _collectionsRepository;
+        private Mock<IDataLink> _mockDataLink;
+        private CollectionsRepository _repository;
 
         [SetUp]
         public void SetUp()
         {
-            // Use the fake implementation for testing.
-            _collectionsRepository = new CollectionsRepository(new FakeDataLink());
+            // Arrange: create a new mock IDataLink and instantiate CollectionsRepository.
+            _mockDataLink = new Mock<IDataLink>();
+            _repository = new CollectionsRepository(_mockDataLink.Object);
         }
 
-        [Test]
-        public void GetAllCollections_UserHasCollections_ReturnsCollections()
+        #region Helper Methods
+
+        private DataTable CreateCollectionsDataTable(int rowCount)
         {
-            // Arrange: userId 1 is seeded with collections in FakeCollectionsRepository.
+            DataTable dt = new DataTable();
+            dt.Columns.Add("user_id", typeof(int));
+            dt.Columns.Add("name", typeof(string));
+            dt.Columns.Add("created_at", typeof(DateTime));
+            dt.Columns.Add("cover_picture", typeof(string));
+            dt.Columns.Add("is_public", typeof(bool));
+            dt.Columns.Add("collection_id", typeof(int));
 
-            // Act
-            List<Collection> collections = _collectionsRepository.GetAllCollections(1);
-
-            // Assert
-            Assert.That(collections, Is.Not.Null, "Collections should not be null.");
-            Assert.That(collections.Count, Is.GreaterThanOrEqualTo(3), "There should be at least three collections for user 1.");
-            foreach (Collection c in collections)
+            for (int i = 0; i < rowCount; i++)
             {
-                Assert.That(c.UserId, Is.EqualTo(1), "All collections should have UserId equal to 1.");
+                DataRow row = dt.NewRow();
+                row["user_id"] = 1;
+                row["name"] = "Collection " + i;
+                // set CreatedAt so that later tests for ordering can work
+                row["created_at"] = DateTime.Now.AddDays(-i);
+                row["cover_picture"] = "cover" + i + ".jpg";
+                row["is_public"] = i % 2 == 0;
+                row["collection_id"] = i + 1;
+                dt.Rows.Add(row);
             }
+            return dt;
         }
 
+        private DataTable CreateEmptyCollectionsDataTable()
+        {
+            DataTable dt = new DataTable();
+            dt.Columns.Add("user_id", typeof(int));
+            dt.Columns.Add("name", typeof(string));
+            dt.Columns.Add("created_at", typeof(DateTime));
+            dt.Columns.Add("cover_picture", typeof(string));
+            dt.Columns.Add("is_public", typeof(bool));
+            dt.Columns.Add("collection_id", typeof(int));
+            return dt;
+        }
+
+        private DataTable CreateGamesDataTable(int rowCount)
+        {
+            DataTable dt = new DataTable();
+            dt.Columns.Add("user_id", typeof(int));
+            dt.Columns.Add("title", typeof(string));
+            dt.Columns.Add("description", typeof(string));
+            dt.Columns.Add("cover_picture", typeof(string));
+            dt.Columns.Add("game_id", typeof(int));
+
+            for (int i = 0; i < rowCount; i++)
+            {
+                DataRow row = dt.NewRow();
+                row["user_id"] = 1;
+                row["title"] = "Game " + i;
+                row["description"] = "Description " + i;
+                row["cover_picture"] = "gamecover" + i + ".jpg";
+                row["game_id"] = i + 1;
+                dt.Rows.Add(row);
+            }
+            return dt;
+        }
+
+        private DataTable CreateEmptyGamesDataTable()
+        {
+            DataTable dt = new DataTable();
+            dt.Columns.Add("user_id", typeof(int));
+            dt.Columns.Add("title", typeof(string));
+            dt.Columns.Add("description", typeof(string));
+            dt.Columns.Add("cover_picture", typeof(string));
+            dt.Columns.Add("game_id", typeof(int));
+            return dt;
+        }
+
+        private SqlException CreateSqlException()
+        {
+            // Create an uninitialized SqlException
+            return (SqlException)FormatterServices.GetUninitializedObject(typeof(SqlException));
+        }
+
+        #endregion
+
+        #region GetAllCollections Tests
+
         [Test]
-        public void GetLastThreeCollectionsForUser_ReturnsMostRecentThree()
+        public void GetAllCollections_ReturnsEmptyList_WhenDataTableIsNull()
         {
             // Arrange
-            List<Collection> allCollections = _collectionsRepository.GetAllCollections(1);
-            int expectedCount = allCollections.Count < 3 ? allCollections.Count : 3;
-
+            _mockDataLink.Setup(dl => dl.ExecuteReader("GetAllCollectionsForUser", It.IsAny<SqlParameter[]>()))
+                         .Returns((DataTable)null);
             // Act
-            List<Collection> lastThree = _collectionsRepository.GetLastThreeCollectionsForUser(1);
-
-            // Assert
-            Assert.That(lastThree.Count, Is.EqualTo(expectedCount), "The returned count should equal the expected count.");
-            // Verify that the collections are in descending order by CreatedAt.
-            List<Collection> ordered = lastThree.OrderByDescending(c => c.CreatedAt).ToList();
-            for (int i = 0; i < lastThree.Count; i++)
-            {
-                Assert.That(lastThree[i].CreatedAt, Is.EqualTo(ordered[i].CreatedAt), "Collections should be in descending order by CreatedAt.");
-            }
+            var result = _repository.GetAllCollections(1);
+            // Assert: list is empty.
+            Assert.That(result, Is.Empty);
         }
 
         [Test]
-        public void GetCollectionById_ExistingCollection_ReturnsCollection()
+        public void GetAllCollections_ReturnsEmptyList_WhenDataTableHasNoRows()
         {
             // Arrange
-            List<Collection> allCollections = _collectionsRepository.GetAllCollections(1);
-            Collection existing = allCollections.First();
-            int collectionId = existing.CollectionId;
-
+            DataTable dt = CreateEmptyCollectionsDataTable();
+            _mockDataLink.Setup(dl => dl.ExecuteReader("GetAllCollectionsForUser", It.IsAny<SqlParameter[]>()))
+                         .Returns(dt);
             // Act
-            Collection result = _collectionsRepository.GetCollectionById(collectionId, 1);
-
-            // Assert
-            Assert.That(result, Is.Not.Null, "The collection should be found.");
-            Assert.That(result.CollectionId, Is.EqualTo(collectionId), "Returned collection ID should match the expected value.");
+            var result = _repository.GetAllCollections(1);
+            // Assert: list is empty.
+            Assert.That(result, Is.Empty);
         }
 
         [Test]
-        public void GetCollectionById_NonExistingCollection_ReturnsNull()
-        {
-            // Act
-            Collection result = _collectionsRepository.GetCollectionById(999, 1);
-
-            // Assert
-            Assert.That(result, Is.Null, "Non-existing collection should return null.");
-        }
-
-        [Test]
-        public void GetGamesInCollection_OverloadWithoutUser_ReturnsEmptyList()
-        {
-            // Act
-            List<OwnedGame> games = _collectionsRepository.GetGamesInCollection(2);
-
-            // Assert
-            Assert.That(games, Is.Not.Null, "Games list should not be null.");
-            Assert.That(games.Count, Is.EqualTo(0), "Games list should be empty for collectionId 2.");
-        }
-
-        [Test]
-        public void GetGamesInCollection_WithUserId1_ReturnsDummyGamesForCollectionId1()
-        {
-            // Act
-            List<OwnedGame> games = _collectionsRepository.GetGamesInCollection(1, 1);
-
-            // Assert
-            Assert.That(games, Is.Not.Null, "Games list should not be null.");
-            Assert.That(games.Count, Is.EqualTo(2), "Dummy games count should equal 2 for collectionId 1.");
-            foreach (OwnedGame game in games)
-            {
-                Assert.That(game.UserId, Is.EqualTo(1), "Each game should have UserId equal to 1.");
-            }
-        }
-
-        [Test]
-        public void AddGameToCollection_NoOp_DoesNotThrow()
-        {
-            // Act
-            Exception exception = null;
-            try
-            {
-                _collectionsRepository.AddGameToCollection(1, 10, 1);
-            }
-            catch (Exception ex)
-            {
-                exception = ex;
-            }
-
-            // Assert
-            Assert.That(exception, Is.Null, "AddGameToCollection should not throw any exception.");
-        }
-
-        [Test]
-        public void RemoveGameFromCollection_NoOp_DoesNotThrow()
-        {
-            // Act
-            Exception exception = null;
-            try
-            {
-                _collectionsRepository.RemoveGameFromCollection(1, 10);
-            }
-            catch (Exception ex)
-            {
-                exception = ex;
-            }
-
-            // Assert
-            Assert.That(exception, Is.Null, "RemoveGameFromCollection should not throw any exception.");
-        }
-
-        [Test]
-        public void MakeCollectionPrivateForUser_NoOp_DoesNotThrow()
-        {
-            // Act
-            Exception exception = null;
-            try
-            {
-                _collectionsRepository.MakeCollectionPrivateForUser("1", "1");
-            }
-            catch (Exception ex)
-            {
-                exception = ex;
-            }
-
-            // Assert
-            Assert.That(exception, Is.Null, "MakeCollectionPrivateForUser should not throw any exception.");
-        }
-
-        [Test]
-        public void MakeCollectionPublicForUser_NoOp_DoesNotThrow()
-        {
-            // Act
-            Exception exception = null;
-            try
-            {
-                _collectionsRepository.MakeCollectionPublicForUser("1", "1");
-            }
-            catch (Exception ex)
-            {
-                exception = ex;
-            }
-
-            // Assert
-            Assert.That(exception, Is.Null, "MakeCollectionPublicForUser should not throw any exception.");
-        }
-
-        [Test]
-        public void RemoveCollectionForUser_ValidCollection_RemovesCollection()
+        public void GetAllCollections_ReturnsCorrectCount_WhenDataTableHasRows()
         {
             // Arrange
-            List<Collection> collectionsBefore = _collectionsRepository.GetAllCollections(1);
-            Collection collectionToRemove = collectionsBefore.First();
-
+            int expectedCount = 5;
+            DataTable dt = CreateCollectionsDataTable(expectedCount);
+            _mockDataLink.Setup(dl => dl.ExecuteReader("GetAllCollectionsForUser", It.IsAny<SqlParameter[]>()))
+                         .Returns(dt);
             // Act
-            _collectionsRepository.RemoveCollectionForUser("1", collectionToRemove.CollectionId.ToString());
-            List<Collection> collectionsAfter = _collectionsRepository.GetAllCollections(1);
-
-            // Assert
-            bool exists = false;
-            foreach (Collection c in collectionsAfter)
-            {
-                if (c.CollectionId == collectionToRemove.CollectionId)
-                {
-                    exists = true;
-                    break;
-                }
-            }
-            Assert.That(exists, Is.False, "The collection should have been removed.");
+            var result = _repository.GetAllCollections(1);
+            // Assert: list count equals expected.
+            Assert.That(result.Count, Is.EqualTo(expectedCount));
         }
 
         [Test]
-        public void SaveCollection_NewCollection_AssignsCollectionId()
+        public void GetAllCollections_SqlException_ThrowsRepositoryExceptionWithDatabaseErrorMessage()
         {
             // Arrange
-            Collection newCollection = new Collection(userId: 1, name: "New Test Collection", createdAt: DateOnly.FromDateTime(DateTime.Now));
-            newCollection.CoverPicture = "newpic.jpg";
-            newCollection.IsPublic = true;
-
-            // Act
-            _collectionsRepository.SaveCollection("1", newCollection);
-
-            // Assert: Check that the new collection has been assigned a nonzero CollectionId.
-            List<Collection> collections = _collectionsRepository.GetAllCollections(1);
-            bool found = false;
-            foreach (Collection c in collections)
-            {
-                if (c.Name == "New Test Collection" && c.CollectionId != 0)
-                {
-                    found = true;
-                    break;
-                }
-            }
-            Assert.That(found, Is.True, "The new collection should be saved and assigned a CollectionId.");
+            SqlException sqlEx = CreateSqlException();
+            _mockDataLink.Setup(dl => dl.ExecuteReader("GetAllCollectionsForUser", It.IsAny<SqlParameter[]>()))
+                         .Throws(sqlEx);
+            // Act & Assert
+            var ex = Assert.Throws<RepositoryException>(() => _repository.GetAllCollections(1));
+            Assert.That(ex.Message, Is.EqualTo("Database error while retrieving collections."));
         }
 
         [Test]
-        public void SaveCollection_UpdateExistingCollection_ChangesValues()
+        public void GetAllCollections_GenericException_ThrowsRepositoryExceptionWithUnexpectedErrorMessage()
         {
             // Arrange
-            Collection collection = _collectionsRepository.GetAllCollections(1).First();
-            string originalName = collection.Name;
-            string updatedName = originalName + " Updated";
-
-            // Act
-            collection.Name = updatedName;
-            _collectionsRepository.SaveCollection("1", collection);
-            Collection updated = _collectionsRepository.GetCollectionById(collection.CollectionId, 1);
-
-            // Assert
-            Assert.That(updated, Is.Not.Null, "Updated collection should not be null.");
-            Assert.That(updated.Name, Is.EqualTo(updatedName), "Collection name should be updated.");
+            _mockDataLink.Setup(dl => dl.ExecuteReader("GetAllCollectionsForUser", It.IsAny<SqlParameter[]>()))
+                         .Throws(new Exception("Test error"));
+            // Act & Assert
+            var ex = Assert.Throws<RepositoryException>(() => _repository.GetAllCollections(1));
+            Assert.That(ex.Message, Is.EqualTo("An unexpected error occurred while retrieving collections."));
         }
 
-        [Test]
-        public void DeleteCollection_ExistingCollection_RemovesIt()
-        {
-            // Arrange: Create a new collection then delete it.
-            _collectionsRepository.CreateCollection(1, "Delete Test", "delpic.jpg", true, DateOnly.FromDateTime(DateTime.Now));
-            List<Collection> all = _collectionsRepository.GetAllCollections(1);
-            Collection toDelete = null;
-            foreach (Collection c in all)
-            {
-                if (c.Name == "Delete Test")
-                {
-                    toDelete = c;
-                    break;
-                }
-            }
-            Assert.That(toDelete, Is.Not.Null, "The new collection to delete should be created.");
+        #endregion
 
-            // Act
-            _collectionsRepository.DeleteCollection(toDelete.CollectionId, 1);
-            List<Collection> afterDelete = _collectionsRepository.GetAllCollections(1);
-
-            // Assert
-            bool exists = false;
-            foreach (Collection c in afterDelete)
-            {
-                if (c.CollectionId == toDelete.CollectionId)
-                {
-                    exists = true;
-                    break;
-                }
-            }
-            Assert.That(exists, Is.False, "The collection should have been deleted.");
-        }
+        #region GetLastThreeCollectionsForUser Tests
 
         [Test]
-        public void CreateCollection_NewCollection_AddsCollection()
+        public void GetLastThreeCollectionsForUser_ReturnsOnlyThreeCollections()
         {
             // Arrange
-            int initialCount = _collectionsRepository.GetAllCollections(1).Count;
-
+            int total = 5;
+            DataTable dt = CreateCollectionsDataTable(total);
+            _mockDataLink.Setup(dl => dl.ExecuteReader("GetAllCollectionsForUser", It.IsAny<SqlParameter[]>()))
+                         .Returns(dt);
             // Act
-            _collectionsRepository.CreateCollection(1, "Create Test", "createpic.jpg", false, DateOnly.FromDateTime(DateTime.Now));
-            int newCount = _collectionsRepository.GetAllCollections(1).Count;
-
-            // Assert
-            Assert.That(newCount, Is.EqualTo(initialCount + 1), "The count of collections should increase by one.");
+            var result = _repository.GetLastThreeCollectionsForUser(1);
+            // Assert: only three collections are returned.
+            Assert.That(result.Count, Is.EqualTo(3));
         }
 
         [Test]
-        public void UpdateCollection_ExistingCollection_UpdatesProperties()
+        public void GetLastThreeCollectionsForUser_ReturnsMostRecentCollections_FirstHasLatestCreatedAt()
         {
             // Arrange
-            Collection collection = _collectionsRepository.GetAllCollections(1).First();
-            int collectionId = collection.CollectionId;
-            string newName = "Updated Name";
-            string newCover = "updatedcover.jpg";
-            bool newVisibility = !collection.IsPublic;
-
-            // Act
-            _collectionsRepository.UpdateCollection(collectionId, 1, newName, newCover, newVisibility);
-            Collection updated = _collectionsRepository.GetCollectionById(collectionId, 1);
-
-            // Assert
-            Assert.That(updated, Is.Not.Null, "Updated collection should not be null.");
-            Assert.That(updated.Name, Is.EqualTo(newName), "Name should be updated.");
-            Assert.That(updated.CoverPicture, Is.EqualTo(newCover), "CoverPicture should be updated.");
-            Assert.That(updated.IsPublic, Is.EqualTo(newVisibility), "Visibility should be updated.");
-        }
-
-        [Test]
-        public void GetPublicCollectionsForUser_ReturnsOnlyPublicCollections()
-        {
-            // Act
-            List<Collection> publicCollections = _collectionsRepository.GetPublicCollectionsForUser(1);
-
-            // Assert
-            foreach (Collection c in publicCollections)
+            // Create 3 collections with known CreatedAt values.
+            DataTable dt = CreateCollectionsDataTable(3);
+            // Modify created_at so that the first row is the oldest and last is the newest.
+            for (int i = 0; i < dt.Rows.Count; i++)
             {
-                Assert.That(c.IsPublic, Is.True, "Each returned collection should be public.");
+                dt.Rows[i]["created_at"] = DateTime.Now.AddDays(-10 + i);
             }
+            _mockDataLink.Setup(dl => dl.ExecuteReader("GetAllCollectionsForUser", It.IsAny<SqlParameter[]>()))
+                         .Returns(dt);
+            // Act
+            var result = _repository.GetLastThreeCollectionsForUser(1);
+            // Assert: the first collection in result has the greatest created_at.
+            Assert.That(result.First().CreatedAt, Is.EqualTo(DateOnly.FromDateTime(DateTime.Now.AddDays(-8))));
         }
 
         [Test]
-        public void GetGamesNotInCollection_ReturnsDummyGames()
+        public void GetLastThreeCollectionsForUser_Exception_ThrowsRepositoryException()
         {
-            // Act
-            List<OwnedGame> games = _collectionsRepository.GetGamesNotInCollection(5, 1);
+            // Arrange
+            _mockDataLink.Setup(dl => dl.ExecuteReader("GetAllCollectionsForUser", It.IsAny<SqlParameter[]>()))
+                         .Throws(new Exception("Test error"));
+            // Act & Assert
+            var ex = Assert.Throws<RepositoryException>(() => _repository.GetLastThreeCollectionsForUser(1));
+            Assert.That(ex.Message, Is.EqualTo("An unexpected error occurred while retrieving the last three collections."));
+        }
 
-            // Assert
-            Assert.That(games, Is.Not.Null, "Games list should not be null.");
-            Assert.That(games.Count, Is.GreaterThan(0), "There should be at least one game returned.");
+        #endregion
+
+        #region GetCollectionById Tests
+
+        [Test]
+        public void GetCollectionById_ReturnsNull_WhenDataTableHasNoRows()
+        {
+            // Arrange
+            DataTable dt = CreateEmptyCollectionsDataTable();
+            _mockDataLink.Setup(dl => dl.ExecuteReader("GetCollectionById", It.IsAny<SqlParameter[]>()))
+                         .Returns(dt);
+            // Act
+            var result = _repository.GetCollectionById(1, 1);
+            // Assert: result is null.
+            Assert.That(result, Is.Null);
+        }
+
+        [Test]
+        public void GetCollectionById_ReturnsCollection_WhenRowExists()
+        {
+            // Arrange
+            DataTable dt = CreateCollectionsDataTable(1);
+            _mockDataLink.Setup(dl => dl.ExecuteReader("GetCollectionById", It.IsAny<SqlParameter[]>()))
+                         .Returns(dt);
+            // Act
+            var result = _repository.GetCollectionById(1, 1);
+            // Assert: collection is not null.
+            Assert.That(result, Is.Not.Null);
+        }
+
+        [Test]
+        public void GetCollectionById_SqlException_ThrowsRepositoryExceptionWithDatabaseErrorMessage()
+        {
+            // Arrange
+            SqlException sqlEx = CreateSqlException();
+            _mockDataLink.Setup(dl => dl.ExecuteReader("GetCollectionById", It.IsAny<SqlParameter[]>()))
+                         .Throws(sqlEx);
+            // Act & Assert
+            var ex = Assert.Throws<RepositoryException>(() => _repository.GetCollectionById(1, 1));
+            Assert.That(ex.Message, Is.EqualTo("Database error while retrieving collection by ID."));
+        }
+
+        [Test]
+        public void GetCollectionById_GenericException_ThrowsRepositoryExceptionWithUnexpectedErrorMessage()
+        {
+            // Arrange
+            _mockDataLink.Setup(dl => dl.ExecuteReader("GetCollectionById", It.IsAny<SqlParameter[]>()))
+                         .Throws(new Exception("Test error"));
+            // Act & Assert
+            var ex = Assert.Throws<RepositoryException>(() => _repository.GetCollectionById(1, 1));
+            Assert.That(ex.Message, Is.EqualTo("An unexpected error occurred while retrieving collection by ID."));
+        }
+
+        #endregion
+
+        #region GetGamesInCollection (single parameter) Tests
+        
+        [Test]
+        public void GetGamesInCollection_ReturnsEmptyList_WhenDataTableHasNoRows()
+        {
+            // Arrange: Create an empty DataTable with expected columns.
+            DataTable emptyTable = new DataTable();
+            emptyTable.Columns.Add("user_id", typeof(int));
+            emptyTable.Columns.Add("title", typeof(string));
+            emptyTable.Columns.Add("description", typeof(string));
+            emptyTable.Columns.Add("cover_picture", typeof(string));
+            emptyTable.Columns.Add("game_id", typeof(int));
+    
+            _mockDataLink.Setup(dl => dl.ExecuteReader("GetGamesInCollection", It.IsAny<SqlParameter[]>()))
+                .Returns(emptyTable);
+            // Act
+            var result = _repository.GetGamesInCollection(1);
+            // Assert: Verify the returned list is empty.
+            Assert.That(result, Is.Empty);
+        }
+
+        [Test]
+        public void GetGamesInCollection_ReturnsEmptyList_WhenDataTableHasNoRows_SingleParam()
+        {
+            // Arrange
+            DataTable dt = CreateEmptyGamesDataTable();
+            _mockDataLink.Setup(dl => dl.ExecuteReader("GetGamesInCollection", It.IsAny<SqlParameter[]>()))
+                         .Returns(dt);
+            // Act
+            var result = _repository.GetGamesInCollection(1);
+            // Assert: result is empty.
+            Assert.That(result, Is.Empty);
+        }
+
+        [Test]
+        public void GetGamesInCollection_ReturnsCorrectCount_WhenDataTableHasRows_SingleParam()
+        {
+            // Arrange
+            int expectedCount = 4;
+            DataTable dt = CreateGamesDataTable(expectedCount);
+            _mockDataLink.Setup(dl => dl.ExecuteReader("GetGamesInCollection", It.IsAny<SqlParameter[]>()))
+                         .Returns(dt);
+            // Act
+            var result = _repository.GetGamesInCollection(1);
+            // Assert: count equals expected.
+            Assert.That(result.Count, Is.EqualTo(expectedCount));
+        }
+
+        [Test]
+        public void GetGamesInCollection_SqlException_ThrowsRepositoryExceptionWithDatabaseErrorMessage_SingleParam()
+        {
+            // Arrange
+            SqlException sqlEx = CreateSqlException();
+            _mockDataLink.Setup(dl => dl.ExecuteReader("GetGamesInCollection", It.IsAny<SqlParameter[]>()))
+                         .Throws(sqlEx);
+            // Act & Assert
+            var ex = Assert.Throws<RepositoryException>(() => _repository.GetGamesInCollection(1));
+            Assert.That(ex.Message, Is.EqualTo("Database error while retrieving games in collection."));
+        }
+
+        [Test]
+        public void GetGamesInCollection_GenericException_ThrowsRepositoryExceptionWithUnexpectedErrorMessage_SingleParam()
+        {
+            // Arrange
+            _mockDataLink.Setup(dl => dl.ExecuteReader("GetGamesInCollection", It.IsAny<SqlParameter[]>()))
+                         .Throws(new Exception("Test error"));
+            // Act & Assert
+            var ex = Assert.Throws<RepositoryException>(() => _repository.GetGamesInCollection(1));
+            Assert.That(ex.Message, Is.EqualTo("An unexpected error occurred while retrieving games in collection."));
         }
         
         [Test]
-        public void IsAllOwnedGamesCollection_DefaultCollection_ReturnsFalse()
+        public void GetGamesInCollection_ReturnsEmptyList_WhenDataTableIsNull()
         {
-            // Arrange
-            var collection = new Collection(userId: 1, name: "Test", createdAt: DateOnly.FromDateTime(DateTime.Now));
-
+            // Arrange: Return null instead of a DataTable
+            _mockDataLink.Setup(dl => dl.ExecuteReader("GetGamesInCollection", It.IsAny<SqlParameter[]>()))
+                .Returns((DataTable)null);
+    
             // Act
-            bool isAllOwned = collection.IsAllOwnedGamesCollection;
-
-            // Assert
-            Assert.That(isAllOwned, Is.False, "IsAllOwnedGamesCollection should be false by default.");
+            var result = _repository.GetGamesInCollection(1);
+    
+            // Assert: The returned list should be empty
+            Assert.That(result, Is.Empty);
         }
 
+        [Test]
+        public void GetGamesInCollection_WithCollectionIdOne_ReturnsEmptyList_WhenDataTableIsNull()
+        {
+            // Arrange: Return null instead of a DataTable
+            _mockDataLink.Setup(dl => dl.ExecuteReader("GetAllGamesForUser", It.IsAny<SqlParameter[]>()))
+                .Returns((DataTable)null);
+    
+            // Act
+            var result = _repository.GetGamesInCollection(1, 1);
+    
+            // Assert: The returned list should be empty
+            Assert.That(result, Is.Empty);
+        }
+
+        #endregion
+
+        #region GetGamesInCollection (two parameters) Tests
+
+        [Test]
+        public void GetGamesInCollection_WithCollectionIdOne_ReturnsAllGamesForUser()
+        {
+            // Arrange
+            int expectedCount = 3;
+            DataTable dt = CreateGamesDataTable(expectedCount);
+            _mockDataLink.Setup(dl => dl.ExecuteReader("GetAllGamesForUser", It.IsAny<SqlParameter[]>()))
+                         .Returns(dt);
+            // Act
+            var result = _repository.GetGamesInCollection(1, 1);
+            // Assert: count equals expected.
+            Assert.That(result.Count, Is.EqualTo(expectedCount));
+        }
+
+        [Test]
+        public void GetGamesInCollection_WithCollectionIdNotOne_ReturnsGamesInCollection_SameAsSingleParam()
+        {
+            // Arrange
+            int expectedCount = 2;
+            DataTable dt = CreateGamesDataTable(expectedCount);
+            _mockDataLink.Setup(dl => dl.ExecuteReader("GetGamesInCollection", It.IsAny<SqlParameter[]>()))
+                         .Returns(dt);
+            // Act
+            var result = _repository.GetGamesInCollection(2, 1);
+            // Assert: count equals expected.
+            Assert.That(result.Count, Is.EqualTo(expectedCount));
+        }
+
+        [Test]
+        public void GetGamesInCollection_WithCollectionIdOne_SqlException_ThrowsRepositoryException()
+        {
+            // Arrange
+            SqlException sqlEx = CreateSqlException();
+            _mockDataLink.Setup(dl => dl.ExecuteReader("GetAllGamesForUser", It.IsAny<SqlParameter[]>()))
+                         .Throws(sqlEx);
+            // Act & Assert
+            var ex = Assert.Throws<RepositoryException>(() => _repository.GetGamesInCollection(1, 1));
+            Assert.That(ex.Message, Is.EqualTo("Database error while retrieving games in collection."));
+        }
+
+        [Test]
+        public void GetGamesInCollection_WithCollectionIdNotOne_GenericException_ThrowsRepositoryException()
+        {
+            // Arrange
+            _mockDataLink.Setup(dl => dl.ExecuteReader("GetGamesInCollection", It.IsAny<SqlParameter[]>()))
+                         .Throws(new Exception("Test error"));
+            // Act & Assert
+            var ex = Assert.Throws<RepositoryException>(() => _repository.GetGamesInCollection(2, 1));
+            Assert.That(ex.Message, Is.EqualTo("An unexpected error occurred while retrieving games in collection."));
+        }
+
+        #endregion
+
+        #region AddGameToCollection Tests
+
+        [Test]
+        public void AddGameToCollection_CallsExecuteNonQuery()
+        {
+            // Arrange
+            _mockDataLink.Setup(dl => dl.ExecuteNonQuery("AddGameToCollection", It.IsAny<SqlParameter[]>()))
+                         .Verifiable();
+            // Act
+            _repository.AddGameToCollection(1, 1, 1);
+            // Assert: verify ExecuteNonQuery was called.
+            _mockDataLink.Verify(dl => dl.ExecuteNonQuery("AddGameToCollection", It.IsAny<SqlParameter[]>()), Times.Once);
+            Assert.That(true, Is.True); // dummy assert
+        }
+
+        [Test]
+        public void AddGameToCollection_SqlException_ThrowsRepositoryExceptionWithDatabaseErrorMessage()
+        {
+            // Arrange
+            SqlException sqlEx = CreateSqlException();
+            _mockDataLink.Setup(dl => dl.ExecuteNonQuery("AddGameToCollection", It.IsAny<SqlParameter[]>()))
+                         .Throws(sqlEx);
+            // Act & Assert
+            var ex = Assert.Throws<RepositoryException>(() => _repository.AddGameToCollection(1, 1, 1));
+            Assert.That(ex.Message, Is.EqualTo("Database error while adding game to collection."));
+        }
+
+        [Test]
+        public void AddGameToCollection_GenericException_ThrowsRepositoryExceptionWithUnexpectedErrorMessage()
+        {
+            // Arrange
+            _mockDataLink.Setup(dl => dl.ExecuteNonQuery("AddGameToCollection", It.IsAny<SqlParameter[]>()))
+                         .Throws(new Exception("Test error"));
+            // Act & Assert
+            var ex = Assert.Throws<RepositoryException>(() => _repository.AddGameToCollection(1, 1, 1));
+            Assert.That(ex.Message, Is.EqualTo("An unexpected error occurred while adding game to collection."));
+        }
+
+        #endregion
+
+        #region RemoveGameFromCollection Tests
+
+        [Test]
+        public void RemoveGameFromCollection_CallsExecuteNonQuery()
+        {
+            // Arrange
+            _mockDataLink.Setup(dl => dl.ExecuteNonQuery("RemoveGameFromCollection", It.IsAny<SqlParameter[]>()))
+                         .Verifiable();
+            // Act
+            _repository.RemoveGameFromCollection(1, 1);
+            // Assert: verify ExecuteNonQuery was called.
+            _mockDataLink.Verify(dl => dl.ExecuteNonQuery("RemoveGameFromCollection", It.IsAny<SqlParameter[]>()), Times.Once);
+            Assert.That(true, Is.True); // dummy assert
+        }
+
+        [Test]
+        public void RemoveGameFromCollection_SqlException_ThrowsRepositoryExceptionWithDatabaseErrorMessage()
+        {
+            // Arrange
+            SqlException sqlEx = CreateSqlException();
+            _mockDataLink.Setup(dl => dl.ExecuteNonQuery("RemoveGameFromCollection", It.IsAny<SqlParameter[]>()))
+                         .Throws(sqlEx);
+            // Act & Assert
+            var ex = Assert.Throws<RepositoryException>(() => _repository.RemoveGameFromCollection(1, 1));
+            Assert.That(ex.Message, Is.EqualTo("Database error while removing game from collection."));
+        }
+
+        [Test]
+        public void RemoveGameFromCollection_GenericException_ThrowsRepositoryExceptionWithUnexpectedErrorMessage()
+        {
+            // Arrange
+            _mockDataLink.Setup(dl => dl.ExecuteNonQuery("RemoveGameFromCollection", It.IsAny<SqlParameter[]>()))
+                         .Throws(new Exception("Test error"));
+            // Act & Assert
+            var ex = Assert.Throws<RepositoryException>(() => _repository.RemoveGameFromCollection(1, 1));
+            Assert.That(ex.Message, Is.EqualTo("An unexpected error occurred while removing game from collection."));
+        }
+
+        #endregion
+
+        #region MakeCollectionPrivateForUser Tests
+
+        [Test]
+        public void MakeCollectionPrivateForUser_CallsExecuteReader()
+        {
+            // Arrange
+            _mockDataLink.Setup(dl => dl.ExecuteReader("MakeCollectionPrivate", It.IsAny<SqlParameter[]>()))
+                         .Verifiable();
+            // Act
+            _repository.MakeCollectionPrivateForUser("1", "1");
+            // Assert: verify ExecuteReader was called.
+            _mockDataLink.Verify(dl => dl.ExecuteReader("MakeCollectionPrivate", It.IsAny<SqlParameter[]>()), Times.Once);
+            Assert.That(true, Is.True); // dummy assert
+        }
+
+        [Test]
+        public void MakeCollectionPrivateForUser_DatabaseOperationException_ThrowsRepositoryException()
+        {
+            // Arrange
+            var dbEx = new DatabaseOperationException("Error");
+            _mockDataLink.Setup(dl => dl.ExecuteReader("MakeCollectionPrivate", It.IsAny<SqlParameter[]>()))
+                         .Throws(dbEx);
+            // Act & Assert
+            var ex = Assert.Throws<RepositoryException>(() => _repository.MakeCollectionPrivateForUser("1", "1"));
+            Assert.That(ex.Message, Is.EqualTo("Failed to make collection 1 private for user 1."));
+        }
+
+        #endregion
+
+        #region MakeCollectionPublicForUser Tests
+
+        [Test]
+        public void MakeCollectionPublicForUser_CallsExecuteReader()
+        {
+            // Arrange
+            _mockDataLink.Setup(dl => dl.ExecuteReader("MakeCollectionPublic", It.IsAny<SqlParameter[]>()))
+                         .Verifiable();
+            // Act
+            _repository.MakeCollectionPublicForUser("1", "1");
+            // Assert: verify ExecuteReader was called.
+            _mockDataLink.Verify(dl => dl.ExecuteReader("MakeCollectionPublic", It.IsAny<SqlParameter[]>()), Times.Once);
+            Assert.That(true, Is.True); // dummy assert
+        }
+
+        [Test]
+        public void MakeCollectionPublicForUser_DatabaseOperationException_ThrowsRepositoryException()
+        {
+            // Arrange
+            var dbEx = new DatabaseOperationException("Error");
+            _mockDataLink.Setup(dl => dl.ExecuteReader("MakeCollectionPublic", It.IsAny<SqlParameter[]>()))
+                         .Throws(dbEx);
+            // Act & Assert
+            var ex = Assert.Throws<RepositoryException>(() => _repository.MakeCollectionPublicForUser("1", "1"));
+            Assert.That(ex.Message, Is.EqualTo("Failed to make collection 1 public for user 1."));
+        }
+
+        #endregion
+
+        #region RemoveCollectionForUser Tests
+
+        [Test]
+        public void RemoveCollectionForUser_CallsExecuteReader()
+        {
+            // Arrange
+            _mockDataLink.Setup(dl => dl.ExecuteReader("DeleteCollection", It.IsAny<SqlParameter[]>()))
+                         .Verifiable();
+            // Act
+            _repository.RemoveCollectionForUser("1", "1");
+            // Assert: verify ExecuteReader was called.
+            _mockDataLink.Verify(dl => dl.ExecuteReader("DeleteCollection", It.IsAny<SqlParameter[]>()), Times.Once);
+            Assert.That(true, Is.True); // dummy assert
+        }
+
+        [Test]
+        public void RemoveCollectionForUser_DatabaseOperationException_ThrowsRepositoryException()
+        {
+            // Arrange
+            var dbEx = new DatabaseOperationException("Error");
+            _mockDataLink.Setup(dl => dl.ExecuteReader("DeleteCollection", It.IsAny<SqlParameter[]>()))
+                         .Throws(dbEx);
+            // Act & Assert
+            var ex = Assert.Throws<RepositoryException>(() => _repository.RemoveCollectionForUser("1", "1"));
+            Assert.That(ex.Message, Is.EqualTo("Failed to remove collection 1 for user 1."));
+        }
+
+        #endregion
+
+        #region SaveCollection Tests
+
+        [Test]
+        public void SaveCollection_NewCollection_CallsCreateCollection()
+        {
+            // Arrange
+            var collection = new Collection(1, "New Collection", DateOnly.FromDateTime(DateTime.Now), "cover.jpg", true);
+            // Ensure CollectionId is 0 to simulate new collection.
+            collection.CollectionId = 0;
+            _mockDataLink.Setup(dl => dl.ExecuteReader("CreateCollection", It.IsAny<SqlParameter[]>()))
+                         .Verifiable();
+            // Act
+            _repository.SaveCollection("1", collection);
+            // Assert: verify ExecuteReader was called with "CreateCollection"
+            _mockDataLink.Verify(dl => dl.ExecuteReader("CreateCollection", It.IsAny<SqlParameter[]>()), Times.Once);
+            Assert.That(true, Is.True); // dummy assert
+        }
+
+        [Test]
+        public void SaveCollection_ExistingCollection_CallsUpdateCollection()
+        {
+            // Arrange
+            var collection = new Collection(1, "Existing Collection", DateOnly.FromDateTime(DateTime.Now), "cover.jpg", false);
+            collection.CollectionId = 10; // non-zero
+            _mockDataLink.Setup(dl => dl.ExecuteReader("UpdateCollection", It.IsAny<SqlParameter[]>()))
+                         .Verifiable();
+            // Act
+            _repository.SaveCollection("1", collection);
+            // Assert: verify ExecuteReader was called with "UpdateCollection"
+            _mockDataLink.Verify(dl => dl.ExecuteReader("UpdateCollection", It.IsAny<SqlParameter[]>()), Times.Once);
+            Assert.That(true, Is.True); // dummy assert
+        }
+
+        [Test]
+        public void SaveCollection_DatabaseOperationException_ThrowsRepositoryException()
+        {
+            // Arrange - testing new collection case.
+            var collection = new Collection(1, "New Collection", DateOnly.FromDateTime(DateTime.Now), "cover.jpg", true);
+            collection.CollectionId = 0;
+            var dbEx = new DatabaseOperationException("Error");
+            _mockDataLink.Setup(dl => dl.ExecuteReader("CreateCollection", It.IsAny<SqlParameter[]>()))
+                         .Throws(dbEx);
+            // Act & Assert
+            var ex = Assert.Throws<RepositoryException>(() => _repository.SaveCollection("1", collection));
+            Assert.That(ex.Message, Is.EqualTo("Failed to save collection for user 1."));
+        }
+
+        #endregion
+
+        #region DeleteCollection Tests
+
+        [Test]
+        public void DeleteCollection_CallsExecuteNonQuery()
+        {
+            // Arrange
+            _mockDataLink.Setup(dl => dl.ExecuteNonQuery("DeleteCollection", It.IsAny<SqlParameter[]>()))
+                         .Verifiable();
+            // Act
+            _repository.DeleteCollection(1, 1);
+            // Assert: verify ExecuteNonQuery was called.
+            _mockDataLink.Verify(dl => dl.ExecuteNonQuery("DeleteCollection", It.IsAny<SqlParameter[]>()), Times.Once);
+            Assert.That(true, Is.True); // dummy assert
+        }
+
+        [Test]
+        public void DeleteCollection_SqlException_ThrowsRepositoryExceptionWithDatabaseErrorMessage()
+        {
+            // Arrange
+            SqlException sqlEx = CreateSqlException();
+            _mockDataLink.Setup(dl => dl.ExecuteNonQuery("DeleteCollection", It.IsAny<SqlParameter[]>()))
+                         .Throws(sqlEx);
+            // Act & Assert
+            var ex = Assert.Throws<RepositoryException>(() => _repository.DeleteCollection(1, 1));
+            Assert.That(ex.Message, Is.EqualTo("Database error while deleting collection."));
+        }
+
+        [Test]
+        public void DeleteCollection_GenericException_ThrowsRepositoryExceptionWithUnexpectedErrorMessage()
+        {
+            // Arrange
+            _mockDataLink.Setup(dl => dl.ExecuteNonQuery("DeleteCollection", It.IsAny<SqlParameter[]>()))
+                         .Throws(new Exception("Test error"));
+            // Act & Assert
+            var ex = Assert.Throws<RepositoryException>(() => _repository.DeleteCollection(1, 1));
+            Assert.That(ex.Message, Is.EqualTo("An unexpected error occurred while deleting collection."));
+        }
+
+        #endregion
+
+        #region CreateCollection Tests
+
+        [Test]
+        public void CreateCollection_CallsExecuteNonQuery()
+        {
+            // Arrange
+            _mockDataLink.Setup(dl => dl.ExecuteNonQuery("CreateCollection", It.IsAny<SqlParameter[]>()))
+                         .Verifiable();
+            // Act
+            _repository.CreateCollection(1, "New Collection", "cover.jpg", true, DateOnly.FromDateTime(DateTime.Now));
+            // Assert: verify ExecuteNonQuery was called.
+            _mockDataLink.Verify(dl => dl.ExecuteNonQuery("CreateCollection", It.IsAny<SqlParameter[]>()), Times.Once);
+            Assert.That(true, Is.True); // dummy assert
+        }
+
+        [Test]
+        public void CreateCollection_SqlException_ThrowsRepositoryExceptionWithDatabaseErrorMessage()
+        {
+            // Arrange
+            SqlException sqlEx = CreateSqlException();
+            _mockDataLink.Setup(dl => dl.ExecuteNonQuery("CreateCollection", It.IsAny<SqlParameter[]>()))
+                         .Throws(sqlEx);
+            // Act & Assert
+            var ex = Assert.Throws<RepositoryException>(() => _repository.CreateCollection(1, "New Collection", "cover.jpg", true, DateOnly.FromDateTime(DateTime.Now)));
+            Assert.That(ex.Message, Is.EqualTo("Database error while creating collection."));
+        }
+
+        [Test]
+        public void CreateCollection_GenericException_ThrowsRepositoryExceptionWithUnexpectedErrorMessage()
+        {
+            // Arrange
+            _mockDataLink.Setup(dl => dl.ExecuteNonQuery("CreateCollection", It.IsAny<SqlParameter[]>()))
+                         .Throws(new Exception("Test error"));
+            // Act & Assert
+            var ex = Assert.Throws<RepositoryException>(() => _repository.CreateCollection(1, "New Collection", "cover.jpg", true, DateOnly.FromDateTime(DateTime.Now)));
+            Assert.That(ex.Message, Is.EqualTo("An unexpected error occurred while creating collection."));
+        }
+
+        #endregion
+
+        #region UpdateCollection Tests
+
+        [Test]
+        public void UpdateCollection_CallsExecuteReader()
+        {
+            // Arrange
+            _mockDataLink.Setup(dl => dl.ExecuteReader("UpdateCollection", It.IsAny<SqlParameter[]>()))
+                         .Verifiable();
+            // Act
+            _repository.UpdateCollection(1, 1, "Updated Collection", "cover_updated.jpg", false);
+            // Assert: verify ExecuteReader was called.
+            _mockDataLink.Verify(dl => dl.ExecuteReader("UpdateCollection", It.IsAny<SqlParameter[]>()), Times.Once);
+            Assert.That(true, Is.True); // dummy assert
+        }
+
+        [Test]
+        public void UpdateCollection_SqlException_ThrowsRepositoryExceptionWithDatabaseErrorMessage()
+        {
+            // Arrange
+            SqlException sqlEx = CreateSqlException();
+            _mockDataLink.Setup(dl => dl.ExecuteReader("UpdateCollection", It.IsAny<SqlParameter[]>()))
+                         .Throws(sqlEx);
+            // Act & Assert
+            var ex = Assert.Throws<RepositoryException>(() => _repository.UpdateCollection(1, 1, "Updated Collection", "cover_updated.jpg", false));
+            Assert.That(ex.Message, Is.EqualTo("Database error while updating collection."));
+        }
+
+        [Test]
+        public void UpdateCollection_GenericException_ThrowsRepositoryExceptionWithUnexpectedErrorMessage()
+        {
+            // Arrange
+            _mockDataLink.Setup(dl => dl.ExecuteReader("UpdateCollection", It.IsAny<SqlParameter[]>()))
+                         .Throws(new Exception("Test error"));
+            // Act & Assert
+            var ex = Assert.Throws<RepositoryException>(() => _repository.UpdateCollection(1, 1, "Updated Collection", "cover_updated.jpg", false));
+            Assert.That(ex.Message, Is.EqualTo("An unexpected error occurred while updating collection."));
+        }
+
+        #endregion
+
+        #region GetPublicCollectionsForUser Tests
+
+        [Test]
+        public void GetPublicCollectionsForUser_ReturnsEmptyList_WhenDataTableHasNoRows()
+        {
+            // Arrange
+            DataTable dt = CreateEmptyCollectionsDataTable();
+            _mockDataLink.Setup(dl => dl.ExecuteReader("GetPublicCollectionsForUser", It.IsAny<SqlParameter[]>()))
+                         .Returns(dt);
+            // Act
+            var result = _repository.GetPublicCollectionsForUser(1);
+            // Assert: list is empty.
+            Assert.That(result, Is.Empty);
+        }
+
+        [Test]
+        public void GetPublicCollectionsForUser_ReturnsCorrectCount_WhenDataTableHasRows()
+        {
+            // Arrange
+            int expectedCount = 4;
+            DataTable dt = CreateCollectionsDataTable(expectedCount);
+            _mockDataLink.Setup(dl => dl.ExecuteReader("GetPublicCollectionsForUser", It.IsAny<SqlParameter[]>()))
+                         .Returns(dt);
+            // Act
+            var result = _repository.GetPublicCollectionsForUser(1);
+            // Assert: count equals expected.
+            Assert.That(result.Count, Is.EqualTo(expectedCount));
+        }
+
+        [Test]
+        public void GetPublicCollectionsForUser_SqlException_ThrowsRepositoryExceptionWithDatabaseErrorMessage()
+        {
+            // Arrange
+            SqlException sqlEx = CreateSqlException();
+            _mockDataLink.Setup(dl => dl.ExecuteReader("GetPublicCollectionsForUser", It.IsAny<SqlParameter[]>()))
+                         .Throws(sqlEx);
+            // Act & Assert
+            var ex = Assert.Throws<RepositoryException>(() => _repository.GetPublicCollectionsForUser(1));
+            Assert.That(ex.Message, Is.EqualTo("Database error while retrieving public collections."));
+        }
+
+        [Test]
+        public void GetPublicCollectionsForUser_GenericException_ThrowsRepositoryExceptionWithUnexpectedErrorMessage()
+        {
+            // Arrange
+            _mockDataLink.Setup(dl => dl.ExecuteReader("GetPublicCollectionsForUser", It.IsAny<SqlParameter[]>()))
+                         .Throws(new Exception("Test error"));
+            // Act & Assert
+            var ex = Assert.Throws<RepositoryException>(() => _repository.GetPublicCollectionsForUser(1));
+            Assert.That(ex.Message, Is.EqualTo("An unexpected error occurred while retrieving public collections."));
+        }
+
+        #endregion
+
+        #region GetGamesNotInCollection Tests
+
+        [Test]
+        public void GetGamesNotInCollection_ReturnsEmptyList_WhenDataTableHasNoRows()
+        {
+            // Arrange: Create an empty DataTable with the expected columns.
+            DataTable emptyTable = new DataTable();
+            emptyTable.Columns.Add("user_id", typeof(int));
+            emptyTable.Columns.Add("title", typeof(string));
+            emptyTable.Columns.Add("description", typeof(string));
+            emptyTable.Columns.Add("cover_picture", typeof(string));
+            emptyTable.Columns.Add("game_id", typeof(int));
+    
+            _mockDataLink.Setup(dl => dl.ExecuteReader("GetGamesNotInCollection", It.IsAny<SqlParameter[]>()))
+                .Returns(emptyTable);
+    
+            // Act
+            var result = _repository.GetGamesNotInCollection(1, 1);
+    
+            // Assert: The returned list should be empty.
+            Assert.That(result, Is.Empty);
+        }
+
+
+        [Test]
+        public void GetGamesNotInCollection_ReturnsCorrectCount_WhenDataTableHasRows()
+        {
+            // Arrange
+            int expectedCount = 3;
+            DataTable dt = CreateGamesDataTable(expectedCount);
+            _mockDataLink.Setup(dl => dl.ExecuteReader("GetGamesNotInCollection", It.IsAny<SqlParameter[]>()))
+                         .Returns(dt);
+            // Act
+            var result = _repository.GetGamesNotInCollection(1, 1);
+            // Assert: count equals expected.
+            Assert.That(result.Count, Is.EqualTo(expectedCount));
+        }
+
+        [Test]
+        public void GetGamesNotInCollection_SqlException_ThrowsRepositoryExceptionWithDatabaseErrorMessage()
+        {
+            // Arrange
+            SqlException sqlEx = CreateSqlException();
+            _mockDataLink.Setup(dl => dl.ExecuteReader("GetGamesNotInCollection", It.IsAny<SqlParameter[]>()))
+                         .Throws(sqlEx);
+            // Act & Assert
+            var ex = Assert.Throws<RepositoryException>(() => _repository.GetGamesNotInCollection(1, 1));
+            Assert.That(ex.Message, Is.EqualTo("Database error while getting games not in collection."));
+        }
+
+        [Test]
+        public void GetGamesNotInCollection_GenericException_ThrowsRepositoryExceptionWithUnexpectedErrorMessage()
+        {
+            // Arrange
+            _mockDataLink.Setup(dl => dl.ExecuteReader("GetGamesNotInCollection", It.IsAny<SqlParameter[]>()))
+                         .Throws(new Exception("Test error"));
+            // Act & Assert
+            var ex = Assert.Throws<RepositoryException>(() => _repository.GetGamesNotInCollection(1, 1));
+            Assert.That(ex.Message, Is.EqualTo("An unexpected error occurred while getting games not in collection."));
+        }
+
+        #endregion
     }
 }

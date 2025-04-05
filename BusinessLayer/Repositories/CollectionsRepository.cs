@@ -429,7 +429,7 @@ namespace BusinessLayer.Repositories
 
                 var dataTable = _dataLink.ExecuteReader("GetGamesNotInCollection", parameters);
 
-                if (dataTable.Rows.Count == 0)
+                if (dataTable == null || dataTable.Rows.Count == 0)
                 {
                     return new List<OwnedGame>();
                 }
@@ -459,26 +459,19 @@ namespace BusinessLayer.Repositories
 
         private static List<Collection> MapDataTableToCollections(DataTable dataTable)
         {
-            try
+            var collections = dataTable.AsEnumerable().Select(row =>
             {
-                var collections = dataTable.AsEnumerable().Select(row =>
-                {
-                    var collection = new Collection(
-                        userId: Convert.ToInt32(row["user_id"]),
-                        name: row["name"].ToString(),
-                        createdAt: DateOnly.FromDateTime(Convert.ToDateTime(row["created_at"])),
-                        coverPicture: row["cover_picture"]?.ToString(),
-                        isPublic: Convert.ToBoolean(row["is_public"])
+                var collection = new Collection(
+                    userId: Convert.ToInt32(row["user_id"]),
+                    name: row["name"].ToString(),
+                    createdAt: DateOnly.FromDateTime(Convert.ToDateTime(row["created_at"])),
+                    coverPicture: row["cover_picture"]?.ToString(),
+                    isPublic: Convert.ToBoolean(row["is_public"])
                     );
-                    collection.CollectionId = Convert.ToInt32(row["collection_id"]);
-                    return collection;
-                }).ToList();
-                return collections;
-            }
-            catch (Exception ex)
-            {
-                throw;
-            }
+                collection.CollectionId = Convert.ToInt32(row["collection_id"]);
+                return collection;
+            }).ToList();
+            return collections;
         }
 
         private static Collection MapDataRowToCollection(DataRow row)

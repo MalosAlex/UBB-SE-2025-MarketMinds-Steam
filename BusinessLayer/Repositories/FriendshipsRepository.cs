@@ -2,7 +2,6 @@ using BusinessLayer.Data;
 using BusinessLayer.Models;
 using System.Data;
 using Microsoft.Data.SqlClient;
-using System.Diagnostics;
 using BusinessLayer.Exceptions;
 using BusinessLayer.Repositories.Interfaces;
 
