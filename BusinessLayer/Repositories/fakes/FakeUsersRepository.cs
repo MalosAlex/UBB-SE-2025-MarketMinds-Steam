@@ -6,6 +6,8 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using BCrypt.Net;
+using BusinessLayer.Utils;
 
 namespace BusinessLayer.Repositories.fakes
 {
@@ -78,6 +80,7 @@ namespace BusinessLayer.Repositories.fakes
             User u = new User();
             u.UserId = userId;
             u.Username = "b";
+            u.Password = PasswordHasher.HashPassword("password");
             return u;
         }
 
@@ -100,8 +103,11 @@ namespace BusinessLayer.Repositories.fakes
 
         public User? VerifyCredentials(string emailOrUsername)
         {
+            if (emailOrUsername == null)
+                return null;
             User u = new User();
             u.Email = emailOrUsername;
+            u.Password = PasswordHasher.HashPassword("password");
             return u;
         }
     }
