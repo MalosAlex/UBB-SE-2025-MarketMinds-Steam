@@ -10,9 +10,9 @@ namespace BusinessLayer.Repositories
 {
     public class SessionRepository : ISessionRepository
     {
-        private readonly DataLink _dataLink;
+        private readonly IDataLink _dataLink;
 
-        public SessionRepository(DataLink dataLink)
+        public SessionRepository(IDataLink dataLink)
         {
             _dataLink = dataLink ?? throw new ArgumentNullException(nameof(dataLink));
         }

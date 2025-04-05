@@ -1,16 +1,18 @@
 ﻿using BusinessLayer.Models;
-using BusinessLayer.Repositories;
 using System;
 using System.Collections.Generic;
 using System.Diagnostics;
+using BusinessLayer.Exceptions;
+using BusinessLayer.Repositories.Interfaces;
+using RepositoryException = BusinessLayer.Repositories.RepositoryException;
 
 namespace BusinessLayer.Services
 {
     public class OwnedGamesService
     {
-        private readonly OwnedGamesRepository _ownedGamesRepository;
+        private readonly IOwnedGamesRepository _ownedGamesRepository;
 
-        public OwnedGamesService(OwnedGamesRepository ownedGamesRepository)
+        public OwnedGamesService(IOwnedGamesRepository ownedGamesRepository)
         {
             _ownedGamesRepository = ownedGamesRepository ?? throw new ArgumentNullException(nameof(ownedGamesRepository));
         }
@@ -80,13 +82,6 @@ namespace BusinessLayer.Services
                 Debug.WriteLine($"Unexpected error: {ex.Message}");
                 throw new ServiceException("An unexpected error occurred while removing owned game.", ex);
             }
-        }
-
-        public class ServiceException : Exception
-        {
-            public ServiceException(string message) : base(message) { }
-            public ServiceException(string message, Exception innerException)
-                : base(message, innerException) { }
         }
     }
 }

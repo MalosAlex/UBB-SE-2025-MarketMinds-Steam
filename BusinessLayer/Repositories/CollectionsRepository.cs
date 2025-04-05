@@ -4,15 +4,16 @@ using System.Data;
 using Microsoft.Data.SqlClient;
 using System.Diagnostics;
 using BusinessLayer.Repositories.Interfaces;
+using System.Linq;
 
 namespace BusinessLayer.Repositories
 {
     public class CollectionsRepository : ICollectionsRepository
     {
-        private readonly DataLink _dataLink;
+        private readonly IDataLink _dataLink;
         private readonly OwnedGamesRepository _ownedGamesRepository;
 
-        public CollectionsRepository(DataLink dataLink, OwnedGamesRepository ownedGamesRepository)
+        public CollectionsRepository(IDataLink dataLink, OwnedGamesRepository ownedGamesRepository)
         {
             _dataLink = dataLink ?? throw new ArgumentNullException(nameof(dataLink));
             _ownedGamesRepository = ownedGamesRepository ?? throw new ArgumentNullException(nameof(ownedGamesRepository));
@@ -141,13 +142,16 @@ namespace BusinessLayer.Repositories
                     return new List<OwnedGame>();
                 }
 
-                var games = dataTable.AsEnumerable().Select(row => new OwnedGame
+                var games = dataTable.AsEnumerable().Select(row =>
                 {
-                    GameId = Convert.ToInt32(row["game_id"]),
-                    UserId = Convert.ToInt32(row["user_id"]),
-                    Title = row["title"].ToString(),
-                    Description = row["description"].ToString(),
-                    CoverPicture = row["cover_picture"]?.ToString()
+                    // Create OwnedGame using the new constructor
+                    var game = new OwnedGame(
+                        Convert.ToInt32(row["user_id"]),
+                        row["title"].ToString(),
+                        row["description"]?.ToString(),
+                        row["cover_picture"]?.ToString());
+                    game.GameId = Convert.ToInt32(row["game_id"]);
+                    return game;
                 }).ToList();
 
                 Debug.WriteLine($"Repository: Mapped {games.Count} games");
@@ -190,13 +194,15 @@ namespace BusinessLayer.Repositories
                         return new List<OwnedGame>();
                     }
 
-                    var games = dataTable.AsEnumerable().Select(row => new OwnedGame
+                    var games = dataTable.AsEnumerable().Select(row =>
                     {
-                        GameId = Convert.ToInt32(row["game_id"]),
-                        UserId = Convert.ToInt32(row["user_id"]),
-                        Title = row["title"].ToString(),
-                        Description = row["description"].ToString(),
-                        CoverPicture = row["cover_picture"]?.ToString()
+                        var game = new OwnedGame(
+                            Convert.ToInt32(row["user_id"]),
+                            row["title"].ToString(),
+                            row["description"]?.ToString(),
+                            row["cover_picture"]?.ToString());
+                        game.GameId = Convert.ToInt32(row["game_id"]);
+                        return game;
                     }).ToList();
 
                     Debug.WriteLine($"Repository: Mapped {games.Count} games");
@@ -519,13 +525,15 @@ namespace BusinessLayer.Repositories
                     return new List<OwnedGame>();
                 }
 
-                var games = dataTable.AsEnumerable().Select(row => new OwnedGame
+                var games = dataTable.AsEnumerable().Select(row =>
                 {
-                    GameId = Convert.ToInt32(row["game_id"]),
-                    UserId = Convert.ToInt32(row["user_id"]),
-                    Title = row["title"].ToString(),
-                    Description = row["description"].ToString(),
-                    CoverPicture = row["cover_picture"]?.ToString()
+                    var game = new OwnedGame(
+                        Convert.ToInt32(row["user_id"]),
+                        row["title"].ToString(),
+                        row["description"]?.ToString(),
+                        row["cover_picture"]?.ToString());
+                    game.GameId = Convert.ToInt32(row["game_id"]);
+                    return game;
                 }).ToList();
 
                 Debug.WriteLine($"Repository: Mapped {games.Count} games");
@@ -584,13 +592,6 @@ namespace BusinessLayer.Repositories
             );
             collection.CollectionId = Convert.ToInt32(row["collection_id"]);
             return collection;
-        }
-
-        public class RepositoryException : Exception
-        {
-            public RepositoryException(string message) : base(message) { }
-            public RepositoryException(string message, Exception innerException)
-                : base(message, innerException) { }
         }
     }
 }

@@ -1,19 +1,17 @@
 using BusinessLayer.Data;
 using BusinessLayer.Models;
-using System;
-using System.Collections.Generic;
 using System.Data;
 using Microsoft.Data.SqlClient;
 using System.Diagnostics;
-using System.Linq;
+using BusinessLayer.Repositories.Interfaces;
 
 namespace BusinessLayer.Repositories
 {
-    public class OwnedGamesRepository
+    public class OwnedGamesRepository: IOwnedGamesRepository
     {
-        private readonly DataLink _dataLink;
+        private readonly IDataLink _dataLink;
 
-        public OwnedGamesRepository(DataLink dataLink)
+        public OwnedGamesRepository(IDataLink dataLink) 
         {
             _dataLink = dataLink ?? throw new ArgumentNullException(nameof(dataLink));
         }
@@ -101,18 +99,20 @@ namespace BusinessLayer.Repositories
             try
             {
                 Debug.WriteLine("Starting to map DataTable to OwnedGames");
-                var games = dataTable.AsEnumerable().Select(row => 
+                var games = dataTable.AsEnumerable().Select(row =>
                 {
-                    var coverPicture = row["cover_picture"]?.ToString();
-                    Debug.WriteLine($"Loading game with cover picture: {coverPicture}");
-                    return new OwnedGame
-                    {
-                        GameId = Convert.ToInt32(row["game_id"]),
-                        UserId = Convert.ToInt32(row["user_id"]),
-                        Title = row["title"].ToString(),
-                        Description = row["description"]?.ToString(),
-                        CoverPicture = coverPicture
-                    };
+                    // Create a new OwnedGame using the new constructor
+                    var game = new OwnedGame(
+                        Convert.ToInt32(row["user_id"]),
+                        row["title"].ToString(),
+                        row["description"]?.ToString(),
+                        row["cover_picture"]?.ToString());
+                    
+                    // Set the GameId separately
+                    game.GameId = Convert.ToInt32(row["game_id"]);
+                    
+                    Debug.WriteLine($"Loaded game with GameId: {game.GameId} and cover picture: {game.CoverPicture}");
+                    return game;
                 }).ToList();
                 Debug.WriteLine($"Successfully mapped {games.Count} owned games");
                 return games;
@@ -127,14 +127,16 @@ namespace BusinessLayer.Repositories
 
         private static OwnedGame MapDataRowToOwnedGame(DataRow row)
         {
-            return new OwnedGame
-            {
-                GameId = Convert.ToInt32(row["game_id"]),
-                UserId = Convert.ToInt32(row["user_id"]),
-                Title = row["title"].ToString(),
-                Description = row["description"]?.ToString(),
-                CoverPicture = row["cover_picture"]?.ToString()
-            };
+            // Create a new OwnedGame using the new constructor
+            var game = new OwnedGame(
+                Convert.ToInt32(row["user_id"]),
+                row["title"].ToString(),
+                row["description"]?.ToString(),
+                row["cover_picture"]?.ToString());
+            
+            // Set the GameId separately
+            game.GameId = Convert.ToInt32(row["game_id"]);
+            return game;
         }
     }
-} 
+}

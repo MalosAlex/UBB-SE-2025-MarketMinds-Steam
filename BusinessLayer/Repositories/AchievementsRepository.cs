@@ -16,9 +16,9 @@ namespace BusinessLayer.Repositories
 {
     public class AchievementsRepository : IAchievementsRepository
     {
-        private readonly DataLink _dataLink;
+        private readonly IDataLink _dataLink;
 
-        public AchievementsRepository(DataLink datalink)
+        public AchievementsRepository(IDataLink datalink)
         {
             _dataLink = datalink ?? throw new ArgumentNullException(nameof(datalink));
         }

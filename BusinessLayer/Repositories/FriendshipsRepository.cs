@@ -9,9 +9,9 @@ namespace BusinessLayer.Repositories
 {
     public class FriendshipsRepository : IFriendshipsRepository
     {
-        private readonly DataLink _dataLink;
+        private readonly IDataLink _dataLink;
 
-        public FriendshipsRepository(DataLink dataLink)
+        public FriendshipsRepository(IDataLink dataLink)
         {
             _dataLink = dataLink ?? throw new ArgumentNullException(nameof(dataLink));
         }
