@@ -1,5 +1,6 @@
 ﻿using BusinessLayer.Models;
 using BusinessLayer.Repositories.Interfaces;
+using Microsoft.IdentityModel.Tokens;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -27,8 +28,18 @@ namespace BusinessLayer.Repositories.fakes
 
         public string CheckUserExists(string email, string username)
         {
-            return "exists";
-            // idk how the implementation works
+            if (email != "" && username == "")
+            {
+                return "EMAIL_EXISTS";
+            }
+            else if (email == "" && username != "")
+            {
+                return "USERNAME_EXISTS";
+            }
+            else
+            {
+                return "OTHER_ERROR";
+            }
         }
 
         public User CreateUser(User user)
