@@ -10,9 +10,9 @@ namespace BusinessLayer.Repositories
 {
     public class FeaturesRepository
     {
-        private readonly DataLink _dataLink;
+        private readonly IDataLink _dataLink;
 
-        public FeaturesRepository(DataLink datalink)
+        public FeaturesRepository(IDataLink datalink)
         {
             _dataLink = datalink ?? throw new ArgumentNullException(nameof(datalink));
         }

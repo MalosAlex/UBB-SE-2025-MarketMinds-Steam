@@ -14,9 +14,9 @@ namespace BusinessLayer.Repositories
 {
     public sealed class UsersRepository : IUsersRepository
     {
-        private readonly DataLink _dataLink;
+        private readonly IDataLink _dataLink;
 
-        public UsersRepository(DataLink datalink)
+        public UsersRepository(IDataLink datalink)
         {
             _dataLink = datalink ?? throw new ArgumentNullException(nameof(datalink));
         }

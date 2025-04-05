@@ -1,17 +1,18 @@
 ﻿using BusinessLayer.Models;
 using BusinessLayer.Repositories;
+using BusinessLayer.Services.Interfaces;
 using System;
 using System.Collections.Generic;
-using System.Linq;
+using BusinessLayer.Repositories.Interfaces;
 
 namespace BusinessLayer.Services
 {
-    public class FriendsService
+    public class FriendsService : IFriendsService
     {
-        private readonly FriendshipsRepository _friendshipsRepository;
-        private readonly UserService _userService;
+        private readonly IFriendshipsRepository _friendshipsRepository;
+        private readonly IUserService _userService;
 
-        public FriendsService(FriendshipsRepository friendshipsRepository, UserService userService)
+        public FriendsService(IFriendshipsRepository friendshipsRepository, IUserService userService)
         {
             _friendshipsRepository = friendshipsRepository ?? throw new ArgumentNullException(nameof(friendshipsRepository));
             _userService = userService ?? throw new ArgumentNullException(nameof(userService));
@@ -21,7 +22,8 @@ namespace BusinessLayer.Services
         {
             try
             {
-                return _friendshipsRepository.GetAllFriendships(_userService.GetCurrentUser().UserId);
+                int currentUserId = _userService.GetCurrentUser().UserId;
+                return _friendshipsRepository.GetAllFriendships(currentUserId);
             }
             catch (RepositoryException ex)
             {
@@ -57,8 +59,17 @@ namespace BusinessLayer.Services
         {
             try
             {
-                var friendships = _friendshipsRepository.GetAllFriendships(userId1);
-                return friendships.Any(f => f.FriendId == userId2);
+                List<Friendship> friendships = _friendshipsRepository.GetAllFriendships(userId1);
+                bool areFriends = false;
+                foreach (Friendship f in friendships)
+                {
+                    if (f.FriendId == userId2)
+                    {
+                        areFriends = true;
+                        break;
+                    }
+                }
+                return areFriends;
             }
             catch (RepositoryException ex)
             {
@@ -70,9 +81,17 @@ namespace BusinessLayer.Services
         {
             try
             {
-                var friendships = _friendshipsRepository.GetAllFriendships(userId1);
-                var friendship = friendships.FirstOrDefault(f => f.FriendId == userId2);
-                return friendship?.FriendshipId;
+                List<Friendship> friendships = _friendshipsRepository.GetAllFriendships(userId1);
+                Friendship found = null;
+                foreach (Friendship f in friendships)
+                {
+                    if (f.FriendId == userId2)
+                    {
+                        found = f;
+                        break;
+                    }
+                }
+                return found != null ? new int?(found.FriendshipId) : null;
             }
             catch (RepositoryException ex)
             {
@@ -95,8 +114,7 @@ namespace BusinessLayer.Services
         public class ServiceException : Exception
         {
             public ServiceException(string message) : base(message) { }
-            public ServiceException(string message, Exception innerException)
-                : base(message, innerException) { }
+            public ServiceException(string message, Exception innerException) : base(message, innerException) { }
         }
     }
 }

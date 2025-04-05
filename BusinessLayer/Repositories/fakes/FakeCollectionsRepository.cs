@@ -46,13 +46,13 @@ namespace BusinessLayer.Repositories.Fakes
 
         public List<OwnedGame> GetGamesInCollection(int collectionId, int userId)
         {
-            // If collectionId==1, we mimic returning all games for the user.
+            // If collectionId == 1, we mimic returning all games for the user.
             if (collectionId == 1)
             {
                 return new List<OwnedGame>
                 {
-                    new OwnedGame { GameId = 1, UserId = userId, Title = "Game A", Description = "Desc A", CoverPicture = "gameA.jpg" },
-                    new OwnedGame { GameId = 2, UserId = userId, Title = "Game B", Description = "Desc B", CoverPicture = "gameB.jpg" }
+                    CreateOwnedGame(userId, 1, "Game A", "Desc A", "gameA.jpg"),
+                    CreateOwnedGame(userId, 2, "Game B", "Desc B", "gameB.jpg")
                 };
             }
             else
@@ -95,7 +95,7 @@ namespace BusinessLayer.Repositories.Fakes
             int uid = int.Parse(userId);
             if (collection.CollectionId == 0)
             {
-                // Mimic creating new collection
+                // Mimic creating new collection.
                 collection.CollectionId = _collections.Any() ? _collections.Max(c => c.CollectionId) + 1 : 1;
                 collection.UserId = uid;
                 _collections.Add(collection);
@@ -139,7 +139,7 @@ namespace BusinessLayer.Repositories.Fakes
                 col.Name = name;
                 col.CoverPicture = coverPicture;
                 col.IsPublic = isPublic;
-                // Update createdAt to now (as in original implementation)
+                // Update CreatedAt to now (as in original implementation)
                 col.CreatedAt = DateOnly.FromDateTime(DateTime.Now);
             }
         }
@@ -154,8 +154,16 @@ namespace BusinessLayer.Repositories.Fakes
             // Return dummy games not in the collection.
             return new List<OwnedGame>
             {
-                new OwnedGame { GameId = 3, UserId = userId, Title = "Game C", Description = "Desc C", CoverPicture = "gameC.jpg" }
+                CreateOwnedGame(userId, 3, "Game C", "Desc C", "gameC.jpg")
             };
+        }
+
+        // Helper method to create OwnedGame using the new constructor.
+        private OwnedGame CreateOwnedGame(int userId, int gameId, string title, string description, string coverPicture)
+        {
+            var game = new OwnedGame(userId, title, description, coverPicture);
+            game.GameId = gameId;
+            return game;
         }
     }
 }

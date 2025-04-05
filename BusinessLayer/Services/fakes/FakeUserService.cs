@@ -8,7 +8,7 @@ using System.Threading.Tasks;
 
 namespace BusinessLayer.Services.fakes
 {
-    internal class FakeUserService : IUserService
+    public class FakeUserService : IUserService
     {
         public bool AcceptChanges(int userId, string givenPassword)
         {

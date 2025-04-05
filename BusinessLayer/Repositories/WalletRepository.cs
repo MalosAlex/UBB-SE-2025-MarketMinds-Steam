@@ -12,9 +12,9 @@ namespace BusinessLayer.Repositories
 {
     public class WalletRepository
     {
-        private readonly DataLink _dataLink;
+        private readonly IDataLink _dataLink;
 
-        public WalletRepository(DataLink datalink)
+        public WalletRepository(IDataLink datalink)
         {
             _dataLink = datalink ?? throw new ArgumentNullException(nameof(datalink));
         }

@@ -9,9 +9,9 @@ namespace BusinessLayer.Repositories
 {
     public class FriendshipsRepository : IFriendshipsRepository
     {
-        private readonly DataLink _dataLink;
+        private readonly IDataLink _dataLink;
 
-        public FriendshipsRepository(DataLink dataLink)
+        public FriendshipsRepository(IDataLink dataLink)
         {
             _dataLink = dataLink ?? throw new ArgumentNullException(nameof(dataLink));
         }
@@ -111,12 +111,17 @@ namespace BusinessLayer.Repositories
                 Debug.WriteLine($"SQL Error: {ex.Message}");
                 throw new RepositoryException("Database error while adding friendship.", ex);
             }
+            catch (RepositoryException)
+            {
+                throw;
+            }
             catch (Exception ex)
             {
                 Debug.WriteLine($"Unexpected Error: {ex.Message}");
                 throw new RepositoryException("An unexpected error occurred while adding friendship.", ex);
             }
         }
+
 
         public Friendship GetFriendshipById(int friendshipId)
         {

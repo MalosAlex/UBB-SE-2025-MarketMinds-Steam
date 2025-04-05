@@ -1,11 +1,7 @@
 ﻿using BusinessLayer.Models;
 using BusinessLayer.Repositories;
-using BusinessLayer.Repositories.Fakes;
 using BusinessLayer.Repositories.Interfaces;
-using NUnit.Framework;
-using System;
-using System.Collections.Generic;
-using System.Linq;
+using BusinessLayer.Data;
 
 namespace Tests
 {
@@ -17,8 +13,8 @@ namespace Tests
         [SetUp]
         public void SetUp()
         {
-            // Use the fake implementation for testing.
-            _friendshipsRepository = new FakeFriendshipsRepository();
+            // Inject the FakeDataLink into the real repository.
+            _friendshipsRepository = new FriendshipsRepository(new FakeDataLink());
         }
 
         [Test]
@@ -36,6 +32,8 @@ namespace Tests
             foreach (Friendship f in friendships)
             {
                 Assert.That(f.UserId, Is.EqualTo(userId), "Each friendship should have the expected UserId.");
+                // Check that friend username is populated (from GetUserById fake)
+                Assert.That(f.FriendUsername, Is.Not.Null.And.Not.Empty, "Friend username should be populated.");
             }
         }
 
@@ -44,8 +42,9 @@ namespace Tests
         {
             // Arrange
             int userId = 1;
+            // Initially, user 1 has two friendships.
             int initialCount = _friendshipsRepository.GetFriendshipCount(userId);
-            int newFriendId = 4;
+            int newFriendId = 4; // User 4 exists in fake users
 
             // Act
             _friendshipsRepository.AddFriendship(userId, newFriendId);
@@ -60,7 +59,7 @@ namespace Tests
         {
             // Arrange
             int userId = 1;
-            int friendId = 2; // Already seeded in FakeFriendshipsRepository.
+            int friendId = 2; // Already exists.
             Exception caughtException = null;
 
             // Act

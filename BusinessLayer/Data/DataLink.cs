@@ -11,7 +11,7 @@ using System.Threading.Tasks;
 
 namespace BusinessLayer.Data
 {
-    public sealed partial class DataLink : IDisposable
+    public sealed partial class DataLink : IDataLink
     {
         private static readonly Lazy<DataLink> instance = new(() => new DataLink());
         private readonly string connectionString;
