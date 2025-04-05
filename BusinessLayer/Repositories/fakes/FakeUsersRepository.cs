@@ -1,10 +1,13 @@
 ﻿using BusinessLayer.Models;
 using BusinessLayer.Repositories.Interfaces;
+using Microsoft.IdentityModel.Tokens;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using BCrypt.Net;
+using BusinessLayer.Utils;
 
 namespace BusinessLayer.Repositories.fakes
 {
@@ -27,8 +30,19 @@ namespace BusinessLayer.Repositories.fakes
 
         public string CheckUserExists(string email, string username)
         {
-            return "exists";
-            // idk how the implementation works
+            if (email != "" && username == "")
+            {
+                return "EMAIL_EXISTS";
+            }
+            else if (email == "" && username != "")
+            {
+                return "USERNAME_EXISTS";
+            }
+            else if (email == "" && username == "")
+            {
+                return "OTHER_ERROR";
+            }
+            else return "";
         }
 
         public User CreateUser(User user)
@@ -66,6 +80,7 @@ namespace BusinessLayer.Repositories.fakes
             User u = new User();
             u.UserId = userId;
             u.Username = "b";
+            u.Password = PasswordHasher.HashPassword("password");
             return u;
         }
 
@@ -88,8 +103,11 @@ namespace BusinessLayer.Repositories.fakes
 
         public User? VerifyCredentials(string emailOrUsername)
         {
+            if (emailOrUsername == null)
+                return null;
             User u = new User();
             u.Email = emailOrUsername;
+            u.Password = PasswordHasher.HashPassword("password");
             return u;
         }
     }

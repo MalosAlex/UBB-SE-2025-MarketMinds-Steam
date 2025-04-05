@@ -30,6 +30,7 @@ namespace BusinessLayer.Services.fakes
         {
             User u = new User();
             u.UserId = 1;
+            u.Email = "test@mail.com";
             return u;
         }
 

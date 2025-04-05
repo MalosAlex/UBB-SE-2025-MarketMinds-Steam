@@ -69,8 +69,8 @@ namespace BusinessLayer.Services
         public void DeleteUser(int userId)
         {
             _usersRepository.DeleteUser(userId);
-
         }
+
         public bool AcceptChanges(int user_id, string givenPassword)
         {
             User user = _usersRepository.GetUserById(user_id);
