@@ -6,6 +6,7 @@ using NUnit.Framework;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using BusinessLayer.Data;
 
 namespace Tests
 {
@@ -18,7 +19,7 @@ namespace Tests
         public void SetUp()
         {
             // Use the fake implementation for testing.
-            _collectionsRepository = new FakeCollectionsRepository();
+            _collectionsRepository = new CollectionsRepository(new FakeDataLink());
         }
 
         [Test]

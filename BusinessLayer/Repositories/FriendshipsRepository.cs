@@ -111,12 +111,17 @@ namespace BusinessLayer.Repositories
                 Debug.WriteLine($"SQL Error: {ex.Message}");
                 throw new RepositoryException("Database error while adding friendship.", ex);
             }
+            catch (RepositoryException)
+            {
+                throw;
+            }
             catch (Exception ex)
             {
                 Debug.WriteLine($"Unexpected Error: {ex.Message}");
                 throw new RepositoryException("An unexpected error occurred while adding friendship.", ex);
             }
         }
+
 
         public Friendship GetFriendshipById(int friendshipId)
         {

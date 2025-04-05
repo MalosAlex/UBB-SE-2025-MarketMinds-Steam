@@ -11,15 +11,8 @@ namespace BusinessLayer.Repositories
     public class CollectionsRepository : ICollectionsRepository
     {
         private readonly IDataLink _dataLink;
-        private readonly OwnedGamesRepository _ownedGamesRepository;
 
-        public CollectionsRepository(IDataLink dataLink, OwnedGamesRepository ownedGamesRepository)
-        {
-            _dataLink = dataLink ?? throw new ArgumentNullException(nameof(dataLink));
-            _ownedGamesRepository = ownedGamesRepository ?? throw new ArgumentNullException(nameof(ownedGamesRepository));
-        }
-
-        public CollectionsRepository(DataLink dataLink)
+        public CollectionsRepository(IDataLink dataLink)
         {
             _dataLink = dataLink ?? throw new ArgumentNullException(nameof(dataLink));
         }
