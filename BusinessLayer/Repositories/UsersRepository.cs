@@ -187,14 +187,15 @@ namespace BusinessLayer.Repositories
             {
                 var parameters = new SqlParameter[]
                 {
-                    new SqlParameter("@email", email),
-                    new SqlParameter("@username", username)
+            new SqlParameter("@email", email),
+            new SqlParameter("@username", username)
                 };
 
                 var dataTable = _dataLink.ExecuteReader("CheckUserExists", parameters);
                 if (dataTable.Rows.Count > 0)
                 {
-                    return dataTable.Rows[0]["ErrorType"]?.ToString();
+                    var errorType = dataTable.Rows[0]["ErrorType"];
+                    return errorType == DBNull.Value ? null : errorType.ToString();
                 }
                 return null;
             }
@@ -203,6 +204,7 @@ namespace BusinessLayer.Repositories
                 throw new RepositoryException("Failed to check if user exists.", ex);
             }
         }
+
 
         public void ChangeEmail(int userId, string newEmail)
         {
@@ -272,14 +274,14 @@ namespace BusinessLayer.Repositories
             }
         }
 
-        private static List<User> MapDataTableToUsers(DataTable dataTable)
+        private List<User> MapDataTableToUsers(DataTable dataTable)
         {
             return dataTable.AsEnumerable()
                 .Select(MapDataRowToUser)
                 .ToList();
         }
 
-        private static User? MapDataRowToUser(DataRow row)
+        public User? MapDataRowToUser(DataRow row)
         {
             if (row["user_id"] == DBNull.Value || 
                 row["email"] == DBNull.Value || 
@@ -299,7 +301,7 @@ namespace BusinessLayer.Repositories
             };
         }
 
-        private static User? MapDataRowToUserWithPassword(DataRow row)
+        public User? MapDataRowToUserWithPassword(DataRow row)
         {
             if (row["user_id"] == DBNull.Value || 
                 row["email"] == DBNull.Value || 

@@ -1,4 +1,5 @@
-﻿using Microsoft.Data.SqlClient;
+﻿using BusinessLayer.Exceptions;
+using Microsoft.Data.SqlClient;
 using System;
 using System.Collections.Generic;
 using System.Data;
@@ -10,6 +11,7 @@ namespace BusinessLayer.Data
 {
     public class FakeDataLink : IDataLink
     {
+        public int throwError { get; set; } = 0;
         // Existing in–memory table for friendships (omitted for brevity; assume already defined).
         private readonly List<Dictionary<string, object>> _friendshipsTable;
         private readonly List<Dictionary<string, object>> _usersTable;
@@ -42,10 +44,10 @@ namespace BusinessLayer.Data
             // Existing seed for users.
             _usersTable = new List<Dictionary<string, object>>
             {
-                new Dictionary<string, object> { { "user_id", 1 }, { "username", "User1" } },
-                new Dictionary<string, object> { { "user_id", 2 }, { "username", "Alice" } },
-                new Dictionary<string, object> { { "user_id", 3 }, { "username", "Bob" } },
-                new Dictionary<string, object> { { "user_id", 4 }, { "username", "Charlie" } }
+                new Dictionary<string, object> { { "user_id", 1 },{"email", "user@mail.com" }, { "username", "User1" } },
+                new Dictionary<string, object> { { "user_id", 2 }, { "email", "alice@mail.com" }, { "username", "Alice" } },
+                new Dictionary<string, object> { { "user_id", 3 }, { "email", "bob@mail.com" }, { "username", "Bob" } },
+                new Dictionary<string, object> { { "user_id", 4 }, { "email", "charlie@mail.com" }, { "username", "Charlie" } }
             };
 
             // Existing seed for profiles.
@@ -439,7 +441,48 @@ namespace BusinessLayer.Data
             }
             #endregion
 
-            return dt;
+            #region Users
+            else if (storedProcedure == "GetAllUsers")
+            {
+                if (throwError == 1)
+                {
+                    throw new DatabaseOperationException("Test exception");
+                }
+                dt.Columns.Add("user_id", typeof(int));
+                dt.Columns.Add("email", typeof(string));
+                dt.Columns.Add("username", typeof(string));
+                foreach (var row in _usersTable)
+                {
+                    DataRow dr = dt.NewRow();
+                    dr["user_id"] = row["user_id"];
+                    dr["username"] = row["username"];
+                    dr["email"] = row["email"];
+                    dt.Rows.Add(dr);
+                }
+            }
+            else if (storedProcedure == "GetUserById")
+            {
+                if (throwError == 1)
+                {
+                    throw new DatabaseOperationException("Test exception");
+                }
+                dt.Columns.Add("user_id", typeof(int));
+                dt.Columns.Add("email", typeof(string));
+                dt.Columns.Add("username", typeof(string));
+                int userId = Convert.ToInt32(sqlParameters.First(p => p.ParameterName == "@user_id").Value);
+                var rows = _usersTable.Where(c => Convert.ToInt32(c["user_id"]) == userId);
+                foreach (var row in rows)
+                {
+                    DataRow dr = dt.NewRow();
+                    dr["user_id"] = row["user_id"];
+                    dr["email"] = row["email"];
+                    dr["username"] = row["username"];
+                    dt.Rows.Add(dr);     
+                }
+            }
+                #endregion
+
+                return dt;
         }
 
         public int ExecuteNonQuery(string storedProcedure, SqlParameter[]? sqlParameters = null)
