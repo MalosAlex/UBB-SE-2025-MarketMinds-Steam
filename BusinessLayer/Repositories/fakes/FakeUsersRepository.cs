@@ -36,10 +36,11 @@ namespace BusinessLayer.Repositories.fakes
             {
                 return "USERNAME_EXISTS";
             }
-            else
+            else if (email == "" && username == "")
             {
                 return "OTHER_ERROR";
             }
+            else return "";
         }
 
         public User CreateUser(User user)
