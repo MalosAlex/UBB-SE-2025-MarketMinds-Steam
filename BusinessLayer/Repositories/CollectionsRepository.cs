@@ -1,15 +1,13 @@
 ﻿using BusinessLayer.Data;
 using BusinessLayer.Models;
-using System;
-using System.Collections.Generic;
 using System.Data;
 using Microsoft.Data.SqlClient;
 using System.Diagnostics;
-using System.Linq;
+using BusinessLayer.Repositories.Interfaces;
 
 namespace BusinessLayer.Repositories
 {
-    public class CollectionsRepository
+    public class CollectionsRepository : ICollectionsRepository
     {
         private readonly DataLink _dataLink;
         private readonly OwnedGamesRepository _ownedGamesRepository;
@@ -68,10 +66,7 @@ namespace BusinessLayer.Repositories
         {
             try
             {
-                // Retrieve all collections for the user
                 var allCollections = GetAllCollections(userId);
-
-                // Order by CreatedAt descending and take the last three collections
                 var lastThreeCollections = allCollections
                     .OrderByDescending(c => c.CreatedAt)
                     .Take(3)
@@ -100,7 +95,7 @@ namespace BusinessLayer.Repositories
 
                 Debug.WriteLine("Repository: Executing GetCollectionById stored procedure");
                 var dataTable = _dataLink.ExecuteReader("GetCollectionById", parameters);
-                
+
                 if (dataTable == null || dataTable.Rows.Count == 0)
                 {
                     Debug.WriteLine($"Repository: No collection found with ID {collectionId}");
@@ -125,7 +120,7 @@ namespace BusinessLayer.Repositories
                 throw new RepositoryException("An unexpected error occurred while retrieving collection by ID.", ex);
             }
         }
-  
+
         public List<OwnedGame> GetGamesInCollection(int collectionId)
         {
             try
@@ -178,8 +173,7 @@ namespace BusinessLayer.Repositories
             try
             {
                 Debug.WriteLine($"Repository: Getting games for collection {collectionId}");
-                
-                // If collectionId is 1, get all games for the user
+
                 if (collectionId == 1)
                 {
                     var parameters = new SqlParameter[]
@@ -210,7 +204,6 @@ namespace BusinessLayer.Repositories
                 }
                 else
                 {
-                    // For other collections, use the existing GetGamesInCollection method
                     return GetGamesInCollection(collectionId);
                 }
             }
@@ -341,7 +334,6 @@ namespace BusinessLayer.Repositories
             {
                 if (collection.CollectionId == 0)
                 {
-                    // Create new collection
                     var parameters = new SqlParameter[]
                     {
                         new SqlParameter("@user_id", userId),
@@ -355,7 +347,6 @@ namespace BusinessLayer.Repositories
                 }
                 else
                 {
-                    // Update existing collection
                     var parameters = new SqlParameter[]
                     {
                         new SqlParameter("@collection_id", collection.CollectionId),
@@ -561,7 +552,6 @@ namespace BusinessLayer.Repositories
                 Debug.WriteLine("Starting to map DataTable to Collections");
                 var collections = dataTable.AsEnumerable().Select(row =>
                 {
-                    // Use the new constructor, then set the CollectionId
                     var collection = new Collection(
                         userId: Convert.ToInt32(row["user_id"]),
                         name: row["name"].ToString(),
