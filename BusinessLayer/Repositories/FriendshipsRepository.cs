@@ -6,7 +6,6 @@ using System.Data;
 using Microsoft.Data.SqlClient;
 using System.Diagnostics;
 using System.Linq;
-using System.Threading.Tasks;
 
 namespace BusinessLayer.Repositories
 {
@@ -36,12 +35,12 @@ namespace BusinessLayer.Repositories
                 var friendships = new List<Friendship>();
                 foreach (DataRow row in dataTable.Rows)
                 {
-                    var friendship = new Friendship
-                    {
-                        FriendshipId = Convert.ToInt32(row["friendship_id"]),
-                        UserId = Convert.ToInt32(row["user_id"]),
-                        FriendId = Convert.ToInt32(row["friend_id"])
-                    };
+                    // Use the new constructor for Friendship
+                    var friendship = new Friendship(
+                        friendshipId: Convert.ToInt32(row["friendship_id"]),
+                        userId: Convert.ToInt32(row["user_id"]),
+                        friendId: Convert.ToInt32(row["friend_id"])
+                    );
 
                     // Get friend's username and profile picture
                     var friendParams = new SqlParameter[]
@@ -222,12 +221,7 @@ namespace BusinessLayer.Repositories
             try
             {
                 Debug.WriteLine("Starting to map DataTable to Friendships");
-                var friendships = dataTable.AsEnumerable().Select(row => new Friendship
-                {
-                    FriendshipId = Convert.ToInt32(row["friendship_id"]),
-                    UserId = Convert.ToInt32(row["user_id"]),
-                    FriendId = Convert.ToInt32(row["friend_id"])
-                }).ToList();
+                var friendships = dataTable.AsEnumerable().Select(row => MapDataRowToFriendship(row)).ToList();
                 Debug.WriteLine($"Successfully mapped {friendships.Count} friendships");
                 return friendships;
             }
@@ -241,12 +235,11 @@ namespace BusinessLayer.Repositories
 
         private static Friendship MapDataRowToFriendship(DataRow row)
         {
-            return new Friendship
-            {
-                FriendshipId = Convert.ToInt32(row["friendship_id"]),
-                UserId = Convert.ToInt32(row["user_id"]),
-                FriendId = Convert.ToInt32(row["friend_id"])
-            };
+            return new Friendship(
+                friendshipId: Convert.ToInt32(row["friendship_id"]),
+                userId: Convert.ToInt32(row["user_id"]),
+                friendId: Convert.ToInt32(row["friend_id"])
+            );
         }
     }
 
