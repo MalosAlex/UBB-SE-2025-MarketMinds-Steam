@@ -5,10 +5,11 @@ using System.Diagnostics;
 using BusinessLayer.Exceptions;
 using BusinessLayer.Repositories.Interfaces;
 using BusinessLayer.Exceptions;
+using BusinessLayer.Services.Interfaces;
 
 namespace BusinessLayer.Services
 {
-    public class OwnedGamesService
+    public class OwnedGamesService : IOwnedGamesService
     {
         private readonly IOwnedGamesRepository _ownedGamesRepository;
 
