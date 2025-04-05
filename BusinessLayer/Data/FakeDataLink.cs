@@ -121,44 +121,8 @@ namespace BusinessLayer.Data
             };
         }
 
-        /// <summary>
-        /// Checks if the provided parameters include a flag to simulate an exception.
-        /// </summary>
-        private void CheckForSimulatedException(SqlParameter[]? sqlParameters)
-        {
-            if (sqlParameters != null && sqlParameters.Any(p =>
-                p.ParameterName == "@simulate_sql_exception" &&
-                p.Value is bool b && b))
-            {
-                throw CreateSqlException("Simulated SQL Exception");
-            }
-        }
-
-        private SqlException CreateSqlException(string message)
-        {
-            var sqlErrorCtor = typeof(SqlError)
-                .GetConstructors(BindingFlags.Instance | BindingFlags.NonPublic)
-                .FirstOrDefault(c => c.GetParameters().Length == 7);
-            object sqlError = sqlErrorCtor?.Invoke(new object[] { 1, (byte)0, (byte)0, "server", message, "proc", 1 })
-                ?? throw new Exception("Could not create SqlError");
-
-            var errorCollection = Activator.CreateInstance(typeof(SqlErrorCollection), true);
-            MethodInfo addMethod = typeof(SqlErrorCollection).GetMethod("Add", BindingFlags.Instance | BindingFlags.NonPublic)
-                ?? throw new Exception("Could not find Add method on SqlErrorCollection");
-            addMethod.Invoke(errorCollection, new object[] { sqlError });
-
-            var sqlExceptionCtor = typeof(SqlException)
-                .GetConstructors(BindingFlags.Instance | BindingFlags.NonPublic)
-                .FirstOrDefault(c => c.GetParameters().Length == 4);
-            return (SqlException)(sqlExceptionCtor?.Invoke(new object[] { message, errorCollection, null, Guid.NewGuid() })
-                ?? throw new Exception("Could not create SqlException"));
-        }
-
         public T? ExecuteScalar<T>(string storedProcedure, SqlParameter[]? sqlParameters = null)
         {
-            if (sqlParameters == null)
-                throw new ArgumentNullException(nameof(sqlParameters));
-            CheckForSimulatedException(sqlParameters);
 
             if (storedProcedure == "GetFriendshipCountForUser")
             {
@@ -187,9 +151,6 @@ namespace BusinessLayer.Data
 
         public DataTable ExecuteReader(string storedProcedure, SqlParameter[]? sqlParameters = null)
         {
-            if (sqlParameters == null)
-                throw new ArgumentNullException(nameof(sqlParameters));
-            CheckForSimulatedException(sqlParameters);
 
             DataTable dt = new DataTable();
 
@@ -483,9 +444,6 @@ namespace BusinessLayer.Data
 
         public int ExecuteNonQuery(string storedProcedure, SqlParameter[]? sqlParameters = null)
         {
-            if (sqlParameters == null)
-                throw new ArgumentNullException(nameof(sqlParameters));
-            CheckForSimulatedException(sqlParameters);
 
             // For many procedures, we perform the same operations as in ExecuteReader.
             if (storedProcedure == "AddFriend")
@@ -588,16 +546,7 @@ namespace BusinessLayer.Data
             return 1;
         }
 
-        public async Task<DataTable> ExecuteReaderAsync(string storedProcedure, SqlParameter[]? sqlParameters = null)
-        {
-            return await Task.FromResult(ExecuteReader(storedProcedure, sqlParameters));
-        }
 
-        public async Task ExecuteNonQueryAsync(string storedProcedure, SqlParameter[]? sqlParameters = null)
-        {
-            ExecuteNonQuery(storedProcedure, sqlParameters);
-            await Task.CompletedTask;
-        }
 
         public void Dispose()
         {

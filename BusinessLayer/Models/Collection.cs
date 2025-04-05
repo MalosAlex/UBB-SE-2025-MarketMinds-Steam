@@ -22,7 +22,7 @@ namespace BusinessLayer.Models
         public DateOnly CreatedAt { get; set; }
 
         public List<OwnedGame> Games { get; set; } = new();
-        public bool IsAllOwnedGamesCollection { get; internal set; } = false;
+        public bool IsAllOwnedGamesCollection { get; }
 
         public Collection(int userId, string name, DateOnly createdAt, string? coverPicture = null, bool isPublic = false)
         {
@@ -31,6 +31,7 @@ namespace BusinessLayer.Models
             CreatedAt = createdAt;
             CoverPicture = coverPicture;
             IsPublic = isPublic;
+            IsAllOwnedGamesCollection = false;
         }
     }
 }

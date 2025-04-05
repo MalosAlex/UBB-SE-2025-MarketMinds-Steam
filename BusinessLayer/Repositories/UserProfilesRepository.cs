@@ -1,11 +1,9 @@
 ﻿using BusinessLayer.Data;
 using BusinessLayer.Models;
-using System;
 using System.Data;
 using Microsoft.Data.SqlClient;
-using System.Threading.Tasks;
-using Dapper;
 using BusinessLayer.Repositories.Interfaces;
+using BusinessLayer.Exceptions;
 
 namespace BusinessLayer.Repositories
 {

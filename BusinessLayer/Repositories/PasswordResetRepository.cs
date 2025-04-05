@@ -1,7 +1,7 @@
 using BusinessLayer.Data;
-using System;
 using System.Data;
 using Microsoft.Data.SqlClient;
+using BusinessLayer.Exceptions;
 
 namespace BusinessLayer.Repositories
 {

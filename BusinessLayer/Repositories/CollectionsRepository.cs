@@ -2,9 +2,9 @@
 using BusinessLayer.Models;
 using System.Data;
 using Microsoft.Data.SqlClient;
-using System.Diagnostics;
 using BusinessLayer.Repositories.Interfaces;
-using System.Linq;
+using BusinessLayer.Exceptions;
+
 
 namespace BusinessLayer.Repositories
 {
@@ -21,37 +21,27 @@ namespace BusinessLayer.Repositories
         {
             try
             {
-                Debug.WriteLine($"Repository: Getting collections for user {userId}");
                 var parameters = new SqlParameter[]
                 {
                     new SqlParameter("@user_id", userId)
                 };
 
-                Debug.WriteLine("Repository: Executing GetAllCollectionsForUser stored procedure");
                 var dataTable = _dataLink.ExecuteReader("GetAllCollectionsForUser", parameters);
-                Debug.WriteLine($"Repository: Got {dataTable?.Rows?.Count ?? 0} rows from database");
 
                 if (dataTable == null || dataTable.Rows.Count == 0)
                 {
-                    Debug.WriteLine("Repository: No collections found for user");
                     return new List<Collection>();
                 }
 
                 var collections = MapDataTableToCollections(dataTable);
-                Debug.WriteLine($"Repository: Mapped {collections.Count} collections");
                 return collections;
             }
             catch (SqlException ex)
             {
-                Debug.WriteLine($"Repository: SQL Error: {ex.Message}");
-                Debug.WriteLine($"Repository: Error Number: {ex.Number}");
-                Debug.WriteLine($"Repository: Stack Trace: {ex.StackTrace}");
                 throw new RepositoryException("Database error while retrieving collections.", ex);
             }
             catch (Exception ex)
             {
-                Debug.WriteLine($"Repository: Unexpected Error: {ex.Message}");
-                Debug.WriteLine($"Repository: Stack Trace: {ex.StackTrace}");
                 throw new RepositoryException("An unexpected error occurred while retrieving collections.", ex);
             }
         }
@@ -66,12 +56,10 @@ namespace BusinessLayer.Repositories
                     .Take(3)
                     .ToList();
 
-                Debug.WriteLine($"Repository: Retrieved last 3 collections for user {userId}");
                 return lastThreeCollections;
             }
             catch (Exception ex)
             {
-                Debug.WriteLine($"Repository: Unexpected Error while getting last three collections: {ex.Message}");
                 throw new RepositoryException("An unexpected error occurred while retrieving the last three collections.", ex);
             }
         }
@@ -80,37 +68,28 @@ namespace BusinessLayer.Repositories
         {
             try
             {
-                Debug.WriteLine($"Repository: Getting collection with ID {collectionId}");
                 var parameters = new SqlParameter[]
                 {
                     new SqlParameter("@collectionId", collectionId),
                     new SqlParameter("@user_id", userId)
                 };
 
-                Debug.WriteLine("Repository: Executing GetCollectionById stored procedure");
                 var dataTable = _dataLink.ExecuteReader("GetCollectionById", parameters);
 
                 if (dataTable == null || dataTable.Rows.Count == 0)
                 {
-                    Debug.WriteLine($"Repository: No collection found with ID {collectionId}");
                     return null;
                 }
 
                 var collection = MapDataRowToCollection(dataTable.Rows[0]);
-                Debug.WriteLine($"Repository: Successfully retrieved collection {collectionId}");
                 return collection;
             }
             catch (SqlException ex)
             {
-                Debug.WriteLine($"Repository: SQL Error: {ex.Message}");
-                Debug.WriteLine($"Repository: Error Number: {ex.Number}");
-                Debug.WriteLine($"Repository: Stack Trace: {ex.StackTrace}");
                 throw new RepositoryException("Database error while retrieving collection by ID.", ex);
             }
             catch (Exception ex)
             {
-                Debug.WriteLine($"Repository: Unexpected Error: {ex.Message}");
-                Debug.WriteLine($"Repository: Stack Trace: {ex.StackTrace}");
                 throw new RepositoryException("An unexpected error occurred while retrieving collection by ID.", ex);
             }
         }
@@ -119,19 +98,15 @@ namespace BusinessLayer.Repositories
         {
             try
             {
-                Debug.WriteLine($"Repository: Getting games for collection {collectionId}");
                 var parameters = new SqlParameter[]
                 {
                     new SqlParameter("@collection_id", collectionId)
                 };
 
-                Debug.WriteLine("Repository: Executing GetGamesInCollection stored procedure");
                 var dataTable = _dataLink.ExecuteReader("GetGamesInCollection", parameters);
-                Debug.WriteLine($"Repository: Got {dataTable?.Rows?.Count ?? 0} rows from database");
 
                 if (dataTable == null || dataTable.Rows.Count == 0)
                 {
-                    Debug.WriteLine("Repository: No games found in collection");
                     return new List<OwnedGame>();
                 }
 
@@ -147,20 +122,14 @@ namespace BusinessLayer.Repositories
                     return game;
                 }).ToList();
 
-                Debug.WriteLine($"Repository: Mapped {games.Count} games");
                 return games;
             }
             catch (SqlException ex)
             {
-                Debug.WriteLine($"Repository: SQL Error: {ex.Message}");
-                Debug.WriteLine($"Repository: Error Number: {ex.Number}");
-                Debug.WriteLine($"Repository: Stack Trace: {ex.StackTrace}");
                 throw new RepositoryException("Database error while retrieving games in collection.", ex);
             }
             catch (Exception ex)
             {
-                Debug.WriteLine($"Repository: Unexpected Error: {ex.Message}");
-                Debug.WriteLine($"Repository: Stack Trace: {ex.StackTrace}");
                 throw new RepositoryException("An unexpected error occurred while retrieving games in collection.", ex);
             }
         }
@@ -169,21 +138,16 @@ namespace BusinessLayer.Repositories
         {
             try
             {
-                Debug.WriteLine($"Repository: Getting games for collection {collectionId}");
-
                 if (collectionId == 1)
                 {
                     var parameters = new SqlParameter[]
                     {
                         new SqlParameter("@user_id", userId)
                     };
-                    Debug.WriteLine("Repository: Executing GetAllGamesForUser stored procedure");
                     var dataTable = _dataLink.ExecuteReader("GetAllGamesForUser", parameters);
-                    Debug.WriteLine($"Repository: Got {dataTable?.Rows?.Count ?? 0} rows from database");
 
                     if (dataTable == null || dataTable.Rows.Count == 0)
                     {
-                        Debug.WriteLine("Repository: No games found for user");
                         return new List<OwnedGame>();
                     }
 
@@ -198,7 +162,6 @@ namespace BusinessLayer.Repositories
                         return game;
                     }).ToList();
 
-                    Debug.WriteLine($"Repository: Mapped {games.Count} games");
                     return games;
                 }
                 else
@@ -208,15 +171,10 @@ namespace BusinessLayer.Repositories
             }
             catch (SqlException ex)
             {
-                Debug.WriteLine($"Repository: SQL Error: {ex.Message}");
-                Debug.WriteLine($"Repository: Error Number: {ex.Number}");
-                Debug.WriteLine($"Repository: Stack Trace: {ex.StackTrace}");
                 throw new RepositoryException("Database error while retrieving games in collection.", ex);
             }
             catch (Exception ex)
             {
-                Debug.WriteLine($"Repository: Unexpected Error: {ex.Message}");
-                Debug.WriteLine($"Repository: Stack Trace: {ex.StackTrace}");
                 throw new RepositoryException("An unexpected error occurred while retrieving games in collection.", ex);
             }
         }
@@ -225,27 +183,20 @@ namespace BusinessLayer.Repositories
         {
             try
             {
-                Debug.WriteLine($"Repository: Adding game {gameId} to collection {collectionId} for user {userId}");
                 var parameters = new SqlParameter[]
                 {
                     new SqlParameter("@collection_id", collectionId),
                     new SqlParameter("@game_id", gameId)
                 };
 
-                Debug.WriteLine("Repository: Executing AddGameToCollection stored procedure");
                 _dataLink.ExecuteNonQuery("AddGameToCollection", parameters);
-                Debug.WriteLine("Repository: Successfully added game to collection");
             }
             catch (SqlException ex)
             {
-                Debug.WriteLine($"Repository: SQL Error: {ex.Message}");
-                Debug.WriteLine($"Repository: Stack Trace: {ex.StackTrace}");
                 throw new RepositoryException("Database error while adding game to collection.", ex);
             }
             catch (Exception ex)
             {
-                Debug.WriteLine($"Repository: Unexpected Error: {ex.Message}");
-                Debug.WriteLine($"Repository: Stack Trace: {ex.StackTrace}");
                 throw new RepositoryException("An unexpected error occurred while adding game to collection.", ex);
             }
         }
@@ -263,12 +214,10 @@ namespace BusinessLayer.Repositories
             }
             catch (SqlException ex)
             {
-                Debug.WriteLine($"SQL Error: {ex.Message}");
                 throw new RepositoryException("Database error while removing game from collection.", ex);
             }
             catch (Exception ex)
             {
-                Debug.WriteLine($"Unexpected Error: {ex.Message}");
                 throw new RepositoryException("An unexpected error occurred while removing game from collection.", ex);
             }
         }
@@ -369,7 +318,7 @@ namespace BusinessLayer.Repositories
         {
             try
             {
-                Debug.WriteLine($"Attempting to delete collection {collectionId} for user {userId}");
+
                 var parameters = new SqlParameter[]
                 {
                     new SqlParameter("@collection_id", collectionId),
@@ -377,16 +326,13 @@ namespace BusinessLayer.Repositories
                 };
 
                 _dataLink.ExecuteNonQuery("DeleteCollection", parameters);
-                Debug.WriteLine($"Successfully deleted collection {collectionId}");
             }
             catch (SqlException ex)
             {
-                Debug.WriteLine($"SQL Error in DeleteCollection: {ex.Message}");
                 throw new RepositoryException("Database error while deleting collection.", ex);
             }
             catch (Exception ex)
             {
-                Debug.WriteLine($"Unexpected error in DeleteCollection: {ex.Message}");
                 throw new RepositoryException("An unexpected error occurred while deleting collection.", ex);
             }
         }
@@ -395,7 +341,6 @@ namespace BusinessLayer.Repositories
         {
             try
             {
-                Debug.WriteLine($"Repository: Creating collection for user {userId}");
                 var parameters = new SqlParameter[]
                 {
                     new SqlParameter("@user_id", userId),
@@ -405,21 +350,14 @@ namespace BusinessLayer.Repositories
                     new SqlParameter("@created_at", createdAt.ToDateTime(TimeOnly.MinValue))
                 };
 
-                Debug.WriteLine("Repository: Executing CreateCollection stored procedure");
                 _dataLink.ExecuteNonQuery("CreateCollection", parameters);
-                Debug.WriteLine("Repository: Successfully created collection");
             }
             catch (SqlException ex)
             {
-                Debug.WriteLine($"Repository: SQL Error: {ex.Message}");
-                Debug.WriteLine($"Repository: Error Number: {ex.Number}");
-                Debug.WriteLine($"Repository: Stack Trace: {ex.StackTrace}");
                 throw new RepositoryException("Database error while creating collection.", ex);
             }
             catch (Exception ex)
             {
-                Debug.WriteLine($"Repository: Unexpected Error: {ex.Message}");
-                Debug.WriteLine($"Repository: Stack Trace: {ex.StackTrace}");
                 throw new RepositoryException("An unexpected error occurred while creating collection.", ex);
             }
         }
@@ -428,7 +366,6 @@ namespace BusinessLayer.Repositories
         {
             try
             {
-                Debug.WriteLine($"Repository: Updating collection {collectionId} for user {userId}");
                 var parameters = new SqlParameter[]
                 {
                     new SqlParameter("@collection_id", collectionId),
@@ -439,21 +376,14 @@ namespace BusinessLayer.Repositories
                     new SqlParameter("@created_at", DateOnly.FromDateTime(DateTime.Now).ToDateTime(TimeOnly.MinValue))
                 };
 
-                Debug.WriteLine("Repository: Executing UpdateCollection stored procedure");
                 _dataLink.ExecuteReader("UpdateCollection", parameters);
-                Debug.WriteLine("Repository: Successfully updated collection");
             }
             catch (SqlException ex)
             {
-                Debug.WriteLine($"Repository: SQL Error: {ex.Message}");
-                Debug.WriteLine($"Repository: Error Number: {ex.Number}");
-                Debug.WriteLine($"Repository: Stack Trace: {ex.StackTrace}");
                 throw new RepositoryException("Database error while updating collection.", ex);
             }
             catch (Exception ex)
             {
-                Debug.WriteLine($"Repository: Unexpected Error: {ex.Message}");
-                Debug.WriteLine($"Repository: Stack Trace: {ex.StackTrace}");
                 throw new RepositoryException("An unexpected error occurred while updating collection.", ex);
             }
         }
@@ -462,37 +392,27 @@ namespace BusinessLayer.Repositories
         {
             try
             {
-                Debug.WriteLine($"Repository: Getting public collections for user {userId}");
                 var parameters = new SqlParameter[]
                 {
                     new SqlParameter("@user_id", userId)
                 };
 
-                Debug.WriteLine("Repository: Executing GetPublicCollectionsForUser stored procedure");
                 var dataTable = _dataLink.ExecuteReader("GetPublicCollectionsForUser", parameters);
-                Debug.WriteLine($"Repository: Got {dataTable?.Rows?.Count ?? 0} rows from database");
 
                 if (dataTable == null || dataTable.Rows.Count == 0)
                 {
-                    Debug.WriteLine("Repository: No public collections found for user");
                     return new List<Collection>();
                 }
 
                 var collections = MapDataTableToCollections(dataTable);
-                Debug.WriteLine($"Repository: Mapped {collections.Count} public collections");
                 return collections;
             }
             catch (SqlException ex)
             {
-                Debug.WriteLine($"Repository: SQL Error: {ex.Message}");
-                Debug.WriteLine($"Repository: Error Number: {ex.Number}");
-                Debug.WriteLine($"Repository: Stack Trace: {ex.StackTrace}");
                 throw new RepositoryException("Database error while retrieving public collections.", ex);
             }
             catch (Exception ex)
             {
-                Debug.WriteLine($"Repository: Unexpected Error: {ex.Message}");
-                Debug.WriteLine($"Repository: Stack Trace: {ex.StackTrace}");
                 throw new RepositoryException("An unexpected error occurred while retrieving public collections.", ex);
             }
         }
@@ -501,20 +421,16 @@ namespace BusinessLayer.Repositories
         {
             try
             {
-                Debug.WriteLine($"Repository: Getting games not in collection {collectionId} for user {userId}");
                 var parameters = new SqlParameter[]
                 {
                     new SqlParameter("@collection_id", collectionId),
                     new SqlParameter("@user_id", userId)
                 };
 
-                Debug.WriteLine("Repository: Executing GetGamesNotInCollection stored procedure");
                 var dataTable = _dataLink.ExecuteReader("GetGamesNotInCollection", parameters);
-                Debug.WriteLine($"Repository: Got {dataTable?.Rows?.Count ?? 0} rows from database");
 
-                if (dataTable == null || dataTable.Rows.Count == 0)
+                if (dataTable.Rows.Count == 0)
                 {
-                    Debug.WriteLine("Repository: No games found outside collection");
                     return new List<OwnedGame>();
                 }
 
@@ -529,19 +445,14 @@ namespace BusinessLayer.Repositories
                     return game;
                 }).ToList();
 
-                Debug.WriteLine($"Repository: Mapped {games.Count} games");
                 return games;
             }
             catch (SqlException ex)
             {
-                Debug.WriteLine($"Repository: SQL Error: {ex.Message}");
-                Debug.WriteLine($"Repository: Stack Trace: {ex.StackTrace}");
                 throw new RepositoryException("Database error while getting games not in collection.", ex);
             }
             catch (Exception ex)
             {
-                Debug.WriteLine($"Repository: Unexpected Error: {ex.Message}");
-                Debug.WriteLine($"Repository: Stack Trace: {ex.StackTrace}");
                 throw new RepositoryException("An unexpected error occurred while getting games not in collection.", ex);
             }
         }
@@ -550,7 +461,6 @@ namespace BusinessLayer.Repositories
         {
             try
             {
-                Debug.WriteLine("Starting to map DataTable to Collections");
                 var collections = dataTable.AsEnumerable().Select(row =>
                 {
                     var collection = new Collection(
@@ -563,13 +473,10 @@ namespace BusinessLayer.Repositories
                     collection.CollectionId = Convert.ToInt32(row["collection_id"]);
                     return collection;
                 }).ToList();
-                Debug.WriteLine($"Successfully mapped {collections.Count} collections");
                 return collections;
             }
             catch (Exception ex)
             {
-                Debug.WriteLine($"Error mapping DataTable: {ex.Message}");
-                Debug.WriteLine($"Stack Trace: {ex.StackTrace}");
                 throw;
             }
         }
