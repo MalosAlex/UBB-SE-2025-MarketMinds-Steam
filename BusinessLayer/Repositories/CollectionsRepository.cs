@@ -6,8 +6,6 @@ using System.Data;
 using Microsoft.Data.SqlClient;
 using System.Diagnostics;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace BusinessLayer.Repositories
 {
@@ -24,7 +22,7 @@ namespace BusinessLayer.Repositories
 
         public CollectionsRepository(DataLink dataLink)
         {
-            _dataLink = dataLink;
+            _dataLink = dataLink ?? throw new ArgumentNullException(nameof(dataLink));
         }
 
         public List<Collection> GetAllCollections(int userId)
@@ -65,6 +63,7 @@ namespace BusinessLayer.Repositories
                 throw new RepositoryException("An unexpected error occurred while retrieving collections.", ex);
             }
         }
+
         public List<Collection> GetLastThreeCollectionsForUser(int userId)
         {
             try
@@ -560,14 +559,18 @@ namespace BusinessLayer.Repositories
             try
             {
                 Debug.WriteLine("Starting to map DataTable to Collections");
-                var collections = dataTable.AsEnumerable().Select(row => new Collection
+                var collections = dataTable.AsEnumerable().Select(row =>
                 {
-                    CollectionId = Convert.ToInt32(row["collection_id"]),
-                    UserId = Convert.ToInt32(row["user_id"]),
-                    Name = row["name"].ToString(),
-                    CoverPicture = row["cover_picture"]?.ToString(),
-                    IsPublic = Convert.ToBoolean(row["is_public"]),
-                    CreatedAt = DateOnly.FromDateTime(Convert.ToDateTime(row["created_at"]))
+                    // Use the new constructor, then set the CollectionId
+                    var collection = new Collection(
+                        userId: Convert.ToInt32(row["user_id"]),
+                        name: row["name"].ToString(),
+                        createdAt: DateOnly.FromDateTime(Convert.ToDateTime(row["created_at"])),
+                        coverPicture: row["cover_picture"]?.ToString(),
+                        isPublic: Convert.ToBoolean(row["is_public"])
+                    );
+                    collection.CollectionId = Convert.ToInt32(row["collection_id"]);
+                    return collection;
                 }).ToList();
                 Debug.WriteLine($"Successfully mapped {collections.Count} collections");
                 return collections;
@@ -582,15 +585,15 @@ namespace BusinessLayer.Repositories
 
         private static Collection MapDataRowToCollection(DataRow row)
         {
-            return new Collection
-            {
-                CollectionId = Convert.ToInt32(row["collection_id"]),
-                UserId = Convert.ToInt32(row["user_id"]),
-                Name = row["name"].ToString(),
-                CoverPicture = row["cover_picture"]?.ToString(),
-                IsPublic = Convert.ToBoolean(row["is_public"]),
-                CreatedAt = DateOnly.FromDateTime(Convert.ToDateTime(row["created_at"]))
-            };
+            var collection = new Collection(
+                userId: Convert.ToInt32(row["user_id"]),
+                name: row["name"].ToString(),
+                createdAt: DateOnly.FromDateTime(Convert.ToDateTime(row["created_at"])),
+                coverPicture: row["cover_picture"]?.ToString(),
+                isPublic: Convert.ToBoolean(row["is_public"])
+            );
+            collection.CollectionId = Convert.ToInt32(row["collection_id"]);
+            return collection;
         }
 
         public class RepositoryException : Exception
