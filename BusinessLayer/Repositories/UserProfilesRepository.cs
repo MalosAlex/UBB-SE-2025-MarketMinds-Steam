@@ -1,19 +1,17 @@
 ﻿using BusinessLayer.Data;
 using BusinessLayer.Models;
-using System;
 using System.Data;
 using Microsoft.Data.SqlClient;
-using System.Threading.Tasks;
-using Dapper;
 using BusinessLayer.Repositories.Interfaces;
+using BusinessLayer.Exceptions;
 
 namespace BusinessLayer.Repositories
 {
     public class UserProfilesRepository : IUserProfilesRepository
     {
-        private readonly DataLink _dataLink;
+        private readonly IDataLink _dataLink;
 
-        public UserProfilesRepository(DataLink dataLink)
+        public UserProfilesRepository(IDataLink dataLink)
         {
             _dataLink = dataLink ?? throw new ArgumentNullException(nameof(dataLink));
         }

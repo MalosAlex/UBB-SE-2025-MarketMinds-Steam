@@ -1,4 +1,3 @@
-using System;
 using System.ComponentModel.DataAnnotations;
 
 namespace BusinessLayer.Models
@@ -17,16 +16,13 @@ namespace BusinessLayer.Models
         public string FriendUsername { get; set; }
         public string FriendProfilePicture { get; set; }
 
-        public void Validate()
+        public Friendship(int friendshipId, int userId, int friendId, string friendUsername = "", string friendProfilePicture = "")
         {
-            if (UserId <= 0)
-                throw new InvalidOperationException("User ID must be greater than 0.");
-
-            if (FriendId <= 0)
-                throw new InvalidOperationException("Friend ID must be greater than 0.");
-
-            if (UserId == FriendId)
-                throw new InvalidOperationException("User cannot be friends with themselves.");
+            FriendshipId = friendshipId;
+            UserId = userId;
+            FriendId = friendId;
+            FriendUsername = friendUsername;
+            FriendProfilePicture = friendProfilePicture;
         }
     }
 }

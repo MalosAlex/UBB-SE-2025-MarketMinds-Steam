@@ -1,17 +1,12 @@
 ﻿using Microsoft.Extensions.Configuration;
-using System;
-using System.Collections.Generic;
 using System.Configuration;
 using System.Data;
 using Microsoft.Data.SqlClient;
-using System.IO;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+using BusinessLayer.Exceptions;
 
 namespace BusinessLayer.Data
 {
-    public sealed partial class DataLink : IDisposable
+    public sealed partial class DataLink : IDataLink
     {
         private static readonly Lazy<DataLink> instance = new(() => new DataLink());
         private readonly string connectionString;
@@ -245,19 +240,5 @@ namespace BusinessLayer.Data
                 disposed = true;
             }
         }
-    }
-
-    public class DatabaseConnectionException : Exception
-    {
-        public DatabaseConnectionException(string message) : base(message) { }
-        public DatabaseConnectionException(string message, Exception innerException)
-            : base(message, innerException) { }
-    }
-
-    public class DatabaseOperationException : Exception
-    {
-        public DatabaseOperationException(string message) : base(message) { }
-        public DatabaseOperationException(string message, Exception innerException)
-            : base(message, innerException) { }
     }
 }

@@ -1,14 +1,15 @@
 ﻿using BusinessLayer.Models;
 using System.Collections.Generic;
-using System.Threading.Tasks;
 
 namespace BusinessLayer.Services.Interfaces
 {
     public interface IFriendsService
     {
-        Task<List<Friendship>> GetFriendsList(string userId);
-        Task AddFriend(string userId, string friendId);
-        Task RemoveFriend(string userId, string friendId);
-        Task<int> GetFriendshipCount(string userId);
+        List<Friendship> GetAllFriendships();
+        void RemoveFriend(int friendshipId);
+        int GetFriendshipCount(int userId);
+        bool AreUsersFriends(int userId1, int userId2);
+        int? GetFriendshipId(int userId1, int userId2);
+        void AddFriend(int userId, int friendId);
     }
 }

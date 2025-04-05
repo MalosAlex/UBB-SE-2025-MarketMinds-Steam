@@ -2,23 +2,18 @@
 using BusinessLayer.Data;
 using BusinessLayer.Models;
 using BusinessLayer.Repositories.Interfaces;
-using System;
-using System.Collections.Generic;
 using System.Data;
 using Microsoft.Data.SqlClient;
 using System.Diagnostics;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using System.Security.Cryptography.X509Certificates;
+using BusinessLayer.Exceptions;
 
 namespace BusinessLayer.Repositories
 {
     public class AchievementsRepository : IAchievementsRepository
     {
-        private readonly DataLink _dataLink;
+        private readonly IDataLink _dataLink;
 
-        public AchievementsRepository(DataLink datalink)
+        public AchievementsRepository(IDataLink datalink)
         {
             _dataLink = datalink ?? throw new ArgumentNullException(nameof(datalink));
         }

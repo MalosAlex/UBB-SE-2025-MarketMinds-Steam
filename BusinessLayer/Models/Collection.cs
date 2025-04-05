@@ -1,9 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.ComponentModel.DataAnnotations;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using System.ComponentModel.DataAnnotations;
 
 namespace BusinessLayer.Models
 {
@@ -26,53 +21,17 @@ namespace BusinessLayer.Models
         [Required]
         public DateOnly CreatedAt { get; set; }
 
-        public List<OwnedGame> Games { get; set; } = new List<OwnedGame>();
-        public bool IsAllOwnedGamesCollection { get; internal set; } = false;
+        public List<OwnedGame> Games { get; set; } = new();
+        public bool IsAllOwnedGamesCollection { get; }
 
-        public void AddGame(OwnedGame game)
+        public Collection(int userId, string name, DateOnly createdAt, string? coverPicture = null, bool isPublic = false)
         {
-            if (game == null)
-                throw new ArgumentNullException(nameof(game));
-
-            if (!Games.Any(g => g.GameId == game.GameId))
-            {
-                Games.Add(game);
-            }
-        }
-
-        public void RemoveGame(OwnedGame game)
-        {
-            if (game == null)
-                throw new ArgumentNullException(nameof(game));
-
-            Games.RemoveAll(g => g.GameId == game.GameId);
-        }
-
-        public void UpdateFrom(Collection other)
-        {
-            if (other == null)
-                throw new ArgumentNullException(nameof(other));
-
-            if (other.CollectionId != CollectionId)
-                throw new InvalidOperationException("Cannot update from a collection with a different ID");
-
-            UserId = other.UserId;
-            Name = other.Name;
-            CoverPicture = other.CoverPicture;
-            IsPublic = other.IsPublic;
-            CreatedAt = other.CreatedAt;
-        }
-
-        public void Validate()
-        {
-            if (UserId <= 0)
-                throw new ValidationException("User ID must be greater than 0");
-
-            if (string.IsNullOrWhiteSpace(Name))
-                throw new ValidationException("Name cannot be empty");
-
-            if (CoverPicture != null && CoverPicture.Length > 255)
-                throw new ValidationException("Cover picture URL cannot exceed 255 characters");
+            UserId = userId;
+            Name = name;
+            CreatedAt = createdAt;
+            CoverPicture = coverPicture;
+            IsPublic = isPublic;
+            IsAllOwnedGamesCollection = false;
         }
     }
 }

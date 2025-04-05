@@ -1,18 +1,16 @@
 ﻿using BusinessLayer.Data;
 using BusinessLayer.Models;
-using System;
-using System.Collections.Generic;
 using System.Data;
 using Microsoft.Data.SqlClient;
-using System.Threading.Tasks;
+using BusinessLayer.Exceptions;
 
 namespace BusinessLayer.Repositories
 {
     public class FeaturesRepository
     {
-        private readonly DataLink _dataLink;
+        private readonly IDataLink _dataLink;
 
-        public FeaturesRepository(DataLink datalink)
+        public FeaturesRepository(IDataLink datalink)
         {
             _dataLink = datalink ?? throw new ArgumentNullException(nameof(datalink));
         }

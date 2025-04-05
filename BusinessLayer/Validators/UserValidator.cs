@@ -1,6 +1,7 @@
 using System;
 using System.Linq;
 using System.Text.RegularExpressions;
+using BusinessLayer.Models;
 
 namespace BusinessLayer.Validators
 {
@@ -30,6 +31,15 @@ namespace BusinessLayer.Validators
 
             var emailPattern = @"^[^@\s]+@[^@\s]+\.[^@\s]+$";
             return Regex.IsMatch(email, emailPattern);
+        }
+
+        public static void ValidateUser(User user)
+        {
+            if(!IsPasswordValid(user.Password))
+                throw new InvalidOperationException("User Password is not valid.");
+            
+            if(!IsEmailValid(user.Email))
+                throw new InvalidOperationException("User Email is not valid.");
         }
     }
 } 

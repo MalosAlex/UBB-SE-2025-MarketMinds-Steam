@@ -1,7 +1,7 @@
 using BusinessLayer.Data;
-using System;
 using System.Data;
 using Microsoft.Data.SqlClient;
+using BusinessLayer.Exceptions;
 
 namespace BusinessLayer.Repositories
 {
@@ -15,9 +15,9 @@ namespace BusinessLayer.Repositories
 
     public class PasswordResetRepository : IPasswordResetRepository
     {
-        private readonly DataLink _dataLink;
+        private readonly IDataLink _dataLink;
 
-        public PasswordResetRepository(DataLink dataLink)
+        public PasswordResetRepository(IDataLink dataLink)
         {
             _dataLink = dataLink ?? throw new ArgumentNullException(nameof(dataLink));
         }
