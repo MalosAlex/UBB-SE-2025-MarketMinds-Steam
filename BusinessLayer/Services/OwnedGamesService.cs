@@ -4,7 +4,7 @@ using System.Collections.Generic;
 using System.Diagnostics;
 using BusinessLayer.Exceptions;
 using BusinessLayer.Repositories.Interfaces;
-using RepositoryException = BusinessLayer.Repositories.RepositoryException;
+using BusinessLayer.Exceptions;
 
 namespace BusinessLayer.Services
 {

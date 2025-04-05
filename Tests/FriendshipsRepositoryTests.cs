@@ -164,5 +164,24 @@ namespace Tests
             // Assert
             Assert.That(friendshipId, Is.Null, "Non-existing relationship should return null.");
         }
+        
+        [Test]
+        public void GetAllFriendships_UserHasFriendships_ProfilePictureIsPopulated()
+        {
+            // Arrange
+            int userId = 1;
+
+            // Act
+            List<Friendship> friendships = _friendshipsRepository.GetAllFriendships(userId);
+
+            // Assert
+            Assert.That(friendships, Is.Not.Empty, "User should have at least one friendship.");
+            foreach (var friendship in friendships)
+            {
+                Assert.That(friendship.FriendProfilePicture, Is.Not.Null.And.Not.Empty,
+                    "FriendProfilePicture should be populated.");
+            }
+        }
+
     }
 }

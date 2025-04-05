@@ -4,6 +4,7 @@ using BusinessLayer.Services.Interfaces;
 using System;
 using System.Collections.Generic;
 using BusinessLayer.Repositories.Interfaces;
+using BusinessLayer.Exceptions;
 
 namespace BusinessLayer.Services
 {

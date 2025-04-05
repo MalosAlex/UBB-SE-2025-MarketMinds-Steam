@@ -3,6 +3,7 @@ using BusinessLayer.Models;
 using System.Data;
 using Microsoft.Data.SqlClient;
 using System.Diagnostics;
+using BusinessLayer.Exceptions;
 using BusinessLayer.Repositories.Interfaces;
 
 namespace BusinessLayer.Repositories
@@ -20,15 +21,12 @@ namespace BusinessLayer.Repositories
         {
             try
             {
-                Debug.WriteLine($"Getting friends for user {userId}");
                 var parameters = new SqlParameter[]
                 {
                     new SqlParameter("@user_id", userId)
                 };
 
-                Debug.WriteLine("Executing GetFriendsForUser stored procedure");
                 var dataTable = _dataLink.ExecuteReader("GetFriendsForUser", parameters);
-                Debug.WriteLine($"Got {dataTable.Rows.Count} rows from database");
 
                 var friendships = new List<Friendship>();
                 foreach (DataRow row in dataTable.Rows)
@@ -62,20 +60,14 @@ namespace BusinessLayer.Repositories
                 }
 
                 friendships = friendships.OrderBy(f => f.FriendUsername).ToList();
-                Debug.WriteLine($"Mapped {friendships.Count} friendships");
                 return friendships;
             }
             catch (SqlException ex)
             {
-                Debug.WriteLine($"SQL Error: {ex.Message}");
-                Debug.WriteLine($"Error Number: {ex.Number}");
-                Debug.WriteLine($"Stack Trace: {ex.StackTrace}");
                 throw new RepositoryException("Database error while retrieving friendships.", ex);
             }
             catch (Exception ex)
             {
-                Debug.WriteLine($"Unexpected Error: {ex.Message}");
-                Debug.WriteLine($"Stack Trace: {ex.StackTrace}");
                 throw new RepositoryException("An unexpected error occurred while retrieving friendships.", ex);
             }
         }
@@ -108,7 +100,6 @@ namespace BusinessLayer.Repositories
             }
             catch (SqlException ex)
             {
-                Debug.WriteLine($"SQL Error: {ex.Message}");
                 throw new RepositoryException("Database error while adding friendship.", ex);
             }
             catch (RepositoryException)
@@ -117,7 +108,6 @@ namespace BusinessLayer.Repositories
             }
             catch (Exception ex)
             {
-                Debug.WriteLine($"Unexpected Error: {ex.Message}");
                 throw new RepositoryException("An unexpected error occurred while adding friendship.", ex);
             }
         }
@@ -156,12 +146,10 @@ namespace BusinessLayer.Repositories
             }
             catch (SqlException ex)
             {
-                Debug.WriteLine($"SQL Error: {ex.Message}");
                 throw new RepositoryException("Database error while removing friendship.", ex);
             }
             catch (Exception ex)
             {
-                Debug.WriteLine($"Unexpected Error: {ex.Message}");
                 throw new RepositoryException("An unexpected error occurred while removing friendship.", ex);
             }
         }
@@ -178,12 +166,10 @@ namespace BusinessLayer.Repositories
             }
             catch (SqlException ex)
             {
-                Debug.WriteLine($"SQL Error: {ex.Message}");
                 throw new RepositoryException("Database error while retrieving friendship count.", ex);
             }
             catch (Exception ex)
             {
-                Debug.WriteLine($"Unexpected Error: {ex.Message}");
                 throw new RepositoryException("An unexpected error occurred while retrieving friendship count.", ex);
             }
         }
@@ -202,12 +188,10 @@ namespace BusinessLayer.Repositories
             }
             catch (SqlException ex)
             {
-                Debug.WriteLine($"SQL Error: {ex.Message}");
                 throw new RepositoryException("Database error while retrieving friendship ID.", ex);
             }
             catch (Exception ex)
             {
-                Debug.WriteLine($"Unexpected Error: {ex.Message}");
                 throw new RepositoryException("An unexpected error occurred while retrieving friendship ID.", ex);
             }
         }
@@ -220,12 +204,5 @@ namespace BusinessLayer.Repositories
                 friendId: Convert.ToInt32(row["friend_id"])
             );
         }
-    }
-
-    public class RepositoryException : Exception
-    {
-        public RepositoryException(string message) : base(message) { }
-        public RepositoryException(string message, Exception innerException)
-            : base(message, innerException) { }
     }
 }

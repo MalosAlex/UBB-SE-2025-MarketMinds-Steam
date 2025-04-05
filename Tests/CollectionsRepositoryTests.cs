@@ -342,5 +342,19 @@ namespace Tests
             Assert.That(games, Is.Not.Null, "Games list should not be null.");
             Assert.That(games.Count, Is.GreaterThan(0), "There should be at least one game returned.");
         }
+        
+        [Test]
+        public void IsAllOwnedGamesCollection_DefaultCollection_ReturnsFalse()
+        {
+            // Arrange
+            var collection = new Collection(userId: 1, name: "Test", createdAt: DateOnly.FromDateTime(DateTime.Now));
+
+            // Act
+            bool isAllOwned = collection.IsAllOwnedGamesCollection;
+
+            // Assert
+            Assert.That(isAllOwned, Is.False, "IsAllOwnedGamesCollection should be false by default.");
+        }
+
     }
 }

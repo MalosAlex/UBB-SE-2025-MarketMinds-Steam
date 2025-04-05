@@ -15,19 +15,15 @@ namespace Tests
     {
         private ICollectionsService _collectionsService;
         private FakeCollectionsRepository _fakeCollectionsRepository;
-        private FakeOwnedGamesRepository _fakeOwnedGamesRepository;
-        private OwnedGamesService _fakeOwnedGamesService;
 
         [SetUp]
         public void SetUp()
         {
             // For testing the service, use the fake repository.
             _fakeCollectionsRepository = new FakeCollectionsRepository();
-            _fakeOwnedGamesRepository = new FakeOwnedGamesRepository();
             // For OwnedGamesService, if you have a real one, you could create a fake as needed.
             // For simplicity, we assume a minimal implementation:
-            _fakeOwnedGamesService = new OwnedGamesService(_fakeOwnedGamesRepository); 
-            _collectionsService = new CollectionsService(_fakeCollectionsRepository, _fakeOwnedGamesService);
+            _collectionsService = new CollectionsService(_fakeCollectionsRepository);
         }
 
         [Test]

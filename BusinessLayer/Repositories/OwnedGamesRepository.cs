@@ -4,6 +4,7 @@ using System.Data;
 using Microsoft.Data.SqlClient;
 using System.Diagnostics;
 using BusinessLayer.Repositories.Interfaces;
+using BusinessLayer.Exceptions;
 
 namespace BusinessLayer.Repositories
 {
