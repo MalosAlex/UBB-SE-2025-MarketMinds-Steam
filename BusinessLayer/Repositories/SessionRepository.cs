@@ -1,6 +1,8 @@
-using System.Data;
 using BusinessLayer.Data;
 using BusinessLayer.Models;
+using System;
+using System.Collections.Generic;
+using System.Data;
 using Microsoft.Data.SqlClient;
 using BusinessLayer.Repositories.Interfaces;
 
@@ -8,11 +10,11 @@ namespace BusinessLayer.Repositories
 {
     public class SessionRepository : ISessionRepository
     {
-        private readonly IDataLink dataLink;
+        private readonly IDataLink _dataLink;
 
         public SessionRepository(IDataLink dataLink)
         {
-            this.dataLink = dataLink ?? throw new ArgumentNullException(nameof(dataLink));
+            _dataLink = dataLink ?? throw new ArgumentNullException(nameof(dataLink));
         }
 
         public SessionDetails CreateSession(int userId)
@@ -24,7 +26,7 @@ namespace BusinessLayer.Repositories
             };
 
             // Execute the stored procedure
-            DataTable result = dataLink.ExecuteReader("CreateSession", parameters);
+            DataTable result = _dataLink.ExecuteReader("CreateSession", parameters);
 
             // Process the result
             if (result.Rows.Count > 0)
@@ -49,7 +51,7 @@ namespace BusinessLayer.Repositories
                   new SqlParameter("@user_id", userId)
             };
 
-            dataLink.ExecuteNonQuery("DeleteUserSessions", parameters);
+            _dataLink.ExecuteNonQuery("DeleteUserSessions", parameters);
         }
 
         public void DeleteSession(Guid sessionId)
@@ -59,7 +61,7 @@ namespace BusinessLayer.Repositories
                   new SqlParameter("@session_id", sessionId)
             };
 
-            dataLink.ExecuteNonQuery("DeleteSession", parameters);
+            _dataLink.ExecuteNonQuery("DeleteSession", parameters);
         }
 
         public SessionDetails GetSessionById(Guid sessionId)
@@ -69,7 +71,7 @@ namespace BusinessLayer.Repositories
                   new SqlParameter("@session_id", sessionId)
             };
 
-            DataTable result = dataLink.ExecuteReader("GetSessionById", parameters);
+            DataTable result = _dataLink.ExecuteReader("GetSessionById", parameters);
 
             if (result.Rows.Count > 0)
             {
@@ -93,7 +95,7 @@ namespace BusinessLayer.Repositories
                   new SqlParameter("@session_id", sessionId)
             };
 
-            DataTable result = dataLink.ExecuteReader("GetUserFromSession", parameters);
+            DataTable result = _dataLink.ExecuteReader("GetUserFromSession", parameters);
 
             if (result.Rows.Count > 0)
             {
@@ -119,7 +121,7 @@ namespace BusinessLayer.Repositories
         {
             var expiredSessions = new List<Guid>();
 
-            DataTable result = dataLink.ExecuteReader("GetExpiredSessions", null);
+            DataTable result = _dataLink.ExecuteReader("GetExpiredSessions", null);
 
             foreach (DataRow row in result.Rows)
             {
@@ -131,4 +133,5 @@ namespace BusinessLayer.Repositories
     }
 
     // DTOs to transfer data between layers
+    
 }

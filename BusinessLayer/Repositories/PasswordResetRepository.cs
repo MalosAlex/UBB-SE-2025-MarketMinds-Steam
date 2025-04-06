@@ -1,5 +1,5 @@
-using System.Data;
 using BusinessLayer.Data;
+using System.Data;
 using Microsoft.Data.SqlClient;
 using BusinessLayer.Exceptions;
 
@@ -15,11 +15,11 @@ namespace BusinessLayer.Repositories
 
     public class PasswordResetRepository : IPasswordResetRepository
     {
-        private readonly IDataLink dataLink;
+        private readonly IDataLink _dataLink;
 
         public PasswordResetRepository(IDataLink dataLink)
         {
-            this.dataLink = dataLink ?? throw new ArgumentNullException(nameof(dataLink));
+            _dataLink = dataLink ?? throw new ArgumentNullException(nameof(dataLink));
         }
 
         public void StoreResetCode(int userId, string code, DateTime expiryTime)
@@ -37,7 +37,7 @@ namespace BusinessLayer.Repositories
                     new SqlParameter("@expirationTime", expiryTime)
                 };
 
-                dataLink.ExecuteNonQuery("StorePasswordResetCode", parameters);
+                _dataLink.ExecuteNonQuery("StorePasswordResetCode", parameters);
             }
             catch (DatabaseOperationException ex)
             {
@@ -54,13 +54,15 @@ namespace BusinessLayer.Repositories
                     new SqlParameter("@userId", userId)
                 };
 
-                dataLink.ExecuteNonQuery("DeleteExistingResetCodes", parameters);
+                _dataLink.ExecuteNonQuery("DeleteExistingResetCodes", parameters);
             }
             catch (DatabaseOperationException ex)
             {
                 throw new RepositoryException($"Failed to delete existing reset codes for user {userId}.", ex);
             }
         }
+
+
 
         public bool VerifyResetCode(string email, string code)
         {
@@ -73,7 +75,7 @@ namespace BusinessLayer.Repositories
                 };
 
                 // Get the reset code data from database
-                DataTable result = dataLink.ExecuteReader("GetResetCodeData", parameters);
+                DataTable result = _dataLink.ExecuteReader("GetResetCodeData", parameters);
 
                 // Implement business logic in the application layer
                 if (result.Rows.Count > 0)
@@ -109,7 +111,7 @@ namespace BusinessLayer.Repositories
                 {
                     new SqlParameter("@email", email)
                 };
-                var userTable = dataLink.ExecuteReader("GetUserByEmail", userIdParams);
+                var userTable = _dataLink.ExecuteReader("GetUserByEmail", userIdParams);
 
                 if (userTable.Rows.Count == 0)
                 {
@@ -126,7 +128,7 @@ namespace BusinessLayer.Repositories
                     new SqlParameter("@newPassword", hashedPassword)
                 };
 
-                var result = dataLink.ExecuteScalar<int>("UpdatePasswordAndRemoveResetCode", parameters);
+                var result = _dataLink.ExecuteScalar<int>("UpdatePasswordAndRemoveResetCode", parameters);
                 return result == 1;
             }
             catch (DatabaseOperationException ex)
@@ -139,7 +141,7 @@ namespace BusinessLayer.Repositories
         {
             try
             {
-                dataLink.ExecuteNonQuery("CleanupResetCodes");
+                _dataLink.ExecuteNonQuery("CleanupResetCodes");
             }
             catch (DatabaseOperationException ex)
             {
@@ -147,4 +149,4 @@ namespace BusinessLayer.Repositories
             }
         }
     }
-}
+} 

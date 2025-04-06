@@ -23,19 +23,13 @@ namespace BusinessLayer.Validators
         public static void ValidateOwnedGame(OwnedGame game)
         {
             if (!IsUserIdValid(game.UserId))
-            {
                 throw new ValidationException("User ID must be greater than 0");
-            }
 
             if (!IsTitleValid(game.Title))
-            {
                 throw new ValidationException("Title cannot be empty or longer than 100 characters");
-            }
 
             if (!IsCoverPictureValid(game.CoverPicture))
-            {
                 throw new ValidationException("Cover picture URL cannot exceed 255 characters");
-            }
         }
     }
 }

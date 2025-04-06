@@ -1,24 +1,30 @@
 ﻿using BusinessLayer.Models;
+using BusinessLayer.Repositories;
 using BusinessLayer.Services.Interfaces;
+using System;
+using System.Collections.Generic;
+using System.Diagnostics;
 using BusinessLayer.Exceptions;
 using BusinessLayer.Repositories.Interfaces;
+using BusinessLayer.Repositories;
+using BusinessLayer.Exceptions;
 
 namespace BusinessLayer.Services
 {
     public class CollectionsService : ICollectionsService
     {
-        private readonly ICollectionsRepository collectionsRepository;
-
+        private readonly ICollectionsRepository _collectionsRepository;
+        
         public CollectionsService(ICollectionsRepository collectionsRepository)
         {
-            collectionsRepository = collectionsRepository ?? throw new ArgumentNullException(nameof(collectionsRepository));
+            _collectionsRepository = collectionsRepository ?? throw new ArgumentNullException(nameof(collectionsRepository));
         }
 
         public List<Collection> GetAllCollections(int userId)
         {
             try
             {
-                var collections = collectionsRepository.GetAllCollections(userId);
+                var collections = _collectionsRepository.GetAllCollections(userId);
                 return collections;
             }
             catch (RepositoryException ex)
@@ -35,10 +41,10 @@ namespace BusinessLayer.Services
         {
             try
             {
-                var collection = collectionsRepository.GetCollectionById(collectionId, userId);
+                var collection = _collectionsRepository.GetCollectionById(collectionId, userId);
 
                 // Load games for the collection.
-                collection.Games = collectionsRepository.GetGamesInCollection(collectionId, userId);
+                collection.Games = _collectionsRepository.GetGamesInCollection(collectionId, userId);
                 return collection;
             }
             catch (RepositoryException ex)
@@ -55,7 +61,7 @@ namespace BusinessLayer.Services
         {
             try
             {
-                var games = collectionsRepository.GetGamesInCollection(collectionId);
+                var games = _collectionsRepository.GetGamesInCollection(collectionId);
                 return games;
             }
             catch (RepositoryException ex)
@@ -72,7 +78,7 @@ namespace BusinessLayer.Services
         {
             try
             {
-                collectionsRepository.AddGameToCollection(collectionId, gameId, userId);
+                _collectionsRepository.AddGameToCollection(collectionId, gameId, userId);
             }
             catch (RepositoryException ex)
             {
@@ -88,7 +94,7 @@ namespace BusinessLayer.Services
         {
             try
             {
-                collectionsRepository.RemoveGameFromCollection(collectionId, gameId);
+                _collectionsRepository.RemoveGameFromCollection(collectionId, gameId);
             }
             catch (RepositoryException ex)
             {
@@ -104,7 +110,7 @@ namespace BusinessLayer.Services
         {
             try
             {
-                collectionsRepository.DeleteCollection(collectionId, userId);
+                _collectionsRepository.DeleteCollection(collectionId, userId);
             }
             catch (Exception ex)
             {
@@ -116,7 +122,7 @@ namespace BusinessLayer.Services
         {
             try
             {
-                collectionsRepository.CreateCollection(userId, name, coverPicture, isPublic, createdAt);
+                _collectionsRepository.CreateCollection(userId, name, coverPicture, isPublic, createdAt);
             }
             catch (RepositoryException ex)
             {
@@ -132,7 +138,7 @@ namespace BusinessLayer.Services
         {
             try
             {
-                collectionsRepository.UpdateCollection(collectionId, userId, name, coverPicture, isPublic);
+                _collectionsRepository.UpdateCollection(collectionId, userId, name, coverPicture, isPublic);
             }
             catch (RepositoryException ex)
             {
@@ -148,7 +154,7 @@ namespace BusinessLayer.Services
         {
             try
             {
-                var collections = collectionsRepository.GetPublicCollectionsForUser(userId);
+                var collections = _collectionsRepository.GetPublicCollectionsForUser(userId);
                 return collections;
             }
             catch (RepositoryException ex)
@@ -163,7 +169,7 @@ namespace BusinessLayer.Services
 
         public List<OwnedGame> GetGamesNotInCollection(int collectionId, int userId)
         {
-            return collectionsRepository.GetGamesNotInCollection(collectionId, userId);
+            return _collectionsRepository.GetGamesNotInCollection(collectionId, userId);
         }
     }
 }

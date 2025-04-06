@@ -1,19 +1,19 @@
-﻿using System.Diagnostics;
-using BusinessLayer.Models;
+﻿using BusinessLayer.Models;
 using BusinessLayer.Repositories;
 using BusinessLayer.Exceptions;
+using System.Diagnostics;
 using BusinessLayer.Services.Interfaces;
 
 namespace BusinessLayer.Services
 {
     public class FeaturesService
     {
-        private readonly FeaturesRepository featuresRepository;
+        private readonly FeaturesRepository _featuresRepository;
         public IUserService UserService { get; }
 
         public FeaturesService(FeaturesRepository featuresRepository, IUserService userService)
         {
-            featuresRepository = featuresRepository ?? throw new ArgumentNullException(nameof(featuresRepository));
+            _featuresRepository = featuresRepository ?? throw new ArgumentNullException(nameof(featuresRepository));
             UserService = userService;
         }
 
@@ -22,7 +22,7 @@ namespace BusinessLayer.Services
             try
             {
                 var userId = UserService.GetCurrentUser().UserId;
-                var allFeatures = featuresRepository.GetAllFeatures(userId);
+                var allFeatures = _featuresRepository.GetAllFeatures(userId);
                 return allFeatures.GroupBy(f => f.Type)
                                  .ToDictionary(g => g.Key, g => g.ToList());
             }
@@ -37,7 +37,7 @@ namespace BusinessLayer.Services
             try
             {
                 Debug.WriteLine($"FeaturesService.EquipFeature: User {userId}, Feature {featureId}");
-
+                
                 // First check if the feature is purchased
                 if (!IsFeaturePurchased(userId, featureId))
                 {
@@ -46,9 +46,9 @@ namespace BusinessLayer.Services
                 }
 
                 // Get the feature type to ensure we unequip other features of the same type
-                var features = featuresRepository.GetAllFeatures(userId);
+                var features = _featuresRepository.GetAllFeatures(userId);
                 var featureToEquip = features.FirstOrDefault(f => f.FeatureId == featureId);
-
+                
                 if (featureToEquip == null)
                 {
                     Debug.WriteLine("Feature not found");
@@ -59,11 +59,11 @@ namespace BusinessLayer.Services
                 // Unequip any existing features of the same type
                 bool unequipResult = UnequipFeaturesByType(userId, featureToEquip.Type);
                 Debug.WriteLine($"Unequip result: {unequipResult}");
-
+                
                 // Now equip the selected feature
-                bool equipResult = featuresRepository.EquipFeature(userId, featureId);
+                bool equipResult = _featuresRepository.EquipFeature(userId, featureId);
                 Debug.WriteLine($"Equip result: {equipResult}");
-
+                
                 return equipResult;
             }
             catch (Exception ex)
@@ -77,7 +77,7 @@ namespace BusinessLayer.Services
         {
             try
             {
-                return featuresRepository.UnequipFeature(userId, featureId);
+                return _featuresRepository.UnequipFeature(userId, featureId);
             }
             catch (Exception ex)
             {
@@ -90,7 +90,7 @@ namespace BusinessLayer.Services
         {
             try
             {
-                return featuresRepository.UnequipFeaturesByType(userId, featureType);
+                return _featuresRepository.UnequipFeaturesByType(userId, featureType);
             }
             catch (Exception ex)
             {
@@ -103,7 +103,7 @@ namespace BusinessLayer.Services
         {
             try
             {
-                return featuresRepository.GetUserFeatures(userId);
+                return _featuresRepository.GetUserFeatures(userId);
             }
             catch (DatabaseOperationException ex)
             {
@@ -115,7 +115,7 @@ namespace BusinessLayer.Services
         {
             try
             {
-                return featuresRepository.IsFeaturePurchased(userId, featureId);
+                return _featuresRepository.IsFeaturePurchased(userId, featureId);
             }
             catch (DatabaseOperationException ex)
             {
@@ -129,7 +129,7 @@ namespace BusinessLayer.Services
             try
             {
                 Debug.WriteLine($"Getting equipped features for user {userId}");
-                var features = featuresRepository.GetUserFeatures(userId);
+                var features = _featuresRepository.GetUserFeatures(userId);
                 var equippedFeatures = features.Where(f => f.Equipped).ToList();
                 Debug.WriteLine($"Found {equippedFeatures.Count} equipped features");
                 return equippedFeatures;
@@ -145,4 +145,5 @@ namespace BusinessLayer.Services
             }
         }
     }
+
 }

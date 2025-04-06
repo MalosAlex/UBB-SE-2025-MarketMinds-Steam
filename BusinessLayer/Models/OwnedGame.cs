@@ -19,6 +19,7 @@ namespace BusinessLayer.Models
         [StringLength(255, ErrorMessage = "Cover picture URL cannot exceed 255 characters")]
         public string? CoverPicture { get; set; }
 
+        
         public OwnedGame(int userId, string title, string description, string? coverPicture = null)
         {
             UserId = userId;

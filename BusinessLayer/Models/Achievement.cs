@@ -11,19 +11,15 @@ namespace BusinessLayer.Models
     {
         public int AchievementId { get; set; }
 
-        public string AchievementName { get; set; } = string.Empty;
-        public string Description { get; set; } = string.Empty;
-        public string AchievementType { get; set; } = string.Empty;
+        public String AchievementName { get; set; } = string.Empty;
+        public String Description { get; set; } = string.Empty;
+        public String AchievementType { get; set; } = string.Empty;
         public int Points { get; set; }
         public string? Icon { get; set; }
 
         public bool IsValidIcon()
         {
-            if (string.IsNullOrWhiteSpace(Icon))
-            {
-                return false;
-            }
-
+            if (string.IsNullOrWhiteSpace(Icon)) return false;
             string pattern = @"\.(png|svg|jpg)$";
             return Regex.IsMatch(Icon, pattern, RegexOptions.IgnoreCase);
         }

@@ -1,6 +1,6 @@
-﻿using System.Data;
-using BusinessLayer.Data;
+﻿using BusinessLayer.Data;
 using BusinessLayer.Models;
+using System.Data;
 using Microsoft.Data.SqlClient;
 using BusinessLayer.Exceptions;
 
@@ -8,11 +8,11 @@ namespace BusinessLayer.Repositories
 {
     public class WalletRepository
     {
-        private readonly IDataLink dataLink;
+        private readonly IDataLink _dataLink;
 
         public WalletRepository(IDataLink datalink)
         {
-            this.dataLink = datalink ?? throw new ArgumentNullException(nameof(datalink));
+            _dataLink = datalink ?? throw new ArgumentNullException(nameof(datalink));
         }
         public Wallet GetWallet(int walletId)
         {
@@ -22,7 +22,7 @@ namespace BusinessLayer.Repositories
                 {
                     new SqlParameter("@wallet_id", walletId)
                 };
-                var dataTable = dataLink.ExecuteReader("GetWalletById", parameters);
+                var dataTable = _dataLink.ExecuteReader("GetWalletById", parameters);
                 return MapDataRowToWallet(dataTable.Rows[0]);
             }
             catch (DatabaseOperationException ex)
@@ -39,7 +39,7 @@ namespace BusinessLayer.Repositories
                 {
             new SqlParameter("@user_id", userId)
                 };
-                var dataTable = dataLink.ExecuteReader("GetWalletIdByUserId", parameters);
+                var dataTable = _dataLink.ExecuteReader("GetWalletIdByUserId", parameters);
                 if (dataTable.Rows.Count > 0)
                 {
                     return Convert.ToInt32(dataTable.Rows[0]["wallet_id"]);
@@ -51,6 +51,7 @@ namespace BusinessLayer.Repositories
                 throw new RepositoryException($"Failed to retrieve wallet ID for user ID {userId} from the database.", ex);
             }
         }
+
 
         private Wallet MapDataRowToWallet(DataRow dataRow) => new Wallet
         {
@@ -67,7 +68,7 @@ namespace BusinessLayer.Repositories
                 new SqlParameter("@amount",  amount),
                 new SqlParameter("@userId", waletId)
             };
-            dataLink.ExecuteReader("AddMoney", parameters);
+            _dataLink.ExecuteReader("AddMoney", parameters);
         }
 
         public void AddPointsToWallet(int amount, int walletId)
@@ -77,7 +78,7 @@ namespace BusinessLayer.Repositories
                 new SqlParameter("@amount",  amount),
                 new SqlParameter("@userId", walletId)
             };
-            dataLink.ExecuteReader("AddPoints", parameters);
+            _dataLink.ExecuteReader("AddPoints", parameters);
         }
 
         public decimal GetMoneyFromWallet(int walletId)
@@ -98,7 +99,7 @@ namespace BusinessLayer.Repositories
                 new SqlParameter("@numberOfPoints", offer.Points), // Fixed parameter name from @@numberOfPoints to @points
                 new SqlParameter("@userId", walletId)
             };
-            dataLink.ExecuteReader("BuyPoints", parameters);
+            _dataLink.ExecuteReader("BuyPoints", parameters);
         }
         public void AddNewWallet(int walletid)
         {
@@ -108,7 +109,7 @@ namespace BusinessLayer.Repositories
                 {
                     new SqlParameter("@user_id", walletid)
                 };
-                var datatable = dataLink.ExecuteReader("CreateWallet", parameters);
+                var datatable = _dataLink.ExecuteReader("CreateWallet", parameters);
             }
             catch (Exception ex)
             {
@@ -123,7 +124,7 @@ namespace BusinessLayer.Repositories
                 {
                     new SqlParameter("@user_id", walletId)
                 };
-                var datatable = dataLink.ExecuteReader("RemoveWallet", parameters);
+                var datatable = _dataLink.ExecuteReader("RemoveWallet", parameters);
             }
             catch (Exception ex)
             {

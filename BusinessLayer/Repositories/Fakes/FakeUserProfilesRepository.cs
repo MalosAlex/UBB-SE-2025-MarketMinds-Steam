@@ -1,7 +1,12 @@
 ﻿using BusinessLayer.Models;
 using BusinessLayer.Repositories.Interfaces;
+using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
 
-namespace BusinessLayer.Repositories.Fakes
+namespace BusinessLayer.Repositories.fakes
 {
     public class FakeUserProfilesRepository : IUserProfilesRepository
     {

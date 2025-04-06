@@ -1,4 +1,8 @@
-﻿namespace BusinessLayer.Models
+﻿using System;
+using System.Diagnostics;
+using System.Threading.Tasks;
+
+namespace BusinessLayer.Models
 {
     public class UserProfile
     {
@@ -8,4 +12,4 @@
         public string? Bio { get; set; }
         public DateTime LastModified { get; set; }
     }
-}
+} 

@@ -1,60 +1,60 @@
 ﻿using BusinessLayer.Services.Interfaces;
 using BusinessLayer.Models;
 using BusinessLayer.Repositories;
+using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
 
 namespace BusinessLayer.Services
 {
     public class WalletService : IWalletService
     {
-        private readonly WalletRepository walletRepository;
-        private readonly IUserService userService;
+        private readonly WalletRepository _walletRepository;
+        private readonly IUserService _userService;
 
         public WalletService(WalletRepository walletRepository, IUserService userService)
         {
-            walletRepository = walletRepository ?? throw new ArgumentNullException(nameof(walletRepository));
-            userService = userService;
+            _walletRepository = walletRepository ?? throw new ArgumentNullException(nameof(walletRepository));
+            _userService = userService;
         }
 
         public void AddMoney(decimal amount)
         {
-            walletRepository.AddMoneyToWallet(amount, userService.GetCurrentUser().UserId);
+            _walletRepository.AddMoneyToWallet(amount, _userService.GetCurrentUser().UserId);
         }
 
         public void AddPoints(int points)
         {
-            walletRepository.AddPointsToWallet(points, userService.GetCurrentUser().UserId);
+            _walletRepository.AddPointsToWallet(points, _userService.GetCurrentUser().UserId);
         }
 
         public decimal GetBalance()
         {
-            return walletRepository.GetMoneyFromWallet(walletRepository.GetWalletIdByUserId(userService.GetCurrentUser().UserId));
+            return _walletRepository.GetMoneyFromWallet(_walletRepository.GetWalletIdByUserId(_userService.GetCurrentUser().UserId));
         }
 
         public int GetPoints()
         {
-            int userId = userService.GetCurrentUser().UserId;
-            int walletId = walletRepository.GetWalletIdByUserId(userId);
-            return walletRepository.GetPointsFromWallet(walletId);
+            int userId = _userService.GetCurrentUser().UserId;
+            int walletId = _walletRepository.GetWalletIdByUserId(userId);
+            return _walletRepository.GetPointsFromWallet(walletId);
         }
 
         public void CreateWallet(int userId)
         {
-            walletRepository.AddNewWallet(userId);
+            _walletRepository.AddNewWallet(userId);
         }
         public void PurchasePoints(PointsOffer offer)
         {
             if (offer == null)
-            {
                 throw new ArgumentNullException(nameof(offer));
-            }
 
             // Check if user has enough balance
             if (GetBalance() < offer.Price)
-            {
                 throw new InvalidOperationException("Insufficient funds");
-            }
-
-            walletRepository.PurchasePoints(offer, userService.GetCurrentUser().UserId);
+            _walletRepository.PurchasePoints(offer, _userService.GetCurrentUser().UserId);
         }
     }
 }

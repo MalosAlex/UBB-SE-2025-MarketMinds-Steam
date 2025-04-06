@@ -1,5 +1,11 @@
 using BusinessLayer.Models;
+using BusinessLayer.Repositories;
 using BusinessLayer.Exceptions;
+using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Threading.Tasks;
+using BCrypt.Net;
 using BusinessLayer.Utils;
 using BusinessLayer.Services.Interfaces;
 using BusinessLayer.Repositories.Interfaces;
@@ -8,29 +14,29 @@ namespace BusinessLayer.Services
 {
     public class UserService : IUserService
     {
-        private readonly IUsersRepository usersRepository;
-        private readonly ISessionService sessionService;
+        private readonly IUsersRepository _usersRepository;
+        private readonly ISessionService _sessionService;
 
         public UserService(IUsersRepository usersRepository, ISessionService sessionService)
         {
-            this.usersRepository = usersRepository ?? throw new ArgumentNullException(nameof(usersRepository));
-            this.sessionService = sessionService ?? throw new ArgumentNullException(nameof(sessionService));
+            _usersRepository = usersRepository ?? throw new ArgumentNullException(nameof(usersRepository));
+            _sessionService = sessionService ?? throw new ArgumentNullException(nameof(sessionService));
         }
 
         public List<User> GetAllUsers()
         {
-            return usersRepository.GetAllUsers();
+            return _usersRepository.GetAllUsers();
         }
 
-        public User GetUserById(int userId) => usersRepository.GetUserById(userId);
+        public User GetUserById(int userId) => _usersRepository.GetUserById(userId);
 
-        public User GetUserByEmail(string email) => usersRepository.GetUserByEmail(email);
+        public User GetUserByEmail(string email) => _usersRepository.GetUserByEmail(email);
 
-        public User? GetUserByUsername(string username) => usersRepository.GetUserByUsername(username);
+        public User? GetUserByUsername(string username) => _usersRepository.GetUserByUsername(username);
         public void ValidateUserAndEmail(string email, string username)
         {
             // Check if user already exists
-            var errorType = usersRepository.CheckUserExists(email, username);
+            var errorType = _usersRepository.CheckUserExists(email, username);
 
             if (!string.IsNullOrEmpty(errorType))
             {
@@ -52,22 +58,22 @@ namespace BusinessLayer.Services
 
             // Hash the password before passing it to the repository
             user.Password = PasswordHasher.HashPassword(user.Password);
-            return usersRepository.CreateUser(user);
+            return _usersRepository.CreateUser(user);
         }
 
         public User UpdateUser(User user)
         {
-            return usersRepository.UpdateUser(user);
+            return _usersRepository.UpdateUser(user);
         }
 
         public void DeleteUser(int userId)
         {
-            usersRepository.DeleteUser(userId);
+            _usersRepository.DeleteUser(userId);
         }
 
         public bool AcceptChanges(int user_id, string givenPassword)
         {
-            User user = usersRepository.GetUserById(user_id);
+            User user = _usersRepository.GetUserById(user_id);
 
             if (PasswordHasher.VerifyPassword(givenPassword, user.Password))
             {
@@ -78,58 +84,55 @@ namespace BusinessLayer.Services
 
         public void UpdateUserEmail(int userId, string newEmail)
         {
-            usersRepository.ChangeEmail(userId, newEmail);
+            _usersRepository.ChangeEmail(userId, newEmail);
         }
         public void UpdateUserPassword(int userId, string newPassword)
         {
-            usersRepository.ChangePassword(userId, newPassword);
+            _usersRepository.ChangePassword(userId, newPassword);
         }
         public void UpdateUserUsername(int userId, string newUsername)
         {
-            usersRepository.ChangeUsername(userId, newUsername);
+            _usersRepository.ChangeUsername(userId, newUsername);
         }
 
         public User? Login(string emailOrUsername, string password)
         {
-            var user = usersRepository.VerifyCredentials(emailOrUsername);
+            var user = _usersRepository.VerifyCredentials(emailOrUsername);
             if (user != null)
             {
-                if (PasswordHasher.VerifyPassword(password, user.Password))
+                if (PasswordHasher.VerifyPassword(password, user.Password)) // Check the password against the hashed password
                 {
-                    sessionService.CreateNewSession(user);
+                    _sessionService.CreateNewSession(user);
 
                     // update last login time for user
-                    usersRepository.UpdateLastLogin(user.UserId);
+                    _usersRepository.UpdateLastLogin(user.UserId);
                 }
                 else
-                {
                     return null;
-                }
             }
-
             return user;
         }
 
         public void Logout()
         {
-            sessionService.EndSession();
+            _sessionService.EndSession();
         }
 
         public User? GetCurrentUser()
         {
-            return sessionService.GetCurrentUser();
+            return _sessionService.GetCurrentUser();
         }
 
         public bool IsUserLoggedIn()
         {
-            return sessionService.IsUserLoggedIn();
+            return _sessionService.IsUserLoggedIn();
         }
 
         public bool UpdateUserUsername(string username, string currentPassword)
         {
             if (this.VerifyUserPassword(currentPassword))
             {
-                usersRepository.ChangeUsername(GetCurrentUser().UserId, username);
+                _usersRepository.ChangeUsername(GetCurrentUser().UserId, username);
                 return true;
             }
             return false;
@@ -139,7 +142,7 @@ namespace BusinessLayer.Services
         {
             if (this.VerifyUserPassword(currentPassword))
             {
-                usersRepository.ChangePassword(GetCurrentUser().UserId, password);
+                _usersRepository.ChangePassword(GetCurrentUser().UserId, password);
                 return true;
             }
             return false;
@@ -149,7 +152,7 @@ namespace BusinessLayer.Services
         {
             if (this.VerifyUserPassword(currentPassword))
             {
-                usersRepository.ChangeEmail(GetCurrentUser().UserId, email);
+                _usersRepository.ChangeEmail(GetCurrentUser().UserId, email);
                 return true;
             }
             return false;
@@ -158,10 +161,10 @@ namespace BusinessLayer.Services
         public bool VerifyUserPassword(string password)
         {
             string email = this.GetCurrentUser().Email;
-            var user = usersRepository.VerifyCredentials(email);
+            var user = _usersRepository.VerifyCredentials(email);
             if (user != null)
             {
-                if (PasswordHasher.VerifyPassword(password, user.Password))
+                if (PasswordHasher.VerifyPassword(password, user.Password)) // Check the password against the hashed password
                 {
                     return true;
                 }

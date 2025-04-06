@@ -8,6 +8,7 @@ using BusinessLayer.Exceptions;
 using BusinessLayer.Services;
 using BusinessLayer.Services.Interfaces;
 using BusinessLayer.Repositories.Fakes;
+using BusinessLayer.Services.fakes;
 using BusinessLayer.Services.Fakes;
 
 namespace Tests

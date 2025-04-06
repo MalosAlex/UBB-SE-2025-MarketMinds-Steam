@@ -1,4 +1,6 @@
 ﻿using BusinessLayer.Models;
+using System;
+using System.Collections.Generic;
 
 namespace BusinessLayer.Repositories.Interfaces
 {

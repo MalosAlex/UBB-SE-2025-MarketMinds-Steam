@@ -4,11 +4,12 @@ using BusinessLayer.Repositories.Interfaces;
 using BusinessLayer.Services.Interfaces;
 using BusinessLayer.Exceptions;
 
+
 namespace BusinessLayer.Services
 {
     public class AchievementsService : IAchievementsService
     {
-        private readonly IAchievementsRepository achievementsRepository;
+        private readonly IAchievementsRepository _achievementsRepository;
 
         public static class Categories
         {
@@ -43,7 +44,7 @@ namespace BusinessLayer.Services
                 UnlockAchievementForUser(userId);
 
                 // Get all achievements with status
-                var all = achievementsRepository.GetAchievementsWithStatusForUser(userId);
+                var all = _achievementsRepository.GetAchievementsWithStatusForUser(userId);
 
                 // Group by category
                 return new GroupedAchievementsResult
@@ -72,7 +73,7 @@ namespace BusinessLayer.Services
 
         public AchievementsService(IAchievementsRepository achievementsRepository)
         {
-            achievementsRepository = achievementsRepository ?? throw new ArgumentNullException(nameof(achievementsRepository));
+            _achievementsRepository = achievementsRepository ?? throw new ArgumentNullException(nameof(achievementsRepository));
         }
 
         public void InitializeAchievements()
@@ -80,10 +81,10 @@ namespace BusinessLayer.Services
             try
             {
                 System.Diagnostics.Debug.WriteLine("Checking if achievements table is empty...");
-                if (achievementsRepository.IsAchievementsTableEmpty())
+                if (_achievementsRepository.IsAchievementsTableEmpty())
                 {
                     System.Diagnostics.Debug.WriteLine("Achievements table is empty. Inserting achievements...");
-                    achievementsRepository.InsertAchievements();
+                    _achievementsRepository.InsertAchievements();
                     System.Diagnostics.Debug.WriteLine("Achievements inserted successfully.");
                     UpdateAchievementIconUrls();
                 }
@@ -104,16 +105,16 @@ namespace BusinessLayer.Services
             {
                 var iconUrls = new Dictionary<int, string>
                 {
-                    { 1, "https://t4.ftcdn.net/jpg/00/99/53/31/360_F_99533164_fpE2O6vEjnXgYhonMyYBGtGUFCLqfTWA.jpg" },
-                    { 3, "https://png.pngtree.com/png-clipart/20200401/original/pngtree-gold-number-5-png-image_5330870.jpg" },
-                    { 5, "https://t4.ftcdn.net/jpg/01/93/98/05/360_F_193980561_lymRkyDG6roPxmgA6x27fEaq3O3z3Mcf.jpg" },
-                    { 10, "https://as1.ftcdn.net/v2/jpg/02/42/16/20/1000_F_242162042_Ve21lDSZQl3Ebb9laV1WAJrR0ls3RGAn.jpg" },
-                    { 15, "https://t3.ftcdn.net/jpg/02/79/95/72/360_F_279957287_UsAVf2woGRBWekMX68LiiWpwrrVVy9bI.jpg" }
+                    {1, "https://t4.ftcdn.net/jpg/00/99/53/31/360_F_99533164_fpE2O6vEjnXgYhonMyYBGtGUFCLqfTWA.jpg" },
+                    {3, "https://png.pngtree.com/png-clipart/20200401/original/pngtree-gold-number-5-png-image_5330870.jpg" },
+                    {5, "https://t4.ftcdn.net/jpg/01/93/98/05/360_F_193980561_lymRkyDG6roPxmgA6x27fEaq3O3z3Mcf.jpg" },
+                    {10, "https://as1.ftcdn.net/v2/jpg/02/42/16/20/1000_F_242162042_Ve21lDSZQl3Ebb9laV1WAJrR0ls3RGAn.jpg" },
+                    {15, "https://t3.ftcdn.net/jpg/02/79/95/72/360_F_279957287_UsAVf2woGRBWekMX68LiiWpwrrVVy9bI.jpg" }
                 };
                 foreach (var iconUrl in iconUrls)
                 {
                     System.Diagnostics.Debug.WriteLine($"Updating icon URL for points: {iconUrl.Key}, URL: {iconUrl.Value}");
-                    achievementsRepository.UpdateAchievementIconUrl(iconUrl.Key, iconUrl.Value);
+                    _achievementsRepository.UpdateAchievementIconUrl(iconUrl.Key, iconUrl.Value);
                 }
 
                 System.Diagnostics.Debug.WriteLine("Achievement icon URLs updated successfully.");
@@ -128,11 +129,12 @@ namespace BusinessLayer.Services
             }
         }
 
+
         public List<Achievement> GetAchievementsForUser(int userId)
         {
             try
             {
-                return achievementsRepository.GetAllAchievements();
+                return _achievementsRepository.GetAllAchievements();
             }
             catch (RepositoryException ex)
             {
@@ -144,23 +146,23 @@ namespace BusinessLayer.Services
         {
             try
             {
-                int numberOfSoldGames = achievementsRepository.GetNumberOfSoldGames(userId);
-                int numberOfFriends = achievementsRepository.GetFriendshipCount(userId);
-                int numberOfOwnedGames = achievementsRepository.GetNumberOfOwnedGames(userId);
-                int numberOfReviewsGiven = achievementsRepository.GetNumberOfReviewsGiven(userId);
-                int numberOfReviewsReceived = achievementsRepository.GetNumberOfReviewsReceived(userId);
-                int numberOfPosts = achievementsRepository.GetNumberOfPosts(userId);
-                int yearsOfActivity = achievementsRepository.GetYearsOfAcftivity(userId);
-                bool isDeveloper = achievementsRepository.IsUserDeveloper(userId);
+                int numberOfSoldGames = _achievementsRepository.GetNumberOfSoldGames(userId);
+                int numberOfFriends = _achievementsRepository.GetFriendshipCount(userId);
+                int numberOfOwnedGames = _achievementsRepository.GetNumberOfOwnedGames(userId);
+                int numberOfReviewsGiven = _achievementsRepository.GetNumberOfReviewsGiven(userId);
+                int numberOfReviewsReceived = _achievementsRepository.GetNumberOfReviewsReceived(userId);
+                int numberOfPosts = _achievementsRepository.GetNumberOfPosts(userId);
+                int yearsOfActivity = _achievementsRepository.GetYearsOfAcftivity(userId);
+                bool isDeveloper = _achievementsRepository.IsUserDeveloper(userId);
 
                 if (numberOfFriends == 1 || numberOfFriends == 5 || numberOfFriends == 10 || numberOfFriends == 50 || numberOfFriends == 100)
                 {
                     int? achievementId = GetAchievementIdByTypeAndCount("Friendships", numberOfFriends);
                     System.Diagnostics.Debug.WriteLine($"Achievement ID for friendships with count {numberOfFriends}: {achievementId}");
-                    if (achievementId.HasValue && !achievementsRepository.IsAchievementUnlocked(userId, achievementId.Value))
+                    if (achievementId.HasValue && !_achievementsRepository.IsAchievementUnlocked(userId, achievementId.Value))
                     {
                         System.Diagnostics.Debug.WriteLine($"Unlocking achievement ID {achievementId.Value} for user {userId}");
-                        achievementsRepository.UnlockAchievement(userId, achievementId.Value);
+                        _achievementsRepository.UnlockAchievement(userId, achievementId.Value);
                     }
                 }
 
@@ -168,10 +170,10 @@ namespace BusinessLayer.Services
                 {
                     int? achievementId = GetAchievementIdByTypeAndCount("Owned Games", numberOfOwnedGames);
                     System.Diagnostics.Debug.WriteLine($"Achievement ID for owned games with count {numberOfOwnedGames}: {achievementId}");
-                    if (achievementId.HasValue && !achievementsRepository.IsAchievementUnlocked(userId, achievementId.Value))
+                    if (achievementId.HasValue && !_achievementsRepository.IsAchievementUnlocked(userId, achievementId.Value))
                     {
                         System.Diagnostics.Debug.WriteLine($"Unlocking achievement ID {achievementId.Value} for user {userId}");
-                        achievementsRepository.UnlockAchievement(userId, achievementId.Value);
+                        _achievementsRepository.UnlockAchievement(userId, achievementId.Value);
                     }
                 }
 
@@ -179,10 +181,10 @@ namespace BusinessLayer.Services
                 {
                     int? achievementId = GetAchievementIdByTypeAndCount("Sold Games", numberOfSoldGames);
                     System.Diagnostics.Debug.WriteLine($"Achievement ID for sold games with count {numberOfSoldGames}: {achievementId}");
-                    if (achievementId.HasValue && !achievementsRepository.IsAchievementUnlocked(userId, achievementId.Value))
+                    if (achievementId.HasValue && !_achievementsRepository.IsAchievementUnlocked(userId, achievementId.Value))
                     {
                         System.Diagnostics.Debug.WriteLine($"Unlocking achievement ID {achievementId.Value} for user {userId}");
-                        achievementsRepository.UnlockAchievement(userId, achievementId.Value);
+                        _achievementsRepository.UnlockAchievement(userId, achievementId.Value);
                     }
                 }
 
@@ -190,10 +192,10 @@ namespace BusinessLayer.Services
                 {
                     int? achievementId = GetAchievementIdByTypeAndCount("Number of Reviews Given", numberOfReviewsGiven);
                     System.Diagnostics.Debug.WriteLine($"Achievement ID for reviews given with count {numberOfReviewsGiven}: {achievementId}");
-                    if (achievementId.HasValue && !achievementsRepository.IsAchievementUnlocked(userId, achievementId.Value))
+                    if (achievementId.HasValue && !_achievementsRepository.IsAchievementUnlocked(userId, achievementId.Value))
                     {
                         System.Diagnostics.Debug.WriteLine($"Unlocking achievement ID {achievementId.Value} for user {userId}");
-                        achievementsRepository.UnlockAchievement(userId, achievementId.Value);
+                        _achievementsRepository.UnlockAchievement(userId, achievementId.Value);
                     }
                 }
 
@@ -201,10 +203,10 @@ namespace BusinessLayer.Services
                 {
                     int? achievementId = GetAchievementIdByTypeAndCount("Number of Reviews Received", numberOfReviewsReceived);
                     System.Diagnostics.Debug.WriteLine($"Achievement ID for reviews received with count {numberOfReviewsReceived}: {achievementId}");
-                    if (achievementId.HasValue && !achievementsRepository.IsAchievementUnlocked(userId, achievementId.Value))
+                    if (achievementId.HasValue && !_achievementsRepository.IsAchievementUnlocked(userId, achievementId.Value))
                     {
                         System.Diagnostics.Debug.WriteLine($"Unlocking achievement ID {achievementId.Value} for user {userId}");
-                        achievementsRepository.UnlockAchievement(userId, achievementId.Value);
+                        _achievementsRepository.UnlockAchievement(userId, achievementId.Value);
                     }
                 }
 
@@ -212,29 +214,29 @@ namespace BusinessLayer.Services
                 {
                     int? achievementId = GetAchievementIdByTypeAndCount("Number of Posts", numberOfPosts);
                     System.Diagnostics.Debug.WriteLine($"Achievement ID for posts with count {numberOfPosts}: {achievementId}");
-                    if (achievementId.HasValue && !achievementsRepository.IsAchievementUnlocked(userId, achievementId.Value))
+                    if (achievementId.HasValue && !_achievementsRepository.IsAchievementUnlocked(userId, achievementId.Value))
                     {
                         System.Diagnostics.Debug.WriteLine($"Unlocking achievement ID {achievementId.Value} for user {userId}");
-                        achievementsRepository.UnlockAchievement(userId, achievementId.Value);
+                        _achievementsRepository.UnlockAchievement(userId, achievementId.Value);
                     }
                 }
                 if (yearsOfActivity == 1 || yearsOfActivity == 2 || yearsOfActivity == 3 || yearsOfActivity == 4)
                 {
                     int? achievementId = GetAchievementIdByTypeAndCount("Years of Activity", yearsOfActivity);
                     System.Diagnostics.Debug.WriteLine($"Achievement ID for years of activity with count {yearsOfActivity}: {achievementId}");
-                    if (achievementId.HasValue && !achievementsRepository.IsAchievementUnlocked(userId, achievementId.Value))
+                    if (achievementId.HasValue && !_achievementsRepository.IsAchievementUnlocked(userId, achievementId.Value))
                     {
                         System.Diagnostics.Debug.WriteLine($"Unlocking achievement ID {achievementId.Value} for user {userId}");
-                        achievementsRepository.UnlockAchievement(userId, achievementId.Value);
+                        _achievementsRepository.UnlockAchievement(userId, achievementId.Value);
                     }
                 }
 
                 if (isDeveloper)
                 {
                     int? achievementId = GetAchievementIdByTypeAndCount("Developer", 1);
-                    if (achievementId.HasValue && !achievementsRepository.IsAchievementUnlocked(userId, achievementId.Value))
+                    if (achievementId.HasValue && !_achievementsRepository.IsAchievementUnlocked(userId, achievementId.Value))
                     {
-                        achievementsRepository.UnlockAchievement(userId, achievementId.Value);
+                        _achievementsRepository.UnlockAchievement(userId, achievementId.Value);
                     }
                 }
             }
@@ -244,11 +246,15 @@ namespace BusinessLayer.Services
             }
         }
 
+
+
+
+
         public void RemoveAchievement(int userId, int achievementId)
         {
             try
             {
-                achievementsRepository.RemoveAchievement(userId, achievementId);
+                _achievementsRepository.RemoveAchievement(userId, achievementId);
             }
             catch (RepositoryException ex)
             {
@@ -260,7 +266,7 @@ namespace BusinessLayer.Services
         {
             try
             {
-                return achievementsRepository.GetUnlockedAchievementsForUser(userId);
+                return _achievementsRepository.GetUnlockedAchievementsForUser(userId);
             }
             catch (RepositoryException ex)
             {
@@ -272,7 +278,7 @@ namespace BusinessLayer.Services
         {
             try
             {
-                return achievementsRepository.GetAllAchievements();
+                return _achievementsRepository.GetAllAchievements();
             }
             catch (RepositoryException ex)
             {
@@ -284,7 +290,7 @@ namespace BusinessLayer.Services
         {
             try
             {
-                return achievementsRepository.GetUnlockedDataForAchievement(userId, achievementId);
+                return _achievementsRepository.GetUnlockedDataForAchievement(userId, achievementId);
             }
             catch (RepositoryException ex)
             {
@@ -296,7 +302,7 @@ namespace BusinessLayer.Services
         {
             try
             {
-                return achievementsRepository.GetAchievementsWithStatusForUser(userId);
+                return _achievementsRepository.GetAchievementsWithStatusForUser(userId);
             }
             catch (RepositoryException ex)
             {
@@ -309,158 +315,102 @@ namespace BusinessLayer.Services
             if (type == "Friendships")
             {
                 if (count == 1)
-                {
-                    return achievementsRepository.GetAchievementIdByName("FRIENDSHIP1");
-                }
+                    return _achievementsRepository.GetAchievementIdByName("FRIENDSHIP1");
                 else if (count == 5)
-                {
-                    return achievementsRepository.GetAchievementIdByName("FRIENDSHIP2");
-                }
+                    return _achievementsRepository.GetAchievementIdByName("FRIENDSHIP2");
                 else if (count == 10)
-                {
-                    return achievementsRepository.GetAchievementIdByName("FRIENDSHIP3");
-                }
+                    return _achievementsRepository.GetAchievementIdByName("FRIENDSHIP3");
                 else if (count == 50)
-                {
-                    return achievementsRepository.GetAchievementIdByName("FRIENDSHIP4");
-                }
+                    return _achievementsRepository.GetAchievementIdByName("FRIENDSHIP4");
                 else if (count == 100)
-                {
-                    return achievementsRepository.GetAchievementIdByName("FRIENDSHIP5");
-                }
+                    return _achievementsRepository.GetAchievementIdByName("FRIENDSHIP5");
             }
             else if (type == "Owned Games")
             {
                 if (count == 1)
-                {
-                    return achievementsRepository.GetAchievementIdByName("OWNEDGAMES1");
-                }
+                    return _achievementsRepository.GetAchievementIdByName("OWNEDGAMES1");
                 else if (count == 5)
-                {
-                    return achievementsRepository.GetAchievementIdByName("OWNEDGAMES2");
-                }
+                    return _achievementsRepository.GetAchievementIdByName("OWNEDGAMES2");
                 else if (count == 10)
-                {
-                    return achievementsRepository.GetAchievementIdByName("OWNEDGAMES3");
-                }
+                    return _achievementsRepository.GetAchievementIdByName("OWNEDGAMES3");
                 else if (count == 50)
-                {
-                    return achievementsRepository.GetAchievementIdByName("OWNEDGAMES4");
-                }
+                    return _achievementsRepository.GetAchievementIdByName("OWNEDGAMES4");
             }
             else if (type == "Sold Games")
             {
                 if (count == 1)
-                {
-                    return achievementsRepository.GetAchievementIdByName("SOLDGAMES1");
-                }
+                    return _achievementsRepository.GetAchievementIdByName("SOLDGAMES1");
                 else if (count == 5)
-                {
-                    return achievementsRepository.GetAchievementIdByName("SOLDGAMES2");
-                }
+                    return _achievementsRepository.GetAchievementIdByName("SOLDGAMES2");
                 else if (count == 10)
-                {
-                    return achievementsRepository.GetAchievementIdByName("SOLDGAMES3");
-                }
+                    return _achievementsRepository.GetAchievementIdByName("SOLDGAMES3");
                 else if (count == 50)
-                {
-                    return achievementsRepository.GetAchievementIdByName("SOLDGAMES4");
-                }
+                    return _achievementsRepository.GetAchievementIdByName("SOLDGAMES4");
             }
             else if (type == "Number of Reviews Given")
             {
                 if (count == 1)
-                {
-                    return achievementsRepository.GetAchievementIdByName("REVIEW1");
-                }
+                    return _achievementsRepository.GetAchievementIdByName("REVIEW1");
                 else if (count == 5)
-                {
-                    return achievementsRepository.GetAchievementIdByName("REVIEW2");
-                }
+                    return _achievementsRepository.GetAchievementIdByName("REVIEW2");
                 else if (count == 10)
-                {
-                    return achievementsRepository.GetAchievementIdByName("REVIEW3");
-                }
+                    return _achievementsRepository.GetAchievementIdByName("REVIEW3");
                 else if (count == 50)
-                {
-                    return achievementsRepository.GetAchievementIdByName("REVIEW4");
-                }
+                    return _achievementsRepository.GetAchievementIdByName("REVIEW4");
             }
             else if (type == "Number of Reviews Received")
             {
                 if (count == 1)
-                {
-                    return achievementsRepository.GetAchievementIdByName("REVIEWR1");
-                }
+                    return _achievementsRepository.GetAchievementIdByName("REVIEWR1");
                 else if (count == 5)
-                {
-                    return achievementsRepository.GetAchievementIdByName("REVIEWR2");
-                }
+                    return _achievementsRepository.GetAchievementIdByName("REVIEWR2");
                 else if (count == 10)
-                {
-                    return achievementsRepository.GetAchievementIdByName("REVIEWR3");
-                }
+                    return _achievementsRepository.GetAchievementIdByName("REVIEWR3");
                 else if (count == 50)
-                {
-                    return achievementsRepository.GetAchievementIdByName("REVIEWR4");
-                }
+                    return _achievementsRepository.GetAchievementIdByName("REVIEWR4");
             }
             else if (type == "Years of Activity")
             {
                 if (count == 1)
-                {
-                    return achievementsRepository.GetAchievementIdByName("ACTIVITY1");
-                }
+                    return _achievementsRepository.GetAchievementIdByName("ACTIVITY1");
                 else if (count == 2)
-                {
-                    return achievementsRepository.GetAchievementIdByName("ACTIVITY2");
-                }
+                    return _achievementsRepository.GetAchievementIdByName("ACTIVITY2");
                 else if (count == 3)
-                {
-                    return achievementsRepository.GetAchievementIdByName("ACTIVITY3");
-                }
+                    return _achievementsRepository.GetAchievementIdByName("ACTIVITY3");
                 else if (count == 4)
-                {
-                    return achievementsRepository.GetAchievementIdByName("ACTIVITY4");
-                }
+                    return _achievementsRepository.GetAchievementIdByName("ACTIVITY4");
             }
             else if (type == "Number of Posts")
             {
                 if (count == 1)
-                {
-                    return achievementsRepository.GetAchievementIdByName("POSTS1");
-                }
+                    return _achievementsRepository.GetAchievementIdByName("POSTS1");
                 else if (count == 5)
-                {
-                    return achievementsRepository.GetAchievementIdByName("POSTS2");
-                }
+                    return _achievementsRepository.GetAchievementIdByName("POSTS2");
                 else if (count == 10)
-                {
-                    return achievementsRepository.GetAchievementIdByName("POSTS3");
-                }
+                    return _achievementsRepository.GetAchievementIdByName("POSTS3");
                 else if (count == 50)
-                {
-                    return achievementsRepository.GetAchievementIdByName("POSTS4");
-                }
+                    return _achievementsRepository.GetAchievementIdByName("POSTS4");
             }
             else if (type == "Developer")
             {
-                if (count == 1)
+                if(count == 1)
                 {
-                    return achievementsRepository.GetAchievementIdByName("DEVELOPER");
+                    return _achievementsRepository.GetAchievementIdByName("DEVELOPER");
                 }
             }
 
-            return null;
+                return null;
         }
+
+
 
         public int GetPointsForUnlockedAchievement(int userId, int achievementId)
         {
             try
             {
-                if (achievementsRepository.IsAchievementUnlocked(userId, achievementId))
+                if (_achievementsRepository.IsAchievementUnlocked(userId, achievementId))
                 {
-                    var achievement = achievementsRepository.GetAllAchievements()
+                    var achievement = _achievementsRepository.GetAllAchievements()
                         .FirstOrDefault(a => a.AchievementId == achievementId);
                     if (achievement != null)
                     {
@@ -473,6 +423,14 @@ namespace BusinessLayer.Services
             {
                 throw new ServiceException("Error retrieving points for unlocked achievement.", ex);
             }
+        }
+
+
+        public class ServiceException : Exception
+        {
+            public ServiceException(string message) : base(message) { }
+            public ServiceException(string message, Exception innerException)
+                : base(message, innerException) { }
         }
     }
 }

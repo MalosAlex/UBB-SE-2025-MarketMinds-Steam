@@ -1,7 +1,7 @@
-﻿using System.Data;
-using BusinessLayer.Data;
+﻿using BusinessLayer.Data;
 using BusinessLayer.Models;
 using BusinessLayer.Utils;
+using System.Data;
 using Microsoft.Data.SqlClient;
 using BusinessLayer.Repositories.Interfaces;
 using BusinessLayer.Exceptions;
@@ -10,18 +10,18 @@ namespace BusinessLayer.Repositories
 {
     public sealed class UsersRepository : IUsersRepository
     {
-        private readonly IDataLink dataLink;
+        private readonly IDataLink _dataLink;
 
         public UsersRepository(IDataLink datalink)
         {
-            this.dataLink = datalink ?? throw new ArgumentNullException(nameof(datalink));
+            _dataLink = datalink ?? throw new ArgumentNullException(nameof(datalink));
         }
 
         public List<User> GetAllUsers()
         {
             try
             {
-                var dataTable = dataLink.ExecuteReader("GetAllUsers");
+                var dataTable = _dataLink.ExecuteReader("GetAllUsers");
                 return MapDataTableToUsers(dataTable);
             }
             catch (DatabaseOperationException ex)
@@ -39,7 +39,7 @@ namespace BusinessLayer.Repositories
                     new SqlParameter("@user_id", userId)
                 };
 
-                var dataTable = dataLink.ExecuteReader("GetUserById", parameters);
+                var dataTable = _dataLink.ExecuteReader("GetUserById", parameters);
                 return dataTable.Rows.Count > 0 ? MapDataRowToUser(dataTable.Rows[0]) : null;
             }
             catch (DatabaseOperationException ex)
@@ -60,7 +60,7 @@ namespace BusinessLayer.Repositories
                     new SqlParameter("@developer", user.IsDeveloper)
                 };
 
-                var dataTable = dataLink.ExecuteReader("UpdateUser", parameters);
+                var dataTable = _dataLink.ExecuteReader("UpdateUser", parameters);
                 if (dataTable.Rows.Count == 0)
                 {
                     throw new RepositoryException($"User with ID {user.UserId} not found.");
@@ -86,7 +86,7 @@ namespace BusinessLayer.Repositories
                     new SqlParameter("@developer", user.IsDeveloper)
                 };
 
-                var dataTable = dataLink.ExecuteReader("CreateUser", parameters);
+                var dataTable = _dataLink.ExecuteReader("CreateUser", parameters);
                 if (dataTable.Rows.Count == 0)
                 {
                     throw new RepositoryException("Failed to create user.");
@@ -109,7 +109,10 @@ namespace BusinessLayer.Repositories
                     new SqlParameter("@user_id", userId)
                 };
 
-                dataLink.ExecuteNonQuery("DeleteUser", parameters);
+                //_dataLink.ExecuteNonQuery("DeleteWallet", parameters);
+
+                _dataLink.ExecuteNonQuery("DeleteUser", parameters);
+                // have to delete all their assigned data
             }
             catch (DatabaseOperationException ex)
             {
@@ -126,14 +129,14 @@ namespace BusinessLayer.Repositories
                     new SqlParameter("@EmailOrUsername", emailOrUsername),
                 };
 
-                var dataTable = dataLink.ExecuteReader("GetUserByEmailOrUsername", parameters);
-
+                var dataTable = _dataLink.ExecuteReader("GetUserByEmailOrUsername", parameters);
+                
                 if (dataTable.Rows.Count > 0)
                 {
                     var user = MapDataRowToUserWithPassword(dataTable.Rows[0]);
                     return user;
                 }
-
+                
                 return null;
             }
             catch (DatabaseOperationException ex)
@@ -151,7 +154,7 @@ namespace BusinessLayer.Repositories
                     new SqlParameter("@email", email)
                 };
 
-                var dataTable = dataLink.ExecuteReader("GetUserByEmail", parameters);
+                var dataTable = _dataLink.ExecuteReader("GetUserByEmail", parameters);
                 return dataTable.Rows.Count > 0 ? MapDataRowToUser(dataTable.Rows[0]) : null;
             }
             catch (DatabaseOperationException ex)
@@ -169,7 +172,7 @@ namespace BusinessLayer.Repositories
                     new SqlParameter("@username", username)
                 };
 
-                var dataTable = dataLink.ExecuteReader("GetUserByUsername", parameters);
+                var dataTable = _dataLink.ExecuteReader("GetUserByUsername", parameters);
                 return dataTable.Rows.Count > 0 ? MapDataRowToUser(dataTable.Rows[0]) : null;
             }
             catch (DatabaseOperationException ex)
@@ -188,7 +191,7 @@ namespace BusinessLayer.Repositories
             new SqlParameter("@username", username)
                 };
 
-                var dataTable = dataLink.ExecuteReader("CheckUserExists", parameters);
+                var dataTable = _dataLink.ExecuteReader("CheckUserExists", parameters);
                 if (dataTable.Rows.Count > 0)
                 {
                     var errorType = dataTable.Rows[0]["ErrorType"];
@@ -202,6 +205,7 @@ namespace BusinessLayer.Repositories
             }
         }
 
+
         public void ChangeEmail(int userId, string newEmail)
         {
             try
@@ -211,7 +215,7 @@ namespace BusinessLayer.Repositories
                     new SqlParameter("@user_id", userId),
                     new SqlParameter("@newEmail", newEmail)
                 };
-                dataLink.ExecuteNonQuery("ChangeEmailForUserId", parameters);
+                _dataLink.ExecuteNonQuery("ChangeEmailForUserId", parameters);
             }
             catch (DatabaseOperationException ex)
             {
@@ -222,12 +226,13 @@ namespace BusinessLayer.Repositories
         {
             try
             {
+
                 var parameters = new SqlParameter[]
                 {
                     new SqlParameter("@user_id", userId),
                     new SqlParameter("@newHashedPassword", PasswordHasher.HashPassword(newPassword))
                 };
-                dataLink.ExecuteNonQuery("ChangePassword", parameters);
+                _dataLink.ExecuteNonQuery("ChangePassword", parameters);
             }
             catch (DatabaseOperationException ex)
             {
@@ -238,12 +243,13 @@ namespace BusinessLayer.Repositories
         {
             try
             {
+
                 var parameters = new SqlParameter[]
                 {
                     new SqlParameter("@user_id", userId),
-                    new SqlParameter("@newUsername", newUsername)
+                    new SqlParameter("@newUsername",newUsername)
                 };
-                dataLink.ExecuteNonQuery("ChangeUsername", parameters);
+                _dataLink.ExecuteNonQuery("ChangeUsername", parameters);
             }
             catch (DatabaseOperationException ex)
             {
@@ -260,7 +266,7 @@ namespace BusinessLayer.Repositories
                     new SqlParameter("@user_id", userId)
                 };
 
-                dataLink.ExecuteNonQuery("UpdateLastLogin", parameters);
+                _dataLink.ExecuteNonQuery("UpdateLastLogin", parameters);
             }
             catch (DatabaseOperationException ex)
             {
@@ -277,7 +283,9 @@ namespace BusinessLayer.Repositories
 
         public User? MapDataRowToUser(DataRow row)
         {
-            if (row["user_id"] == DBNull.Value || row["email"] == DBNull.Value || row["username"] == DBNull.Value)
+            if (row["user_id"] == DBNull.Value || 
+                row["email"] == DBNull.Value || 
+                row["username"] == DBNull.Value)
             {
                 return null;
             }
@@ -295,7 +303,10 @@ namespace BusinessLayer.Repositories
 
         public User? MapDataRowToUserWithPassword(DataRow row)
         {
-            if (row["user_id"] == DBNull.Value || row["email"] == DBNull.Value || row["username"] == DBNull.Value || row["hashed_password"] == DBNull.Value)
+            if (row["user_id"] == DBNull.Value || 
+                row["email"] == DBNull.Value || 
+                row["username"] == DBNull.Value || 
+                row["hashed_password"] == DBNull.Value)
             {
                 return null;
             }
@@ -314,4 +325,11 @@ namespace BusinessLayer.Repositories
             return user;
         }
     }
+
+    //public class RepositoryException : Exception
+    //{
+    //    public RepositoryException(string message) : base(message) { }
+    //    public RepositoryException(string message, Exception innerException)
+    //        : base(message, innerException) { }
+    //}
 }

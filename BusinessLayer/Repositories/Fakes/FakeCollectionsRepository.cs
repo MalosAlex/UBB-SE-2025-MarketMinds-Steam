@@ -1,24 +1,28 @@
 ﻿using BusinessLayer.Models;
+using System;
+using System.Collections.Generic;
+using System.Linq;
+using BusinessLayer.Repositories;
 using BusinessLayer.Repositories.Interfaces;
 
 namespace BusinessLayer.Repositories.Fakes
 {
     public class FakeCollectionsRepository : ICollectionsRepository
     {
-        private readonly List<Collection> collections = new();
+        private readonly List<Collection> _collections = new();
 
         public FakeCollectionsRepository()
         {
             // Seed with some dummy collections for testing.
-            collections.Add(new Collection(userId: 1, name: "Test Collection 1", createdAt: DateOnly.FromDateTime(DateTime.Now.AddDays(-5)), coverPicture: "pic1.jpg", isPublic: true) { CollectionId = 1 });
-            collections.Add(new Collection(userId: 1, name: "Test Collection 2", createdAt: DateOnly.FromDateTime(DateTime.Now.AddDays(-3)), coverPicture: "pic2.jpg", isPublic: false) { CollectionId = 2 });
-            collections.Add(new Collection(userId: 1, name: "Test Collection 3", createdAt: DateOnly.FromDateTime(DateTime.Now.AddDays(-1)), coverPicture: "pic3.jpg", isPublic: true) { CollectionId = 3 });
-            collections.Add(new Collection(userId: 2, name: "Other User Collection", createdAt: DateOnly.FromDateTime(DateTime.Now.AddDays(-2)), coverPicture: "pic4.jpg", isPublic: true) { CollectionId = 4 });
+            _collections.Add(new Collection(userId: 1, name: "Test Collection 1", createdAt: DateOnly.FromDateTime(DateTime.Now.AddDays(-5)), coverPicture: "pic1.jpg", isPublic: true) { CollectionId = 1 });
+            _collections.Add(new Collection(userId: 1, name: "Test Collection 2", createdAt: DateOnly.FromDateTime(DateTime.Now.AddDays(-3)), coverPicture: "pic2.jpg", isPublic: false) { CollectionId = 2 });
+            _collections.Add(new Collection(userId: 1, name: "Test Collection 3", createdAt: DateOnly.FromDateTime(DateTime.Now.AddDays(-1)), coverPicture: "pic3.jpg", isPublic: true) { CollectionId = 3 });
+            _collections.Add(new Collection(userId: 2, name: "Other User Collection", createdAt: DateOnly.FromDateTime(DateTime.Now.AddDays(-2)), coverPicture: "pic4.jpg", isPublic: true) { CollectionId = 4 });
         }
 
         public List<Collection> GetAllCollections(int userId)
         {
-            return collections.Where(c => c.UserId == userId).ToList();
+            return _collections.Where(c => c.UserId == userId).ToList();
         }
 
         public List<Collection> GetLastThreeCollectionsForUser(int userId)
@@ -31,7 +35,7 @@ namespace BusinessLayer.Repositories.Fakes
 
         public Collection GetCollectionById(int collectionId, int userId)
         {
-            return collections.FirstOrDefault(c => c.CollectionId == collectionId && c.UserId == userId);
+            return _collections.FirstOrDefault(c => c.CollectionId == collectionId && c.UserId == userId);
         }
 
         public List<OwnedGame> GetGamesInCollection(int collectionId)
@@ -81,11 +85,9 @@ namespace BusinessLayer.Repositories.Fakes
         {
             int uid = int.Parse(userId);
             int cid = int.Parse(collectionId);
-            var col = collections.FirstOrDefault(c => c.CollectionId == cid && c.UserId == uid);
+            var col = _collections.FirstOrDefault(c => c.CollectionId == cid && c.UserId == uid);
             if (col != null)
-            {
-                collections.Remove(col);
-            }
+                _collections.Remove(col);
         }
 
         public void SaveCollection(string userId, Collection collection)
@@ -94,28 +96,28 @@ namespace BusinessLayer.Repositories.Fakes
             if (collection.CollectionId == 0)
             {
                 // Mimic creating new collection.
-                collection.CollectionId = collections.Any() ? collections.Max(c => c.CollectionId) + 1 : 1;
+                collection.CollectionId = _collections.Any() ? _collections.Max(c => c.CollectionId) + 1 : 1;
                 collection.UserId = uid;
-                collections.Add(collection);
+                _collections.Add(collection);
             }
             else
             {
                 // Mimic update: remove the old version and add new one.
-                var existing = collections.FirstOrDefault(c => c.CollectionId == collection.CollectionId && c.UserId == uid);
+                var existing = _collections.FirstOrDefault(c => c.CollectionId == collection.CollectionId && c.UserId == uid);
                 if (existing != null)
                 {
-                    collections.Remove(existing);
-                    collections.Add(collection);
+                    _collections.Remove(existing);
+                    _collections.Add(collection);
                 }
             }
         }
 
         public void DeleteCollection(int collectionId, int userId)
         {
-            var col = collections.FirstOrDefault(c => c.CollectionId == collectionId && c.UserId == userId);
+            var col = _collections.FirstOrDefault(c => c.CollectionId == collectionId && c.UserId == userId);
             if (col != null)
             {
-                collections.Remove(col);
+                _collections.Remove(col);
             }
         }
 
@@ -123,14 +125,14 @@ namespace BusinessLayer.Repositories.Fakes
         {
             var collection = new Collection(userId, name, createdAt, coverPicture, isPublic)
             {
-                CollectionId = collections.Any() ? collections.Max(c => c.CollectionId) + 1 : 1
+                CollectionId = _collections.Any() ? _collections.Max(c => c.CollectionId) + 1 : 1
             };
-            collections.Add(collection);
+            _collections.Add(collection);
         }
 
         public void UpdateCollection(int collectionId, int userId, string name, string coverPicture, bool isPublic)
         {
-            var col = collections.FirstOrDefault(c => c.CollectionId == collectionId && c.UserId == userId);
+            var col = _collections.FirstOrDefault(c => c.CollectionId == collectionId && c.UserId == userId);
             if (col != null)
             {
                 // For simplicity, we replace properties.
@@ -144,7 +146,7 @@ namespace BusinessLayer.Repositories.Fakes
 
         public List<Collection> GetPublicCollectionsForUser(int userId)
         {
-            return collections.Where(c => c.UserId == userId && c.IsPublic).ToList();
+            return _collections.Where(c => c.UserId == userId && c.IsPublic).ToList();
         }
 
         public List<OwnedGame> GetGamesNotInCollection(int collectionId, int userId)

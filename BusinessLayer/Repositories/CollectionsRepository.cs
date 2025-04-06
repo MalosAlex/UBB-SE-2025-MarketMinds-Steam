@@ -1,19 +1,20 @@
-﻿using System.Data;
-using BusinessLayer.Data;
+﻿using BusinessLayer.Data;
 using BusinessLayer.Models;
+using System.Data;
 using Microsoft.Data.SqlClient;
 using BusinessLayer.Repositories.Interfaces;
 using BusinessLayer.Exceptions;
+
 
 namespace BusinessLayer.Repositories
 {
     public class CollectionsRepository : ICollectionsRepository
     {
-        private readonly IDataLink dataLink;
+        private readonly IDataLink _dataLink;
 
         public CollectionsRepository(IDataLink dataLink)
         {
-            dataLink = dataLink ?? throw new ArgumentNullException(nameof(dataLink));
+            _dataLink = dataLink ?? throw new ArgumentNullException(nameof(dataLink));
         }
 
         public List<Collection> GetAllCollections(int userId)
@@ -25,7 +26,7 @@ namespace BusinessLayer.Repositories
                     new SqlParameter("@user_id", userId)
                 };
 
-                var dataTable = dataLink.ExecuteReader("GetAllCollectionsForUser", parameters);
+                var dataTable = _dataLink.ExecuteReader("GetAllCollectionsForUser", parameters);
 
                 if (dataTable == null || dataTable.Rows.Count == 0)
                 {
@@ -73,7 +74,7 @@ namespace BusinessLayer.Repositories
                     new SqlParameter("@user_id", userId)
                 };
 
-                var dataTable = dataLink.ExecuteReader("GetCollectionById", parameters);
+                var dataTable = _dataLink.ExecuteReader("GetCollectionById", parameters);
 
                 if (dataTable == null || dataTable.Rows.Count == 0)
                 {
@@ -102,7 +103,7 @@ namespace BusinessLayer.Repositories
                     new SqlParameter("@collection_id", collectionId)
                 };
 
-                var dataTable = dataLink.ExecuteReader("GetGamesInCollection", parameters);
+                var dataTable = _dataLink.ExecuteReader("GetGamesInCollection", parameters);
 
                 if (dataTable == null || dataTable.Rows.Count == 0)
                 {
@@ -143,7 +144,7 @@ namespace BusinessLayer.Repositories
                     {
                         new SqlParameter("@user_id", userId)
                     };
-                    var dataTable = dataLink.ExecuteReader("GetAllGamesForUser", parameters);
+                    var dataTable = _dataLink.ExecuteReader("GetAllGamesForUser", parameters);
 
                     if (dataTable == null || dataTable.Rows.Count == 0)
                     {
@@ -188,7 +189,7 @@ namespace BusinessLayer.Repositories
                     new SqlParameter("@game_id", gameId)
                 };
 
-                dataLink.ExecuteNonQuery("AddGameToCollection", parameters);
+                _dataLink.ExecuteNonQuery("AddGameToCollection", parameters);
             }
             catch (SqlException ex)
             {
@@ -209,7 +210,7 @@ namespace BusinessLayer.Repositories
                     new SqlParameter("@collection_id", collectionId),
                     new SqlParameter("@game_id", gameId)
                 };
-                dataLink.ExecuteNonQuery("RemoveGameFromCollection", parameters);
+                _dataLink.ExecuteNonQuery("RemoveGameFromCollection", parameters);
             }
             catch (SqlException ex)
             {
@@ -231,7 +232,7 @@ namespace BusinessLayer.Repositories
                     new SqlParameter("@collection_id", collectionId)
                 };
 
-                dataLink.ExecuteReader("MakeCollectionPrivate", parameters);
+                _dataLink.ExecuteReader("MakeCollectionPrivate", parameters);
             }
             catch (DatabaseOperationException ex)
             {
@@ -249,7 +250,7 @@ namespace BusinessLayer.Repositories
                     new SqlParameter("@collection_id", collectionId)
                 };
 
-                dataLink.ExecuteReader("MakeCollectionPublic", parameters);
+                _dataLink.ExecuteReader("MakeCollectionPublic", parameters);
             }
             catch (DatabaseOperationException ex)
             {
@@ -267,7 +268,7 @@ namespace BusinessLayer.Repositories
                     new SqlParameter("@collection_id", collectionId)
                 };
 
-                dataLink.ExecuteReader("DeleteCollection", parameters);
+                _dataLink.ExecuteReader("DeleteCollection", parameters);
             }
             catch (DatabaseOperationException ex)
             {
@@ -290,7 +291,7 @@ namespace BusinessLayer.Repositories
                         new SqlParameter("@created_at", collection.CreatedAt.ToDateTime(TimeOnly.MinValue))
                     };
 
-                    dataLink.ExecuteReader("CreateCollection", parameters);
+                    _dataLink.ExecuteReader("CreateCollection", parameters);
                 }
                 else
                 {
@@ -304,7 +305,7 @@ namespace BusinessLayer.Repositories
                         new SqlParameter("@created_at", collection.CreatedAt.ToDateTime(TimeOnly.MinValue))
                     };
 
-                    dataLink.ExecuteReader("UpdateCollection", parameters);
+                    _dataLink.ExecuteReader("UpdateCollection", parameters);
                 }
             }
             catch (DatabaseOperationException ex)
@@ -317,13 +318,14 @@ namespace BusinessLayer.Repositories
         {
             try
             {
+
                 var parameters = new SqlParameter[]
                 {
                     new SqlParameter("@collection_id", collectionId),
                     new SqlParameter("@user_id", userId)
                 };
 
-                dataLink.ExecuteNonQuery("DeleteCollection", parameters);
+                _dataLink.ExecuteNonQuery("DeleteCollection", parameters);
             }
             catch (SqlException ex)
             {
@@ -348,7 +350,7 @@ namespace BusinessLayer.Repositories
                     new SqlParameter("@created_at", createdAt.ToDateTime(TimeOnly.MinValue))
                 };
 
-                dataLink.ExecuteNonQuery("CreateCollection", parameters);
+                _dataLink.ExecuteNonQuery("CreateCollection", parameters);
             }
             catch (SqlException ex)
             {
@@ -374,7 +376,7 @@ namespace BusinessLayer.Repositories
                     new SqlParameter("@created_at", DateOnly.FromDateTime(DateTime.Now).ToDateTime(TimeOnly.MinValue))
                 };
 
-                dataLink.ExecuteReader("UpdateCollection", parameters);
+                _dataLink.ExecuteReader("UpdateCollection", parameters);
             }
             catch (SqlException ex)
             {
@@ -395,7 +397,7 @@ namespace BusinessLayer.Repositories
                     new SqlParameter("@user_id", userId)
                 };
 
-                var dataTable = dataLink.ExecuteReader("GetPublicCollectionsForUser", parameters);
+                var dataTable = _dataLink.ExecuteReader("GetPublicCollectionsForUser", parameters);
 
                 if (dataTable == null || dataTable.Rows.Count == 0)
                 {
@@ -425,7 +427,7 @@ namespace BusinessLayer.Repositories
                     new SqlParameter("@user_id", userId)
                 };
 
-                var dataTable = dataLink.ExecuteReader("GetGamesNotInCollection", parameters);
+                var dataTable = _dataLink.ExecuteReader("GetGamesNotInCollection", parameters);
 
                 if (dataTable == null || dataTable.Rows.Count == 0)
                 {
@@ -464,8 +466,8 @@ namespace BusinessLayer.Repositories
                     name: row["name"].ToString(),
                     createdAt: DateOnly.FromDateTime(Convert.ToDateTime(row["created_at"])),
                     coverPicture: row["cover_picture"]?.ToString(),
-                    isPublic: Convert.ToBoolean(row["is_public"]));
-
+                    isPublic: Convert.ToBoolean(row["is_public"])
+                    );
                 collection.CollectionId = Convert.ToInt32(row["collection_id"]);
                 return collection;
             }).ToList();
@@ -479,7 +481,8 @@ namespace BusinessLayer.Repositories
                 name: row["name"].ToString(),
                 createdAt: DateOnly.FromDateTime(Convert.ToDateTime(row["created_at"])),
                 coverPicture: row["cover_picture"]?.ToString(),
-                isPublic: Convert.ToBoolean(row["is_public"]));
+                isPublic: Convert.ToBoolean(row["is_public"])
+            );
             collection.CollectionId = Convert.ToInt32(row["collection_id"]);
             return collection;
         }

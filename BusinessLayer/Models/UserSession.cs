@@ -4,28 +4,27 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace BusinessLayer.Models
+namespace BusinessLayer.Models 
 {
+    //lalal
     public sealed class UserSession
     {
-        private static UserSession? instance;
-        private static readonly object LockObject = new object();
+        private static UserSession? _instance;
+        private static readonly object _lock = new object();
 
-        private UserSession()
-        {
-        }
+        private UserSession() { }
 
         public static UserSession Instance
         {
             get
             {
-                lock (LockObject)
+                lock (_lock)
                 {
-                    if (instance == null)
+                    if (_instance == null)
                     {
-                        instance = new UserSession();
+                        _instance = new UserSession();
                     }
-                    return instance;
+                    return _instance;
                 }
             }
         }
@@ -37,7 +36,7 @@ namespace BusinessLayer.Models
 
         public void UpdateSession(Guid sessionId, int userId, DateTime createdTime, DateTime expireTime)
         {
-            lock (LockObject)
+            lock (_lock)
             {
                 CurrentSessionId = sessionId;
                 UserId = userId;
@@ -48,7 +47,7 @@ namespace BusinessLayer.Models
 
         public void ClearSession()
         {
-            lock (LockObject)
+            lock (_lock)
             {
                 CurrentSessionId = null;
                 UserId = 0;
@@ -59,9 +58,13 @@ namespace BusinessLayer.Models
 
         public bool IsSessionValid()
         {
-            lock (LockObject)
+            lock (_lock)
             {
-                return CurrentSessionId.HasValue && UserId > 0 && CreatedAt != DateTime.MinValue && ExpiresAt != DateTime.MinValue && DateTime.Now < ExpiresAt;
+                return CurrentSessionId.HasValue && 
+                       UserId > 0 && 
+                       CreatedAt != DateTime.MinValue && 
+                       ExpiresAt != DateTime.MinValue && 
+                       DateTime.Now < ExpiresAt;
             }
         }
     }

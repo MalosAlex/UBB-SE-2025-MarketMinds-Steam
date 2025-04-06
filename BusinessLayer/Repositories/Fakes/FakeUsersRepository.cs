@@ -1,8 +1,15 @@
 ﻿using BusinessLayer.Models;
 using BusinessLayer.Repositories.Interfaces;
+using Microsoft.IdentityModel.Tokens;
+using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
+using BCrypt.Net;
 using BusinessLayer.Utils;
 
-namespace BusinessLayer.Repositories.Fakes
+namespace BusinessLayer.Repositories.fakes
 {
     public class FakeUsersRepository : IUsersRepository
     {
@@ -23,22 +30,19 @@ namespace BusinessLayer.Repositories.Fakes
 
         public string CheckUserExists(string email, string username)
         {
-            if (email != string.Empty && username == string.Empty)
+            if (email != "" && username == "")
             {
                 return "EMAIL_EXISTS";
             }
-            else if (email == string.Empty && username != string.Empty)
+            else if (email == "" && username != "")
             {
                 return "USERNAME_EXISTS";
             }
-            else if (email == string.Empty && username == string.Empty)
+            else if (email == "" && username == "")
             {
                 return "OTHER_ERROR";
             }
-            else
-            {
-                return string.Empty;
-            }
+            else return "";
         }
 
         public User CreateUser(User user)
@@ -100,10 +104,7 @@ namespace BusinessLayer.Repositories.Fakes
         public User? VerifyCredentials(string emailOrUsername)
         {
             if (emailOrUsername == null)
-            {
                 return null;
-            }
-
             User u = new User();
             u.Email = emailOrUsername;
             u.Password = PasswordHasher.HashPassword("password");

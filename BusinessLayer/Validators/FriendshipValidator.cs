@@ -22,19 +22,13 @@ namespace BusinessLayer.Validators
         public static void ValidateFriendship(Friendship friendship)
         {
             if (!IsUserIdValid(friendship.UserId))
-            {
                 throw new InvalidOperationException("User ID must be greater than 0.");
-            }
 
             if (!IsFriendIdValid(friendship.FriendId))
-            {
                 throw new InvalidOperationException("Friend ID must be greater than 0.");
-            }
 
             if (!IsNotSelfFriendship(friendship.UserId, friendship.FriendId))
-            {
                 throw new InvalidOperationException("User cannot be friends with themselves.");
-            }
         }
     }
 }
