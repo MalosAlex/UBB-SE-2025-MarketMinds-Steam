@@ -214,7 +214,7 @@ var assemblies = [
     "name": "BusinessLayer",
     "classes": [
       { "name": "BusinessLayer.Data.DataLink", "rp": "BusinessLayer_DataLink.html", "cl": 12, "ucl": 148, "cal": 160, "tl": 244, "cb": 0, "tb": 26, "cm": 0, "fcm": 0, "tm": 0, "lch": [], "bch": [], "mch": [], "mfch": [], "hc": [], "metrics": { } },
-      { "name": "BusinessLayer.Data.FakeDataLink", "rp": "BusinessLayer_FakeDataLink.html", "cl": 422, "ucl": 75, "cal": 497, "tl": 599, "cb": 105, "tb": 144, "cm": 0, "fcm": 0, "tm": 0, "lch": [], "bch": [], "mch": [], "mfch": [], "hc": [], "metrics": { } },
+      { "name": "BusinessLayer.Data.FakeDataLink", "rp": "BusinessLayer_FakeDataLink.html", "cl": 422, "ucl": 75, "cal": 497, "tl": 598, "cb": 105, "tb": 144, "cm": 0, "fcm": 0, "tm": 0, "lch": [], "bch": [], "mch": [], "mfch": [], "hc": [], "metrics": { } },
       { "name": "BusinessLayer.Exceptions.DatabaseConnectionException", "rp": "BusinessLayer_DatabaseConnectionException.html", "cl": 2, "ucl": 0, "cal": 2, "tl": 8, "cb": 0, "tb": 0, "cm": 0, "fcm": 0, "tm": 0, "lch": [], "bch": [], "mch": [], "mfch": [], "hc": [], "metrics": { } },
       { "name": "BusinessLayer.Exceptions.DatabaseOperationException", "rp": "BusinessLayer_DatabaseOperationException.html", "cl": 2, "ucl": 0, "cal": 2, "tl": 8, "cb": 0, "tb": 0, "cm": 0, "fcm": 0, "tm": 0, "lch": [], "bch": [], "mch": [], "mfch": [], "hc": [], "metrics": { } },
       { "name": "BusinessLayer.Exceptions.EmailAlreadyExistsException", "rp": "BusinessLayer_EmailAlreadyExistsException.html", "cl": 1, "ucl": 0, "cal": 1, "tl": 21, "cb": 0, "tb": 0, "cm": 0, "fcm": 0, "tm": 0, "lch": [], "bch": [], "mch": [], "mfch": [], "hc": [], "metrics": { } },
@@ -222,9 +222,9 @@ var assemblies = [
       { "name": "BusinessLayer.Exceptions.ServiceException", "rp": "BusinessLayer_ServiceException.html", "cl": 2, "ucl": 0, "cal": 2, "tl": 7, "cb": 0, "tb": 0, "cm": 0, "fcm": 0, "tm": 0, "lch": [], "bch": [], "mch": [], "mfch": [], "hc": [], "metrics": { } },
       { "name": "BusinessLayer.Exceptions.UsernameAlreadyTakenException", "rp": "BusinessLayer_UsernameAlreadyTakenException.html", "cl": 1, "ucl": 0, "cal": 1, "tl": 21, "cb": 0, "tb": 0, "cm": 0, "fcm": 0, "tm": 0, "lch": [], "bch": [], "mch": [], "mfch": [], "hc": [], "metrics": { } },
       { "name": "BusinessLayer.Exceptions.UserValidationException", "rp": "BusinessLayer_UserValidationException.html", "cl": 1, "ucl": 0, "cal": 1, "tl": 21, "cb": 0, "tb": 0, "cm": 0, "fcm": 0, "tm": 0, "lch": [], "bch": [], "mch": [], "mfch": [], "hc": [], "metrics": { } },
-      { "name": "BusinessLayer.Models.Achievement", "rp": "BusinessLayer_Achievement.html", "cl": 0, "ucl": 18, "cal": 18, "tl": 36, "cb": 0, "tb": 2, "cm": 0, "fcm": 0, "tm": 0, "lch": [], "bch": [], "mch": [], "mfch": [], "hc": [], "metrics": { } },
-      { "name": "BusinessLayer.Models.AchievementUnlockedData", "rp": "BusinessLayer_AchievementUnlockedData.html", "cl": 0, "ucl": 3, "cal": 3, "tl": 15, "cb": 0, "tb": 0, "cm": 0, "fcm": 0, "tm": 0, "lch": [], "bch": [], "mch": [], "mfch": [], "hc": [], "metrics": { } },
-      { "name": "BusinessLayer.Models.AchievementWithStatus", "rp": "BusinessLayer_AchievementWithStatus.html", "cl": 0, "ucl": 4, "cal": 4, "tl": 17, "cb": 0, "tb": 2, "cm": 0, "fcm": 0, "tm": 0, "lch": [], "bch": [], "mch": [], "mfch": [], "hc": [], "metrics": { } },
+      { "name": "BusinessLayer.Models.Achievement", "rp": "BusinessLayer_Achievement.html", "cl": 6, "ucl": 12, "cal": 18, "tl": 36, "cb": 0, "tb": 2, "cm": 0, "fcm": 0, "tm": 0, "lch": [], "bch": [], "mch": [], "mfch": [], "hc": [], "metrics": { } },
+      { "name": "BusinessLayer.Models.AchievementUnlockedData", "rp": "BusinessLayer_AchievementUnlockedData.html", "cl": 3, "ucl": 0, "cal": 3, "tl": 15, "cb": 0, "tb": 0, "cm": 0, "fcm": 0, "tm": 0, "lch": [], "bch": [], "mch": [], "mfch": [], "hc": [], "metrics": { } },
+      { "name": "BusinessLayer.Models.AchievementWithStatus", "rp": "BusinessLayer_AchievementWithStatus.html", "cl": 3, "ucl": 1, "cal": 4, "tl": 17, "cb": 0, "tb": 2, "cm": 0, "fcm": 0, "tm": 0, "lch": [], "bch": [], "mch": [], "mfch": [], "hc": [], "metrics": { } },
       { "name": "BusinessLayer.Models.Collection", "rp": "BusinessLayer_Collection.html", "cl": 17, "ucl": 0, "cal": 17, "tl": 37, "cb": 0, "tb": 0, "cm": 0, "fcm": 0, "tm": 0, "lch": [], "bch": [], "mch": [], "mfch": [], "hc": [], "metrics": { } },
       { "name": "BusinessLayer.Models.Feature", "rp": "BusinessLayer_Feature.html", "cl": 0, "ucl": 7, "cal": 7, "tl": 13, "cb": 0, "tb": 0, "cm": 0, "fcm": 0, "tm": 0, "lch": [], "bch": [], "mch": [], "mfch": [], "hc": [], "metrics": { } },
       { "name": "BusinessLayer.Models.Friendship", "rp": "BusinessLayer_Friendship.html", "cl": 13, "ucl": 0, "cal": 13, "tl": 28, "cb": 0, "tb": 0, "cm": 0, "fcm": 0, "tm": 0, "lch": [], "bch": [], "mch": [], "mfch": [], "hc": [], "metrics": { } },
@@ -236,34 +236,35 @@ var assemblies = [
       { "name": "BusinessLayer.Models.UserSession", "rp": "BusinessLayer_UserSession.html", "cl": 0, "ucl": 42, "cal": 42, "tl": 71, "cb": 0, "tb": 10, "cm": 0, "fcm": 0, "tm": 0, "lch": [], "bch": [], "mch": [], "mfch": [], "hc": [], "metrics": { } },
       { "name": "BusinessLayer.Models.UserWithSessionDetails", "rp": "BusinessLayer_UserWithSessionDetails.html", "cl": 0, "ucl": 9, "cal": 9, "tl": 21, "cb": 0, "tb": 0, "cm": 0, "fcm": 0, "tm": 0, "lch": [], "bch": [], "mch": [], "mfch": [], "hc": [], "metrics": { } },
       { "name": "BusinessLayer.Models.Wallet", "rp": "BusinessLayer_Wallet.html", "cl": 0, "ucl": 4, "cal": 4, "tl": 20, "cb": 0, "tb": 0, "cm": 0, "fcm": 0, "tm": 0, "lch": [], "bch": [], "mch": [], "mfch": [], "hc": [], "metrics": { } },
-      { "name": "BusinessLayer.Repositories.AchievementsRepository", "rp": "BusinessLayer_AchievementsRepository.html", "cl": 0, "ucl": 331, "cal": 331, "tl": 479, "cb": 0, "tb": 24, "cm": 0, "fcm": 0, "tm": 0, "lch": [], "bch": [], "mch": [], "mfch": [], "hc": [], "metrics": { } },
-      { "name": "BusinessLayer.Repositories.CollectionsRepository", "rp": "BusinessLayer_CollectionsRepository.html", "cl": 245, "ucl": 106, "cal": 351, "tl": 497, "cb": 22, "tb": 44, "cm": 0, "fcm": 0, "tm": 0, "lch": [], "bch": [], "mch": [], "mfch": [], "hc": [], "metrics": { } },
-      { "name": "BusinessLayer.Repositories.Fakes.FakeCollectionsRepository", "rp": "BusinessLayer_FakeCollectionsRepository.html", "cl": 68, "ucl": 36, "cal": 104, "tl": 169, "cb": 12, "tb": 28, "cm": 0, "fcm": 0, "tm": 0, "lch": [], "bch": [], "mch": [], "mfch": [], "hc": [], "metrics": { } },
-      { "name": "BusinessLayer.Repositories.Fakes.FakeFriendshipsRepository", "rp": "BusinessLayer_FakeFriendshipsRepository.html", "cl": 34, "ucl": 7, "cal": 41, "tl": 68, "cb": 5, "tb": 8, "cm": 0, "fcm": 0, "tm": 0, "lch": [], "bch": [], "mch": [], "mfch": [], "hc": [], "metrics": { } },
-      { "name": "BusinessLayer.Repositories.Fakes.FakeOwnedGamesRepository", "rp": "BusinessLayer_FakeOwnedGamesRepository.html", "cl": 0, "ucl": 28, "cal": 28, "tl": 49, "cb": 0, "tb": 6, "cm": 0, "fcm": 0, "tm": 0, "lch": [], "bch": [], "mch": [], "mfch": [], "hc": [], "metrics": { } },
+      { "name": "BusinessLayer.Repositories.AchievementsRepository", "rp": "BusinessLayer_AchievementsRepository.html", "cl": 389, "ucl": 23, "cal": 412, "tl": 407, "cb": 30, "tb": 44, "cm": 0, "fcm": 0, "tm": 0, "lch": [], "bch": [], "mch": [], "mfch": [], "hc": [], "metrics": { } },
+      { "name": "BusinessLayer.Repositories.CollectionsRepository", "rp": "BusinessLayer_CollectionsRepository.html", "cl": 355, "ucl": 0, "cal": 355, "tl": 490, "cb": 36, "tb": 50, "cm": 0, "fcm": 0, "tm": 0, "lch": [], "bch": [], "mch": [], "mfch": [], "hc": [], "metrics": { } },
+      { "name": "BusinessLayer.Repositories.Fakes.FakeCollectionsRepository", "rp": "BusinessLayer_FakeCollectionsRepository.html", "cl": 104, "ucl": 0, "cal": 104, "tl": 169, "cb": 25, "tb": 28, "cm": 0, "fcm": 0, "tm": 0, "lch": [], "bch": [], "mch": [], "mfch": [], "hc": [], "metrics": { } },
+      { "name": "BusinessLayer.Repositories.Fakes.FakeFriendshipsRepository", "rp": "BusinessLayer_FakeFriendshipsRepository.html", "cl": 41, "ucl": 0, "cal": 41, "tl": 68, "cb": 7, "tb": 8, "cm": 0, "fcm": 0, "tm": 0, "lch": [], "bch": [], "mch": [], "mfch": [], "hc": [], "metrics": { } },
+      { "name": "BusinessLayer.Repositories.Fakes.FakeOwnedGamesRepository", "rp": "BusinessLayer_FakeOwnedGamesRepository.html", "cl": 28, "ucl": 0, "cal": 28, "tl": 49, "cb": 6, "tb": 6, "cm": 0, "fcm": 0, "tm": 0, "lch": [], "bch": [], "mch": [], "mfch": [], "hc": [], "metrics": { } },
       { "name": "BusinessLayer.Repositories.fakes.FakeSessionRepository", "rp": "BusinessLayer_FakeSessionRepository.html", "cl": 0, "ucl": 24, "cal": 24, "tl": 49, "cb": 0, "tb": 0, "cm": 0, "fcm": 0, "tm": 0, "lch": [], "bch": [], "mch": [], "mfch": [], "hc": [], "metrics": { } },
       { "name": "BusinessLayer.Repositories.fakes.FakeUserProfilesRepository", "rp": "BusinessLayer_FakeUserProfilesRepository.html", "cl": 0, "ucl": 18, "cal": 18, "tl": 43, "cb": 0, "tb": 0, "cm": 0, "fcm": 0, "tm": 0, "lch": [], "bch": [], "mch": [], "mfch": [], "hc": [], "metrics": { } },
       { "name": "BusinessLayer.Repositories.fakes.FakeUsersRepository", "rp": "BusinessLayer_FakeUsersRepository.html", "cl": 63, "ucl": 1, "cal": 64, "tl": 114, "cb": 13, "tb": 14, "cm": 0, "fcm": 0, "tm": 0, "lch": [], "bch": [], "mch": [], "mfch": [], "hc": [], "metrics": { } },
       { "name": "BusinessLayer.Repositories.FeaturesRepository", "rp": "BusinessLayer_FeaturesRepository.html", "cl": 0, "ucl": 155, "cal": 155, "tl": 225, "cb": 0, "tb": 10, "cm": 0, "fcm": 0, "tm": 0, "lch": [], "bch": [], "mch": [], "mfch": [], "hc": [], "metrics": { } },
-      { "name": "BusinessLayer.Repositories.FriendshipsRepository", "rp": "BusinessLayer_FriendshipsRepository.html", "cl": 107, "ucl": 38, "cal": 145, "tl": 208, "cb": 13, "tb": 16, "cm": 0, "fcm": 0, "tm": 0, "lch": [], "bch": [], "mch": [], "mfch": [], "hc": [], "metrics": { } },
-      { "name": "BusinessLayer.Repositories.OwnedGamesRepository", "rp": "BusinessLayer_OwnedGamesRepository.html", "cl": 0, "ucl": 98, "cal": 98, "tl": 143, "cb": 0, "tb": 12, "cm": 0, "fcm": 0, "tm": 0, "lch": [], "bch": [], "mch": [], "mfch": [], "hc": [], "metrics": { } },
+      { "name": "BusinessLayer.Repositories.FriendshipsRepository", "rp": "BusinessLayer_FriendshipsRepository.html", "cl": 172, "ucl": 13, "cal": 185, "tl": 207, "cb": 28, "tb": 32, "cm": 0, "fcm": 0, "tm": 0, "lch": [], "bch": [], "mch": [], "mfch": [], "hc": [], "metrics": { } },
+      { "name": "BusinessLayer.Repositories.OwnedGamesRepository", "rp": "BusinessLayer_OwnedGamesRepository.html", "cl": 78, "ucl": 38, "cal": 116, "tl": 119, "cb": 7, "tb": 22, "cm": 0, "fcm": 0, "tm": 0, "lch": [], "bch": [], "mch": [], "mfch": [], "hc": [], "metrics": { } },
       { "name": "BusinessLayer.Repositories.PasswordResetRepository", "rp": "BusinessLayer_PasswordResetRepository.html", "cl": 0, "ucl": 84, "cal": 84, "tl": 152, "cb": 0, "tb": 10, "cm": 0, "fcm": 0, "tm": 0, "lch": [], "bch": [], "mch": [], "mfch": [], "hc": [], "metrics": { } },
       { "name": "BusinessLayer.Repositories.PointsOffersRepository", "rp": "BusinessLayer_PointsOffersRepository.html", "cl": 0, "ucl": 9, "cal": 9, "tl": 28, "cb": 0, "tb": 0, "cm": 0, "fcm": 0, "tm": 0, "lch": [], "bch": [], "mch": [], "mfch": [], "hc": [], "metrics": { } },
       { "name": "BusinessLayer.Repositories.SessionRepository", "rp": "BusinessLayer_SessionRepository.html", "cl": 0, "ucl": 86, "cal": 86, "tl": 137, "cb": 0, "tb": 12, "cm": 0, "fcm": 0, "tm": 0, "lch": [], "bch": [], "mch": [], "mfch": [], "hc": [], "metrics": { } },
       { "name": "BusinessLayer.Repositories.UserProfilesRepository", "rp": "BusinessLayer_UserProfilesRepository.html", "cl": 0, "ucl": 80, "cal": 80, "tl": 126, "cb": 0, "tb": 12, "cm": 0, "fcm": 0, "tm": 0, "lch": [], "bch": [], "mch": [], "mfch": [], "hc": [], "metrics": { } },
       { "name": "BusinessLayer.Repositories.UsersRepository", "rp": "BusinessLayer_UsersRepository.html", "cl": 221, "ucl": 0, "cal": 221, "tl": 335, "cb": 44, "tb": 44, "cm": 0, "fcm": 0, "tm": 0, "lch": [], "bch": [], "mch": [], "mfch": [], "hc": [], "metrics": { } },
       { "name": "BusinessLayer.Repositories.WalletRepository", "rp": "BusinessLayer_WalletRepository.html", "cl": 0, "ucl": 95, "cal": 95, "tl": 135, "cb": 0, "tb": 4, "cm": 0, "fcm": 0, "tm": 0, "lch": [], "bch": [], "mch": [], "mfch": [], "hc": [], "metrics": { } },
-      { "name": "BusinessLayer.Services.AchievementsService", "rp": "BusinessLayer_AchievementsService.html", "cl": 0, "ucl": 291, "cal": 291, "tl": 376, "cb": 0, "tb": 180, "cm": 0, "fcm": 0, "tm": 0, "lch": [], "bch": [], "mch": [], "mfch": [], "hc": [], "metrics": { } },
+      { "name": "BusinessLayer.Services.AchievementsService", "rp": "BusinessLayer_AchievementsService.html", "cl": 0, "ucl": 394, "cal": 394, "tl": 436, "cb": 0, "tb": 352, "cm": 0, "fcm": 0, "tm": 0, "lch": [], "bch": [], "mch": [], "mfch": [], "hc": [], "metrics": { } },
       { "name": "BusinessLayer.Services.AuthenticationService", "rp": "BusinessLayer_AuthenticationService.html", "cl": 0, "ucl": 4, "cal": 4, "tl": 18, "cb": 0, "tb": 2, "cm": 0, "fcm": 0, "tm": 0, "lch": [], "bch": [], "mch": [], "mfch": [], "hc": [], "metrics": { } },
-      { "name": "BusinessLayer.Services.CollectionsService", "rp": "BusinessLayer_CollectionsService.html", "cl": 54, "ucl": 53, "cal": 107, "tl": 179, "cb": 2, "tb": 4, "cm": 0, "fcm": 0, "tm": 0, "lch": [], "bch": [], "mch": [], "mfch": [], "hc": [], "metrics": { } },
-      { "name": "BusinessLayer.Services.Fakes.FakeCollectionsService", "rp": "BusinessLayer_FakeCollectionsService.html", "cl": 0, "ucl": 168, "cal": 168, "tl": 233, "cb": 0, "tb": 64, "cm": 0, "fcm": 0, "tm": 0, "lch": [], "bch": [], "mch": [], "mfch": [], "hc": [], "metrics": { } },
-      { "name": "BusinessLayer.Services.Fakes.FakeFriendsService", "rp": "BusinessLayer_FakeFriendsService.html", "cl": 0, "ucl": 89, "cal": 89, "tl": 120, "cb": 0, "tb": 34, "cm": 0, "fcm": 0, "tm": 0, "lch": [], "bch": [], "mch": [], "mfch": [], "hc": [], "metrics": { } },
+      { "name": "BusinessLayer.Services.CollectionsService", "rp": "BusinessLayer_CollectionsService.html", "cl": 120, "ucl": 17, "cal": 137, "tl": 175, "cb": 2, "tb": 4, "cm": 0, "fcm": 0, "tm": 0, "lch": [], "bch": [], "mch": [], "mfch": [], "hc": [], "metrics": { } },
+      { "name": "BusinessLayer.Services.Fakes.FakeCollectionsService", "rp": "BusinessLayer_FakeCollectionsService.html", "cl": 168, "ucl": 0, "cal": 168, "tl": 233, "cb": 62, "tb": 64, "cm": 0, "fcm": 0, "tm": 0, "lch": [], "bch": [], "mch": [], "mfch": [], "hc": [], "metrics": { } },
+      { "name": "BusinessLayer.Services.Fakes.FakeFriendsService", "rp": "BusinessLayer_FakeFriendsService.html", "cl": 89, "ucl": 0, "cal": 89, "tl": 120, "cb": 30, "tb": 34, "cm": 0, "fcm": 0, "tm": 0, "lch": [], "bch": [], "mch": [], "mfch": [], "hc": [], "metrics": { } },
+      { "name": "BusinessLayer.Services.Fakes.FakeOwnedGamesService", "rp": "BusinessLayer_FakeOwnedGamesService.html", "cl": 22, "ucl": 0, "cal": 22, "tl": 42, "cb": 6, "tb": 6, "cm": 0, "fcm": 0, "tm": 0, "lch": [], "bch": [], "mch": [], "mfch": [], "hc": [], "metrics": { } },
       { "name": "BusinessLayer.Services.fakes.FakeSessionService", "rp": "BusinessLayer_FakeSessionService.html", "cl": 15, "ucl": 4, "cal": 19, "tl": 47, "cb": 0, "tb": 0, "cm": 0, "fcm": 0, "tm": 0, "lch": [], "bch": [], "mch": [], "mfch": [], "hc": [], "metrics": { } },
       { "name": "BusinessLayer.Services.fakes.FakeUserService", "rp": "BusinessLayer_FakeUserService.html", "cl": 5, "ucl": 70, "cal": 75, "tl": 130, "cb": 0, "tb": 0, "cm": 0, "fcm": 0, "tm": 0, "lch": [], "bch": [], "mch": [], "mfch": [], "hc": [], "metrics": { } },
       { "name": "BusinessLayer.Services.fakes.FakeWalletService", "rp": "BusinessLayer_FakeWalletService.html", "cl": 0, "ucl": 23, "cal": 23, "tl": 48, "cb": 0, "tb": 2, "cm": 0, "fcm": 0, "tm": 0, "lch": [], "bch": [], "mch": [], "mfch": [], "hc": [], "metrics": { } },
       { "name": "BusinessLayer.Services.FeaturesService", "rp": "BusinessLayer_FeaturesService.html", "cl": 0, "ucl": 87, "cal": 87, "tl": 148, "cb": 0, "tb": 8, "cm": 0, "fcm": 0, "tm": 0, "lch": [], "bch": [], "mch": [], "mfch": [], "hc": [], "metrics": { } },
-      { "name": "BusinessLayer.Services.FriendsService", "rp": "BusinessLayer_FriendsService.html", "cl": 50, "ucl": 20, "cal": 70, "tl": 121, "cb": 12, "tb": 14, "cm": 0, "fcm": 0, "tm": 0, "lch": [], "bch": [], "mch": [], "mfch": [], "hc": [], "metrics": { } },
-      { "name": "BusinessLayer.Services.OwnedGamesService", "rp": "BusinessLayer_OwnedGamesService.html", "cl": 0, "ucl": 53, "cal": 53, "tl": 87, "cb": 0, "tb": 4, "cm": 0, "fcm": 0, "tm": 0, "lch": [], "bch": [], "mch": [], "mfch": [], "hc": [], "metrics": { } },
+      { "name": "BusinessLayer.Services.FriendsService", "rp": "BusinessLayer_FriendsService.html", "cl": 68, "ucl": 2, "cal": 70, "tl": 115, "cb": 12, "tb": 14, "cm": 0, "fcm": 0, "tm": 0, "lch": [], "bch": [], "mch": [], "mfch": [], "hc": [], "metrics": { } },
+      { "name": "BusinessLayer.Services.OwnedGamesService", "rp": "BusinessLayer_OwnedGamesService.html", "cl": 53, "ucl": 16, "cal": 69, "tl": 88, "cb": 3, "tb": 8, "cm": 0, "fcm": 0, "tm": 0, "lch": [], "bch": [], "mch": [], "mfch": [], "hc": [], "metrics": { } },
       { "name": "BusinessLayer.Services.PasswordResetService", "rp": "BusinessLayer_PasswordResetService.html", "cl": 0, "ucl": 28, "cal": 28, "tl": 63, "cb": 0, "tb": 2, "cm": 0, "fcm": 0, "tm": 0, "lch": [], "bch": [], "mch": [], "mfch": [], "hc": [], "metrics": { } },
       { "name": "BusinessLayer.Services.SessionService", "rp": "BusinessLayer_SessionService.html", "cl": 0, "ucl": 65, "cal": 65, "tl": 112, "cb": 0, "tb": 20, "cm": 0, "fcm": 0, "tm": 0, "lch": [], "bch": [], "mch": [], "mfch": [], "hc": [], "metrics": { } },
       { "name": "BusinessLayer.Services.UserService", "rp": "BusinessLayer_UserService.html", "cl": 101, "ucl": 0, "cal": 101, "tl": 175, "cb": 26, "tb": 26, "cm": 0, "fcm": 0, "tm": 0, "lch": [], "bch": [], "mch": [], "mfch": [], "hc": [], "metrics": { } },
@@ -287,22 +288,28 @@ var riskHotspotMetrics = [
 
 var riskHotspots = [
   {
+    "assembly": "BusinessLayer", "class": "BusinessLayer.Services.AchievementsService", "reportPath": "BusinessLayer_AchievementsService.html", "methodName": "UnlockAchievementForUser(System.Int32)", "methodShortName": "UnlockAchievementForUser(...)", "fileIndex": 0, "line": 146,
+    "metrics": [
+      { "value": 8556, "exceeded": true },
+      { "value": 92, "exceeded": true },
+    ]},
+  {
     "assembly": "BusinessLayer", "class": "BusinessLayer.Services.AchievementsService", "reportPath": "BusinessLayer_AchievementsService.html", "methodName": "UnlockAchievementForUser(System.Int32)", "methodShortName": "UnlockAchievementForUser(...)", "fileIndex": 0, "line": 86,
     "metrics": [
       { "value": 8556, "exceeded": true },
       { "value": 92, "exceeded": true },
     ]},
   {
-    "assembly": "BusinessLayer", "class": "BusinessLayer.Services.AchievementsService", "reportPath": "BusinessLayer_AchievementsService.html", "methodName": "GetAchievementIdByTypeAndCount(System.String,System.Int32)", "methodShortName": "GetAchievementIdByTypeAndCount(...)", "fileIndex": 0, "line": 254,
+    "assembly": "BusinessLayer", "class": "BusinessLayer.Services.AchievementsService", "reportPath": "BusinessLayer_AchievementsService.html", "methodName": "GetAchievementIdByTypeAndCount(System.String,System.Int32)", "methodShortName": "GetAchievementIdByTypeAndCount(...)", "fileIndex": 0, "line": 314,
     "metrics": [
       { "value": 5852, "exceeded": true },
       { "value": 76, "exceeded": true },
     ]},
   {
-    "assembly": "BusinessLayer", "class": "BusinessLayer.Services.Fakes.FakeCollectionsService", "reportPath": "BusinessLayer_FakeCollectionsService.html", "methodName": "GetCollectionById(System.Int32,System.Int32)", "methodShortName": "GetCollectionById(...)", "fileIndex": 0, "line": 48,
+    "assembly": "BusinessLayer", "class": "BusinessLayer.Services.AchievementsService", "reportPath": "BusinessLayer_AchievementsService.html", "methodName": "GetAchievementIdByTypeAndCount(System.String,System.Int32)", "methodShortName": "GetAchievementIdByTypeAndCount(...)", "fileIndex": 0, "line": 254,
     "metrics": [
-      { "value": 156, "exceeded": true },
-      { "value": 12, "exceeded": false },
+      { "value": 5852, "exceeded": true },
+      { "value": 76, "exceeded": true },
     ]},
   {
     "assembly": "BusinessLayer", "class": "BusinessLayer.Data.FakeDataLink", "reportPath": "BusinessLayer_FakeDataLink.html", "methodName": "ExecuteReader(System.String,Microsoft.Data.SqlClient.SqlParameter[])", "methodShortName": "ExecuteReader(...)", "fileIndex": 0, "line": 155,
@@ -317,37 +324,7 @@ var riskHotspots = [
       { "value": 10, "exceeded": false },
     ]},
   {
-    "assembly": "BusinessLayer", "class": "BusinessLayer.Services.Fakes.FakeCollectionsService", "reportPath": "BusinessLayer_FakeCollectionsService.html", "methodName": "SaveCollection(System.String,BusinessLayer.Models.Collection)", "methodShortName": "SaveCollection(...)", "fileIndex": 0, "line": 130,
-    "metrics": [
-      { "value": 110, "exceeded": true },
-      { "value": 10, "exceeded": false },
-    ]},
-  {
     "assembly": "BusinessLayer", "class": "BusinessLayer.Models.UserSession", "reportPath": "BusinessLayer_UserSession.html", "methodName": "IsSessionValid()", "methodShortName": "IsSessionValid()", "fileIndex": 0, "line": 60,
-    "metrics": [
-      { "value": 72, "exceeded": true },
-      { "value": 8, "exceeded": false },
-    ]},
-  {
-    "assembly": "BusinessLayer", "class": "BusinessLayer.Repositories.Fakes.FakeCollectionsRepository", "reportPath": "BusinessLayer_FakeCollectionsRepository.html", "methodName": "SaveCollection(System.String,BusinessLayer.Models.Collection)", "methodShortName": "SaveCollection(...)", "fileIndex": 0, "line": 94,
-    "metrics": [
-      { "value": 72, "exceeded": true },
-      { "value": 8, "exceeded": false },
-    ]},
-  {
-    "assembly": "BusinessLayer", "class": "BusinessLayer.Services.Fakes.FakeCollectionsService", "reportPath": "BusinessLayer_FakeCollectionsService.html", "methodName": "RemoveCollectionForUser(System.String,System.String)", "methodShortName": "RemoveCollectionForUser(...)", "fileIndex": 0, "line": 111,
-    "metrics": [
-      { "value": 72, "exceeded": true },
-      { "value": 8, "exceeded": false },
-    ]},
-  {
-    "assembly": "BusinessLayer", "class": "BusinessLayer.Services.Fakes.FakeCollectionsService", "reportPath": "BusinessLayer_FakeCollectionsService.html", "methodName": "DeleteCollection(System.Int32,System.Int32)", "methodShortName": "DeleteCollection(...)", "fileIndex": 0, "line": 153,
-    "metrics": [
-      { "value": 72, "exceeded": true },
-      { "value": 8, "exceeded": false },
-    ]},
-  {
-    "assembly": "BusinessLayer", "class": "BusinessLayer.Services.Fakes.FakeFriendsService", "reportPath": "BusinessLayer_FakeFriendsService.html", "methodName": "AddFriend(System.Int32,System.Int32)", "methodShortName": "AddFriend(...)", "fileIndex": 0, "line": 103,
     "metrics": [
       { "value": 72, "exceeded": true },
       { "value": 8, "exceeded": false },
@@ -359,55 +336,7 @@ var riskHotspots = [
       { "value": 34, "exceeded": true },
     ]},
   {
-    "assembly": "BusinessLayer", "class": "BusinessLayer.Repositories.AchievementsRepository", "reportPath": "BusinessLayer_AchievementsRepository.html", "methodName": "GetAchievementsWithStatusForUser(System.Int32)", "methodShortName": "GetAchievementsWithStatusForUser(...)", "fileIndex": 0, "line": 209,
-    "metrics": [
-      { "value": 42, "exceeded": true },
-      { "value": 6, "exceeded": false },
-    ]},
-  {
-    "assembly": "BusinessLayer", "class": "BusinessLayer.Repositories.AchievementsRepository", "reportPath": "BusinessLayer_AchievementsRepository.html", "methodName": "MapDataRowToAchievement(System.Data.DataRow)", "methodShortName": "MapDataRowToAchievement(...)", "fileIndex": 0, "line": 457,
-    "metrics": [
-      { "value": 42, "exceeded": true },
-      { "value": 6, "exceeded": false },
-    ]},
-  {
-    "assembly": "BusinessLayer", "class": "BusinessLayer.Repositories.AchievementsRepository", "reportPath": "BusinessLayer_AchievementsRepository.html", "methodName": "MapDataRowToAchievementUnlockedData(System.Data.DataRow)", "methodShortName": "MapDataRowToAchievementUnlockedData(...)", "fileIndex": 0, "line": 470,
-    "metrics": [
-      { "value": 42, "exceeded": true },
-      { "value": 6, "exceeded": false },
-    ]},
-  {
     "assembly": "BusinessLayer", "class": "BusinessLayer.Repositories.UserProfilesRepository", "reportPath": "BusinessLayer_UserProfilesRepository.html", "methodName": "UpdateProfile(BusinessLayer.Models.UserProfile)", "methodShortName": "UpdateProfile(...)", "fileIndex": 0, "line": 38,
-    "metrics": [
-      { "value": 42, "exceeded": true },
-      { "value": 6, "exceeded": false },
-    ]},
-  {
-    "assembly": "BusinessLayer", "class": "BusinessLayer.Services.Fakes.FakeCollectionsService", "reportPath": "BusinessLayer_FakeCollectionsService.html", "methodName": "UpdateCollection(System.Int32,System.Int32,System.String,System.String,System.Boolean)", "methodShortName": "UpdateCollection(...)", "fileIndex": 0, "line": 180,
-    "metrics": [
-      { "value": 42, "exceeded": true },
-      { "value": 6, "exceeded": false },
-    ]},
-  {
-    "assembly": "BusinessLayer", "class": "BusinessLayer.Services.Fakes.FakeCollectionsService", "reportPath": "BusinessLayer_FakeCollectionsService.html", "methodName": "GetPublicCollectionsForUser(System.Int32)", "methodShortName": "GetPublicCollectionsForUser(...)", "fileIndex": 0, "line": 195,
-    "metrics": [
-      { "value": 42, "exceeded": true },
-      { "value": 6, "exceeded": false },
-    ]},
-  {
-    "assembly": "BusinessLayer", "class": "BusinessLayer.Services.Fakes.FakeFriendsService", "reportPath": "BusinessLayer_FakeFriendsService.html", "methodName": "RemoveFriend(System.Int32)", "methodShortName": "RemoveFriend(...)", "fileIndex": 0, "line": 47,
-    "metrics": [
-      { "value": 42, "exceeded": true },
-      { "value": 6, "exceeded": false },
-    ]},
-  {
-    "assembly": "BusinessLayer", "class": "BusinessLayer.Services.Fakes.FakeFriendsService", "reportPath": "BusinessLayer_FakeFriendsService.html", "methodName": "AreUsersFriends(System.Int32,System.Int32)", "methodShortName": "AreUsersFriends(...)", "fileIndex": 0, "line": 77,
-    "metrics": [
-      { "value": 42, "exceeded": true },
-      { "value": 6, "exceeded": false },
-    ]},
-  {
-    "assembly": "BusinessLayer", "class": "BusinessLayer.Services.Fakes.FakeFriendsService", "reportPath": "BusinessLayer_FakeFriendsService.html", "methodName": "GetFriendshipId(System.Int32,System.Int32)", "methodShortName": "GetFriendshipId(...)", "fileIndex": 0, "line": 91,
     "metrics": [
       { "value": 42, "exceeded": true },
       { "value": 6, "exceeded": false },
