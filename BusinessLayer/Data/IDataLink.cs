@@ -1,6 +1,5 @@
 ﻿using System.Data;
 using Microsoft.Data.SqlClient;
-using System.Threading.Tasks;
 
 namespace BusinessLayer.Data
 {

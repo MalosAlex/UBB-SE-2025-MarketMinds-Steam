@@ -1,6 +1,6 @@
-﻿using Microsoft.Extensions.Configuration;
-using System.Configuration;
+﻿using System.Configuration;
 using System.Data;
+using Microsoft.Extensions.Configuration;
 using Microsoft.Data.SqlClient;
 using BusinessLayer.Exceptions;
 
@@ -8,7 +8,7 @@ namespace BusinessLayer.Data
 {
     public sealed partial class DataLink : IDataLink
     {
-        private static readonly Lazy<DataLink> instance = new(() => new DataLink());
+        private static readonly Lazy<DataLink> DataLinkInstance = new(() => new DataLink());
         private readonly string connectionString;
         private bool disposed;
 
@@ -31,9 +31,8 @@ namespace BusinessLayer.Data
                     throw new ConfigurationErrorsException("Database connection settings are missing in appsettings.json");
                 }
 
-                //connectionString = $"Data Source={localDataSource};Initial Catalog={initialCatalog};User Id={userId};Password={password};TrustServerCertificate=True;";
+                // connectionString = $"Data Source={localDataSource};Initial Catalog={initialCatalog};User Id={userId};Password={password};TrustServerCertificate=True;";
                 connectionString = $"Data Source={localDataSource};Initial Catalog={initialCatalog};Integrated Security=True;TrustServerCertificate=True;";
-
 
                 // Test the connection immediately
                 using var testConnection = new SqlConnection(connectionString);
@@ -49,7 +48,7 @@ namespace BusinessLayer.Data
             }
         }
 
-        public static DataLink Instance => instance.Value;
+        public static DataLink Instance => DataLinkInstance.Value;
 
         private SqlConnection CreateConnection()
         {
@@ -104,7 +103,6 @@ namespace BusinessLayer.Data
                 throw new DatabaseOperationException($"Unexpected error during ExecuteScalar operation: {ex.Message}", ex);
             }
         }
-
 
         public DataTable ExecuteReader(string storedProcedure, SqlParameter[]? sqlParameters = null)
         {
@@ -225,7 +223,6 @@ namespace BusinessLayer.Data
                 throw new DatabaseOperationException($"Error during ExecuteNonQueryAsync operation: {ex.Message}", ex);
             }
         }
-
 
         public void Dispose()
         {

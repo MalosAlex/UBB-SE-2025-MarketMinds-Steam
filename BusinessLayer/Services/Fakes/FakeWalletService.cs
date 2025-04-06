@@ -1,35 +1,32 @@
 ﻿using BusinessLayer.Models;
-using System;
-using System.Collections.Generic;
 using BusinessLayer.Services.Interfaces;
 
-namespace BusinessLayer.Services.fakes
+namespace BusinessLayer.Services.Fakes
 {
     public class FakeWalletService : IWalletService
     {
-        private decimal _balance = 100m;
-        private int _points = 0;
+        private decimal balance = 100m;
+        private int points = 0;
         public List<string> Actions = new();
-        
 
         public void AddMoney(decimal amount)
         {
-            _balance += amount;
+            balance += amount;
         }
 
         public void AddPoints(int points)
         {
-            _points += points;
+            points += points;
         }
 
         public decimal GetBalance()
         {
-            return _balance;
+            return balance;
         }
 
         public int GetPoints()
         {
-            return _points;
+            return points;
         }
 
         public void CreateWallet(int userId)
@@ -38,11 +35,13 @@ namespace BusinessLayer.Services.fakes
 
         public void PurchasePoints(PointsOffer offer)
         {
-            if (_balance < offer.Price)
+            if (balance < offer.Price)
+            {
                 throw new InvalidOperationException("Insufficient funds");
+            }
 
-            _balance -= offer.Price;
-            _points += offer.Points;
+            balance -= offer.Price;
+            points += offer.Points;
         }
     }
 }

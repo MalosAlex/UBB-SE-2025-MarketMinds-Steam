@@ -10,10 +10,10 @@ namespace BusinessLayer.Models
     {
         public int Points { get; set; }
         public int Price { get; set; }
-        public PointsOffer(int price, int points) {
+        public PointsOffer(int price, int points)
+        {
             this.Price = price;
             this.Points = points;
         }
-        
     }
 }

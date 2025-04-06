@@ -1,12 +1,7 @@
 ﻿using BusinessLayer.Models;
 using BusinessLayer.Services.Interfaces;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
-namespace BusinessLayer.Services.fakes
+namespace BusinessLayer.Services.Fakes
 {
     public class FakeUserService : IUserService
     {
@@ -24,7 +19,6 @@ namespace BusinessLayer.Services.fakes
 
         public void DeleteUser(int userId)
         {
-           
         }
 
         public List<User> GetAllUsers()

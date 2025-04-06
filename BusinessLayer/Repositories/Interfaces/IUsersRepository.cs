@@ -1,10 +1,4 @@
 ﻿using BusinessLayer.Models;
-using System;
-using System.Collections.Generic;
-using System.Data;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace BusinessLayer.Repositories.Interfaces
 {
@@ -23,6 +17,5 @@ namespace BusinessLayer.Repositories.Interfaces
         void ChangePassword(int userId, string newPassword);
         void ChangeUsername(int userId, string newUsername);
         void UpdateLastLogin(int userId);
-       
     }
 }

@@ -1,7 +1,5 @@
-﻿using BusinessLayer.Models;
-using System;
-using System.Collections.Generic;
-using System.Diagnostics;
+﻿using System.Diagnostics;
+using BusinessLayer.Models;
 using BusinessLayer.Exceptions;
 using BusinessLayer.Repositories.Interfaces;
 using BusinessLayer.Exceptions;
@@ -11,11 +9,11 @@ namespace BusinessLayer.Services
 {
     public class OwnedGamesService : IOwnedGamesService
     {
-        private readonly IOwnedGamesRepository _ownedGamesRepository;
+        private readonly IOwnedGamesRepository ownedGamesRepository;
 
         public OwnedGamesService(IOwnedGamesRepository ownedGamesRepository)
         {
-            _ownedGamesRepository = ownedGamesRepository ?? throw new ArgumentNullException(nameof(ownedGamesRepository));
+            ownedGamesRepository = ownedGamesRepository ?? throw new ArgumentNullException(nameof(ownedGamesRepository));
         }
 
         public List<OwnedGame> GetAllOwnedGames(int userId)
@@ -23,7 +21,7 @@ namespace BusinessLayer.Services
             try
             {
                 Debug.WriteLine($"Getting all owned games for user {userId}");
-                var games = _ownedGamesRepository.GetAllOwnedGames(userId);
+                var games = ownedGamesRepository.GetAllOwnedGames(userId);
                 Debug.WriteLine($"Successfully retrieved {games.Count} owned games");
                 return games;
             }
@@ -44,7 +42,7 @@ namespace BusinessLayer.Services
             try
             {
                 Debug.WriteLine($"Getting owned game {gameId} for user {userId}");
-                var game = _ownedGamesRepository.GetOwnedGameById(gameId, userId);
+                var game = ownedGamesRepository.GetOwnedGameById(gameId, userId);
                 if (game == null)
                 {
                     Debug.WriteLine($"No owned game found with ID {gameId} for user {userId}");
@@ -70,7 +68,7 @@ namespace BusinessLayer.Services
             try
             {
                 Debug.WriteLine($"Removing owned game {gameId} for user {userId}");
-                _ownedGamesRepository.RemoveOwnedGame(gameId, userId);
+                ownedGamesRepository.RemoveOwnedGame(gameId, userId);
                 Debug.WriteLine($"Successfully removed owned game {gameId}");
             }
             catch (RepositoryException ex)

@@ -1,10 +1,7 @@
 ﻿using BusinessLayer.Models;
 using BusinessLayer.Repositories.Interfaces;
-using System;
-using System.Collections.Generic;
-using System.Linq;
 
-namespace BusinessLayer.Repositories.fakes
+namespace BusinessLayer.Repositories.Fakes
 {
     internal class FakeSessionRepository : ISessionRepository
     {
@@ -29,13 +26,16 @@ namespace BusinessLayer.Repositories.fakes
         {
             List<Guid> guids = new List<Guid>();
             Guid guid = Guid.Empty;
-            guids.Add(guid);    
+            guids.Add(guid);
             return guids;
         }
 
         public SessionDetails GetSessionById(Guid sessionId)
         {
-            SessionDetails sessionDetails = new SessionDetails {SessionId = sessionId};
+            SessionDetails sessionDetails = new SessionDetails
+            {
+                SessionId = sessionId,
+            };
             return sessionDetails;
         }
 
@@ -43,7 +43,7 @@ namespace BusinessLayer.Repositories.fakes
         {
             UserWithSessionDetails userWithSessionDetails = new UserWithSessionDetails();
             userWithSessionDetails.SessionId = sessionId;
-            return userWithSessionDetails;  
+            return userWithSessionDetails;
         }
     }
 }

@@ -1,28 +1,27 @@
-﻿using Azure.Core.Extensions;
+﻿using System.Data;
+using System.Diagnostics;
 using BusinessLayer.Data;
 using BusinessLayer.Models;
 using BusinessLayer.Repositories.Interfaces;
-using System.Data;
 using Microsoft.Data.SqlClient;
-using System.Diagnostics;
 using BusinessLayer.Exceptions;
 
 namespace BusinessLayer.Repositories
 {
     public class AchievementsRepository : IAchievementsRepository
     {
-        private readonly IDataLink _dataLink;
+        private readonly IDataLink dataLink;
 
         public AchievementsRepository(IDataLink datalink)
         {
-            _dataLink = datalink ?? throw new ArgumentNullException(nameof(datalink));
+            dataLink = datalink ?? throw new ArgumentNullException(nameof(datalink));
         }
 
         public void InsertAchievements()
         {
             try
             {
-                _dataLink.ExecuteNonQuery("InsertAchievements");
+                dataLink.ExecuteNonQuery("InsertAchievements");
                 System.Diagnostics.Debug.WriteLine("InsertAchievements stored procedure executed successfully.");
             }
             catch (Exception ex)
@@ -36,10 +35,10 @@ namespace BusinessLayer.Repositories
             try
             {
                 System.Diagnostics.Debug.WriteLine("Executing SQL query to check if achievements table is empty...");
-                var result = _dataLink.ExecuteScalar<int>("IsAchievementsTableEmpty");
+                var result = dataLink.ExecuteScalar<int>("IsAchievementsTableEmpty");
                 System.Diagnostics.Debug.WriteLine($"Number of achievements in table: {result}");
                 return result == 0;
-            }    
+            }
             catch (Exception ex)
             {
                 System.Diagnostics.Debug.WriteLine($"Unexpected error while checking if achievements table is empty: {ex.Message}");
@@ -56,7 +55,7 @@ namespace BusinessLayer.Repositories
                     new SqlParameter("@points", points),
                     new SqlParameter("@iconUrl", iconUrl)
                 };
-                _dataLink.ExecuteNonQuery("UpdateAchievementIcon", parameters);
+                dataLink.ExecuteNonQuery("UpdateAchievementIcon", parameters);
             }
             catch (Exception ex)
             {
@@ -65,13 +64,11 @@ namespace BusinessLayer.Repositories
             }
         }
 
-
-
         public List<Achievement> GetAllAchievements()
         {
             try
             {
-                var dataTable = _dataLink.ExecuteReader("GetAllAchievements");
+                var dataTable = dataLink.ExecuteReader("GetAllAchievements");
                 return MapDataTableToAchievements(dataTable);
             }
             catch (Exception ex)
@@ -88,7 +85,7 @@ namespace BusinessLayer.Repositories
                 {
                     new SqlParameter("@userId", userId)
                 };
-                var dataTable = _dataLink.ExecuteReader("GetUnlockedAchievements", parameters);
+                var dataTable = dataLink.ExecuteReader("GetUnlockedAchievements", parameters);
                 return MapDataTableToAchievements(dataTable);
             }
             catch (Exception ex)
@@ -106,7 +103,7 @@ namespace BusinessLayer.Repositories
                     new SqlParameter("@userId", userId),
                     new SqlParameter("@achievementId", achievementId)
                 };
-                _dataLink.ExecuteNonQuery("UnlockAchievement", parameters);
+                dataLink.ExecuteNonQuery("UnlockAchievement", parameters);
             }
             catch (Exception ex)
             {
@@ -123,7 +120,7 @@ namespace BusinessLayer.Repositories
                     new SqlParameter("@userId", userId),
                     new SqlParameter("@achievementId", achievementId)
                 };
-                _dataLink.ExecuteNonQuery("RemoveAchievement", parameters);
+                dataLink.ExecuteNonQuery("RemoveAchievement", parameters);
             }
             catch (Exception ex)
             {
@@ -140,7 +137,7 @@ namespace BusinessLayer.Repositories
                     new SqlParameter("@user_id", userId),
                     new SqlParameter("@achievement_id", achievementId)
                 };
-                var dataTable = _dataLink.ExecuteReader("GetUnlockedDataForAchievement", parameters);
+                var dataTable = dataLink.ExecuteReader("GetUnlockedDataForAchievement", parameters);
                 return dataTable.Rows.Count > 0 ? MapDataRowToAchievementUnlockedData(dataTable.Rows[0]) : null;
             }
             catch (Exception ex)
@@ -150,7 +147,7 @@ namespace BusinessLayer.Repositories
                 throw new RepositoryException("An unexpected error occurred while retrieving achievement data.", ex);
             }
         }
-       
+
         public bool IsAchievementUnlocked(int userId, int achievementId)
         {
             try
@@ -161,7 +158,7 @@ namespace BusinessLayer.Repositories
                 new SqlParameter("@achievement_id", achievementId)
             };
 
-                int? result = _dataLink.ExecuteScalar<int>("IsAchievementUnlocked", parameters);
+                int? result = dataLink.ExecuteScalar<int>("IsAchievementUnlocked", parameters);
                 return result > 0;
             }
             catch (Exception ex)
@@ -213,7 +210,7 @@ namespace BusinessLayer.Repositories
                 new SqlParameter("@user_id", userId)
                 };
 
-                var result = _dataLink.ExecuteScalar<int>("GetNumberOfSoldGames", parameters);
+                var result = dataLink.ExecuteScalar<int>("GetNumberOfSoldGames", parameters);
                 return result;
             }
             catch (Exception ex)
@@ -230,7 +227,7 @@ namespace BusinessLayer.Repositories
                 {
                     new SqlParameter("@user_id", userId)
                 };
-                return _dataLink.ExecuteScalar<int>("GetFriendshipCountForUser", parameters);
+                return dataLink.ExecuteScalar<int>("GetFriendshipCountForUser", parameters);
             }
             catch (Exception ex)
             {
@@ -248,7 +245,7 @@ namespace BusinessLayer.Repositories
                 new SqlParameter("@user_id", userId)
                 };
 
-                var result = _dataLink.ExecuteScalar<int>("GetNumberOfOwnedGames", parameters);
+                var result = dataLink.ExecuteScalar<int>("GetNumberOfOwnedGames", parameters);
                 return result;
             }
             catch (Exception ex)
@@ -266,7 +263,7 @@ namespace BusinessLayer.Repositories
                 new SqlParameter("@user_id", userId)
                 };
 
-                var result = _dataLink.ExecuteScalar<int>("GetNumberOfReviewsGiven", parameters);
+                var result = dataLink.ExecuteScalar<int>("GetNumberOfReviewsGiven", parameters);
                 return result;
             }
             catch (Exception ex)
@@ -284,7 +281,7 @@ namespace BusinessLayer.Repositories
                 new SqlParameter("@user_id", userId)
                 };
 
-                var result = _dataLink.ExecuteScalar<int>("GetNumberOfReviewsReceived", parameters);
+                var result = dataLink.ExecuteScalar<int>("GetNumberOfReviewsReceived", parameters);
                 return result;
             }
             catch (Exception ex)
@@ -302,7 +299,7 @@ namespace BusinessLayer.Repositories
                 new SqlParameter("@user_id", userId)
                 };
 
-                var result = _dataLink.ExecuteScalar<int>("GetNumberOfPosts", parameters);
+                var result = dataLink.ExecuteScalar<int>("GetNumberOfPosts", parameters);
                 return result;
             }
             catch (Exception ex)
@@ -320,7 +317,7 @@ namespace BusinessLayer.Repositories
             new SqlParameter("@user_id", userId)
                 };
 
-                var createdAt = _dataLink.ExecuteScalar<DateTime>("GetUserCreatedAt", parameters);
+                var createdAt = dataLink.ExecuteScalar<DateTime>("GetUserCreatedAt", parameters);
                 var yearsOfActivity = DateTime.Now.Year - createdAt.Year;
 
                 // Adjust for the case where the user hasn't completed the current year
@@ -346,7 +343,7 @@ namespace BusinessLayer.Repositories
             new SqlParameter("@achievementName", achievementName)
                 };
 
-                var result = _dataLink.ExecuteScalar<int?>("GetAchievementIdByName", parameters);
+                var result = dataLink.ExecuteScalar<int?>("GetAchievementIdByName", parameters);
                 System.Diagnostics.Debug.WriteLine($"Achievement ID for name {achievementName}: {result}");
                 return result;
             }
@@ -366,7 +363,7 @@ namespace BusinessLayer.Repositories
             new SqlParameter("@user_id", userId)
                 };
 
-                var result = _dataLink.ExecuteScalar<bool>("IsUserDeveloper", parameters);
+                var result = dataLink.ExecuteScalar<bool>("IsUserDeveloper", parameters);
                 return result;
             }
             catch (Exception ex)
@@ -374,8 +371,6 @@ namespace BusinessLayer.Repositories
                 throw new RepositoryException("An unexpected error occurred while retrieving developer status.", ex);
             }
         }
-
-
         private static List<Achievement> MapDataTableToAchievements(DataTable dataTable)
         {
             return dataTable.AsEnumerable().Select(MapDataRowToAchievement).ToList();
