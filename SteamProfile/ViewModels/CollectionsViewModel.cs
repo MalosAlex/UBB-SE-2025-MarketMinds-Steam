@@ -108,6 +108,7 @@ namespace SteamProfile.ViewModels
         {
             try
             {
+                _userId = _userService.GetCurrentUser().UserId;
                 Debug.WriteLine($"Deleting collection {collectionId}");
                 _collectionsService.DeleteCollection(collectionId, _userId);
                 LoadCollections(); // Reload collections after deletion
@@ -124,6 +125,8 @@ namespace SteamProfile.ViewModels
         {
             try
             {
+                _userId = _userService.GetCurrentUser().UserId;
+                
                 if (collection == null)
                 {
                     Debug.WriteLine("No collection selected");
@@ -146,6 +149,7 @@ namespace SteamProfile.ViewModels
         {
             try
             {
+                _userId = _userService.GetCurrentUser().UserId;
                 if (SelectedCollection == null)
                 {
                     Debug.WriteLine("No collection selected");
@@ -168,6 +172,7 @@ namespace SteamProfile.ViewModels
         {
             try
             {
+                _userId = _userService.GetCurrentUser().UserId;
                 if (SelectedCollection == null)
                 {
                     Debug.WriteLine("No collection selected");
@@ -190,6 +195,7 @@ namespace SteamProfile.ViewModels
         {
             try
             {
+                _userId = _userService.GetCurrentUser().UserId;
                 Debug.WriteLine($"Creating collection: {parameters.Name}");
                 _collectionsService.CreateCollection(
                     _userId,
@@ -212,6 +218,7 @@ namespace SteamProfile.ViewModels
         {
             try
             {
+                _userId = _userService.GetCurrentUser().UserId;
                 Debug.WriteLine($"Updating collection: {parameters.Name}");
                 _collectionsService.UpdateCollection(
                     parameters.CollectionId,
