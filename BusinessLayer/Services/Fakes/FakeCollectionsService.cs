@@ -212,15 +212,17 @@ namespace BusinessLayer.Services.Fakes
             result.Add(gameC);
             return result;
         }
+        
+        private int CompareByCreatedAtDescending(Collection a, Collection b)
+        {
+            return b.CreatedAt.CompareTo(a.CreatedAt);
+        }
+
 
         public List<Collection> GetLastThreeCollectionsForUser(int userId)
         {
             List<Collection> userCollections = GetAllCollections(userId);
-            // Explicit sorting with delegate
-            userCollections.Sort(delegate(Collection a, Collection b)
-            {
-                return b.CreatedAt.CompareTo(a.CreatedAt);
-            });
+            userCollections.Sort(CompareByCreatedAtDescending);
             int count = userCollections.Count < 3 ? userCollections.Count : 3;
             List<Collection> result = new List<Collection>();
             for (int i = 0; i < count; i++)

@@ -4,10 +4,12 @@ using Microsoft.UI.Xaml;
 using Microsoft.UI.Xaml.Controls;
 using BusinessLayer.Models;
 using BusinessLayer.Services;
+using BusinessLayer.Validators;
 using SteamProfile.Views;
 using System;
 using System.Text.RegularExpressions;
 using System.Threading.Tasks;
+using BusinessLayer.Services.Interfaces;
 
 namespace SteamProfile.ViewModels.ConfigurationsViewModels
 {
@@ -61,7 +63,7 @@ namespace SteamProfile.ViewModels.ConfigurationsViewModels
         // Event to request the View to show the password confirmation dialog
         public event EventHandler RequestPasswordConfirmation;
 
-        private readonly UserService _userService;
+        private readonly IUserService _userService;
         private Action _pendingAction;
 
         public AccountSettingsViewModel()
@@ -83,16 +85,9 @@ namespace SteamProfile.ViewModels.ConfigurationsViewModels
 
         private void ValidatePassword(string password)
         {
-            bool isValid = IsValidPassword(password);
+            bool isValid = UserValidator.IsPasswordValid(password);
             PasswordErrorMessageVisibility = isValid ? Visibility.Collapsed : Visibility.Visible;
             UpdatePasswordEnabled = isValid;
-        }
-
-        private bool IsValidPassword(string password)
-        {
-            if (string.IsNullOrEmpty(password)) return false;
-            var regex = new Regex(@"^(?=.*[a-z])(?=.*[A-Z])(?=.*\W).{8,}$");
-            return regex.IsMatch(password);
         }
 
         partial void OnEmailChanged(string value)
@@ -102,16 +97,9 @@ namespace SteamProfile.ViewModels.ConfigurationsViewModels
 
         private void ValidateEmail(string email)
         {
-            bool isValid = IsValidEmail(email);
+            bool isValid = UserValidator.IsEmailValid(email);
             EmailErrorMessageVisibility = isValid ? Visibility.Collapsed : Visibility.Visible;
             UpdateEmailEnabled = isValid;
-        }
-
-        private bool IsValidEmail(string email)
-        {
-            if (string.IsNullOrEmpty(email)) return false;
-            var regex = new Regex(@"^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$");
-            return regex.IsMatch(email) && _userService.GetUserByEmail(email) == null;
         }
 
         partial void OnUsernameChanged(string value)
@@ -128,8 +116,9 @@ namespace SteamProfile.ViewModels.ConfigurationsViewModels
 
         private bool IsValidUsername(string username)
         {
-            if (string.IsNullOrEmpty(username)) return false;
-            return _userService.GetUserByUsername(username) == null; // Username should be unique
+            if (!UserValidator.IsValidUsername(username)) 
+                return false;
+            return _userService.GetUserByUsername(username) == null; 
         }
 
         [RelayCommand]

@@ -1,31 +1,23 @@
 using Microsoft.UI.Xaml;
 using Microsoft.UI.Xaml.Controls;
-using Microsoft.UI.Xaml.Controls.Primitives;
-using Microsoft.UI.Xaml.Data;
-using Microsoft.UI.Xaml.Input;
-using Microsoft.UI.Xaml.Media;
 using Microsoft.UI.Xaml.Navigation;
 using SteamProfile.ViewModels;
 using BusinessLayer.Models;
 using System;
-using System.Collections.Generic;
-using System.IO;
-using System.Linq;
-using System.Runtime.InteropServices.WindowsRuntime;
-using Windows.Foundation;
-using Windows.Foundation.Collections;
 
 namespace SteamProfile.Views
 {
     public sealed partial class CollectionsPage : Page
     {
-        private CollectionsViewModel _viewModel;
+        private CollectionsViewModel _collectionsViewModel;
+        private UsersViewModel _usersViewModel;
 
         public CollectionsPage()
         {
             this.InitializeComponent();
-            _viewModel = new CollectionsViewModel(App.CollectionsService, App.UserService);
-            this.DataContext = _viewModel;
+            _collectionsViewModel = App.CollectionsViewModel;
+            _usersViewModel = App.UsersViewModel;
+            this.DataContext = _collectionsViewModel;
         }
 
         protected override void OnNavigatedTo(NavigationEventArgs e)
@@ -36,7 +28,7 @@ namespace SteamProfile.Views
 
         private void LoadCollections()
         {
-            _viewModel.LoadCollectionsCommand.Execute(null);
+            _collectionsViewModel.LoadCollectionsCommand.Execute(null);
         }
 
         private void ViewCollection_Click(object sender, RoutedEventArgs e)
@@ -51,7 +43,7 @@ namespace SteamProfile.Views
         {
             if (sender is Button button && button.CommandParameter is int collectionId)
             {
-                _viewModel.DeleteCollectionCommand.Execute(collectionId);
+                _collectionsViewModel.DeleteCollectionCommand.Execute(collectionId);
             }
         }
 
@@ -102,7 +94,7 @@ namespace SteamProfile.Views
                 {
                     try
                     {
-                        _viewModel.UpdateCollectionCommand.Execute(new UpdateCollectionParams
+                        _collectionsViewModel.UpdateCollectionCommand.Execute(new UpdateCollectionParams
                         {
                             CollectionId = collection.CollectionId,
                             Name = nameTextBox.Text,
@@ -168,7 +160,7 @@ namespace SteamProfile.Views
             {
                 try
                 {
-                    _viewModel.CreateCollectionCommand.Execute(new CreateCollectionParams
+                    _collectionsViewModel.CreateCollectionCommand.Execute(new CreateCollectionParams
                     {
                         Name = nameTextBox.Text,
                         CoverPicture = coverPictureTextBox.Text,
@@ -192,7 +184,7 @@ namespace SteamProfile.Views
 
         private void BackToProfileButton_Click(object sender, RoutedEventArgs e)
         {
-            Frame.Navigate(typeof(ProfilePage), App.UserService.GetCurrentUser().UserId);
+            Frame.Navigate(typeof(ProfilePage), _usersViewModel.GetCurrentUser().UserId);
         }
     }
 }

@@ -36,22 +36,22 @@ namespace BusinessLayer.Repositories
                         friendId: Convert.ToInt32(row["friend_id"])
                     );
 
-                    var friendParams = new SqlParameter[]
+                    var friendshipParameters = new SqlParameter[]
                     {
                         new SqlParameter("@user_id", friendship.FriendId)
                     };
-                    var friendData = _dataLink.ExecuteReader("GetUserById", friendParams);
-                    if (friendData.Rows.Count > 0)
+                    var friendUserProfileData = _dataLink.ExecuteReader("GetUserById", friendshipParameters);
+                    if (friendUserProfileData.Rows.Count > 0)
                     {
-                        friendship.FriendUsername = friendData.Rows[0]["username"].ToString();
-                        var profileParams = new SqlParameter[]
+                        friendship.FriendUsername = friendUserProfileData.Rows[0]["username"].ToString();
+                        var userProfileParameters = new SqlParameter[]
                         {
                             new SqlParameter("@user_id", friendship.FriendId)
                         };
-                        var profileData = _dataLink.ExecuteReader("GetUserProfileByUserId", profileParams);
-                        if (profileData.Rows.Count > 0)
+                        var userProfileData = _dataLink.ExecuteReader("GetUserProfileByUserId", userProfileParameters);
+                        if (userProfileData.Rows.Count > 0)
                         {
-                            friendship.FriendProfilePicture = profileData.Rows[0]["profile_picture"].ToString();
+                            friendship.FriendProfilePicture = userProfileData.Rows[0]["profile_picture"].ToString();
                         }
                     }
 
@@ -75,15 +75,15 @@ namespace BusinessLayer.Repositories
         {
             try
             {
-                var userParams = new SqlParameter[] { new SqlParameter("@user_id", userId) };
-                var friendParams = new SqlParameter[] { new SqlParameter("@user_id", friendId) };
+                var userProfileParameters = new SqlParameter[] { new SqlParameter("@user_id", userId) };
+                var friendshipParameters = new SqlParameter[] { new SqlParameter("@user_id", friendId) };
 
-                var userData = _dataLink.ExecuteReader("GetUserById", userParams);
-                var friendData = _dataLink.ExecuteReader("GetUserById", friendParams);
+                var userProfileData = _dataLink.ExecuteReader("GetUserById", userProfileParameters);
+                var friendUserProfileData = _dataLink.ExecuteReader("GetUserById", friendshipParameters);
 
-                if (userData.Rows.Count == 0)
+                if (userProfileData.Rows.Count == 0)
                     throw new RepositoryException($"User with ID {userId} does not exist.");
-                if (friendData.Rows.Count == 0)
+                if (friendUserProfileData.Rows.Count == 0)
                     throw new RepositoryException($"User with ID {friendId} does not exist.");
 
                 var existingFriendships = GetAllFriendships(userId);

@@ -6,12 +6,13 @@ using BusinessLayer.Services;
 using SteamProfile.Views;
 using System;
 using System.Threading.Tasks;
+using BusinessLayer.Services.Interfaces;
 
 namespace SteamProfile.ViewModels
 {
     public partial class LoginViewModel : ObservableObject
     {
-        private readonly UserService _userService;
+        private readonly IUserService _userService;
         private readonly Frame _frame;
 
         [ObservableProperty]

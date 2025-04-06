@@ -45,9 +45,7 @@ namespace SteamProfile.ViewModels.ConfigurationsViewModels
                 Description = _originalDescription;
             }
         }
-
-      
-
+        
         [RelayCommand]
         private async Task ChooseNewPhotoAsync()
         {

@@ -32,7 +32,7 @@ namespace BusinessLayer.Services
 
         public User GetUserByEmail(string email) => _usersRepository.GetUserByEmail(email);
 
-        public User GetUserByUsername(string username) => _usersRepository.GetUserByUsername(username);
+        public User? GetUserByUsername(string username) => _usersRepository.GetUserByUsername(username);
         public void ValidateUserAndEmail(string email, string username)
         {
             // Check if user already exists

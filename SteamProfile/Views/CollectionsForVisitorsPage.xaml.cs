@@ -2,7 +2,6 @@ using Microsoft.UI.Xaml;
 using Microsoft.UI.Xaml.Controls;
 using SteamProfile.ViewModels;
 using System;
-using System.Linq;
 using System.Diagnostics;
 using Microsoft.UI.Xaml.Navigation;
 
@@ -10,14 +9,14 @@ namespace SteamProfile.Views
 {
     public sealed partial class CollectionsForVisitorsPage : Page
     {
-        private CollectionsViewModel _viewModel;
+        private CollectionsViewModel _collectionsViewModel;
         private int _userId;
 
         public CollectionsForVisitorsPage()
         {
             this.InitializeComponent();
-            _viewModel = new CollectionsViewModel(App.CollectionsService, App.UserService);
-            this.DataContext = _viewModel;
+            _collectionsViewModel = App.CollectionsViewModel;
+            this.DataContext = _collectionsViewModel;
         }
 
         protected override void OnNavigatedTo(NavigationEventArgs e)
@@ -34,20 +33,20 @@ namespace SteamProfile.Views
         {
             try
             {
-                _viewModel.IsLoading = true;
-                _viewModel.ErrorMessage = string.Empty;
+                _collectionsViewModel.IsLoading = true;
+                _collectionsViewModel.ErrorMessage = string.Empty;
                 
-                var collections = App.CollectionsService.GetPublicCollectionsForUser(_userId);
-                _viewModel.Collections = new System.Collections.ObjectModel.ObservableCollection<BusinessLayer.Models.Collection>(collections);
+                var collections = _collectionsViewModel.GetPublicCollectionsForUser(_userId);
+                _collectionsViewModel.Collections = new System.Collections.ObjectModel.ObservableCollection<BusinessLayer.Models.Collection>(collections);
             }
             catch (Exception ex)
             {
-                _viewModel.ErrorMessage = "Failed to load collections. Please try again later.";
+                _collectionsViewModel.ErrorMessage = "Failed to load collections. Please try again later.";
                 Debug.WriteLine($"Error loading collections: {ex.Message}");
             }
             finally
             {
-                _viewModel.IsLoading = false;
+                _collectionsViewModel.IsLoading = false;
             }
         }
 

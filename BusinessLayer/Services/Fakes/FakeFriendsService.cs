@@ -12,7 +12,8 @@ namespace BusinessLayer.Services.Fakes
         public FakeFriendsService()
         {
             _friendships = new List<Friendship>();
-            // Seed with some dummy friendships.
+            
+            // Seed with some dummy friendships for testing.
             _friendships.Add(new Friendship(1, 1, 2)
             {
                 FriendUsername = "Alice",
@@ -24,22 +25,26 @@ namespace BusinessLayer.Services.Fakes
                 FriendProfilePicture = "bob.jpg"
             });
         }
+        
+        private int CompareByUsername(Friendship f1, Friendship f2)
+        {
+            return string.Compare(f1.FriendUsername, f2.FriendUsername, StringComparison.Ordinal);
+        }
+
 
         public List<Friendship> GetAllFriendships()
         {
             List<Friendship> result = new List<Friendship>();
             foreach (Friendship f in _friendships)
             {
-                if (f.UserId == 1) // Assume current user is 1
+                // Assume current user is 1
+                if (f.UserId == 1) 
                 {
                     result.Add(f);
                 }
             }
-            // Explicit sort using delegate
-            result.Sort(delegate(Friendship f1, Friendship f2)
-            {
-                return string.Compare(f1.FriendUsername, f2.FriendUsername, StringComparison.Ordinal);
-            });
+            
+            result.Sort(CompareByUsername);
             return result;
         }
 

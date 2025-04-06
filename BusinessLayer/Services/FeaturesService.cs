@@ -2,15 +2,16 @@
 using BusinessLayer.Repositories;
 using BusinessLayer.Exceptions;
 using System.Diagnostics;
+using BusinessLayer.Services.Interfaces;
 
 namespace BusinessLayer.Services
 {
     public class FeaturesService
     {
         private readonly FeaturesRepository _featuresRepository;
-        public UserService UserService { get; }
+        public IUserService UserService { get; }
 
-        public FeaturesService(FeaturesRepository featuresRepository, UserService userService)
+        public FeaturesService(FeaturesRepository featuresRepository, IUserService userService)
         {
             _featuresRepository = featuresRepository ?? throw new ArgumentNullException(nameof(featuresRepository));
             UserService = userService;

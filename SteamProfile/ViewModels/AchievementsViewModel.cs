@@ -8,14 +8,15 @@ using System;
 using System.Collections.ObjectModel;
 using System.Linq;
 using System.Threading.Tasks;
+using BusinessLayer.Services.Interfaces;
 
 namespace SteamProfile.ViewModels
 {
     public partial class AchievementsViewModel : ObservableObject
     {
         private static AchievementsViewModel _instance;
-        private readonly AchievementsService _achievementsService;
-        private readonly UserService _userService;
+        private readonly IAchievementsService _achievementsService;
+        private readonly IUserService _userService;
 
         [ObservableProperty]
         private ObservableCollection<AchievementWithStatus> _allAchievements = new ObservableCollection<AchievementWithStatus>();
@@ -56,7 +57,7 @@ namespace SteamProfile.ViewModels
             }
         }
 
-        private AchievementsViewModel(AchievementsService achievementsService, UserService userService)
+        private AchievementsViewModel(IAchievementsService achievementsService, IUserService userService)
         {
             _achievementsService = achievementsService ?? throw new ArgumentNullException(nameof(achievementsService));
             _userService = userService ?? throw new ArgumentNullException(nameof(userService));

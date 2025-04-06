@@ -2,26 +2,27 @@ using Microsoft.UI.Xaml;
 using Microsoft.UI.Xaml.Controls;
 using Microsoft.UI.Xaml.Navigation;
 using BusinessLayer.Models;
-using BusinessLayer.Services;
 using SteamProfile.ViewModels;
 using System;
 using System.Diagnostics;
-using System.Windows;
 
 namespace SteamProfile.Views
 {
     public sealed partial class CollectionGamesPage : Page
     {
-        private CollectionGamesViewModel _viewModel;
+        private CollectionGamesViewModel _collectionGamesViewModel;
+        private CollectionsViewModel _collectionsViewModel;
+        private UsersViewModel _userViewModel;
         private int _collectionId;
-        private string _collectionName;
-        private readonly UserService _userService = App.UserService;
-
+        private string _collectionName = String.Empty;
+        
         public CollectionGamesPage()
         {
             this.InitializeComponent();
-            _viewModel = new CollectionGamesViewModel(App.CollectionsService);
-            this.DataContext = _viewModel;
+            _collectionGamesViewModel = App.CollectionsGamesViewModel;
+            _collectionsViewModel = App.CollectionsViewModel;
+            _userViewModel = App.UsersViewModel;
+            this.DataContext = _collectionGamesViewModel;
         }
 
         protected override void OnNavigatedTo(NavigationEventArgs e)
@@ -37,8 +38,8 @@ namespace SteamProfile.Views
             {
                 // Handle back navigation from AddGameToCollectionPage
                 _collectionId = backCollectionId;
-                var userId = _userService.GetCurrentUser().UserId;
-                var collection = App.CollectionsService.GetCollectionById(_collectionId, userId);
+                var userId = _userViewModel.GetCurrentUser().UserId;
+                var collection = _collectionsViewModel.GetCollectionById(_collectionId, userId);
                 if (collection != null)
                 {
                     _collectionName = collection.Name;
@@ -51,8 +52,8 @@ namespace SteamProfile.Views
         {
             try
             {
-                _viewModel.CollectionName = _collectionName;
-                _viewModel.LoadGames(_collectionId);
+                _collectionGamesViewModel.CollectionName = _collectionName;
+                _collectionGamesViewModel.LoadGames(_collectionId);
             }
             catch (Exception ex)
             {
@@ -79,9 +80,9 @@ namespace SteamProfile.Views
 
                 int gameId = Convert.ToInt32(button.Tag);
                 Debug.WriteLine($"Removing game {gameId} from collection {_collectionId}");
-
-                App.CollectionsService.RemoveGameFromCollection(_collectionId, gameId);
-                _viewModel.LoadGames(_collectionId);
+                    
+                _collectionsViewModel.RemoveGameFromCollection(_collectionId, gameId);
+                _collectionGamesViewModel.LoadGames(_collectionId);
             }
             catch (Exception ex)
             {

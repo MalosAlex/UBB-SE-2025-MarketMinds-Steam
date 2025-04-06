@@ -1,38 +1,33 @@
-﻿using System;
-using System.Collections.Generic;
-using System.IO;
-using System.Linq;
-using System.Runtime.InteropServices.WindowsRuntime;
-using Microsoft.UI.Xaml;
-using Microsoft.UI.Xaml.Controls;
-using Microsoft.UI.Xaml.Controls.Primitives;
-using Microsoft.UI.Xaml.Data;
-using Microsoft.UI.Xaml.Input;
-using Microsoft.UI.Xaml.Media;
-using Microsoft.UI.Xaml.Navigation;
-using Microsoft.UI.Xaml.Shapes;
+﻿using Microsoft.UI.Xaml;
 using BusinessLayer.Data;
 using BusinessLayer.Repositories;
+using BusinessLayer.Services.Interfaces;
 using BusinessLayer.Services;
-using SteamProfile.Views;
 using SteamProfile.ViewModels;
-using Windows.ApplicationModel;
-using Windows.ApplicationModel.Activation;
-using Windows.Foundation;
-using Windows.Foundation.Collections;
 
 namespace SteamProfile
 {
     public partial class App : Application
     {
-        public static readonly AchievementsService AchievementsService;
+        
+        // Services
+        public static readonly IAchievementsService AchievementsService;
         public static readonly FeaturesService FeaturesService;
-        public static readonly CollectionsService CollectionsService;
+        public static readonly ICollectionsService CollectionsService;
         public static readonly WalletService WalletService;
-        public static readonly UserService UserService;
-        public static readonly FriendsService FriendsService;
-        public static readonly OwnedGamesService OwnedGamesService;
+        public static readonly IUserService UserService;
+        public static readonly IFriendsService FriendsService;
+        public static readonly IOwnedGamesService OwnedGamesService;
         public static readonly AuthenticationService AuthenticationService;
+        
+        // View Models
+        public static readonly AddGameToCollectionViewModel AddGameToCollectionViewModel;
+        public static readonly CollectionsViewModel CollectionsViewModel;
+        public static readonly CollectionGamesViewModel CollectionsGamesViewModel;
+        public static readonly UsersViewModel UsersViewModel;
+        public static readonly FriendsViewModel FriendsViewModel;
+
+        // MUST BE ELIMINATED WHAT EVEN IS THIS !!!!!!!!!!!!!!!!!
         public static PasswordResetService PasswordResetService { get; private set; }
         public static readonly SessionService SessionService;
         public static UserProfilesRepository UserProfileRepository { get; private set; }
@@ -53,8 +48,6 @@ namespace SteamProfile
             var ownedGamesRepossitory = new OwnedGamesRepository(dataLink);
             var sessionRepository = new SessionRepository(dataLink);
             var passwordResetRepo = new PasswordResetRepository(dataLink);
-            UserProfileRepository = new UserProfilesRepository(dataLink);
-            CollectionsRepository = new CollectionsRepository(dataLink);
 
 
             // Initialize all services
@@ -68,7 +61,15 @@ namespace SteamProfile
             OwnedGamesService = new OwnedGamesService(ownedGamesRepossitory);
             PasswordResetService = new PasswordResetService(passwordResetRepo, UserService);
             FeaturesService = new FeaturesService(featuresRepository, UserService);
+            
+            // Initialize all view models
+            UsersViewModel = UsersViewModel.Instance;
+            AddGameToCollectionViewModel = new AddGameToCollectionViewModel(CollectionsService);
+            CollectionsViewModel = new CollectionsViewModel(CollectionsService, UserService);
+            CollectionsGamesViewModel = new CollectionGamesViewModel(CollectionsService);
+            FriendsViewModel = new FriendsViewModel(FriendsService, UserService);
 
+            // Others
             InitializeAchievements();
         }
 

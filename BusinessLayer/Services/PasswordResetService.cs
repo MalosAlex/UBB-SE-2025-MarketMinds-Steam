@@ -1,6 +1,7 @@
 using BusinessLayer.Repositories;
 using System;
 using BCrypt.Net;
+using BusinessLayer.Services.Interfaces;
 
 namespace BusinessLayer.Services
 {
@@ -15,11 +16,11 @@ namespace BusinessLayer.Services
     public class PasswordResetService : IPasswordResetService
     {
         private readonly PasswordResetRepository _resetRepository;
-        private readonly UserService _userService;
+        private readonly IUserService _userService;
 
         public PasswordResetService(
             PasswordResetRepository resetRepository,
-            UserService userService)
+            IUserService userService)
         {
             _resetRepository = resetRepository;
             _userService = userService;

@@ -5,15 +5,16 @@ using BusinessLayer.Services;
 using SteamProfile.Views;
 using SteamProfile.Views.ConfigurationsView;
 using System;
+using BusinessLayer.Services.Interfaces;
 
 namespace SteamProfile.ViewModels
 {
     public partial class ConfigurationsViewModel : ObservableObject
     {
         private readonly Frame _frame;
-        private readonly UserService _userService;
+        private readonly IUserService _userService;
 
-        public ConfigurationsViewModel(Frame frame, UserService userService)
+        public ConfigurationsViewModel(Frame frame, IUserService userService)
         {
             _frame = frame;
             _userService = userService ?? throw new NullReferenceException(nameof(userService));

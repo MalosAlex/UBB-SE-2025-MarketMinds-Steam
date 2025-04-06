@@ -13,18 +13,19 @@ using Microsoft.UI.Xaml;
 using BusinessLayer.Repositories;
 using System.Linq;
 using System.Collections.Generic;
+using BusinessLayer.Services.Interfaces;
 
 namespace SteamProfile.ViewModels
 {
     public partial class ProfileViewModel : ObservableObject
     {
         private static ProfileViewModel _instance;
-        private readonly UserService _userService;
-        private readonly FriendsService _friendsService;
+        private readonly IUserService _userService;
+        private readonly IFriendsService _friendsService;
         private readonly DispatcherQueue _dispatcherQueue;
         private readonly UserProfilesRepository _userProfileRepository;
         private readonly FeaturesService _featuresService;
-        private readonly AchievementsService _achievementsService;
+        private readonly IAchievementsService _achievementsService;
 
         [ObservableProperty]
         private string _username = string.Empty;
@@ -167,13 +168,13 @@ namespace SteamProfile.ViewModels
         }
 
         public static void Initialize(
-            UserService userService,
-            FriendsService friendsService,
+            IUserService userService,
+            IFriendsService friendsService,
             DispatcherQueue dispatcherQueue,
             UserProfilesRepository userProfileRepository,
             CollectionsRepository collectionsRepository,
             FeaturesService featuresService,
-            AchievementsService achievementsService)
+            IAchievementsService achievementsService)
         {
             if (_instance != null)
             {
@@ -183,13 +184,13 @@ namespace SteamProfile.ViewModels
         }
 
         public ProfileViewModel(
-            UserService userService,
-            FriendsService friendsService,
+            IUserService userService,
+            IFriendsService friendsService,
             DispatcherQueue dispatcherQueue,
             UserProfilesRepository userProfileRepository,
             CollectionsRepository collectionsRepository,
             FeaturesService featuresService,
-            AchievementsService achievementsService)
+            IAchievementsService achievementsService)
         {
             _userService = userService ?? throw new ArgumentNullException(nameof(userService));
             _friendsService = friendsService ?? throw new ArgumentNullException(nameof(friendsService));

@@ -14,7 +14,7 @@ namespace SteamProfile
         public MainWindow()
         {
             this.InitializeComponent();
-            NavigationService.Instance.Initialize(ContentFrame); // Pass the Frame directly !!!!!!!!!!!
+            NavigationService.Instance.Initialize(ContentFrame); 
 
             IntPtr hWnd = WinRT.Interop.WindowNative.GetWindowHandle(this);
             WindowId windowId = Win32Interop.GetWindowIdFromWindow(hWnd);

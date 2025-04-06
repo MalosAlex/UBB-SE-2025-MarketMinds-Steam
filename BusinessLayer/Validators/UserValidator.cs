@@ -7,6 +7,13 @@ namespace BusinessLayer.Validators
 {
     public static class UserValidator
     {
+        public static bool IsValidUsername(string username)
+        {
+            if (string.IsNullOrEmpty(username))
+                return false;
+            return true;
+        }
+        
         public static bool IsPasswordValid(string password)
         {
             if (string.IsNullOrWhiteSpace(password) || password.Length < 8)
@@ -35,6 +42,9 @@ namespace BusinessLayer.Validators
 
         public static void ValidateUser(User user)
         {
+            if(!IsValidUsername(user.Username))
+                throw new InvalidOperationException("User Username is not valid.");
+            
             if(!IsPasswordValid(user.Password))
                 throw new InvalidOperationException("User Password is not valid.");
             

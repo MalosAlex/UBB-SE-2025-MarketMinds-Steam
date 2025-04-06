@@ -4,6 +4,7 @@ using BusinessLayer.Models;
 using BusinessLayer.Services;
 using System;
 using System.Collections.ObjectModel;
+using BusinessLayer.Services.Interfaces;
 
 namespace SteamProfile.ViewModels { 
 
@@ -11,7 +12,7 @@ namespace SteamProfile.ViewModels {
     {
         // Singleton instance to ensure only one ViewModel exists for the Users page
         private static UsersViewModel _instance;
-        private readonly UserService _userService;
+        private readonly IUserService _userService;
         private static Random _random = new Random();
 
         // ObservableCollection automatically notifies the UI when items are added/removed
@@ -36,7 +37,7 @@ namespace SteamProfile.ViewModels {
             }
         }
 
-        private UsersViewModel(UserService userService)
+        private UsersViewModel(IUserService userService)
         {
             _userService = userService ?? throw new ArgumentNullException(nameof(userService));
             _users = new ObservableCollection<User>();
@@ -75,6 +76,11 @@ namespace SteamProfile.ViewModels {
             {
                 Users.Add(createdUser);
             }
+        }
+
+        public User? GetCurrentUser()
+        {
+            return _userService.GetCurrentUser();
         }
     }
 } 

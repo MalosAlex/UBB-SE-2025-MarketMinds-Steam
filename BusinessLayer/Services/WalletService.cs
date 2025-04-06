@@ -12,9 +12,9 @@ namespace BusinessLayer.Services
     public class WalletService : IWalletService
     {
         private readonly WalletRepository _walletRepository;
-        private readonly UserService _userService;
+        private readonly IUserService _userService;
 
-        public WalletService(WalletRepository walletRepository, UserService userService)
+        public WalletService(WalletRepository walletRepository, IUserService userService)
         {
             _walletRepository = walletRepository ?? throw new ArgumentNullException(nameof(walletRepository));
             _userService = userService;

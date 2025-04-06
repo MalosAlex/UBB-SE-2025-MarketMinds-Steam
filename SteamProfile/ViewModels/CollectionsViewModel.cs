@@ -1,8 +1,9 @@
 ﻿using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
 using BusinessLayer.Models;
-using BusinessLayer.Services;
+using BusinessLayer.Services.Interfaces;
 using System;
+using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Diagnostics;
 using System.Linq;
@@ -27,8 +28,8 @@ namespace SteamProfile.ViewModels
 
     public partial class CollectionsViewModel : ObservableObject
     {
-        private readonly CollectionsService _collectionsService;
-        private readonly UserService _userService;
+        private readonly ICollectionsService _collectionsService;
+        private readonly IUserService _userService;
         private readonly int _userId;
         private ObservableCollection<Collection> _collections;
 
@@ -54,7 +55,7 @@ namespace SteamProfile.ViewModels
             }
         }
 
-        public CollectionsViewModel(CollectionsService collectionsService, UserService userService)
+        public CollectionsViewModel(ICollectionsService collectionsService, IUserService userService)
         {
             _collectionsService = collectionsService ?? throw new ArgumentNullException(nameof(collectionsService));
             _userService = userService ?? throw new ArgumentNullException(nameof(userService));
@@ -63,10 +64,6 @@ namespace SteamProfile.ViewModels
             LoadCollections();
         }
 
-        // Constructor overload for when services are not directly provided
-        public CollectionsViewModel() : this(App.CollectionsService, App.UserService)
-        {
-        }
 
         [RelayCommand]
         private void LoadCollections()
@@ -231,6 +228,21 @@ namespace SteamProfile.ViewModels
                 Debug.WriteLine($"Error updating collection: {ex.Message}");
                 ErrorMessage = "Error updating collection. Please try again.";
             }
+        }
+
+        public List<Collection> GetPublicCollectionsForUser(int userId)
+        {
+            return _collectionsService.GetPublicCollectionsForUser(userId);
+        }
+
+        public Collection GetCollectionById(int collectionId, int userId)
+        {
+            return _collectionsService.GetCollectionById(collectionId, userId);
+        }
+
+        public void RemoveGameFromCollection(int collectionId, int gameId)
+        {
+            _collectionsService.RemoveGameFromCollection(collectionId, gameId);
         }
     }
 }

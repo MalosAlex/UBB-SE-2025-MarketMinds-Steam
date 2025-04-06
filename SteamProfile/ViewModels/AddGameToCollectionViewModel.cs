@@ -1,20 +1,20 @@
 using CommunityToolkit.Mvvm.ComponentModel;
 using Microsoft.UI.Xaml.Controls;
 using BusinessLayer.Models;
-using BusinessLayer.Services;
 using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.ComponentModel;
 using System.Diagnostics;
 using System.Runtime.CompilerServices;
+using BusinessLayer.Services.Interfaces;
 
 namespace SteamProfile.ViewModels
 {
     public class AddGameToCollectionViewModel : ObservableObject
     {
-        private readonly CollectionsService _collectionsService;
-        private readonly UserService _userService;
+        private readonly ICollectionsService _collectionsService;
+        private readonly IUserService _userService;
         private readonly int _userId;
         private ObservableCollection<OwnedGame> _availableGames;
         private bool _isLoading;
@@ -39,7 +39,7 @@ namespace SteamProfile.ViewModels
             set => SetProperty(ref _errorMessage, value);
         }
 
-        public AddGameToCollectionViewModel(CollectionsService collectionsService)
+        public AddGameToCollectionViewModel(ICollectionsService collectionsService)
         {
             _collectionsService = collectionsService;
             _availableGames = new ObservableCollection<OwnedGame>();

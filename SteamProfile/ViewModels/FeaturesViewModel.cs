@@ -17,6 +17,7 @@ using SteamProfile.Views;
 using System.Diagnostics;
 using Microsoft.UI.Xaml.Media.Imaging;
 using BusinessLayer.Repositories;
+using BusinessLayer.Services.Interfaces;
 
 namespace SteamProfile.ViewModels
 {
@@ -66,7 +67,7 @@ namespace SteamProfile.ViewModels
     public class FeaturesViewModel : INotifyPropertyChanged
     {
         private readonly FeaturesService _featuresService;
-        private readonly UserService _userService;
+        private readonly IUserService _userService;
         private readonly UserProfilesRepository _userProfilesRepository;
         private string _statusMessage = string.Empty;
         private Brush _statusColor;

@@ -2,7 +2,8 @@
 using CommunityToolkit.Mvvm.Input;
 using Microsoft.UI.Xaml.Controls;
 using BusinessLayer.Models;
-using BusinessLayer.Services;
+using BusinessLayer.Services.Interfaces;
+using BusinessLayer.Exceptions;
 using SteamProfile.Views;
 using System;
 using System.Collections.ObjectModel;
@@ -14,8 +15,8 @@ namespace SteamProfile.ViewModels
 {
     public partial class FriendsViewModel : ObservableObject
     {
-        private readonly FriendsService _friendsService;
-        private readonly UserService _userService;
+        private readonly IFriendsService _friendsService;
+        private readonly IUserService _userService;
 
 
         [ObservableProperty]
@@ -30,7 +31,7 @@ namespace SteamProfile.ViewModels
         [ObservableProperty]
         private string _errorMessage;
 
-        public FriendsViewModel(FriendsService friendsService, UserService userService)
+        public FriendsViewModel(IFriendsService friendsService, IUserService userService)
         {
             _friendsService = friendsService ?? throw new ArgumentNullException(nameof(friendsService));
             _userService = userService ?? throw new ArgumentNullException(nameof(friendsService));
@@ -128,12 +129,6 @@ namespace SteamProfile.ViewModels
         public void SelectFriendship(Friendship friendship)
         {
             SelectedFriendship = friendship;
-        }
-        public class ServiceException : Exception
-        {
-            public ServiceException(string message) : base(message) { }
-            public ServiceException(string message, Exception innerException)
-                : base(message, innerException) { }
         }
     }
 }

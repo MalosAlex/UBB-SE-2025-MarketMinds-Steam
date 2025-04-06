@@ -3,20 +3,19 @@ using Microsoft.UI.Xaml.Controls;
 using Microsoft.UI.Xaml.Navigation;
 using BusinessLayer.Models;
 using SteamProfile.ViewModels;
-using System;
 
 namespace SteamProfile.Views
 {
     public sealed partial class AddGameToCollectionPage : Page
     {
-        private AddGameToCollectionViewModel _viewModel;
+        private AddGameToCollectionViewModel _addGamesToCollectionViewModel;
         private int _collectionId;
 
         public AddGameToCollectionPage()
         {
             this.InitializeComponent();
-            _viewModel = new AddGameToCollectionViewModel(App.CollectionsService);
-            this.DataContext = _viewModel;
+            _addGamesToCollectionViewModel = App.AddGameToCollectionViewModel;
+            this.DataContext = _addGamesToCollectionViewModel;
         }
 
         protected override void OnNavigatedTo(NavigationEventArgs e)
@@ -25,7 +24,7 @@ namespace SteamProfile.Views
             if (e.Parameter is int collectionId)
             {
                 _collectionId = collectionId;
-                _viewModel.Initialize(collectionId);
+                _addGamesToCollectionViewModel.Initialize(collectionId);
             }
         }
 
@@ -38,7 +37,7 @@ namespace SteamProfile.Views
         {
             if (sender is Button button && button.DataContext is OwnedGame game)
             {
-                _viewModel.AddGameToCollection(game);
+                _addGamesToCollectionViewModel.AddGameToCollection(game);
             }
         }
     }

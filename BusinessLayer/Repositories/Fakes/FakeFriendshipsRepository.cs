@@ -13,7 +13,7 @@ namespace BusinessLayer.Repositories.Fakes
 
         public FakeFriendshipsRepository()
         {
-            // Seed some dummy friendships.
+            // Seed some dummy friendships for testing.
             _friendships.Add(new Friendship(friendshipId: 1, userId: 1, friendId: 2)
             {
                 FriendUsername = "Alice",

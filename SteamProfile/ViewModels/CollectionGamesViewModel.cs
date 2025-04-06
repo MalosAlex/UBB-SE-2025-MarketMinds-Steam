@@ -1,16 +1,16 @@
 using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
 using BusinessLayer.Models;
-using BusinessLayer.Services;
 using System;
 using System.Collections.ObjectModel;
 using System.Diagnostics;
+using BusinessLayer.Services.Interfaces;
 
 namespace SteamProfile.ViewModels
 {
     public partial class CollectionGamesViewModel : ObservableObject
     {
-        private readonly CollectionsService _collectionsService;
+        private readonly ICollectionsService _collectionsService;
 
         [ObservableProperty]
         private string _collectionName;
@@ -27,7 +27,7 @@ namespace SteamProfile.ViewModels
         [ObservableProperty]
         private bool _isAllOwnedGamesCollection;
 
-        public CollectionGamesViewModel(CollectionsService collectionsService)
+        public CollectionGamesViewModel(ICollectionsService collectionsService)
         {
             _collectionsService = collectionsService;
             _games = new ObservableCollection<OwnedGame>();
