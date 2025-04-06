@@ -9,7 +9,7 @@ namespace SteamProfile
 {
     public partial class App : Application
     {
-        
+
         // Services
         public static readonly IAchievementsService AchievementsService;
         public static readonly FeaturesService FeaturesService;
@@ -19,11 +19,9 @@ namespace SteamProfile
         public static readonly IFriendsService FriendsService;
         public static readonly IOwnedGamesService OwnedGamesService;
         public static readonly AuthenticationService AuthenticationService;
-        
+
         // View Models
         public static readonly AddGameToCollectionViewModel AddGameToCollectionViewModel;
-        public static readonly CollectionsViewModel CollectionsViewModel;
-        public static readonly CollectionGamesViewModel CollectionsGamesViewModel;
         public static readonly UsersViewModel UsersViewModel;
         public static readonly FriendsViewModel FriendsViewModel;
 
@@ -51,22 +49,20 @@ namespace SteamProfile
 
 
             // Initialize all services
+            SessionService = new SessionService(sessionRepository, usersRepository);
+            UserService = new UserService(usersRepository, SessionService);
             AchievementsService = new AchievementsService(achievementsRepository);
             CollectionsService = new CollectionsService(collectionsRepository);
             AuthenticationService = new AuthenticationService(usersRepository);
-            SessionService = new SessionService(sessionRepository, usersRepository);
-            UserService = new UserService(usersRepository, SessionService);
             WalletService = new WalletService(walletRepository, UserService);
             FriendsService = new FriendsService(friendshipsRepository, UserService);
             OwnedGamesService = new OwnedGamesService(ownedGamesRepossitory);
             PasswordResetService = new PasswordResetService(passwordResetRepo, UserService);
             FeaturesService = new FeaturesService(featuresRepository, UserService);
-            
+
             // Initialize all view models
             UsersViewModel = UsersViewModel.Instance;
             AddGameToCollectionViewModel = new AddGameToCollectionViewModel(CollectionsService);
-            CollectionsViewModel = new CollectionsViewModel(CollectionsService, UserService);
-            CollectionsGamesViewModel = new CollectionGamesViewModel(CollectionsService);
             FriendsViewModel = new FriendsViewModel(FriendsService, UserService);
 
             // Others

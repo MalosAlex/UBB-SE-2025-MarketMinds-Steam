@@ -115,7 +115,7 @@ namespace BusinessLayer.Services
             sessionService.EndSession();
         }
 
-        public User? GetCurrentUser()
+        public User GetCurrentUser()
         {
             return sessionService.GetCurrentUser();
         }

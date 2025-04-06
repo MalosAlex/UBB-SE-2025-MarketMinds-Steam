@@ -72,7 +72,7 @@ namespace BusinessLayer.Services
 
         public AchievementsService(IAchievementsRepository achievementsRepository)
         {
-            achievementsRepository = achievementsRepository ?? throw new ArgumentNullException(nameof(achievementsRepository));
+            this.achievementsRepository = achievementsRepository ?? throw new ArgumentNullException(nameof(achievementsRepository));
         }
 
         public void InitializeAchievements()

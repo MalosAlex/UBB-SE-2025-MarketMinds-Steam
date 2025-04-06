@@ -18,7 +18,7 @@ namespace BusinessLayer.Services.Interfaces
         void UpdateUserUsername(int userId, string newUsername);
         User? Login(string emailOrUsername, string password);
         void Logout();
-        User? GetCurrentUser();
+        User GetCurrentUser();
         bool IsUserLoggedIn();
         bool UpdateUserUsername(string username, string currentPassword);
         bool UpdateUserPassword(string password, string currentPassword);

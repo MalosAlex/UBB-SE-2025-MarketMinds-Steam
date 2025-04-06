@@ -13,7 +13,7 @@ namespace BusinessLayer.Services
 
         public FeaturesService(FeaturesRepository featuresRepository, IUserService userService)
         {
-            featuresRepository = featuresRepository ?? throw new ArgumentNullException(nameof(featuresRepository));
+            this.featuresRepository = featuresRepository ?? throw new ArgumentNullException(nameof(featuresRepository));
             UserService = userService;
         }
 

@@ -11,8 +11,8 @@ namespace BusinessLayer.Services
 
         public WalletService(WalletRepository walletRepository, IUserService userService)
         {
-            walletRepository = walletRepository ?? throw new ArgumentNullException(nameof(walletRepository));
-            userService = userService;
+            this.walletRepository = walletRepository ?? throw new ArgumentNullException(nameof(walletRepository));
+            this.userService = userService;
         }
 
         public void AddMoney(decimal amount)

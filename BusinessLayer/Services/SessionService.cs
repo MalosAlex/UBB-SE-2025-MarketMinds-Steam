@@ -11,8 +11,8 @@ namespace BusinessLayer.Services
 
         public SessionService(SessionRepository sessionRepository, UsersRepository usersRepository)
         {
-            sessionRepository = sessionRepository ?? throw new ArgumentNullException(nameof(sessionRepository));
-            usersRepository = usersRepository ?? throw new ArgumentNullException(nameof(usersRepository));
+            this.sessionRepository = sessionRepository ?? throw new ArgumentNullException(nameof(sessionRepository));
+            this.usersRepository = usersRepository ?? throw new ArgumentNullException(nameof(usersRepository));
         }
 
         public Guid CreateNewSession(User user)
