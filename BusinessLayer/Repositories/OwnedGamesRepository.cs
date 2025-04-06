@@ -1,20 +1,19 @@
+using System.Data;
 using BusinessLayer.Data;
 using BusinessLayer.Models;
-using System.Data;
 using Microsoft.Data.SqlClient;
-using System.Diagnostics;
 using BusinessLayer.Repositories.Interfaces;
 using BusinessLayer.Exceptions;
 
 namespace BusinessLayer.Repositories
 {
-    public class OwnedGamesRepository: IOwnedGamesRepository
+    public class OwnedGamesRepository : IOwnedGamesRepository
     {
-        private readonly IDataLink _dataLink;
+        private readonly IDataLink dataLink;
 
-        public OwnedGamesRepository(IDataLink dataLink) 
+        public OwnedGamesRepository(IDataLink dataLink)
         {
-            _dataLink = dataLink ?? throw new ArgumentNullException(nameof(dataLink));
+            this.dataLink = dataLink ?? throw new ArgumentNullException(nameof(dataLink));
         }
 
         public List<OwnedGame> GetAllOwnedGames(int userId)
@@ -26,7 +25,7 @@ namespace BusinessLayer.Repositories
                     new SqlParameter("@user_id", userId)
                 };
 
-                var dataTable = _dataLink.ExecuteReader("GetAllOwnedGames", parameters);
+                var dataTable = dataLink.ExecuteReader("GetAllOwnedGames", parameters);
                 var games = MapDataTableToOwnedGames(dataTable);
                 return games;
             }
@@ -49,7 +48,7 @@ namespace BusinessLayer.Repositories
                     new SqlParameter("@gameId", gameId),
                     new SqlParameter("@userId", userId)
                 };
-                var dataTable = _dataLink.ExecuteReader("GetOwnedGameById", parameters);
+                var dataTable = dataLink.ExecuteReader("GetOwnedGameById", parameters);
                 return dataTable.Rows.Count > 0 ? MapDataRowToOwnedGame(dataTable.Rows[0]) : null;
             }
             catch (SqlException ex)
@@ -71,7 +70,7 @@ namespace BusinessLayer.Repositories
                     new SqlParameter("@game_id", gameId),
                     new SqlParameter("@user_id", userId)
                 };
-                _dataLink.ExecuteNonQuery("RemoveOwnedGame", parameters);
+                dataLink.ExecuteNonQuery("RemoveOwnedGame", parameters);
             }
             catch (SqlException ex)
             {
@@ -93,10 +92,10 @@ namespace BusinessLayer.Repositories
                     row["title"].ToString(),
                     row["description"]?.ToString(),
                     row["cover_picture"]?.ToString());
-                    
+
                 // Set the GameId separately
                 game.GameId = Convert.ToInt32(row["game_id"]);
-                    
+
                 return game;
             }).ToList();
             return games;
@@ -110,7 +109,7 @@ namespace BusinessLayer.Repositories
                 row["title"].ToString(),
                 row["description"]?.ToString(),
                 row["cover_picture"]?.ToString());
-            
+
             // Set the GameId separately
             game.GameId = Convert.ToInt32(row["game_id"]);
             return game;

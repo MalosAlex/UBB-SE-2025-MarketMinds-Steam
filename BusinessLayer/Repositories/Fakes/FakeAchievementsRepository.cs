@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace BusinessLayer.Repositories.Fakes
 {
-    class FakeAchievementsRepository
+    public class FakeAchievementsRepository
     {
     }
 }

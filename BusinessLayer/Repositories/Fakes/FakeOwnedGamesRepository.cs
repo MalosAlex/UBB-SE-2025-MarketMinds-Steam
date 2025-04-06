@@ -5,12 +5,12 @@ namespace BusinessLayer.Repositories.Fakes
 {
     public class FakeOwnedGamesRepository : IOwnedGamesRepository
     {
-        private readonly List<OwnedGame> _ownedGames;
+        private readonly List<OwnedGame> ownedGames;
 
         public FakeOwnedGamesRepository()
         {
             // Seed with some dummy owned games for testing.
-            _ownedGames = new List<OwnedGame>
+            ownedGames = new List<OwnedGame>
             {
                 // Creating OwnedGame using the new constructor, then assigning GameId.
                 CreateOwnedGame(1, 1, "Game A", "Description A", "gameA.jpg"),
@@ -21,20 +21,20 @@ namespace BusinessLayer.Repositories.Fakes
 
         public List<OwnedGame> GetAllOwnedGames(int userId)
         {
-            return _ownedGames.Where(g => g.UserId == userId).ToList();
+            return ownedGames.Where(g => g.UserId == userId).ToList();
         }
 
         public OwnedGame GetOwnedGameById(int gameId, int userId)
         {
-            return _ownedGames.FirstOrDefault(g => g.GameId == gameId && g.UserId == userId);
+            return ownedGames.FirstOrDefault(g => g.GameId == gameId && g.UserId == userId);
         }
 
         public void RemoveOwnedGame(int gameId, int userId)
         {
-            var game = _ownedGames.FirstOrDefault(g => g.GameId == gameId && g.UserId == userId);
+            var game = ownedGames.FirstOrDefault(g => g.GameId == gameId && g.UserId == userId);
             if (game != null)
             {
-                _ownedGames.Remove(game);
+                ownedGames.Remove(game);
             }
         }
 

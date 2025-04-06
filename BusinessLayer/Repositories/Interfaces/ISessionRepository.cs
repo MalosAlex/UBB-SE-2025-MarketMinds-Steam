@@ -10,9 +10,5 @@ namespace BusinessLayer.Repositories.Interfaces
         SessionDetails GetSessionById(Guid sessionId);
         UserWithSessionDetails GetUserFromSession(Guid sessionId);
         List<Guid> GetExpiredSessions();
-
-        
-
-        
     }
 }

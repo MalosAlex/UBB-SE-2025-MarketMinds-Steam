@@ -1,6 +1,6 @@
-﻿using BusinessLayer.Data;
+﻿using System.Data;
+using BusinessLayer.Data;
 using BusinessLayer.Models;
-using System.Data;
 using Microsoft.Data.SqlClient;
 using BusinessLayer.Repositories.Interfaces;
 using BusinessLayer.Exceptions;
@@ -9,11 +9,11 @@ namespace BusinessLayer.Repositories
 {
     public class UserProfilesRepository : IUserProfilesRepository
     {
-        private readonly IDataLink _dataLink;
+        private readonly IDataLink dataLink;
 
         public UserProfilesRepository(IDataLink dataLink)
         {
-            _dataLink = dataLink ?? throw new ArgumentNullException(nameof(dataLink));
+            this.dataLink = dataLink ?? throw new ArgumentNullException(nameof(dataLink));
         }
 
         public UserProfile? GetUserProfileByUserId(int userId)
@@ -25,7 +25,7 @@ namespace BusinessLayer.Repositories
                     new SqlParameter("@user_id", userId)
                 };
 
-                var dataTable = _dataLink.ExecuteReader("GetUserProfileByUserId", parameters);
+                var dataTable = dataLink.ExecuteReader("GetUserProfileByUserId", parameters);
                 return dataTable.Rows.Count > 0 ? MapDataRowToUserProfile(dataTable.Rows[0]) : null;
             }
             catch (DatabaseOperationException ex)
@@ -46,7 +46,7 @@ namespace BusinessLayer.Repositories
                     new SqlParameter("@bio", (object?)profile.Bio ?? DBNull.Value)
                 };
 
-                var dataTable = _dataLink.ExecuteReader("UpdateUserProfile", parameters);
+                var dataTable = dataLink.ExecuteReader("UpdateUserProfile", parameters);
                 return dataTable.Rows.Count > 0 ? MapDataRowToUserProfile(dataTable.Rows[0]) : null;
             }
             catch (DatabaseOperationException ex)
@@ -64,7 +64,7 @@ namespace BusinessLayer.Repositories
                     new SqlParameter("@user_id", userId)
                 };
 
-                var dataTable = _dataLink.ExecuteReader("CreateUserProfile", parameters);
+                var dataTable = dataLink.ExecuteReader("CreateUserProfile", parameters);
                 return dataTable.Rows.Count > 0 ? MapDataRowToUserProfile(dataTable.Rows[0]) : null;
             }
             catch (DatabaseOperationException ex)
@@ -81,10 +81,8 @@ namespace BusinessLayer.Repositories
                 {
                     new SqlParameter("@user_id", user_id),
                     new SqlParameter("@bio", bio)
-
                 };
-
-                var dataTable = _dataLink.ExecuteReader("UpdateUserProfileBio", parameters);
+                var dataTable = dataLink.ExecuteReader("UpdateUserProfileBio", parameters);
             }
             catch (DatabaseOperationException ex)
             {
@@ -102,14 +100,13 @@ namespace BusinessLayer.Repositories
                     new SqlParameter("@profile_picture", picture)
                 };
 
-                var dataTable = _dataLink.ExecuteReader("UpdateUserProfilePicture", parameters);
+                var dataTable = dataLink.ExecuteReader("UpdateUserProfilePicture", parameters);
             }
             catch (DatabaseOperationException ex)
             {
                 throw new RepositoryException($"Failed to update profile for user {user_id}.", ex);
             }
         }
-
 
         private static UserProfile MapDataRowToUserProfile(DataRow row)
         {

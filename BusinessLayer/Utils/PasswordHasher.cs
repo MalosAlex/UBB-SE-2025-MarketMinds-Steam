@@ -19,10 +19,11 @@ namespace BusinessLayer.Utils
         public static bool VerifyPassword(string password, string hashedPassword)
         {
             if (string.IsNullOrWhiteSpace(password) || string.IsNullOrWhiteSpace(hashedPassword))
+            {
                 return false;
+            }
 
             return BCrypt.Net.BCrypt.Verify(password, hashedPassword);
         }
-
     }
 }

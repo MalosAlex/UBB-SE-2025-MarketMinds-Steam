@@ -1,6 +1,6 @@
-﻿using BusinessLayer.Data;
+﻿using System.Data;
+using BusinessLayer.Data;
 using BusinessLayer.Models;
-using System.Data;
 using Microsoft.Data.SqlClient;
 using BusinessLayer.Exceptions;
 
@@ -8,11 +8,11 @@ namespace BusinessLayer.Repositories
 {
     public class FeaturesRepository
     {
-        private readonly IDataLink _dataLink;
+        private readonly IDataLink dataLink;
 
         public FeaturesRepository(IDataLink datalink)
         {
-            _dataLink = datalink ?? throw new ArgumentNullException(nameof(datalink));
+            dataLink = datalink ?? throw new ArgumentNullException(nameof(datalink));
         }
 
         public List<Feature> GetAllFeatures(int userId)
@@ -25,7 +25,7 @@ namespace BusinessLayer.Repositories
             new SqlParameter("@userId", userId)
                 };
 
-                var dataTable = _dataLink.ExecuteReader("GetAllFeatures", parameters);
+                var dataTable = dataLink.ExecuteReader("GetAllFeatures", parameters);
 
                 foreach (DataRow row in dataTable.Rows)
                 {
@@ -59,7 +59,7 @@ namespace BusinessLayer.Repositories
                 };
 
                 var features = new List<Feature>();
-                var dataTable = _dataLink.ExecuteReader("GetFeaturesByType", parameters);
+                var dataTable = dataLink.ExecuteReader("GetFeaturesByType", parameters);
 
                 foreach (DataRow row in dataTable.Rows)
                 {
@@ -92,7 +92,7 @@ namespace BusinessLayer.Repositories
                 };
 
                 var features = new List<Feature>();
-                var dataTable = _dataLink.ExecuteReader("GetUserFeatures", parameters);
+                var dataTable = dataLink.ExecuteReader("GetUserFeatures", parameters);
 
                 foreach (DataRow row in dataTable.Rows)
                 {
@@ -127,7 +127,7 @@ namespace BusinessLayer.Repositories
             new SqlParameter("@featureId", featureId)
                 };
 
-                var relationshipTable = _dataLink.ExecuteReader("GetFeatureUserRelationship", checkParams);
+                var relationshipTable = dataLink.ExecuteReader("GetFeatureUserRelationship", checkParams);
 
                 if (relationshipTable.Rows.Count > 0)
                 {
@@ -139,7 +139,7 @@ namespace BusinessLayer.Repositories
                 new SqlParameter("@equipped", 1)
                     };
 
-                    _dataLink.ExecuteNonQuery("UpdateFeatureUserEquipStatus", updateParams);
+                    dataLink.ExecuteNonQuery("UpdateFeatureUserEquipStatus", updateParams);
                 }
                 else
                 {
@@ -151,7 +151,7 @@ namespace BusinessLayer.Repositories
                 new SqlParameter("@equipped", 1)
                     };
 
-                    _dataLink.ExecuteNonQuery("CreateFeatureUserRelationship", createParams);
+                    dataLink.ExecuteNonQuery("CreateFeatureUserRelationship", createParams);
                 }
 
                 return true;
@@ -173,7 +173,7 @@ namespace BusinessLayer.Repositories
                     new SqlParameter("@featureId", featureId)
                 };
 
-                _dataLink.ExecuteNonQuery("UnequipFeature", parameters);
+                dataLink.ExecuteNonQuery("UnequipFeature", parameters);
                 return true;  // If no exception, consider it successful
             }
             catch (DatabaseOperationException ex)
@@ -193,7 +193,7 @@ namespace BusinessLayer.Repositories
                     new SqlParameter("@featureType", featureType)
                 };
 
-                _dataLink.ExecuteNonQuery("UnequipFeaturesByType", parameters);
+                dataLink.ExecuteNonQuery("UnequipFeaturesByType", parameters);
                 return true;  // If no exception, consider it successful
             }
             catch (DatabaseOperationException ex)
@@ -213,7 +213,7 @@ namespace BusinessLayer.Repositories
                     new SqlParameter("@featureId", featureId)
                 };
 
-                var result = _dataLink.ExecuteScalar<int>("CheckFeaturePurchase", parameters);
+                var result = dataLink.ExecuteScalar<int>("CheckFeaturePurchase", parameters);
                 return result > 0;
             }
             catch (DatabaseOperationException ex)

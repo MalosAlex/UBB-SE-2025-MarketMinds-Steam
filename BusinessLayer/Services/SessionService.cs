@@ -1,37 +1,34 @@
 using BusinessLayer.Models;
 using BusinessLayer.Repositories;
-using System;
-using System.Threading.Tasks;
 using BusinessLayer.Services.Interfaces;
 
 namespace BusinessLayer.Services
 {
     public class SessionService : ISessionService
     {
-        private readonly SessionRepository _sessionRepository;
-        private readonly UsersRepository _usersRepository;
+        private readonly SessionRepository sessionRepository;
+        private readonly UsersRepository usersRepository;
 
         public SessionService(SessionRepository sessionRepository, UsersRepository usersRepository)
         {
-            _sessionRepository = sessionRepository ?? throw new ArgumentNullException(nameof(sessionRepository));
-            _usersRepository = usersRepository ?? throw new ArgumentNullException(nameof(usersRepository));
+            sessionRepository = sessionRepository ?? throw new ArgumentNullException(nameof(sessionRepository));
+            usersRepository = usersRepository ?? throw new ArgumentNullException(nameof(usersRepository));
         }
 
         public Guid CreateNewSession(User user)
         {
             // Business logic: Delete any existing sessions for this user
-            _sessionRepository.DeleteUserSessions(user.UserId);
+            sessionRepository.DeleteUserSessions(user.UserId);
 
             // Create a new session
-            var sessionDetails = _sessionRepository.CreateSession(user.UserId);
+            var sessionDetails = sessionRepository.CreateSession(user.UserId);
 
             // Update the singleton session instance
             UserSession.Instance.UpdateSession(
                 sessionDetails.SessionId,
                 user.UserId,
                 sessionDetails.CreatedAt,
-                sessionDetails.ExpiresAt
-            );
+                sessionDetails.ExpiresAt);
 
             return sessionDetails.SessionId;
         }
@@ -41,7 +38,7 @@ namespace BusinessLayer.Services
             var sessionId = UserSession.Instance.CurrentSessionId;
             if (sessionId.HasValue)
             {
-                _sessionRepository.DeleteSession(sessionId.Value);
+                sessionRepository.DeleteSession(sessionId.Value);
                 UserSession.Instance.ClearSession();
             }
         }
@@ -54,14 +51,14 @@ namespace BusinessLayer.Services
                 if (UserSession.Instance.CurrentSessionId.HasValue)
                 {
                     // If session exists but is invalid (likely expired), delete it
-                    _sessionRepository.DeleteSession(UserSession.Instance.CurrentSessionId.Value);
+                    sessionRepository.DeleteSession(UserSession.Instance.CurrentSessionId.Value);
                     UserSession.Instance.ClearSession();
                 }
                 return null;
             }
 
             // Get user details from the database
-            return _usersRepository.GetUserById(UserSession.Instance.UserId);
+            return usersRepository.GetUserById(UserSession.Instance.UserId);
         }
 
         public bool IsUserLoggedIn()
@@ -71,7 +68,7 @@ namespace BusinessLayer.Services
 
         public void RestoreSessionFromDatabase(Guid sessionId)
         {
-            var sessionDetails = _sessionRepository.GetSessionById(sessionId);
+            var sessionDetails = sessionRepository.GetSessionById(sessionId);
 
             if (sessionDetails != null)
             {
@@ -79,7 +76,7 @@ namespace BusinessLayer.Services
                 if (DateTime.Now > sessionDetails.ExpiresAt)
                 {
                     // Business logic: Delete expired session
-                    _sessionRepository.DeleteSession(sessionId);
+                    sessionRepository.DeleteSession(sessionId);
                     return;
                 }
 
@@ -88,18 +85,17 @@ namespace BusinessLayer.Services
                     sessionDetails.SessionId,
                     sessionDetails.UserId,
                     sessionDetails.CreatedAt,
-                    sessionDetails.ExpiresAt
-                );
+                    sessionDetails.ExpiresAt);
             }
         }
 
         // Method to cleanup expired sessions (could be called by a background job)
         public void CleanupExpiredSessions()
         {
-            var expiredSessions = _sessionRepository.GetExpiredSessions();
+            var expiredSessions = sessionRepository.GetExpiredSessions();
             foreach (var expiredSessionId in expiredSessions)
             {
-                _sessionRepository.DeleteSession(expiredSessionId);
+                sessionRepository.DeleteSession(expiredSessionId);
             }
 
             // Also check the current session

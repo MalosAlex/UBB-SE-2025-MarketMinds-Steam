@@ -4,27 +4,28 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace BusinessLayer.Models 
+namespace BusinessLayer.Models
 {
-    //lalal
     public sealed class UserSession
     {
-        private static UserSession? _instance;
-        private static readonly object _lock = new object();
+        private static UserSession? instance;
+        private static readonly object LockObject = new object();
 
-        private UserSession() { }
+        private UserSession()
+        {
+        }
 
         public static UserSession Instance
         {
             get
             {
-                lock (_lock)
+                lock (LockObject)
                 {
-                    if (_instance == null)
+                    if (instance == null)
                     {
-                        _instance = new UserSession();
+                        instance = new UserSession();
                     }
-                    return _instance;
+                    return instance;
                 }
             }
         }
@@ -36,7 +37,7 @@ namespace BusinessLayer.Models
 
         public void UpdateSession(Guid sessionId, int userId, DateTime createdTime, DateTime expireTime)
         {
-            lock (_lock)
+            lock (LockObject)
             {
                 CurrentSessionId = sessionId;
                 UserId = userId;
@@ -47,7 +48,7 @@ namespace BusinessLayer.Models
 
         public void ClearSession()
         {
-            lock (_lock)
+            lock (LockObject)
             {
                 CurrentSessionId = null;
                 UserId = 0;
@@ -58,13 +59,9 @@ namespace BusinessLayer.Models
 
         public bool IsSessionValid()
         {
-            lock (_lock)
+            lock (LockObject)
             {
-                return CurrentSessionId.HasValue && 
-                       UserId > 0 && 
-                       CreatedAt != DateTime.MinValue && 
-                       ExpiresAt != DateTime.MinValue && 
-                       DateTime.Now < ExpiresAt;
+                return CurrentSessionId.HasValue && UserId > 0 && CreatedAt != DateTime.MinValue && ExpiresAt != DateTime.MinValue && DateTime.Now < ExpiresAt;
             }
         }
     }

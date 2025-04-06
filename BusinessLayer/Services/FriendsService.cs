@@ -1,8 +1,5 @@
 ﻿using BusinessLayer.Models;
-using BusinessLayer.Repositories;
 using BusinessLayer.Services.Interfaces;
-using System;
-using System.Collections.Generic;
 using BusinessLayer.Repositories.Interfaces;
 using BusinessLayer.Exceptions;
 
@@ -10,21 +7,21 @@ namespace BusinessLayer.Services
 {
     public class FriendsService : IFriendsService
     {
-        private readonly IFriendshipsRepository _friendshipsRepository;
-        private readonly IUserService _userService;
+        private readonly IFriendshipsRepository friendshipsRepository;
+        private readonly IUserService userService;
 
         public FriendsService(IFriendshipsRepository friendshipsRepository, IUserService userService)
         {
-            _friendshipsRepository = friendshipsRepository ?? throw new ArgumentNullException(nameof(friendshipsRepository));
-            _userService = userService ?? throw new ArgumentNullException(nameof(userService));
+            this.friendshipsRepository = friendshipsRepository ?? throw new ArgumentNullException(nameof(friendshipsRepository));
+            this.userService = userService ?? throw new ArgumentNullException(nameof(userService));
         }
 
         public List<Friendship> GetAllFriendships()
         {
             try
             {
-                int currentUserId = _userService.GetCurrentUser().UserId;
-                return _friendshipsRepository.GetAllFriendships(currentUserId);
+                int currentUserId = userService.GetCurrentUser().UserId;
+                return friendshipsRepository.GetAllFriendships(currentUserId);
             }
             catch (RepositoryException ex)
             {
@@ -36,7 +33,7 @@ namespace BusinessLayer.Services
         {
             try
             {
-                _friendshipsRepository.RemoveFriendship(friendshipId);
+                friendshipsRepository.RemoveFriendship(friendshipId);
             }
             catch (RepositoryException ex)
             {
@@ -48,7 +45,7 @@ namespace BusinessLayer.Services
         {
             try
             {
-                return _friendshipsRepository.GetFriendshipCount(userId);
+                return friendshipsRepository.GetFriendshipCount(userId);
             }
             catch (RepositoryException ex)
             {
@@ -60,7 +57,7 @@ namespace BusinessLayer.Services
         {
             try
             {
-                List<Friendship> friendships = _friendshipsRepository.GetAllFriendships(userId1);
+                List<Friendship> friendships = friendshipsRepository.GetAllFriendships(userId1);
                 bool areFriends = false;
                 foreach (Friendship f in friendships)
                 {
@@ -82,7 +79,7 @@ namespace BusinessLayer.Services
         {
             try
             {
-                List<Friendship> friendships = _friendshipsRepository.GetAllFriendships(userId1);
+                List<Friendship> friendships = friendshipsRepository.GetAllFriendships(userId1);
                 Friendship found = null;
                 foreach (Friendship f in friendships)
                 {
@@ -104,7 +101,7 @@ namespace BusinessLayer.Services
         {
             try
             {
-                _friendshipsRepository.AddFriendship(userId, friendId);
+                friendshipsRepository.AddFriendship(userId, friendId);
             }
             catch (RepositoryException ex)
             {

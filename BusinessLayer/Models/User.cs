@@ -11,11 +11,10 @@ namespace BusinessLayer.Models
         public int UserId { get; set; }
         public string Username { get; set; }
         public string Email { get; set; }
-        
+
         // This property is used for input/output but never stored in the database
         // The actual password is stored as a hash in the database
         public string Password { get; set; }
-        
         public bool IsDeveloper { get; set; }
         public DateTime CreatedAt { get; set; }
         public DateTime? LastLogin { get; set; }

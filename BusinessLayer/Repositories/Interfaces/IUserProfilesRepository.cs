@@ -1,9 +1,4 @@
 ﻿using BusinessLayer.Models;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace BusinessLayer.Repositories.Interfaces
 {
@@ -14,6 +9,5 @@ namespace BusinessLayer.Repositories.Interfaces
         UserProfile? CreateProfile(int userId);
         void UpdateProfileBio(int user_id, string bio);
         void UpdateProfilePicture(int user_id, string picture);
-
     }
 }
