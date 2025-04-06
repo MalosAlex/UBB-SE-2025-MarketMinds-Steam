@@ -1,8 +1,12 @@
-﻿using System.Diagnostics;
+﻿using System;
+using System.Collections.Generic;
+using System.Diagnostics;
+using System.Linq;
+using BusinessLayer.Exceptions;
 using BusinessLayer.Models;
 using BusinessLayer.Repositories;
-using BusinessLayer.Exceptions;
 using BusinessLayer.Services.Interfaces;
+using BusinessLayer.Validators;
 
 namespace BusinessLayer.Services
 {
@@ -23,6 +27,16 @@ namespace BusinessLayer.Services
             {
                 var userId = UserService.GetCurrentUser().UserId;
                 var allFeatures = featuresRepository.GetAllFeatures(userId);
+                // Validate all features
+                foreach (var feature in allFeatures)
+                {
+                    var validation = FeaturesValidator.ValidateFeature(feature);
+                    if (!validation.isValid)
+                    {
+                        throw new ValidationException(validation.errorMessage);
+                    }
+                }
+
                 return allFeatures.GroupBy(f => f.Type)
                                  .ToDictionary(g => g.Key, g => g.ToList());
             }
@@ -73,16 +87,23 @@ namespace BusinessLayer.Services
             }
         }
 
-        public bool UnequipFeature(int userId, int featureId)
+        public (bool success, string message) UnequipFeature(int userId, int featureId)
         {
             try
             {
-                return featuresRepository.UnequipFeature(userId, featureId);
+                if (featuresRepository.UnequipFeature(userId, featureId))
+                {
+                    return (true, "Feature unequipped successfully.");
+                }
+                else
+                {
+                    return (false, "Failed to unequip feature.");
+                }
             }
             catch (Exception ex)
             {
                 Debug.WriteLine($"Error unequipping feature: {ex.Message}");
-                return false;
+                return (false, "An error occurred while unequipping the feature.");
             }
         }
 
@@ -103,7 +124,18 @@ namespace BusinessLayer.Services
         {
             try
             {
-                return featuresRepository.GetUserFeatures(userId);
+                var features = featuresRepository.GetUserFeatures(userId);
+                // Validate all features
+                foreach (var feature in features)
+                {
+                    var validation = FeaturesValidator.ValidateFeature(feature);
+                    if (!validation.isValid)
+                    {
+                        throw new ValidationException(validation.errorMessage);
+                    }
+                }
+
+                return features;
             }
             catch (DatabaseOperationException ex)
             {
@@ -143,6 +175,11 @@ namespace BusinessLayer.Services
                 }
                 return new List<Feature>();
             }
+        }
+
+        public FeaturesRepository GetRepository()
+        {
+            return featuresRepository;
         }
     }
 }

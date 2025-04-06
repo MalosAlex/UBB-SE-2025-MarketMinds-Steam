@@ -13,6 +13,7 @@ using System.Linq;
 using System.Runtime.InteropServices.WindowsRuntime;
 using Windows.Foundation;
 using Windows.Foundation.Collections;
+using Windows.System;
 
 namespace SteamProfile.Views
 {
@@ -23,7 +24,7 @@ namespace SteamProfile.Views
         public FeaturesPage()
         {
             this.InitializeComponent();
-            _viewModel = new FeaturesViewModel(App.FeaturesService, this.Frame);
+            _viewModel = new FeaturesViewModel(App.FeaturesService, App.UserService);
             this.DataContext = _viewModel;
             this.Loaded += FeaturesPage_Loaded;
         }
@@ -37,107 +38,8 @@ namespace SteamProfile.Views
         {
             if (sender is FrameworkElement element && element.DataContext is FeatureDisplay feature)
             {
-                ShowOptionsDialog(feature);
-            }
-        }
-
-        private async void ShowOptionsDialog(FeatureDisplay feature)
-        {
-            ContentDialog dialog = new ContentDialog
-            {
-                XamlRoot = this.XamlRoot,
-                Title = feature.Name,
-                CloseButtonText = "Cancel"
-            };
-
-            StackPanel panel = new StackPanel { Spacing = 10 };
-            
-            if (!feature.IsPurchased)
-            {
-                Button buyButton = new Button
-                {
-                    Content = "Buy",
-                    Style = Application.Current.Resources["AccentButtonStyle"] as Style
-                };
-                
-                buyButton.Click += (s, e) => 
-                {
-                    dialog.Hide();
-                    this.Frame.Navigate(typeof(ShopPage), feature.FeatureId);
-                };
-                
-                panel.Children.Add(buyButton);
-            }
-            else if (feature.Equipped)
-            {
-                Button unequipButton = new Button
-                {
-                    Content = "Unequip",
-                    Style = Application.Current.Resources["AccentButtonStyle"] as Style
-                };
-                
-                unequipButton.Click += (s, e) => 
-                {
-                    try
-                    {
-                        bool success = _viewModel.UnequipFeature(feature.FeatureId);
-                        if (success)
-                        {
-                            dialog.Hide();
-                        }
-                    }
-                    catch (Exception ex)
-                    {
-                        // Handle error
-                    }
-                };
-                
-                panel.Children.Add(unequipButton);
-            }
-            else
-            {
-                Button equipButton = new Button
-                {
-                    Content = "Equip",
-                    Style = Application.Current.Resources["AccentButtonStyle"] as Style
-                };
-                
-                equipButton.Click += (s, e) => 
-                {
-                    try
-                    {
-                        bool success = _viewModel.EquipFeature(feature.FeatureId);
-                        if (success)
-                        {
-                            dialog.Hide();
-                        }
-                    }
-                    catch (Exception ex)
-                    {
-                        // Handle error
-                    }
-                };
-                
-                panel.Children.Add(equipButton);
-            }
-            
-            // Add preview button
-            Button previewButton = new Button
-            {
-                Content = "Preview",
-                Style = Application.Current.Resources["DefaultButtonStyle"] as Style
-            };
-            
-            previewButton.Click += (s, e) => 
-            {
-                dialog.Hide();
                 _viewModel.ShowPreview(feature);
-            };
-            
-            panel.Children.Add(previewButton);
-            
-            dialog.Content = panel;
-            await dialog.ShowAsync();
+            }
         }
 
         private void Image_ImageFailed(object sender, ExceptionRoutedEventArgs e)
