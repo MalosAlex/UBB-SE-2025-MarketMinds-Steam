@@ -30,7 +30,7 @@ namespace SteamProfile.ViewModels
     {
         private readonly ICollectionsService _collectionsService;
         private readonly IUserService _userService;
-        private readonly int _userId;
+        private int _userId;
         private ObservableCollection<Collection> _collections;
 
         [ObservableProperty]
@@ -59,17 +59,16 @@ namespace SteamProfile.ViewModels
         {
             _collectionsService = collectionsService ?? throw new ArgumentNullException(nameof(collectionsService));
             _userService = userService ?? throw new ArgumentNullException(nameof(userService));
-            _userId = _userService.GetCurrentUser().UserId;
             _collections = new ObservableCollection<Collection>();
-            LoadCollections();
         }
 
 
         [RelayCommand]
-        private void LoadCollections()
+        public void LoadCollections()
         {
             try
             {
+                _userId = _userService.GetCurrentUser().UserId;
                 IsLoading = true;
                 ErrorMessage = string.Empty;
                 Debug.WriteLine("Loading collections...");

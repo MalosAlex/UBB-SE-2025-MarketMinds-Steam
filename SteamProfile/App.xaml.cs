@@ -22,6 +22,8 @@ namespace SteamProfile
 
         // View Models
         public static readonly AddGameToCollectionViewModel AddGameToCollectionViewModel;
+        public static readonly CollectionGamesViewModel CollectionGamesViewModel;
+        public static readonly CollectionsViewModel CollectionsViewModel;
         public static readonly UsersViewModel UsersViewModel;
         public static readonly FriendsViewModel FriendsViewModel;
 
@@ -64,6 +66,8 @@ namespace SteamProfile
             UsersViewModel = UsersViewModel.Instance;
             AddGameToCollectionViewModel = new AddGameToCollectionViewModel(CollectionsService);
             FriendsViewModel = new FriendsViewModel(FriendsService, UserService);
+            CollectionGamesViewModel = new CollectionGamesViewModel(CollectionsService);
+            CollectionsViewModel = new CollectionsViewModel(CollectionsService, UserService);
 
             // Others
             InitializeAchievements();

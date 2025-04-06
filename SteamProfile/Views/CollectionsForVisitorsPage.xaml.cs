@@ -15,7 +15,8 @@ namespace SteamProfile.Views
         public CollectionsForVisitorsPage()
         {
             this.InitializeComponent();
-            _collectionsViewModel = new CollectionsViewModel(App.CollectionsService, App.UserService);
+            _collectionsViewModel = App.CollectionsViewModel;
+            _collectionsViewModel.LoadCollections();
             this.DataContext = _collectionsViewModel;
         }
 
