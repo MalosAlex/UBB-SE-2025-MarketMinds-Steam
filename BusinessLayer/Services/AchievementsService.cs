@@ -11,6 +11,66 @@ namespace BusinessLayer.Services
     {
         private readonly IAchievementsRepository _achievementsRepository;
 
+        public static class Categories
+        {
+            public const string Friendships = "Friendships";
+            public const string OwnedGames = "Owned Games";
+            public const string SoldGames = "Sold Games";
+            public const string YearsOfActivity = "Years of Activity";
+            public const string NumberOfPosts = "Number of Posts";
+            public const string NumberOfReviewsGiven = "Number of Reviews Given";
+            public const string NumberOfReviewsReceived = "Number of Reviews Received";
+            public const string Developer = "Developer";
+        }
+
+        public class GroupedAchievementsResult
+        {
+            public List<AchievementWithStatus> AllAchievements { get; set; }
+            public List<AchievementWithStatus> Friendships { get; set; }
+            public List<AchievementWithStatus> OwnedGames { get; set; }
+            public List<AchievementWithStatus> SoldGames { get; set; }
+            public List<AchievementWithStatus> YearsOfActivity { get; set; }
+            public List<AchievementWithStatus> NumberOfPosts { get; set; }
+            public List<AchievementWithStatus> NumberOfReviewsGiven { get; set; }
+            public List<AchievementWithStatus> NumberOfReviewsReceived { get; set; }
+            public List<AchievementWithStatus> Developer { get; set; }
+        }
+
+        public GroupedAchievementsResult GetGroupedAchievementsForUser(int userId)
+        {
+            try
+            {
+                // Unlock logic (business rules)
+                UnlockAchievementForUser(userId);
+
+                // Get all achievements with status
+                var all = _achievementsRepository.GetAchievementsWithStatusForUser(userId);
+
+                // Group by category
+                return new GroupedAchievementsResult
+                {
+                    AllAchievements = all,
+                    Friendships = FilterByCategory(all, "Friendships"),
+                    OwnedGames = FilterByCategory(all, "Owned Games"),
+                    SoldGames = FilterByCategory(all, "Sold Games"),
+                    YearsOfActivity = FilterByCategory(all, "Years of Activity"),
+                    NumberOfPosts = FilterByCategory(all, "Number of Posts"),
+                    NumberOfReviewsGiven = FilterByCategory(all, "Number of Reviews Given"),
+                    NumberOfReviewsReceived = FilterByCategory(all, "Number of Reviews Received"),
+                    Developer = FilterByCategory(all, "Developer")
+                };
+            }
+            catch (RepositoryException ex)
+            {
+                throw new ServiceException("Error grouping achievements for user.", ex);
+            }
+        }
+
+        private List<AchievementWithStatus> FilterByCategory(List<AchievementWithStatus> all, string category)
+        {
+            return all.Where(a => a.Achievement.AchievementType == category).ToList();
+        }
+
         public AchievementsService(IAchievementsRepository achievementsRepository)
         {
             _achievementsRepository = achievementsRepository ?? throw new ArgumentNullException(nameof(achievementsRepository));
