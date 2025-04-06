@@ -25,10 +25,6 @@ namespace BusinessLayer.Repositories
                 _dataLink.ExecuteNonQuery("InsertAchievements");
                 System.Diagnostics.Debug.WriteLine("InsertAchievements stored procedure executed successfully.");
             }
-            catch (SqlException ex)
-            {
-                throw new RepositoryException("Database error while inserting achievements.", ex);
-            }
             catch (Exception ex)
             {
                 throw new RepositoryException("An unexpected error occurred while inserting achievements.", ex);
@@ -43,12 +39,7 @@ namespace BusinessLayer.Repositories
                 var result = _dataLink.ExecuteScalar<int>("IsAchievementsTableEmpty");
                 System.Diagnostics.Debug.WriteLine($"Number of achievements in table: {result}");
                 return result == 0;
-            }
-            catch (SqlException ex)
-            {
-                System.Diagnostics.Debug.WriteLine($"SQL Error while checking if achievements table is empty: {ex.Message}");
-                throw new RepositoryException("Database error while checking if achievements table is empty.", ex);
-            }
+            }    
             catch (Exception ex)
             {
                 System.Diagnostics.Debug.WriteLine($"Unexpected error while checking if achievements table is empty: {ex.Message}");
@@ -67,11 +58,6 @@ namespace BusinessLayer.Repositories
                 };
                 _dataLink.ExecuteNonQuery("UpdateAchievementIcon", parameters);
             }
-            catch (SqlException ex)
-            {
-                System.Diagnostics.Debug.WriteLine($"SQL Error while updating achievement icon URL: {ex.Message}");
-                throw new RepositoryException("Database error while updating achievement icon URL.", ex);
-            }
             catch (Exception ex)
             {
                 System.Diagnostics.Debug.WriteLine($"Unexpected error while updating achievement icon URL: {ex.Message}");
@@ -87,10 +73,6 @@ namespace BusinessLayer.Repositories
             {
                 var dataTable = _dataLink.ExecuteReader("GetAllAchievements");
                 return MapDataTableToAchievements(dataTable);
-            }
-            catch (SqlException ex)
-            {
-                throw new RepositoryException("Database error while retrieving achievements.", ex);
             }
             catch (Exception ex)
             {
@@ -109,10 +91,6 @@ namespace BusinessLayer.Repositories
                 var dataTable = _dataLink.ExecuteReader("GetUnlockedAchievements", parameters);
                 return MapDataTableToAchievements(dataTable);
             }
-            catch (SqlException ex)
-            {
-                throw new RepositoryException("Database error while retrieving unlocked achievements.", ex);
-            }
             catch (Exception ex)
             {
                 throw new RepositoryException("An unexpected error occurred while retrieving unlocked achievements.", ex);
@@ -129,10 +107,6 @@ namespace BusinessLayer.Repositories
                     new SqlParameter("@achievementId", achievementId)
                 };
                 _dataLink.ExecuteNonQuery("UnlockAchievement", parameters);
-            }
-            catch (SqlException ex)
-            {
-                throw new RepositoryException("Database error while unlocking achievement.", ex);
             }
             catch (Exception ex)
             {
@@ -151,10 +125,6 @@ namespace BusinessLayer.Repositories
                 };
                 _dataLink.ExecuteNonQuery("RemoveAchievement", parameters);
             }
-            catch (SqlException ex)
-            {
-                throw new RepositoryException("Database error while removing achievement.", ex);
-            }
             catch (Exception ex)
             {
                 throw new RepositoryException("An unexpected error occurred while removing achievement.", ex);
@@ -172,10 +142,6 @@ namespace BusinessLayer.Repositories
                 };
                 var dataTable = _dataLink.ExecuteReader("GetUnlockedDataForAchievement", parameters);
                 return dataTable.Rows.Count > 0 ? MapDataRowToAchievementUnlockedData(dataTable.Rows[0]) : null;
-            }
-            catch (SqlException ex)
-            {
-                throw new RepositoryException("Database error while retrieving achievement data.", ex);
             }
             catch (Exception ex)
             {
@@ -250,10 +216,6 @@ namespace BusinessLayer.Repositories
                 var result = _dataLink.ExecuteScalar<int>("GetNumberOfSoldGames", parameters);
                 return result;
             }
-            catch (SqlException ex)
-            {
-                throw new RepositoryException("Database error while retrieving number of sold games.", ex);
-            }
             catch (Exception ex)
             {
                 throw new RepositoryException("An unexpected error occurred while retrieving number of sold games.", ex);
@@ -269,11 +231,6 @@ namespace BusinessLayer.Repositories
                     new SqlParameter("@user_id", userId)
                 };
                 return _dataLink.ExecuteScalar<int>("GetFriendshipCountForUser", parameters);
-            }
-            catch (SqlException ex)
-            {
-                Debug.WriteLine($"SQL Error: {ex.Message}");
-                throw new RepositoryException("Database error while retrieving friendship count.", ex);
             }
             catch (Exception ex)
             {
@@ -294,10 +251,6 @@ namespace BusinessLayer.Repositories
                 var result = _dataLink.ExecuteScalar<int>("GetNumberOfOwnedGames", parameters);
                 return result;
             }
-            catch (SqlException ex)
-            {
-                throw new RepositoryException("Database error while retrieving number of owned games.", ex);
-            }
             catch (Exception ex)
             {
                 throw new RepositoryException("An unexpected error occurred while retrieving number of owned games.", ex);
@@ -315,10 +268,6 @@ namespace BusinessLayer.Repositories
 
                 var result = _dataLink.ExecuteScalar<int>("GetNumberOfReviewsGiven", parameters);
                 return result;
-            }
-            catch (SqlException ex)
-            {
-                throw new RepositoryException("Database error while retrieving number of reviews given.", ex);
             }
             catch (Exception ex)
             {
@@ -338,10 +287,6 @@ namespace BusinessLayer.Repositories
                 var result = _dataLink.ExecuteScalar<int>("GetNumberOfReviewsReceived", parameters);
                 return result;
             }
-            catch (SqlException ex)
-            {
-                throw new RepositoryException("Database error while retrieving number of reviews received.", ex);
-            }
             catch (Exception ex)
             {
                 throw new RepositoryException("An unexpected error occurred while retrieving number of reviews received.", ex);
@@ -359,10 +304,6 @@ namespace BusinessLayer.Repositories
 
                 var result = _dataLink.ExecuteScalar<int>("GetNumberOfPosts", parameters);
                 return result;
-            }
-            catch (SqlException ex)
-            {
-                throw new RepositoryException("Database error while retrieving number of posts.", ex);
             }
             catch (Exception ex)
             {
@@ -390,10 +331,6 @@ namespace BusinessLayer.Repositories
 
                 return yearsOfActivity;
             }
-            catch (SqlException ex)
-            {
-                throw new RepositoryException("Database error while retrieving years of activity.", ex);
-            }
             catch (Exception ex)
             {
                 throw new RepositoryException("An unexpected error occurred while retrieving years of activity.", ex);
@@ -413,11 +350,6 @@ namespace BusinessLayer.Repositories
                 System.Diagnostics.Debug.WriteLine($"Achievement ID for name {achievementName}: {result}");
                 return result;
             }
-            catch (SqlException ex)
-            {
-                System.Diagnostics.Debug.WriteLine($"SQL Error while retrieving achievement ID: {ex.Message}");
-                throw new RepositoryException("Database error while retrieving achievement ID.", ex);
-            }
             catch (Exception ex)
             {
                 System.Diagnostics.Debug.WriteLine($"Unexpected error while retrieving achievement ID: {ex.Message}");
@@ -436,10 +368,6 @@ namespace BusinessLayer.Repositories
 
                 var result = _dataLink.ExecuteScalar<bool>("IsUserDeveloper", parameters);
                 return result;
-            }
-            catch (SqlException ex)
-            {
-                throw new RepositoryException("Database error while retrieving developer status.", ex);
             }
             catch (Exception ex)
             {
