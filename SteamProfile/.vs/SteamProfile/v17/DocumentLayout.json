@@ -3,21 +3,26 @@
   "WorkspaceRootPath": "C:\\Users\\Alex\\Documents\\GitHub\\UBB-SE-2025-MarketMinds-Steam\\SteamProfile\\",
   "Documents": [
     {
-      "AbsoluteMoniker": "D:0:0:{09B961A1-8938-4CC5-AF4E-5D1AA01F3036}|SteamProfile.csproj|c:\\users\\alex\\documents\\github\\ubb-se-2025-marketminds-steam\\steamprofile\\app.xaml.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
-      "RelativeMoniker": "D:0:0:{09B961A1-8938-4CC5-AF4E-5D1AA01F3036}|SteamProfile.csproj|solutionrelative:app.xaml.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
-    },
-    {
-      "AbsoluteMoniker": "D:0:0:{099646CD-6B72-4623-9112-DDAB9DC403D9}|..\\BusinessLayer\\BusinessLayer.csproj|c:\\users\\alex\\documents\\github\\ubb-se-2025-marketminds-steam\\businesslayer\\repositories\\userprofilesrepository.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
-    },
-    {
       "AbsoluteMoniker": "D:0:0:{09B961A1-8938-4CC5-AF4E-5D1AA01F3036}|SteamProfile.csproj|c:\\users\\alex\\documents\\github\\ubb-se-2025-marketminds-steam\\steamprofile\\viewmodels\\forgotpasswordviewmodel.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
       "RelativeMoniker": "D:0:0:{09B961A1-8938-4CC5-AF4E-5D1AA01F3036}|SteamProfile.csproj|solutionrelative:viewmodels\\forgotpasswordviewmodel.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{099646CD-6B72-4623-9112-DDAB9DC403D9}|..\\BusinessLayer\\BusinessLayer.csproj|c:\\users\\alex\\documents\\github\\ubb-se-2025-marketminds-steam\\businesslayer\\repositories\\interfaces\\ipasswordresetrepository.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{099646CD-6B72-4623-9112-DDAB9DC403D9}|..\\BusinessLayer\\BusinessLayer.csproj|c:\\users\\alex\\documents\\github\\ubb-se-2025-marketminds-steam\\businesslayer\\services\\passwordresetservice.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
     },
     {
       "AbsoluteMoniker": "D:0:0:{099646CD-6B72-4623-9112-DDAB9DC403D9}|..\\BusinessLayer\\BusinessLayer.csproj|c:\\users\\alex\\documents\\github\\ubb-se-2025-marketminds-steam\\businesslayer\\services\\featuresservice.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
     },
     {
-      "AbsoluteMoniker": "D:0:0:{099646CD-6B72-4623-9112-DDAB9DC403D9}|..\\BusinessLayer\\BusinessLayer.csproj|c:\\users\\alex\\documents\\github\\ubb-se-2025-marketminds-steam\\businesslayer\\services\\passwordresetservice.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+      "AbsoluteMoniker": "D:0:0:{099646CD-6B72-4623-9112-DDAB9DC403D9}|..\\BusinessLayer\\BusinessLayer.csproj|c:\\users\\alex\\documents\\github\\ubb-se-2025-marketminds-steam\\businesslayer\\services\\interfaces\\ipasswordresetservice.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{099646CD-6B72-4623-9112-DDAB9DC403D9}|..\\BusinessLayer\\BusinessLayer.csproj|c:\\users\\alex\\documents\\github\\ubb-se-2025-marketminds-steam\\businesslayer\\services\\interfaces\\ifeaturesservice.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{099646CD-6B72-4623-9112-DDAB9DC403D9}|..\\BusinessLayer\\BusinessLayer.csproj|c:\\users\\alex\\documents\\github\\ubb-se-2025-marketminds-steam\\businesslayer\\repositories\\userprofilesrepository.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
     },
     {
       "AbsoluteMoniker": "D:0:0:{09B961A1-8938-4CC5-AF4E-5D1AA01F3036}|SteamProfile.csproj|c:\\users\\alex\\documents\\github\\ubb-se-2025-marketminds-steam\\steamprofile\\viewmodels\\profileviewmodel.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
@@ -35,7 +40,7 @@
       "DocumentGroups": [
         {
           "DockedWidth": 200,
-          "SelectedChildIndex": 8,
+          "SelectedChildIndex": 12,
           "Children": [
             {
               "$type": "Bookmark",
@@ -60,19 +65,58 @@
             {
               "$type": "Document",
               "DocumentIndex": 1,
+              "Title": "IPasswordResetRepository.cs",
+              "DocumentMoniker": "C:\\Users\\Alex\\Documents\\GitHub\\UBB-SE-2025-MarketMinds-Steam\\BusinessLayer\\Repositories\\Interfaces\\IPasswordResetRepository.cs",
+              "RelativeDocumentMoniker": "..\\BusinessLayer\\Repositories\\Interfaces\\IPasswordResetRepository.cs",
+              "ToolTip": "C:\\Users\\Alex\\Documents\\GitHub\\UBB-SE-2025-MarketMinds-Steam\\BusinessLayer\\Repositories\\Interfaces\\IPasswordResetRepository.cs",
+              "RelativeToolTip": "..\\BusinessLayer\\Repositories\\Interfaces\\IPasswordResetRepository.cs",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAsAAAABAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-04-06T20:35:47.824Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 4,
+              "Title": "IPasswordResetService.cs",
+              "DocumentMoniker": "C:\\Users\\Alex\\Documents\\GitHub\\UBB-SE-2025-MarketMinds-Steam\\BusinessLayer\\Services\\Interfaces\\IPasswordResetService.cs",
+              "RelativeDocumentMoniker": "..\\BusinessLayer\\Services\\Interfaces\\IPasswordResetService.cs",
+              "ToolTip": "C:\\Users\\Alex\\Documents\\GitHub\\UBB-SE-2025-MarketMinds-Steam\\BusinessLayer\\Services\\Interfaces\\IPasswordResetService.cs",
+              "RelativeToolTip": "..\\BusinessLayer\\Services\\Interfaces\\IPasswordResetService.cs",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAsAAAABAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-04-06T20:35:07.566Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 5,
+              "Title": "IFeaturesService.cs",
+              "DocumentMoniker": "C:\\Users\\Alex\\Documents\\GitHub\\UBB-SE-2025-MarketMinds-Steam\\BusinessLayer\\Services\\Interfaces\\IFeaturesService.cs",
+              "RelativeDocumentMoniker": "..\\BusinessLayer\\Services\\Interfaces\\IFeaturesService.cs",
+              "ToolTip": "C:\\Users\\Alex\\Documents\\GitHub\\UBB-SE-2025-MarketMinds-Steam\\BusinessLayer\\Services\\Interfaces\\IFeaturesService.cs",
+              "RelativeToolTip": "..\\BusinessLayer\\Services\\Interfaces\\IFeaturesService.cs",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAAA4AAAABAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-04-06T20:34:45.508Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 6,
               "Title": "UserProfilesRepository.cs",
               "DocumentMoniker": "C:\\Users\\Alex\\Documents\\GitHub\\UBB-SE-2025-MarketMinds-Steam\\BusinessLayer\\Repositories\\UserProfilesRepository.cs",
               "RelativeDocumentMoniker": "..\\BusinessLayer\\Repositories\\UserProfilesRepository.cs",
               "ToolTip": "C:\\Users\\Alex\\Documents\\GitHub\\UBB-SE-2025-MarketMinds-Steam\\BusinessLayer\\Repositories\\UserProfilesRepository.cs",
               "RelativeToolTip": "..\\BusinessLayer\\Repositories\\UserProfilesRepository.cs",
-              "ViewState": "AgIAAAAAAAAAAAAAAAAAABQAAAAPAAAAAAAAAA==",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAuwA0AAAAPAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
               "WhenOpened": "2025-04-06T20:07:57.97Z",
               "EditorCaption": ""
             },
             {
               "$type": "Document",
-              "DocumentIndex": 4,
+              "DocumentIndex": 2,
               "Title": "PasswordResetService.cs",
               "DocumentMoniker": "C:\\Users\\Alex\\Documents\\GitHub\\UBB-SE-2025-MarketMinds-Steam\\BusinessLayer\\Services\\PasswordResetService.cs",
               "RelativeDocumentMoniker": "..\\BusinessLayer\\Services\\PasswordResetService.cs",
@@ -85,7 +129,7 @@
             },
             {
               "$type": "Document",
-              "DocumentIndex": 5,
+              "DocumentIndex": 7,
               "Title": "ProfileViewModel.cs",
               "DocumentMoniker": "C:\\Users\\Alex\\Documents\\GitHub\\UBB-SE-2025-MarketMinds-Steam\\SteamProfile\\ViewModels\\ProfileViewModel.cs",
               "RelativeDocumentMoniker": "ViewModels\\ProfileViewModel.cs",
@@ -93,21 +137,7 @@
               "RelativeToolTip": "ViewModels\\ProfileViewModel.cs",
               "ViewState": "AgIAAK8AAAAAAAAAAAAhwM4AAAAUAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2025-04-06T19:39:12.636Z",
-              "EditorCaption": ""
-            },
-            {
-              "$type": "Document",
-              "DocumentIndex": 0,
-              "Title": "App.xaml.cs",
-              "DocumentMoniker": "C:\\Users\\Alex\\Documents\\GitHub\\UBB-SE-2025-MarketMinds-Steam\\SteamProfile\\App.xaml.cs",
-              "RelativeDocumentMoniker": "App.xaml.cs",
-              "ToolTip": "C:\\Users\\Alex\\Documents\\GitHub\\UBB-SE-2025-MarketMinds-Steam\\SteamProfile\\App.xaml.cs",
-              "RelativeToolTip": "App.xaml.cs",
-              "ViewState": "AgIAAAwAAAAAAAAAAAAEwCAAAABLAAAAAAAAAA==",
-              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2025-04-06T19:38:59.963Z",
-              "EditorCaption": ""
+              "WhenOpened": "2025-04-06T19:39:12.636Z"
             },
             {
               "$type": "Document",
@@ -124,20 +154,20 @@
             },
             {
               "$type": "Document",
-              "DocumentIndex": 2,
+              "DocumentIndex": 0,
               "Title": "ForgotPasswordViewModel.cs",
               "DocumentMoniker": "C:\\Users\\Alex\\Documents\\GitHub\\UBB-SE-2025-MarketMinds-Steam\\SteamProfile\\ViewModels\\ForgotPasswordViewModel.cs",
               "RelativeDocumentMoniker": "ViewModels\\ForgotPasswordViewModel.cs",
-              "ToolTip": "C:\\Users\\Alex\\Documents\\GitHub\\UBB-SE-2025-MarketMinds-Steam\\SteamProfile\\ViewModels\\ForgotPasswordViewModel.cs",
-              "RelativeToolTip": "ViewModels\\ForgotPasswordViewModel.cs",
-              "ViewState": "AgIAADsAAAAAAAAAAAAgwFEAAAAJAAAAAAAAAA==",
+              "ToolTip": "C:\\Users\\Alex\\Documents\\GitHub\\UBB-SE-2025-MarketMinds-Steam\\SteamProfile\\ViewModels\\ForgotPasswordViewModel.cs*",
+              "RelativeToolTip": "ViewModels\\ForgotPasswordViewModel.cs*",
+              "ViewState": "AgIAAEwAAAAAAAAAAADgv2cAAAAnAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
               "WhenOpened": "2025-04-06T16:53:43.295Z",
               "EditorCaption": ""
             },
             {
               "$type": "Document",
-              "DocumentIndex": 6,
+              "DocumentIndex": 8,
               "Title": "appsettings.json",
               "DocumentMoniker": "C:\\Users\\Alex\\Documents\\GitHub\\UBB-SE-2025-MarketMinds-Steam\\SteamProfile\\appsettings.json",
               "RelativeDocumentMoniker": "appsettings.json",
@@ -145,8 +175,7 @@
               "RelativeToolTip": "appsettings.json",
               "ViewState": "AgIAAAAAAAAAAAAAAAAAAAEAAAAlAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.001642|",
-              "WhenOpened": "2025-04-06T16:53:13.489Z",
-              "EditorCaption": ""
+              "WhenOpened": "2025-04-06T16:53:13.489Z"
             }
           ]
         }
