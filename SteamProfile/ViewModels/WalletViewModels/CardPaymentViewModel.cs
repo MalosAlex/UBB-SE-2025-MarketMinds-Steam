@@ -1,8 +1,8 @@
 ﻿using Microsoft.UI.Xaml;
 using BusinessLayer.Models;
+using BusinessLayer.Validators;
 using System;
 using System.Collections.Generic;
-using System.Text.RegularExpressions;
 using System.Threading.Tasks;
 using CommunityToolkit.Mvvm.ComponentModel;
 
@@ -11,129 +11,92 @@ namespace SteamProfile.ViewModels
     public partial class CardPaymentViewModel : ObservableObject
     {
         // Private fields
-        private int _amount;
-        private WalletViewModel _walletViewModel;
-        private User _user;
+        private int amount;
+        private WalletViewModel walletViewModel;
+        private User user;
 
         // Observable properties using MVVM Toolkit's source generators
         [ObservableProperty]
-        private string _amountText;
+        private string amountText;
 
         [ObservableProperty]
-        private bool _isNameValid;
+        private bool isNameValid;
 
         [ObservableProperty]
-        private bool _isCardNumberValid;
+        private bool isCardNumberValid;
 
         [ObservableProperty]
-        private bool _isCVVValid;
+        private bool isCvvValid;
 
         [ObservableProperty]
-        private bool _isDateValid;
+        private bool isDateValid;
 
         [ObservableProperty]
-        private bool _showErrorMessage;
+        private bool showErrorMessage;
 
         [ObservableProperty]
-        private string _statusMessage;
+        private string statusMessage;
 
         [ObservableProperty]
-        private Visibility _statusMessageVisibility;
+        private Visibility statusMessageVisibility;
 
         // Computed properties - these must be manually maintained
         public Visibility ErrorMessageVisibility => ShowErrorMessage ? Visibility.Visible : Visibility.Collapsed;
 
-        public bool AreAllFieldsValid => IsNameValid && IsCardNumberValid && IsCVVValid && IsDateValid;
+        public bool AreAllFieldsValid => IsNameValid && IsCardNumberValid && IsCvvValid && IsDateValid;
 
         // Initialization
         public CardPaymentViewModel()
         {
-            _statusMessageVisibility = Visibility.Collapsed;
-            _showErrorMessage = false;
+            statusMessageVisibility = Visibility.Collapsed;
+            showErrorMessage = false;
         }
 
         public void Initialize(Dictionary<string, object> parameters)
         {
             // Extract parameters
-            _amount = parameters.ContainsKey("sum") ? (int)parameters["sum"] : 0;
-            _walletViewModel = parameters.ContainsKey("viewModel") ? (WalletViewModel)parameters["viewModel"] : null;
-            _user = parameters.ContainsKey("user") ? (User)parameters["user"] : null;
+            amount = parameters.ContainsKey("sum") ? (int)parameters["sum"] : 0;
+            walletViewModel = parameters.ContainsKey("viewModel") ? (WalletViewModel)parameters["viewModel"] : null;
+            user = parameters.ContainsKey("user") ? (User)parameters["user"] : null;
 
             // Update UI bindings
-            AmountText = "Sum: " + _amount.ToString();
+            AmountText = "Sum: " + amount.ToString();
         }
 
-        // Validation Methods
+        // Validation Methods - Business logic moved to PaymentValidator
         public void ValidateName(string name)
         {
-            if (string.IsNullOrEmpty(name))
-            {
-                IsNameValid = false;
-                return;
-            }
-            IsNameValid = name.Split(' ').Length > 1;
+            IsNameValid = PaymentValidator.IsCardNameValid(name);
+            UpdateErrorMessageVisibility();
         }
 
         public void ValidateCardNumber(string cardNumber)
         {
-            if (string.IsNullOrEmpty(cardNumber))
-            {
-                IsCardNumberValid = false;
-                return;
-            }
-
-            // Simple check for 16-digit card number
-            IsCardNumberValid = Regex.IsMatch(cardNumber, @"^\d{16}$");
+            IsCardNumberValid = PaymentValidator.IsCardNumberValid(cardNumber);
+            UpdateErrorMessageVisibility();
         }
 
         public void ValidateCVV(string cvv)
         {
-            if (string.IsNullOrEmpty(cvv))
-            {
-                IsCVVValid = false;
-                return;
-            }
-
-            // Simple check for 3-digit CVV
-            IsCVVValid = Regex.IsMatch(cvv, @"^\d{3}$");
+            IsCvvValid = PaymentValidator.IsCvvValid(cvv);
+            UpdateErrorMessageVisibility();
         }
 
         public void ValidateExpirationDate(string expirationDate)
         {
-            if (string.IsNullOrEmpty(expirationDate))
-            {
-                IsDateValid = false;
-                return;
-            }
-
-            // Check MM/YY format
-            bool isValidDateFormat = Regex.IsMatch(expirationDate, @"^(0[1-9]|1[0-2])\/\d{2}$");
-
-            if (!isValidDateFormat)
-            {
-                IsDateValid = false;
-                return;
-            }
-
-            // Check if date is in the future
-            string[] date = expirationDate.Split('/');
-            int month = int.Parse(date[0]);
-            int year = int.Parse(date[1]);
-            int currentMonth = DateTime.Today.Month;
-            int currentYear = DateTime.Today.Year % 100;
-
-            IsDateValid = (year > currentYear) || (year == currentYear && month >= currentMonth);
+            IsDateValid = PaymentValidator.IsExpirationDateValid(expirationDate);
+            UpdateErrorMessageVisibility();
         }
 
         // Manually update error message visibility when validation properties change
         partial void OnIsNameValidChanged(bool value) => UpdateErrorMessageVisibility();
         partial void OnIsCardNumberValidChanged(bool value) => UpdateErrorMessageVisibility();
-        partial void OnIsCVVValidChanged(bool value) => UpdateErrorMessageVisibility();
+        partial void OnIsCvvValidChanged(bool value) => UpdateErrorMessageVisibility();
         partial void OnIsDateValidChanged(bool value) => UpdateErrorMessageVisibility();
 
         private void UpdateErrorMessageVisibility()
         {
-            ShowErrorMessage = !IsNameValid || !IsCardNumberValid || !IsCVVValid || !IsDateValid;
+            ShowErrorMessage = !IsNameValid || !IsCardNumberValid || !IsCvvValid || !IsDateValid;
             OnPropertyChanged(nameof(ErrorMessageVisibility));
         }
 
@@ -153,9 +116,9 @@ namespace SteamProfile.ViewModels
             await Task.Delay(1000);
 
             // Update wallet balance via the WalletViewModel
-            if (_walletViewModel != null)
+            if (walletViewModel != null)
             {
-                _walletViewModel.AddFunds(_amount);
+                walletViewModel.AddFunds(amount);
             }
 
             StatusMessage = "Payment was performed successfully";

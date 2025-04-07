@@ -4,6 +4,7 @@ using Microsoft.UI.Xaml.Navigation;
 using BusinessLayer.Repositories;
 using SteamProfile.ViewModels;
 using System;
+using BusinessLayer.Repositories.Interfaces;
 
 namespace SteamProfile.Views.WalletViews
 {

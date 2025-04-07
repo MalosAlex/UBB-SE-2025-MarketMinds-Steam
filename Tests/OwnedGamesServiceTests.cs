@@ -22,6 +22,13 @@ namespace Tests
             _service = new OwnedGamesService(_repositoryMock.Object);
         }
 
+        [Test]
+        public void OwnedGamesService_NullOwnedGamesRepository_ThrowsError()
+        {
+            // Assert
+            Assert.Throws<ArgumentNullException>(() => new OwnedGamesService(null));
+        }
+
         #region GetAllOwnedGames Tests
 
         [Test]

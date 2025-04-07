@@ -8,14 +8,15 @@ using System;
 using System.Collections.ObjectModel;
 using System.Threading.Tasks;
 using System.Windows.Input;
+using BusinessLayer.Repositories.Interfaces;
 
 namespace SteamProfile.ViewModels
 {
     public partial class AddPointsViewModel : ObservableObject
     {
-        private readonly WalletViewModel _walletViewModel;
-        private readonly PointsOffersRepository _offersRepository;
-        private readonly Frame _navigationFrame;
+        private readonly WalletViewModel walletViewModel;
+        private readonly IPointsOffersRepository offersRepository;
+        private readonly Frame navigationFrame;
 
         [ObservableProperty]
         private int userPoints;
@@ -26,36 +27,36 @@ namespace SteamProfile.ViewModels
         public ObservableCollection<PointsOffer> PointsOffers { get; }
         public ICommand PurchasePointsCommand { get; }
 
-        public AddPointsViewModel(WalletViewModel walletViewModel, PointsOffersRepository offersRepository, Frame navigationFrame)
+        public AddPointsViewModel(WalletViewModel walletViewModel, IPointsOffersRepository offersRepository, Frame navigationFrame)
         {
-            _walletViewModel = walletViewModel ?? throw new ArgumentNullException(nameof(walletViewModel));
-            _offersRepository = offersRepository ?? throw new ArgumentNullException(nameof(offersRepository));
-            _navigationFrame = navigationFrame ?? throw new ArgumentNullException(nameof(navigationFrame));
+            this.walletViewModel = walletViewModel ?? throw new ArgumentNullException(nameof(walletViewModel));
+            this.offersRepository = offersRepository ?? throw new ArgumentNullException(nameof(offersRepository));
+            this.navigationFrame = navigationFrame ?? throw new ArgumentNullException(nameof(navigationFrame));
 
-            PointsOffers = new ObservableCollection<PointsOffer>(_offersRepository.Offers);
-            UserPoints = _walletViewModel.Points;
+            PointsOffers = new ObservableCollection<PointsOffer>(this.offersRepository.Offers);
+            UserPoints = this.walletViewModel.Points;
             IsProcessing = false;
 
             PurchasePointsCommand = new RelayCommand<PointsOffer>(BuyPoints, CanBuyPoints);
         }
 
-        private bool CanBuyPoints(PointsOffer offer) => offer != null && !IsProcessing;
+        private bool CanBuyPoints(PointsOffer pointsOffer) => pointsOffer != null && !IsProcessing;
 
-        private async void BuyPoints(PointsOffer offer)
+        private async void BuyPoints(PointsOffer pointsOffer)
         {
-            if (offer == null)
+            if (pointsOffer == null)
                 return;
 
             IsProcessing = true;
 
             try
             {
-                bool success = await _walletViewModel.AddPoints(offer);
+                bool success = await walletViewModel.AddPoints(pointsOffer);
                 if (success)
                 {
-                    UserPoints = _walletViewModel.Points;
-                    _walletViewModel.RefreshWalletData();
-                    await ShowSuccessMessageAsync(offer);
+                    UserPoints = walletViewModel.Points;
+                    walletViewModel.RefreshWalletData();
+                    await ShowSuccessMessageAsync(pointsOffer);
                     NavigateBack();
                 }
                 else
@@ -63,9 +64,9 @@ namespace SteamProfile.ViewModels
                     await ShowErrorMessageAsync("Insufficient funds to purchase these points.");
                 }
             }
-            catch (Exception ex)
+            catch (Exception exception)
             {
-                await ShowErrorMessageAsync($"An error occurred: {ex.Message}");
+                await ShowErrorMessageAsync($"An error occurred: {exception.Message}");
             }
             finally
             {
@@ -73,14 +74,14 @@ namespace SteamProfile.ViewModels
             }
         }
 
-        private async Task ShowSuccessMessageAsync(PointsOffer offer)
+        private async Task ShowSuccessMessageAsync(PointsOffer pointsOffer)
         {
             ContentDialog dialog = new ContentDialog
             {
                 Title = "Points Added",
-                Content = $"Successfully added {offer.Points} points to your wallet!",
+                Content = $"Successfully added {pointsOffer.Points} points to your wallet!",
                 CloseButtonText = "OK",
-                XamlRoot = _navigationFrame.XamlRoot
+                XamlRoot = navigationFrame.XamlRoot
             };
 
             await dialog.ShowAsync();
@@ -93,7 +94,7 @@ namespace SteamProfile.ViewModels
                 Title = "Error",
                 Content = message,
                 CloseButtonText = "OK",
-                XamlRoot = _navigationFrame.XamlRoot
+                XamlRoot = navigationFrame.XamlRoot
             };
 
             await dialog.ShowAsync();
@@ -101,15 +102,15 @@ namespace SteamProfile.ViewModels
 
         private void NavigateBack()
         {
-            if (_navigationFrame.CanGoBack)
+            if (navigationFrame.CanGoBack)
             {
-                _navigationFrame.GoBack();
+                navigationFrame.GoBack();
             }
         }
 
         public void RefreshPoints()
         {
-            UserPoints = _walletViewModel.Points;
+            UserPoints = walletViewModel.Points;
         }
     }
 }

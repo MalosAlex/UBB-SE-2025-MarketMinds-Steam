@@ -31,6 +31,20 @@ namespace Tests
         #region Exception Tests using Moq
 
         [Test]
+        public void FriendsService_NullFriendshipRepository_ThrowsException()
+        {
+            // Assert
+            Assert.Throws<ArgumentNullException>(() => new FriendsService(null, new FakeUserService()));
+        }
+
+        [Test]
+        public void FriendsService_NullUserService_ThrowsException()
+        {
+            // Assert
+            Assert.Throws<ArgumentNullException>(() => new FriendsService(new FakeFriendshipsRepository(), null));
+        }
+
+        [Test]
         public void GetAllFriendships_RepositoryThrows_ServiceExceptionThrown()
         {
             // Arrange

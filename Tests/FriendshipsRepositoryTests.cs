@@ -11,6 +11,7 @@ using BusinessLayer.Repositories.Interfaces;
 using BusinessLayer.Exceptions;
 using Microsoft.Data.SqlClient;
 using System.Runtime.Serialization;
+using BusinessLayer.Services;
 
 namespace Tests
 {
@@ -25,6 +26,13 @@ namespace Tests
         {
             _mockDataLink = new Mock<IDataLink>();
             _repository = new FriendshipsRepository(_mockDataLink.Object);
+        }
+
+        [Test]
+        public void FriendshipRepository_NullDataLink_ThrowsException()
+        {
+            // Assert
+            Assert.Throws<ArgumentNullException>(() => new FriendshipsRepository(null));
         }
 
         #region Helper Methods

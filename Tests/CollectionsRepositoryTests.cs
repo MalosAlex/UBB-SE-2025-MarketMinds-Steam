@@ -11,6 +11,7 @@ using BusinessLayer.Repositories.Interfaces;
 using BusinessLayer.Exceptions;
 using Microsoft.Data.SqlClient;
 using System.Runtime.Serialization;
+using BusinessLayer.Services;
 
 namespace Tests
 {
@@ -26,6 +27,13 @@ namespace Tests
             // Arrange: create a new mock IDataLink and instantiate CollectionsRepository.
             _mockDataLink = new Mock<IDataLink>();
             _repository = new CollectionsRepository(_mockDataLink.Object);
+        }
+
+        [Test]
+        public void CollectionRepository_NullDataLink_ThrowsException()
+        {
+            // Assert
+            Assert.Throws<ArgumentNullException>(() => new CollectionsRepository(null));
         }
 
         #region Helper Methods
