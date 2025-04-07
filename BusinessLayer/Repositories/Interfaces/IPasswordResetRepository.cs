@@ -4,9 +4,9 @@ namespace BusinessLayer.Repositories.Interfaces
 {
     public interface IPasswordResetRepository
     {
-        void StoreResetCode(string email, string code, DateTime expirationTime);
+        void StoreResetCode(int userId, string code, DateTime expiryTime);
         bool VerifyResetCode(string email, string code);
-        void DeleteResetCode(string email);
+        bool ResetPassword(string email, string code, string hashedPassword);
         void CleanupExpiredCodes();
     }
 }

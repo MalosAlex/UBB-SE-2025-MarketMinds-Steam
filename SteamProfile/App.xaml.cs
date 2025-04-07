@@ -5,6 +5,8 @@ using BusinessLayer.Services.Interfaces;
 using BusinessLayer.Services;
 using SteamProfile.ViewModels;
 using BusinessLayer.Repositories.Interfaces;
+using Microsoft.Extensions.DependencyInjection;
+using SteamProfile.Views;
 
 namespace SteamProfile
 {
@@ -34,6 +36,10 @@ namespace SteamProfile
         public static UserProfilesRepository UserProfileRepository { get; private set; }
         public static CollectionsRepository CollectionsRepository { get;  }
 
+        public static PasswordResetRepository passwordResetRepository { get; private set; }
+
+        public static UsersRepository UserRepository { get; private set; }
+
         static App()
         {
             var dataLink = DataLink.Instance;
@@ -41,25 +47,25 @@ namespace SteamProfile
 
             var achievementsRepository = new AchievementsRepository(dataLink);
             var featuresRepository = new FeaturesRepository(dataLink);
-            var usersRepository = new UsersRepository(dataLink);
+            UserRepository = new UsersRepository(dataLink);
             UserProfileRepository = new UserProfilesRepository(dataLink);
             CollectionsRepository = new CollectionsRepository(dataLink);
             IWalletRepository walletRepository = new WalletRepository(dataLink);
             var friendshipsRepository = new FriendshipsRepository(dataLink);
             var ownedGamesRepossitory = new OwnedGamesRepository(dataLink);
             var sessionRepository = new SessionRepository(dataLink);
-            var passwordResetRepo = new PasswordResetRepository(dataLink);
+            passwordResetRepository = new PasswordResetRepository(dataLink);
 
 
             // Initialize all services
-            SessionService = new SessionService(sessionRepository, usersRepository);
-            UserService = new UserService(usersRepository, SessionService);
+            SessionService = new SessionService(sessionRepository, UserRepository);
+            UserService = new UserService(UserRepository, SessionService);
             AchievementsService = new AchievementsService(achievementsRepository);
             CollectionsService = new CollectionsService(CollectionsRepository);
-            AuthenticationService = new AuthenticationService(usersRepository);
+            AuthenticationService = new AuthenticationService(UserRepository);
             FriendsService = new FriendsService(friendshipsRepository, UserService);
             OwnedGamesService = new OwnedGamesService(ownedGamesRepossitory);
-            PasswordResetService = new PasswordResetService(passwordResetRepo, UserService);
+            PasswordResetService = new PasswordResetService(passwordResetRepository, UserService);
             FeaturesService = new FeaturesService(featuresRepository, UserService);
             WalletService = new WalletService(walletRepository, UserService);
 
@@ -94,6 +100,33 @@ namespace SteamProfile
             m_window = new MainWindow();
             //NavigationService.Instance.Initialize(m_window.Content as Frame); // Ensure the frame is passed
             m_window.Activate();
+        }
+
+        private void ConfigureServices(IServiceCollection services)
+        {
+            // Register services
+            services.AddSingleton<IUserService, UserService>();
+            services.AddSingleton<IPasswordResetService>(sp => 
+                new PasswordResetService(passwordResetRepository, sp.GetRequiredService<IUserService>()));
+            services.AddSingleton<IFeaturesService>(sp =>
+                new FeaturesService(
+                    sp.GetRequiredService<IFeaturesRepository>(),
+                    sp.GetRequiredService<IUserService>()
+                ));
+
+            // Register repositories
+            services.AddSingleton<IUsersRepository, UsersRepository>();
+            services.AddSingleton<IFeaturesRepository, FeaturesRepository>();
+            services.AddSingleton<IPasswordResetRepository, PasswordResetRepository>();
+
+            // Register ViewModels
+            services.AddTransient<FeaturesViewModel>();
+            services.AddTransient<ForgotPasswordViewModel>();
+            
+            // Register pages
+            services.AddTransient<MainWindow>();
+            services.AddTransient<FeaturesPage>();
+            services.AddTransient<ProfilePage>();
         }
 
     }
