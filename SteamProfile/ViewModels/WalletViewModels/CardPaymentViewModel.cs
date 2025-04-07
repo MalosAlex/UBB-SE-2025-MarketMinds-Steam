@@ -1,8 +1,8 @@
 ﻿using Microsoft.UI.Xaml;
 using BusinessLayer.Models;
+using BusinessLayer.Validators;
 using System;
 using System.Collections.Generic;
-using System.Text.RegularExpressions;
 using System.Threading.Tasks;
 using CommunityToolkit.Mvvm.ComponentModel;
 
@@ -63,66 +63,29 @@ namespace SteamProfile.ViewModels
             AmountText = "Sum: " + amount.ToString();
         }
 
-        // Validation Methods
+        // Validation Methods - Business logic moved to PaymentValidator
         public void ValidateName(string name)
         {
-            if (string.IsNullOrEmpty(name))
-            {
-                IsNameValid = false;
-                return;
-            }
-            IsNameValid = name.Split(' ').Length > 1;
+            IsNameValid = PaymentValidator.IsCardNameValid(name);
+            UpdateErrorMessageVisibility();
         }
 
         public void ValidateCardNumber(string cardNumber)
         {
-            if (string.IsNullOrEmpty(cardNumber))
-            {
-                IsCardNumberValid = false;
-                return;
-            }
-
-            // Check for 16-digit card number
-            IsCardNumberValid = Regex.IsMatch(cardNumber, @"^\d{16}$");
+            IsCardNumberValid = PaymentValidator.IsCardNumberValid(cardNumber);
+            UpdateErrorMessageVisibility();
         }
 
         public void ValidateCVV(string cvv)
         {
-            if (string.IsNullOrEmpty(cvv))
-            {
-                IsCvvValid = false;
-                return;
-            }
-
-            // Check for 3-digit CVV
-            IsCvvValid = Regex.IsMatch(cvv, @"^\d{3}$");
+            IsCvvValid = PaymentValidator.IsCvvValid(cvv);
+            UpdateErrorMessageVisibility();
         }
 
         public void ValidateExpirationDate(string expirationDate)
         {
-            if (string.IsNullOrEmpty(expirationDate))
-            {
-                IsDateValid = false;
-                return;
-            }
-
-            // Check MM/YY format
-            bool isValidDateFormat = Regex.IsMatch(expirationDate, @"^(0[1-9]|1[0-2])\/\d{2}$");
-
-            if (!isValidDateFormat)
-            {
-                IsDateValid = false;
-                return;
-            }
-
-            // Check if date is in the future
-            string[] dateParts = expirationDate.Split('/');
-            int month = int.Parse(dateParts[0]);
-            int year = int.Parse(dateParts[1]);
-            int currentMonth = DateTime.Today.Month;
-            int currentYear = DateTime.Today.Year % 100;
-
-            IsDateValid = (year > currentYear) || (year == currentYear && month >= currentMonth);
+            IsDateValid = PaymentValidator.IsExpirationDateValid(expirationDate);
+            UpdateErrorMessageVisibility();
         }
 
         // Manually update error message visibility when validation properties change

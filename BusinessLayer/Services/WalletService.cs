@@ -56,5 +56,28 @@ namespace BusinessLayer.Services
 
             walletRepository.PurchasePoints(offer, userService.GetCurrentUser().UserId);
         }
+
+        // Moved from WalletViewModel
+        public bool TryPurchasePoints(PointsOffer pointsOffer)
+        {
+            if (pointsOffer == null)
+            {
+                return false;
+            }
+            try
+            {
+                // Check if user has enough balance to purchase the points
+                if (GetBalance() >= pointsOffer.Price)
+                {
+                    PurchasePoints(pointsOffer);
+                    return true;
+                }
+                return false;
+            }
+            catch (Exception)
+            {
+                return false;
+            }
+        }
     }
 }

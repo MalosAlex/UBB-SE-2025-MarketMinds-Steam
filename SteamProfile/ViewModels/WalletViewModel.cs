@@ -67,27 +67,15 @@ namespace SteamProfile.ViewModels
         [RelayCommand]
         public async Task<bool> AddPoints(PointsOffer pointsOffer)
         {
-            if (pointsOffer == null)
-                return false;
+            // Business logic moved to WalletService
+            bool success = walletService.TryPurchasePoints(pointsOffer);
 
-            // Check if user has enough balance to purchase the points
-            if (Balance >= pointsOffer.Price)
+            if (success)
             {
-                try
-                {
-                    // Use the service to handle the purchase transaction
-                    walletService.PurchasePoints(pointsOffer);
-                    // Refresh wallet data after purchase
-                    RefreshWalletData();
-                    return true;
-                }
-                catch (Exception)
-                {
-                    // Return false if any exception occurs during the purchase
-                    return false;
-                }
+                RefreshWalletData();
             }
-            return false;
+
+            return success;
         }
 
         //[RelayCommand]

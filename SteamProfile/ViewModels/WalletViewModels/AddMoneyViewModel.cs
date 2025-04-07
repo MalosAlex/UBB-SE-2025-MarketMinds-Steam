@@ -1,8 +1,8 @@
 ﻿using Microsoft.UI.Xaml;
 using BusinessLayer.Models;
+using BusinessLayer.Validators;
 using System;
 using System.Collections.Generic;
-using System.Linq;
 using CommunityToolkit.Mvvm.Input;
 using System.Windows.Input;
 using CommunityToolkit.Mvvm.ComponentModel;
@@ -12,7 +12,6 @@ namespace SteamProfile.ViewModels
     public partial class AddMoneyViewModel : ObservableObject
     {
         private readonly WalletViewModel walletViewModel;
-        private readonly List<char> allowedDigits = new() { '0', '1', '2', '3', '4', '5', '6', '7', '8', '9' };
         private const int MAXIMUM_AMOUNT = 500;
 
         [ObservableProperty]
@@ -52,6 +51,7 @@ namespace SteamProfile.ViewModels
 
         public void ValidateInput(string input)
         {
+            // Business logic moved to PaymentValidator
             ShowErrorMessage = false;
             IsInputValid = false;
 
@@ -60,35 +60,8 @@ namespace SteamProfile.ViewModels
                 return;
             }
 
-            // Check if input is too long
-            if (input.Length > 3)
-            {
-                ShowErrorMessage = true;
-                return;
-            }
-
-            // Check if input contains only digits
-            if (input.Any(character => !allowedDigits.Contains(character)))
-            {
-                ShowErrorMessage = true;
-                return;
-            }
-
-            // Check if amount is within limits
-            if (int.TryParse(input, out int amount))
-            {
-                if (amount > MAXIMUM_AMOUNT || amount <= 0)
-                {
-                    ShowErrorMessage = true;
-                    return;
-                }
-
-                IsInputValid = true;
-            }
-            else
-            {
-                ShowErrorMessage = true;
-            }
+            IsInputValid = PaymentValidator.IsMonetaryAmountValid(input, MAXIMUM_AMOUNT);
+            ShowErrorMessage = !IsInputValid;
         }
 
         private void ProcessAddFunds()

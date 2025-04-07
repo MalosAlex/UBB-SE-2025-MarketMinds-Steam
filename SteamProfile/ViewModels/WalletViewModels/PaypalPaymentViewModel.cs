@@ -1,9 +1,9 @@
 ﻿using CommunityToolkit.Mvvm.ComponentModel;
 using Microsoft.UI.Xaml;
 using BusinessLayer.Models;
+using BusinessLayer.Validators;
 using System;
 using System.Collections.Generic;
-using System.Text.RegularExpressions;
 using System.Threading.Tasks;
 
 namespace SteamProfile.ViewModels
@@ -72,15 +72,15 @@ namespace SteamProfile.ViewModels
 
         public void ValidateEmail(string emailAddress)
         {
-            IsEmailValid = !string.IsNullOrEmpty(emailAddress) &&
-                           Regex.IsMatch(emailAddress, @"^[A-Za-z0-9._%+-]+@[A-Za-z0-9.-]+\.[A-Za-z]{2,}$");
+            // Business logic moved to PaymentValidator
+            IsEmailValid = PaymentValidator.IsEmailValid(emailAddress);
             ShowErrorMessage = !IsEmailValid;
         }
 
         public void ValidatePassword(string password)
         {
-            IsPasswordValid = !string.IsNullOrEmpty(password) &&
-                              Regex.IsMatch(password, @"^(?=.*[A-Z])(?=.*[a-z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{8,}$");
+            // Business logic moved to PaymentValidator
+            IsPasswordValid = PaymentValidator.IsPasswordValid(password);
             ShowErrorMessage = !IsPasswordValid;
         }
 
