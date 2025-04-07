@@ -3,19 +3,19 @@
   "WorkspaceRootPath": "C:\\Users\\Robi\\Desktop\\ISS 922\\UBB-SE-2025-MarketMinds-Steam\\SteamProfile\\",
   "Documents": [
     {
-      "AbsoluteMoniker": "D:0:0:{B051E1EC-29FA-4017-9859-4050605093EE}|..\\Tests\\Tests.csproj|c:\\users\\robi\\desktop\\iss 922\\ubb-se-2025-marketminds-steam\\tests\\achievementsrepositorytests.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+      "AbsoluteMoniker": "D:0:0:{099646CD-6B72-4623-9112-DDAB9DC403D9}|..\\BusinessLayer\\BusinessLayer.csproj|c:\\users\\robi\\desktop\\iss 922\\ubb-se-2025-marketminds-steam\\businesslayer\\services\\achievementsservice.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
     },
     {
       "AbsoluteMoniker": "D:0:0:{099646CD-6B72-4623-9112-DDAB9DC403D9}|..\\BusinessLayer\\BusinessLayer.csproj|c:\\users\\robi\\desktop\\iss 922\\ubb-se-2025-marketminds-steam\\businesslayer\\repositories\\achievementsrepository.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
     },
     {
-      "AbsoluteMoniker": "D:0:0:{B051E1EC-29FA-4017-9859-4050605093EE}|..\\Tests\\Tests.csproj|c:\\users\\robi\\desktop\\iss 922\\ubb-se-2025-marketminds-steam\\tests\\achievementsservicetests.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
-    },
-    {
-      "AbsoluteMoniker": "D:0:0:{099646CD-6B72-4623-9112-DDAB9DC403D9}|..\\BusinessLayer\\BusinessLayer.csproj|c:\\users\\robi\\desktop\\iss 922\\ubb-se-2025-marketminds-steam\\businesslayer\\services\\achievementsservice.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
-    },
-    {
       "AbsoluteMoniker": "D:0:0:{099646CD-6B72-4623-9112-DDAB9DC403D9}|..\\BusinessLayer\\BusinessLayer.csproj|c:\\users\\robi\\desktop\\iss 922\\ubb-se-2025-marketminds-steam\\businesslayer\\repositories\\fakes\\fakeachievementsrepository.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{B051E1EC-29FA-4017-9859-4050605093EE}|..\\Tests\\Tests.csproj|c:\\users\\robi\\desktop\\iss 922\\ubb-se-2025-marketminds-steam\\tests\\achievementsrepositorytests.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{B051E1EC-29FA-4017-9859-4050605093EE}|..\\Tests\\Tests.csproj|c:\\users\\robi\\desktop\\iss 922\\ubb-se-2025-marketminds-steam\\tests\\achievementsservicetests.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
     },
     {
       "AbsoluteMoniker": "D:0:0:{09B961A1-8938-4CC5-AF4E-5D1AA01F3036}|SteamProfile.csproj|c:\\users\\robi\\desktop\\iss 922\\ubb-se-2025-marketminds-steam\\steamprofile\\appsettings.json||{90A6B3A7-C1A3-4009-A288-E2FF89E96FA0}",
@@ -343,26 +343,30 @@
             },
             {
               "$type": "Document",
-              "DocumentIndex": 0,
+              "DocumentIndex": 3,
               "Title": "AchievementsRepositoryTests.cs",
               "DocumentMoniker": "C:\\Users\\Robi\\Desktop\\ISS 922\\UBB-SE-2025-MarketMinds-Steam\\Tests\\AchievementsRepositoryTests.cs",
               "RelativeDocumentMoniker": "..\\Tests\\AchievementsRepositoryTests.cs",
               "ToolTip": "C:\\Users\\Robi\\Desktop\\ISS 922\\UBB-SE-2025-MarketMinds-Steam\\Tests\\AchievementsRepositoryTests.cs",
               "RelativeToolTip": "..\\Tests\\AchievementsRepositoryTests.cs",
-              "ViewState": "AgIAAHMBAAAAAAAAAAAgwIwBAAAAAAAAAAAAAA==",
+              "ViewState": "AgIAADMBAAAAAAAAAAAQwGcBAAAAAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
               "WhenOpened": "2025-04-06T22:03:08.367Z",
               "EditorCaption": ""
             },
             {
+              "$type": "Bookmark",
+              "Name": "ST:1:0:{d212f56b-c48a-434c-a121-1c5d80b59b9f}"
+            },
+            {
               "$type": "Document",
-              "DocumentIndex": 2,
+              "DocumentIndex": 4,
               "Title": "AchievementsServiceTests.cs",
               "DocumentMoniker": "C:\\Users\\Robi\\Desktop\\ISS 922\\UBB-SE-2025-MarketMinds-Steam\\Tests\\AchievementsServiceTests.cs",
               "RelativeDocumentMoniker": "..\\Tests\\AchievementsServiceTests.cs",
               "ToolTip": "C:\\Users\\Robi\\Desktop\\ISS 922\\UBB-SE-2025-MarketMinds-Steam\\Tests\\AchievementsServiceTests.cs",
               "RelativeToolTip": "..\\Tests\\AchievementsServiceTests.cs",
-              "ViewState": "AgIAAAYAAAAAAAAAAAAAACIAAAAJAAAAAAAAAA==",
+              "ViewState": "AgIAAAYAAAAAAAAAAAAAACUAAAAAAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
               "WhenOpened": "2025-04-07T14:20:28.98Z",
               "EditorCaption": ""
@@ -375,14 +379,10 @@
               "RelativeDocumentMoniker": "appsettings.json",
               "ToolTip": "C:\\Users\\Robi\\Desktop\\ISS 922\\UBB-SE-2025-MarketMinds-Steam\\SteamProfile\\appsettings.json",
               "RelativeToolTip": "appsettings.json",
-              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAEAAAAsAAAAAAAAAA==",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAEAAAAtAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.001642|",
               "WhenOpened": "2025-04-05T13:03:07.982Z",
               "EditorCaption": ""
-            },
-            {
-              "$type": "Bookmark",
-              "Name": "ST:1:0:{d212f56b-c48a-434c-a121-1c5d80b59b9f}"
             },
             {
               "$type": "Document",
@@ -1092,7 +1092,7 @@
         "Y": 0,
         "Width": 1230,
         "Height": 766,
-        "WindowState": 2
+        "WindowState": 0
       },
       "DocumentGroups": [
         {
@@ -1101,7 +1101,7 @@
           "Children": [
             {
               "$type": "Document",
-              "DocumentIndex": 3,
+              "DocumentIndex": 0,
               "Title": "AchievementsService.cs",
               "DocumentMoniker": "C:\\Users\\Robi\\Desktop\\ISS 922\\UBB-SE-2025-MarketMinds-Steam\\BusinessLayer\\Services\\AchievementsService.cs",
               "RelativeDocumentMoniker": "..\\BusinessLayer\\Services\\AchievementsService.cs",
@@ -1135,7 +1135,7 @@
           "Children": [
             {
               "$type": "Document",
-              "DocumentIndex": 4,
+              "DocumentIndex": 2,
               "Title": "FakeAchievementsRepository.cs",
               "DocumentMoniker": "C:\\Users\\Robi\\Desktop\\ISS 922\\UBB-SE-2025-MarketMinds-Steam\\BusinessLayer\\Repositories\\Fakes\\FakeAchievementsRepository.cs",
               "RelativeDocumentMoniker": "..\\BusinessLayer\\Repositories\\Fakes\\FakeAchievementsRepository.cs",
@@ -1175,7 +1175,7 @@
               "RelativeDocumentMoniker": "..\\BusinessLayer\\Repositories\\AchievementsRepository.cs",
               "ToolTip": "C:\\Users\\Robi\\Desktop\\ISS 922\\UBB-SE-2025-MarketMinds-Steam\\BusinessLayer\\Repositories\\AchievementsRepository.cs",
               "RelativeToolTip": "..\\BusinessLayer\\Repositories\\AchievementsRepository.cs",
-              "ViewState": "AgIAAHEBAAAAAAAAAAAAAHUBAABDAAAAAAAAAA==",
+              "ViewState": "AgIAAHEBAAAAAAAAAAAAAI8BAAAJAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
               "WhenOpened": "2025-04-06T19:48:19.774Z",
               "EditorCaption": ""

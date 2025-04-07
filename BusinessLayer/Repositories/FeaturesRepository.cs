@@ -3,10 +3,11 @@ using BusinessLayer.Data;
 using BusinessLayer.Models;
 using Microsoft.Data.SqlClient;
 using BusinessLayer.Exceptions;
+using BusinessLayer.Repositories.Interfaces;
 
 namespace BusinessLayer.Repositories
 {
-    public class FeaturesRepository
+    public class FeaturesRepository : IFeaturesRepository
     {
         private readonly IDataLink dataLink;
 
