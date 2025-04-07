@@ -42,7 +42,7 @@ namespace SteamProfile
             var featuresRepository = new FeaturesRepository(dataLink);
             var usersRepository = new UsersRepository(dataLink);
             UserProfileRepository = new UserProfilesRepository(dataLink);
-            var collectionsRepository = new CollectionsRepository(dataLink);
+            CollectionsRepository = new CollectionsRepository(dataLink);
             var walletRepository = new WalletRepository(dataLink);
             var friendshipsRepository = new FriendshipsRepository(dataLink);
             var ownedGamesRepossitory = new OwnedGamesRepository(dataLink);
@@ -54,7 +54,7 @@ namespace SteamProfile
             SessionService = new SessionService(sessionRepository, usersRepository);
             UserService = new UserService(usersRepository, SessionService);
             AchievementsService = new AchievementsService(achievementsRepository);
-            CollectionsService = new CollectionsService(collectionsRepository);
+            CollectionsService = new CollectionsService(CollectionsRepository);
             AuthenticationService = new AuthenticationService(usersRepository);
             WalletService = new WalletService(walletRepository, UserService);
             FriendsService = new FriendsService(friendshipsRepository, UserService);
