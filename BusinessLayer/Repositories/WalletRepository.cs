@@ -3,10 +3,11 @@ using BusinessLayer.Data;
 using BusinessLayer.Models;
 using Microsoft.Data.SqlClient;
 using BusinessLayer.Exceptions;
+using BusinessLayer.Repositories.Interfaces;
 
 namespace BusinessLayer.Repositories
 {
-    public class WalletRepository
+    public class WalletRepository : IWalletRepository
     {
         private readonly IDataLink dataLink;
 
@@ -37,7 +38,7 @@ namespace BusinessLayer.Repositories
             {
                 var parameters = new SqlParameter[]
                 {
-            new SqlParameter("@user_id", userId)
+                     new SqlParameter("@user_id", userId)
                 };
                 var dataTable = dataLink.ExecuteReader("GetWalletIdByUserId", parameters);
                 if (dataTable.Rows.Count > 0)
@@ -95,7 +96,7 @@ namespace BusinessLayer.Repositories
             SqlParameter[] parameters = new SqlParameter[]
             {
                 new SqlParameter("@price", offer.Price),
-                new SqlParameter("@numberOfPoints", offer.Points), // Fixed parameter name from @@numberOfPoints to @points
+                new SqlParameter("@numberOfPoints", offer.Points),
                 new SqlParameter("@userId", walletId)
             };
             dataLink.ExecuteReader("BuyPoints", parameters);
