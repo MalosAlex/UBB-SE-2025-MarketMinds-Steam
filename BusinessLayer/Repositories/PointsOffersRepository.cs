@@ -1,10 +1,12 @@
 ﻿using BusinessLayer.Models;
+using BusinessLayer.Repositories.Interfaces;
 
 namespace BusinessLayer.Repositories
 {
-    public class PointsOffersRepository
+    public class PointsOffersRepository : IPointsOffersRepository
     {
-        public List<PointsOffer> Offers = [];
+        public List<PointsOffer> Offers { get; } = [];
+
         public PointsOffersRepository()
         {
             Offers.Add(new PointsOffer(2, 5));

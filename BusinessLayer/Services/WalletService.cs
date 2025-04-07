@@ -1,18 +1,19 @@
 ﻿using BusinessLayer.Services.Interfaces;
 using BusinessLayer.Models;
 using BusinessLayer.Repositories;
+using BusinessLayer.Repositories.Interfaces;
 
 namespace BusinessLayer.Services
 {
     public class WalletService : IWalletService
     {
-        private readonly WalletRepository walletRepository;
+        private readonly IWalletRepository walletRepository;
         private readonly IUserService userService;
 
-        public WalletService(WalletRepository walletRepository, IUserService userService)
+        public WalletService(IWalletRepository walletRepository, IUserService userService)
         {
             this.walletRepository = walletRepository ?? throw new ArgumentNullException(nameof(walletRepository));
-            this.userService = userService;
+            this.userService = userService ?? throw new ArgumentNullException(nameof(userService));
         }
 
         public void AddMoney(decimal amount)

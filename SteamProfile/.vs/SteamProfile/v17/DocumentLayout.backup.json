@@ -3,6 +3,19 @@
   "WorkspaceRootPath": "C:\\Users\\jolde\\OneDrive\\Documents\\GitHub\\UBB-SE-2025-MarketMinds-Steam\\SteamProfile\\",
   "Documents": [
     {
+      "AbsoluteMoniker": "D:0:0:{099646CD-6B72-4623-9112-DDAB9DC403D9}|..\\BusinessLayer\\BusinessLayer.csproj|c:\\users\\jolde\\onedrive\\documents\\github\\ubb-se-2025-marketminds-steam\\businesslayer\\repositories\\interfaces\\ipointsoffersrepository.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{099646CD-6B72-4623-9112-DDAB9DC403D9}|..\\BusinessLayer\\BusinessLayer.csproj|c:\\users\\jolde\\onedrive\\documents\\github\\ubb-se-2025-marketminds-steam\\businesslayer\\repositories\\pointsoffersrepository.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{09B961A1-8938-4CC5-AF4E-5D1AA01F3036}|SteamProfile.csproj|c:\\users\\jolde\\onedrive\\documents\\github\\ubb-se-2025-marketminds-steam\\steamprofile\\app.xaml.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{09B961A1-8938-4CC5-AF4E-5D1AA01F3036}|SteamProfile.csproj|solutionrelative:app.xaml.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{099646CD-6B72-4623-9112-DDAB9DC403D9}|..\\BusinessLayer\\BusinessLayer.csproj|c:\\users\\jolde\\onedrive\\documents\\github\\ubb-se-2025-marketminds-steam\\businesslayer\\services\\walletservice.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
       "AbsoluteMoniker": "D:0:0:{099646CD-6B72-4623-9112-DDAB9DC403D9}|..\\BusinessLayer\\BusinessLayer.csproj|c:\\users\\jolde\\onedrive\\documents\\github\\ubb-se-2025-marketminds-steam\\businesslayer\\services\\fakes\\fakewalletservice.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
     },
     {
@@ -29,12 +42,6 @@
       "RelativeMoniker": "D:0:0:{09B961A1-8938-4CC5-AF4E-5D1AA01F3036}|SteamProfile.csproj|solutionrelative:viewmodels\\walletviewmodel.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
     },
     {
-      "AbsoluteMoniker": "D:0:0:{099646CD-6B72-4623-9112-DDAB9DC403D9}|..\\BusinessLayer\\BusinessLayer.csproj|c:\\users\\jolde\\onedrive\\documents\\github\\ubb-se-2025-marketminds-steam\\businesslayer\\validators\\paymentvalidator.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
-    },
-    {
-      "AbsoluteMoniker": "D:0:0:{099646CD-6B72-4623-9112-DDAB9DC403D9}|..\\BusinessLayer\\BusinessLayer.csproj|c:\\users\\jolde\\onedrive\\documents\\github\\ubb-se-2025-marketminds-steam\\businesslayer\\services\\walletservice.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
-    },
-    {
       "AbsoluteMoniker": "D:0:0:{09B961A1-8938-4CC5-AF4E-5D1AA01F3036}|SteamProfile.csproj|c:\\users\\jolde\\onedrive\\documents\\github\\ubb-se-2025-marketminds-steam\\steamprofile\\viewmodels\\walletviewmodels\\addpointsviewmodel.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
       "RelativeMoniker": "D:0:0:{09B961A1-8938-4CC5-AF4E-5D1AA01F3036}|SteamProfile.csproj|solutionrelative:viewmodels\\walletviewmodels\\addpointsviewmodel.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
     },
@@ -50,9 +57,6 @@
     },
     {
       "AbsoluteMoniker": "D:0:0:{099646CD-6B72-4623-9112-DDAB9DC403D9}|..\\BusinessLayer\\BusinessLayer.csproj|c:\\users\\jolde\\onedrive\\documents\\github\\ubb-se-2025-marketminds-steam\\businesslayer\\repositories\\walletrepository.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
-    },
-    {
-      "AbsoluteMoniker": "D:0:0:{099646CD-6B72-4623-9112-DDAB9DC403D9}|..\\BusinessLayer\\BusinessLayer.csproj|c:\\users\\jolde\\onedrive\\documents\\github\\ubb-se-2025-marketminds-steam\\businesslayer\\repositories\\interfaces\\iwalletrepository.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
     },
     {
       "AbsoluteMoniker": "D:0:0:{099646CD-6B72-4623-9112-DDAB9DC403D9}|..\\BusinessLayer\\BusinessLayer.csproj|c:\\users\\jolde\\onedrive\\documents\\github\\ubb-se-2025-marketminds-steam\\businesslayer\\repositories\\usersrepository.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
@@ -122,6 +126,12 @@
     },
     {
       "AbsoluteMoniker": "D:0:0:{A2FE74E1-B743-11D0-AE1A-00A0C90FFFC3}|\u003CMiscFiles\u003E|C:\\Users\\Ghaster\\IdeaProjects\\UBB-SE-2025-MarketMinds-Steam\\BusinessLayer\\Exceptions\\ValidationException.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{A2FE74E1-B743-11D0-AE1A-00A0C90FFFC3}|\u003CMiscFiles\u003E|C:\\Users\\jolde\\OneDrive\\Documents\\GitHub\\UBB-SE-2025-MarketMinds-Steam\\BusinessLayer\\Validators\\PaymentValidator.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{A2FE74E1-B743-11D0-AE1A-00A0C90FFFC3}|\u003CMiscFiles\u003E|C:\\Users\\jolde\\OneDrive\\Documents\\GitHub\\UBB-SE-2025-MarketMinds-Steam\\BusinessLayer\\Repositories\\Interfaces\\IWalletRepository.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
     }
   ],
   "DocumentGroupContainers": [
@@ -131,7 +141,7 @@
       "DocumentGroups": [
         {
           "DockedWidth": 200,
-          "SelectedChildIndex": 38,
+          "SelectedChildIndex": 27,
           "Children": [
             {
               "$type": "Bookmark",
@@ -243,7 +253,46 @@
             },
             {
               "$type": "Document",
+              "DocumentIndex": 0,
+              "Title": "IPointsOffersRepository.cs",
+              "DocumentMoniker": "C:\\Users\\jolde\\OneDrive\\Documents\\GitHub\\UBB-SE-2025-MarketMinds-Steam\\BusinessLayer\\Repositories\\Interfaces\\IPointsOffersRepository.cs",
+              "RelativeDocumentMoniker": "..\\BusinessLayer\\Repositories\\Interfaces\\IPointsOffersRepository.cs",
+              "ToolTip": "C:\\Users\\jolde\\OneDrive\\Documents\\GitHub\\UBB-SE-2025-MarketMinds-Steam\\BusinessLayer\\Repositories\\Interfaces\\IPointsOffersRepository.cs*",
+              "RelativeToolTip": "..\\BusinessLayer\\Repositories\\Interfaces\\IPointsOffersRepository.cs*",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAgAAAABAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-04-07T13:43:08.572Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 1,
+              "Title": "PointsOffersRepository.cs",
+              "DocumentMoniker": "C:\\Users\\jolde\\OneDrive\\Documents\\GitHub\\UBB-SE-2025-MarketMinds-Steam\\BusinessLayer\\Repositories\\PointsOffersRepository.cs",
+              "RelativeDocumentMoniker": "..\\BusinessLayer\\Repositories\\PointsOffersRepository.cs",
+              "ToolTip": "C:\\Users\\jolde\\OneDrive\\Documents\\GitHub\\UBB-SE-2025-MarketMinds-Steam\\BusinessLayer\\Repositories\\PointsOffersRepository.cs",
+              "RelativeToolTip": "..\\BusinessLayer\\Repositories\\PointsOffersRepository.cs",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAYAAAAFAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-04-07T13:42:21.656Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
               "DocumentIndex": 2,
+              "Title": "App.xaml.cs",
+              "DocumentMoniker": "C:\\Users\\jolde\\OneDrive\\Documents\\GitHub\\UBB-SE-2025-MarketMinds-Steam\\SteamProfile\\App.xaml.cs",
+              "RelativeDocumentMoniker": "App.xaml.cs",
+              "ToolTip": "C:\\Users\\jolde\\OneDrive\\Documents\\GitHub\\UBB-SE-2025-MarketMinds-Steam\\SteamProfile\\App.xaml.cs",
+              "RelativeToolTip": "App.xaml.cs",
+              "ViewState": "AgIAAFMAAAAAAAAAAAAuwFoAAAAAAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-04-07T13:40:37.167Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 6,
               "Title": "IWalletService.cs",
               "DocumentMoniker": "C:\\Users\\jolde\\OneDrive\\Documents\\GitHub\\UBB-SE-2025-MarketMinds-Steam\\BusinessLayer\\Services\\Interfaces\\IWalletService.cs",
               "RelativeDocumentMoniker": "..\\BusinessLayer\\Services\\Interfaces\\IWalletService.cs",
@@ -251,12 +300,11 @@
               "RelativeToolTip": "..\\BusinessLayer\\Services\\Interfaces\\IWalletService.cs",
               "ViewState": "AgIAAAAAAAAAAAAAAAAAAAwAAAA4AAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2025-04-07T13:22:36.923Z",
-              "EditorCaption": ""
+              "WhenOpened": "2025-04-07T13:22:36.923Z"
             },
             {
               "$type": "Document",
-              "DocumentIndex": 7,
+              "DocumentIndex": 38,
               "Title": "PaymentValidator.cs",
               "DocumentMoniker": "C:\\Users\\jolde\\OneDrive\\Documents\\GitHub\\UBB-SE-2025-MarketMinds-Steam\\BusinessLayer\\Validators\\PaymentValidator.cs",
               "RelativeDocumentMoniker": "..\\BusinessLayer\\Validators\\PaymentValidator.cs",
@@ -264,12 +312,11 @@
               "RelativeToolTip": "..\\BusinessLayer\\Validators\\PaymentValidator.cs",
               "ViewState": "AgIAAAAAAAAAAAAAAAAAAFIAAAAAAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2025-04-07T13:18:58.886Z",
-              "EditorCaption": ""
+              "WhenOpened": "2025-04-07T13:18:58.886Z"
             },
             {
               "$type": "Document",
-              "DocumentIndex": 9,
+              "DocumentIndex": 11,
               "Title": "AddPointsViewModel.cs",
               "DocumentMoniker": "C:\\Users\\jolde\\OneDrive\\Documents\\GitHub\\UBB-SE-2025-MarketMinds-Steam\\SteamProfile\\ViewModels\\WalletViewModels\\AddPointsViewModel.cs",
               "RelativeDocumentMoniker": "ViewModels\\WalletViewModels\\AddPointsViewModel.cs",
@@ -277,12 +324,11 @@
               "RelativeToolTip": "ViewModels\\WalletViewModels\\AddPointsViewModel.cs",
               "ViewState": "AgIAAAAAAAAAAAAAAAAAAA0AAAA+AAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2025-04-07T13:10:21.771Z",
-              "EditorCaption": ""
+              "WhenOpened": "2025-04-07T13:10:21.771Z"
             },
             {
               "$type": "Document",
-              "DocumentIndex": 3,
+              "DocumentIndex": 7,
               "Title": "AddMoneyViewModel.cs",
               "DocumentMoniker": "C:\\Users\\jolde\\OneDrive\\Documents\\GitHub\\UBB-SE-2025-MarketMinds-Steam\\SteamProfile\\ViewModels\\WalletViewModels\\AddMoneyViewModel.cs",
               "RelativeDocumentMoniker": "ViewModels\\WalletViewModels\\AddMoneyViewModel.cs",
@@ -290,12 +336,11 @@
               "RelativeToolTip": "ViewModels\\WalletViewModels\\AddMoneyViewModel.cs",
               "ViewState": "AgIAAAAAAAAAAAAAAAAAAFgAAAABAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2025-04-07T13:08:42.926Z",
-              "EditorCaption": ""
+              "WhenOpened": "2025-04-07T13:08:42.926Z"
             },
             {
               "$type": "Document",
-              "DocumentIndex": 5,
+              "DocumentIndex": 9,
               "Title": "PaypalPaymentViewModel.cs",
               "DocumentMoniker": "C:\\Users\\jolde\\OneDrive\\Documents\\GitHub\\UBB-SE-2025-MarketMinds-Steam\\SteamProfile\\ViewModels\\WalletViewModels\\PaypalPaymentViewModel.cs",
               "RelativeDocumentMoniker": "ViewModels\\WalletViewModels\\PaypalPaymentViewModel.cs",
@@ -303,12 +348,11 @@
               "RelativeToolTip": "ViewModels\\WalletViewModels\\PaypalPaymentViewModel.cs",
               "ViewState": "AgIAAAAAAAAAAAAAAAAAAGoAAAABAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2025-04-07T13:07:09.556Z",
-              "EditorCaption": ""
+              "WhenOpened": "2025-04-07T13:07:09.556Z"
             },
             {
               "$type": "Document",
-              "DocumentIndex": 10,
+              "DocumentIndex": 12,
               "Title": "CardPaymentPage.xaml.cs",
               "DocumentMoniker": "C:\\Users\\jolde\\OneDrive\\Documents\\GitHub\\UBB-SE-2025-MarketMinds-Steam\\SteamProfile\\Views\\WalletViews\\CardPaymentPage.xaml.cs",
               "RelativeDocumentMoniker": "Views\\WalletViews\\CardPaymentPage.xaml.cs",
@@ -316,12 +360,11 @@
               "RelativeToolTip": "Views\\WalletViews\\CardPaymentPage.xaml.cs",
               "ViewState": "AgIAAB8AAAAAAAAAAAAAAC0AAAAzAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2025-04-07T13:06:14.068Z",
-              "EditorCaption": ""
+              "WhenOpened": "2025-04-07T13:06:14.068Z"
             },
             {
               "$type": "Document",
-              "DocumentIndex": 4,
+              "DocumentIndex": 8,
               "Title": "CardPaymentViewModel.cs",
               "DocumentMoniker": "C:\\Users\\jolde\\OneDrive\\Documents\\GitHub\\UBB-SE-2025-MarketMinds-Steam\\SteamProfile\\ViewModels\\WalletViewModels\\CardPaymentViewModel.cs",
               "RelativeDocumentMoniker": "ViewModels\\WalletViewModels\\CardPaymentViewModel.cs",
@@ -329,12 +372,11 @@
               "RelativeToolTip": "ViewModels\\WalletViewModels\\CardPaymentViewModel.cs",
               "ViewState": "AgIAAAAAAAAAAAAAAAAAAIEAAAABAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2025-04-07T13:02:23.841Z",
-              "EditorCaption": ""
+              "WhenOpened": "2025-04-07T13:02:23.841Z"
             },
             {
               "$type": "Document",
-              "DocumentIndex": 6,
+              "DocumentIndex": 10,
               "Title": "WalletViewModel.cs",
               "DocumentMoniker": "C:\\Users\\jolde\\OneDrive\\Documents\\GitHub\\UBB-SE-2025-MarketMinds-Steam\\SteamProfile\\ViewModels\\WalletViewModel.cs",
               "RelativeDocumentMoniker": "ViewModels\\WalletViewModel.cs",
@@ -342,12 +384,11 @@
               "RelativeToolTip": "ViewModels\\WalletViewModel.cs",
               "ViewState": "AgIAAAAAAAAAAAAAAAAAAEsAAAANAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2025-04-07T12:59:32.021Z",
-              "EditorCaption": ""
+              "WhenOpened": "2025-04-07T12:59:32.021Z"
             },
             {
               "$type": "Document",
-              "DocumentIndex": 11,
+              "DocumentIndex": 13,
               "Title": "PointsOffer.cs",
               "DocumentMoniker": "C:\\Users\\jolde\\OneDrive\\Documents\\GitHub\\UBB-SE-2025-MarketMinds-Steam\\BusinessLayer\\Models\\PointsOffer.cs",
               "RelativeDocumentMoniker": "..\\BusinessLayer\\Models\\PointsOffer.cs",
@@ -355,12 +396,11 @@
               "RelativeToolTip": "..\\BusinessLayer\\Models\\PointsOffer.cs",
               "ViewState": "AgIAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2025-04-07T12:59:06.362Z",
-              "EditorCaption": ""
+              "WhenOpened": "2025-04-07T12:59:06.362Z"
             },
             {
               "$type": "Document",
-              "DocumentIndex": 12,
+              "DocumentIndex": 14,
               "Title": "UserValidator.cs",
               "DocumentMoniker": "C:\\Users\\jolde\\OneDrive\\Documents\\GitHub\\UBB-SE-2025-MarketMinds-Steam\\BusinessLayer\\Validators\\UserValidator.cs",
               "RelativeDocumentMoniker": "..\\BusinessLayer\\Validators\\UserValidator.cs",
@@ -368,12 +408,11 @@
               "RelativeToolTip": "..\\BusinessLayer\\Validators\\UserValidator.cs",
               "ViewState": "AgIAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2025-04-07T12:56:15.826Z",
-              "EditorCaption": ""
+              "WhenOpened": "2025-04-07T12:56:15.826Z"
             },
             {
               "$type": "Document",
-              "DocumentIndex": 8,
+              "DocumentIndex": 3,
               "Title": "WalletService.cs",
               "DocumentMoniker": "C:\\Users\\jolde\\OneDrive\\Documents\\GitHub\\UBB-SE-2025-MarketMinds-Steam\\BusinessLayer\\Services\\WalletService.cs",
               "RelativeDocumentMoniker": "..\\BusinessLayer\\Services\\WalletService.cs",
@@ -386,7 +425,7 @@
             },
             {
               "$type": "Document",
-              "DocumentIndex": 0,
+              "DocumentIndex": 4,
               "Title": "FakeWalletService.cs",
               "DocumentMoniker": "C:\\Users\\jolde\\OneDrive\\Documents\\GitHub\\UBB-SE-2025-MarketMinds-Steam\\BusinessLayer\\Services\\Fakes\\FakeWalletService.cs",
               "RelativeDocumentMoniker": "..\\BusinessLayer\\Services\\Fakes\\FakeWalletService.cs",
@@ -399,7 +438,7 @@
             },
             {
               "$type": "Document",
-              "DocumentIndex": 15,
+              "DocumentIndex": 16,
               "Title": "UsersRepository.cs",
               "DocumentMoniker": "C:\\Users\\jolde\\OneDrive\\Documents\\GitHub\\UBB-SE-2025-MarketMinds-Steam\\BusinessLayer\\Repositories\\UsersRepository.cs",
               "RelativeDocumentMoniker": "..\\BusinessLayer\\Repositories\\UsersRepository.cs",
@@ -407,12 +446,11 @@
               "RelativeToolTip": "..\\BusinessLayer\\Repositories\\UsersRepository.cs",
               "ViewState": "AgIAAAAAAAAAAAAAAAAAAAYAAAAfAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2025-04-07T12:31:54.67Z",
-              "EditorCaption": ""
+              "WhenOpened": "2025-04-07T12:31:54.67Z"
             },
             {
               "$type": "Document",
-              "DocumentIndex": 14,
+              "DocumentIndex": 39,
               "Title": "IWalletRepository.cs",
               "DocumentMoniker": "C:\\Users\\jolde\\OneDrive\\Documents\\GitHub\\UBB-SE-2025-MarketMinds-Steam\\BusinessLayer\\Repositories\\Interfaces\\IWalletRepository.cs",
               "RelativeDocumentMoniker": "..\\BusinessLayer\\Repositories\\Interfaces\\IWalletRepository.cs",
@@ -420,12 +458,11 @@
               "RelativeToolTip": "..\\BusinessLayer\\Repositories\\Interfaces\\IWalletRepository.cs",
               "ViewState": "AgIAAAQAAAAAAAAAAAAuwBAAAAAAAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2025-04-07T12:29:17.561Z",
-              "EditorCaption": ""
+              "WhenOpened": "2025-04-07T12:29:17.561Z"
             },
             {
               "$type": "Document",
-              "DocumentIndex": 17,
+              "DocumentIndex": 18,
               "Title": "IAchievementsRepository.cs",
               "DocumentMoniker": "C:\\Users\\jolde\\OneDrive\\Documents\\GitHub\\UBB-SE-2025-MarketMinds-Steam\\BusinessLayer\\Repositories\\Interfaces\\IAchievementsRepository.cs",
               "RelativeDocumentMoniker": "..\\BusinessLayer\\Repositories\\Interfaces\\IAchievementsRepository.cs",
@@ -433,12 +470,11 @@
               "RelativeToolTip": "..\\BusinessLayer\\Repositories\\Interfaces\\IAchievementsRepository.cs",
               "ViewState": "AgIAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2025-04-07T12:27:14.254Z",
-              "EditorCaption": ""
+              "WhenOpened": "2025-04-07T12:27:14.254Z"
             },
             {
               "$type": "Document",
-              "DocumentIndex": 18,
+              "DocumentIndex": 19,
               "Title": "UserProfile.cs",
               "DocumentMoniker": "C:\\Users\\jolde\\OneDrive\\Documents\\GitHub\\UBB-SE-2025-MarketMinds-Steam\\BusinessLayer\\Models\\UserProfile.cs",
               "RelativeDocumentMoniker": "..\\BusinessLayer\\Models\\UserProfile.cs",
@@ -446,12 +482,11 @@
               "RelativeToolTip": "..\\BusinessLayer\\Models\\UserProfile.cs",
               "ViewState": "AgIAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2025-04-07T12:26:22.627Z",
-              "EditorCaption": ""
+              "WhenOpened": "2025-04-07T12:26:22.627Z"
             },
             {
               "$type": "Document",
-              "DocumentIndex": 19,
+              "DocumentIndex": 20,
               "Title": "UserSession.cs",
               "DocumentMoniker": "C:\\Users\\jolde\\OneDrive\\Documents\\GitHub\\UBB-SE-2025-MarketMinds-Steam\\BusinessLayer\\Models\\UserSession.cs",
               "RelativeDocumentMoniker": "..\\BusinessLayer\\Models\\UserSession.cs",
@@ -459,12 +494,11 @@
               "RelativeToolTip": "..\\BusinessLayer\\Models\\UserSession.cs",
               "ViewState": "AgIAAAYAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2025-04-07T12:26:17.998Z",
-              "EditorCaption": ""
+              "WhenOpened": "2025-04-07T12:26:17.998Z"
             },
             {
               "$type": "Document",
-              "DocumentIndex": 13,
+              "DocumentIndex": 15,
               "Title": "WalletRepository.cs",
               "DocumentMoniker": "C:\\Users\\jolde\\OneDrive\\Documents\\GitHub\\UBB-SE-2025-MarketMinds-Steam\\BusinessLayer\\Repositories\\WalletRepository.cs",
               "RelativeDocumentMoniker": "..\\BusinessLayer\\Repositories\\WalletRepository.cs",
@@ -472,12 +506,11 @@
               "RelativeToolTip": "..\\BusinessLayer\\Repositories\\WalletRepository.cs",
               "ViewState": "AgIAAAAAAAAAAAAAAAAAAHkAAAANAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2025-04-07T12:25:45.079Z",
-              "EditorCaption": ""
+              "WhenOpened": "2025-04-07T12:25:45.079Z"
             },
             {
               "$type": "Document",
-              "DocumentIndex": 16,
+              "DocumentIndex": 17,
               "Title": "Wallet.cs",
               "DocumentMoniker": "C:\\Users\\jolde\\OneDrive\\Documents\\GitHub\\UBB-SE-2025-MarketMinds-Steam\\BusinessLayer\\Models\\Wallet.cs",
               "RelativeDocumentMoniker": "..\\BusinessLayer\\Models\\Wallet.cs",
@@ -485,12 +518,11 @@
               "RelativeToolTip": "..\\BusinessLayer\\Models\\Wallet.cs",
               "ViewState": "AgIAAAAAAAAAAAAAAAAAAAoAAAAbAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2025-04-07T12:23:41.81Z",
-              "EditorCaption": ""
+              "WhenOpened": "2025-04-07T12:23:41.81Z"
             },
             {
               "$type": "Document",
-              "DocumentIndex": 20,
+              "DocumentIndex": 21,
               "Title": "appsettings.json",
               "DocumentMoniker": "C:\\Users\\jolde\\OneDrive\\Documents\\GitHub\\UBB-SE-2025-MarketMinds-Steam\\SteamProfile\\appsettings.json",
               "RelativeDocumentMoniker": "appsettings.json",
@@ -498,12 +530,11 @@
               "RelativeToolTip": "appsettings.json",
               "ViewState": "AgIAAAAAAAAAAAAAAAAAAAEAAAApAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.001642|",
-              "WhenOpened": "2025-04-07T12:14:50.656Z",
-              "EditorCaption": ""
+              "WhenOpened": "2025-04-07T12:14:50.656Z"
             },
             {
               "$type": "Document",
-              "DocumentIndex": 21,
+              "DocumentIndex": 22,
               "Title": "OwnedGamesRepositoryTests.cs",
               "DocumentMoniker": "C:\\Users\\Ghaster\\IdeaProjects\\UBB-SE-2025-MarketMinds-Steam\\Tests\\OwnedGamesRepositoryTests.cs",
               "RelativeDocumentMoniker": "..\\..\\..\\..\\..\\..\\Ghaster\\IdeaProjects\\UBB-SE-2025-MarketMinds-Steam\\Tests\\OwnedGamesRepositoryTests.cs",
@@ -514,7 +545,7 @@
             },
             {
               "$type": "Document",
-              "DocumentIndex": 24,
+              "DocumentIndex": 25,
               "Title": "OwnedGamesRepository.cs",
               "DocumentMoniker": "C:\\Users\\Ghaster\\IdeaProjects\\UBB-SE-2025-MarketMinds-Steam\\BusinessLayer\\Repositories\\OwnedGamesRepository.cs",
               "RelativeDocumentMoniker": "..\\..\\..\\..\\..\\..\\Ghaster\\IdeaProjects\\UBB-SE-2025-MarketMinds-Steam\\BusinessLayer\\Repositories\\OwnedGamesRepository.cs",
@@ -526,7 +557,7 @@
             },
             {
               "$type": "Document",
-              "DocumentIndex": 25,
+              "DocumentIndex": 26,
               "Title": "FriendshipsRepositoryTests.cs",
               "DocumentMoniker": "C:\\Users\\Ghaster\\IdeaProjects\\UBB-SE-2025-MarketMinds-Steam\\Tests\\FriendshipsRepositoryTests.cs",
               "RelativeDocumentMoniker": "..\\..\\..\\..\\..\\..\\Ghaster\\IdeaProjects\\UBB-SE-2025-MarketMinds-Steam\\Tests\\FriendshipsRepositoryTests.cs",
@@ -538,7 +569,7 @@
             },
             {
               "$type": "Document",
-              "DocumentIndex": 26,
+              "DocumentIndex": 27,
               "Title": "FriendshipsRepository.cs",
               "DocumentMoniker": "C:\\Users\\Ghaster\\IdeaProjects\\UBB-SE-2025-MarketMinds-Steam\\BusinessLayer\\Repositories\\FriendshipsRepository.cs",
               "RelativeDocumentMoniker": "..\\..\\..\\..\\..\\..\\Ghaster\\IdeaProjects\\UBB-SE-2025-MarketMinds-Steam\\BusinessLayer\\Repositories\\FriendshipsRepository.cs",
@@ -550,7 +581,7 @@
             },
             {
               "$type": "Document",
-              "DocumentIndex": 27,
+              "DocumentIndex": 28,
               "Title": "CollectionsRepositoryTests.cs",
               "DocumentMoniker": "C:\\Users\\Ghaster\\IdeaProjects\\UBB-SE-2025-MarketMinds-Steam\\Tests\\CollectionsRepositoryTests.cs",
               "RelativeDocumentMoniker": "..\\..\\..\\..\\..\\..\\Ghaster\\IdeaProjects\\UBB-SE-2025-MarketMinds-Steam\\Tests\\CollectionsRepositoryTests.cs",
@@ -562,7 +593,7 @@
             },
             {
               "$type": "Document",
-              "DocumentIndex": 28,
+              "DocumentIndex": 29,
               "Title": "CollectionsRepository.cs",
               "DocumentMoniker": "C:\\Users\\Ghaster\\IdeaProjects\\UBB-SE-2025-MarketMinds-Steam\\BusinessLayer\\Repositories\\CollectionsRepository.cs",
               "RelativeDocumentMoniker": "..\\..\\..\\..\\..\\..\\Ghaster\\IdeaProjects\\UBB-SE-2025-MarketMinds-Steam\\BusinessLayer\\Repositories\\CollectionsRepository.cs",
@@ -574,7 +605,7 @@
             },
             {
               "$type": "Document",
-              "DocumentIndex": 29,
+              "DocumentIndex": 30,
               "Title": "OwnedGamesServiceTests.cs",
               "DocumentMoniker": "C:\\Users\\Ghaster\\IdeaProjects\\UBB-SE-2025-MarketMinds-Steam\\Tests\\OwnedGamesServiceTests.cs",
               "RelativeDocumentMoniker": "..\\..\\..\\..\\..\\..\\Ghaster\\IdeaProjects\\UBB-SE-2025-MarketMinds-Steam\\Tests\\OwnedGamesServiceTests.cs",
@@ -586,7 +617,7 @@
             },
             {
               "$type": "Document",
-              "DocumentIndex": 30,
+              "DocumentIndex": 31,
               "Title": "OwnedGamesService.cs",
               "DocumentMoniker": "C:\\Users\\Ghaster\\IdeaProjects\\UBB-SE-2025-MarketMinds-Steam\\BusinessLayer\\Services\\OwnedGamesService.cs",
               "RelativeDocumentMoniker": "..\\..\\..\\..\\..\\..\\Ghaster\\IdeaProjects\\UBB-SE-2025-MarketMinds-Steam\\BusinessLayer\\Services\\OwnedGamesService.cs",
@@ -598,7 +629,7 @@
             },
             {
               "$type": "Document",
-              "DocumentIndex": 31,
+              "DocumentIndex": 32,
               "Title": "FriendsService.cs",
               "DocumentMoniker": "C:\\Users\\Ghaster\\IdeaProjects\\UBB-SE-2025-MarketMinds-Steam\\BusinessLayer\\Services\\FriendsService.cs",
               "RelativeDocumentMoniker": "..\\..\\..\\..\\..\\..\\Ghaster\\IdeaProjects\\UBB-SE-2025-MarketMinds-Steam\\BusinessLayer\\Services\\FriendsService.cs",
@@ -610,7 +641,7 @@
             },
             {
               "$type": "Document",
-              "DocumentIndex": 32,
+              "DocumentIndex": 33,
               "Title": "FriendsServiceTests.cs",
               "DocumentMoniker": "C:\\Users\\Ghaster\\IdeaProjects\\UBB-SE-2025-MarketMinds-Steam\\Tests\\FriendsServiceTests.cs",
               "RelativeDocumentMoniker": "..\\..\\..\\..\\..\\..\\Ghaster\\IdeaProjects\\UBB-SE-2025-MarketMinds-Steam\\Tests\\FriendsServiceTests.cs",
@@ -622,7 +653,7 @@
             },
             {
               "$type": "Document",
-              "DocumentIndex": 33,
+              "DocumentIndex": 34,
               "Title": "CollectionsServiceTests.cs",
               "DocumentMoniker": "C:\\Users\\Ghaster\\IdeaProjects\\UBB-SE-2025-MarketMinds-Steam\\Tests\\CollectionsServiceTests.cs",
               "RelativeDocumentMoniker": "..\\..\\..\\..\\..\\..\\Ghaster\\IdeaProjects\\UBB-SE-2025-MarketMinds-Steam\\Tests\\CollectionsServiceTests.cs",
@@ -634,7 +665,7 @@
             },
             {
               "$type": "Document",
-              "DocumentIndex": 34,
+              "DocumentIndex": 35,
               "Title": "CollectionsService.cs",
               "DocumentMoniker": "C:\\Users\\Ghaster\\IdeaProjects\\UBB-SE-2025-MarketMinds-Steam\\BusinessLayer\\Services\\CollectionsService.cs",
               "RelativeDocumentMoniker": "..\\..\\..\\..\\..\\..\\Ghaster\\IdeaProjects\\UBB-SE-2025-MarketMinds-Steam\\BusinessLayer\\Services\\CollectionsService.cs",
@@ -646,7 +677,7 @@
             },
             {
               "$type": "Document",
-              "DocumentIndex": 22,
+              "DocumentIndex": 23,
               "Title": "AchievementsPage.xaml.cs",
               "DocumentMoniker": "C:\\Users\\jolde\\OneDrive\\Documents\\GitHub\\UBB-SE-2025-MarketMinds-Steam\\SteamProfile\\Views\\AchievementsPage.xaml.cs",
               "RelativeDocumentMoniker": "Views\\AchievementsPage.xaml.cs",
@@ -657,7 +688,7 @@
             },
             {
               "$type": "Document",
-              "DocumentIndex": 23,
+              "DocumentIndex": 24,
               "Title": "AddGameToCollectionViewModel.cs",
               "DocumentMoniker": "C:\\Users\\jolde\\OneDrive\\Documents\\GitHub\\UBB-SE-2025-MarketMinds-Steam\\SteamProfile\\ViewModels\\AddGameToCollectionViewModel.cs",
               "RelativeDocumentMoniker": "ViewModels\\AddGameToCollectionViewModel.cs",
@@ -668,7 +699,7 @@
             },
             {
               "$type": "Document",
-              "DocumentIndex": 35,
+              "DocumentIndex": 36,
               "Title": "FeaturesValidator.cs",
               "DocumentMoniker": "C:\\Users\\Ghaster\\IdeaProjects\\UBB-SE-2025-MarketMinds-Steam\\BusinessLayer\\Validators\\FeaturesValidator.cs",
               "RelativeDocumentMoniker": "..\\..\\..\\..\\..\\..\\Ghaster\\IdeaProjects\\UBB-SE-2025-MarketMinds-Steam\\BusinessLayer\\Validators\\FeaturesValidator.cs",
@@ -679,7 +710,7 @@
             },
             {
               "$type": "Document",
-              "DocumentIndex": 36,
+              "DocumentIndex": 37,
               "Title": "ValidationException.cs",
               "DocumentMoniker": "C:\\Users\\Ghaster\\IdeaProjects\\UBB-SE-2025-MarketMinds-Steam\\BusinessLayer\\Exceptions\\ValidationException.cs",
               "RelativeDocumentMoniker": "..\\..\\..\\..\\..\\..\\Ghaster\\IdeaProjects\\UBB-SE-2025-MarketMinds-Steam\\BusinessLayer\\Exceptions\\ValidationException.cs",
@@ -690,7 +721,7 @@
             },
             {
               "$type": "Document",
-              "DocumentIndex": 1,
+              "DocumentIndex": 5,
               "Title": "SteamProfile.csproj",
               "DocumentMoniker": "C:\\Users\\jolde\\OneDrive\\Documents\\GitHub\\UBB-SE-2025-MarketMinds-Steam\\SteamProfile\\SteamProfile.csproj",
               "RelativeDocumentMoniker": "SteamProfile.csproj",
@@ -698,8 +729,7 @@
               "RelativeToolTip": "SteamProfile.csproj",
               "ViewState": "AgIAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000758|",
-              "WhenOpened": "2025-04-07T07:10:18.465Z",
-              "EditorCaption": ""
+              "WhenOpened": "2025-04-07T07:10:18.465Z"
             }
           ]
         },

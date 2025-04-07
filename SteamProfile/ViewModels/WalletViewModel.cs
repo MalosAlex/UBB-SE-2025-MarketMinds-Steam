@@ -7,13 +7,15 @@ using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Threading.Tasks;
+using BusinessLayer.Services.Interfaces;
+using BusinessLayer.Repositories.Interfaces;
 
 namespace SteamProfile.ViewModels
 {
     public partial class WalletViewModel : ObservableObject
     {
-        private readonly WalletService walletService;
-        private readonly PointsOffersRepository pointsOffersRepository;
+        private readonly IWalletService walletService;
+        private readonly IPointsOffersRepository pointsOffersRepository;
 
         [ObservableProperty]
         private decimal balance;
@@ -29,7 +31,7 @@ namespace SteamProfile.ViewModels
 
         public string PointsText => $"{Points} pts";
 
-        public WalletViewModel(WalletService walletService)
+        public WalletViewModel(IWalletService walletService)
         {
             this.walletService = walletService ?? throw new ArgumentNullException(nameof(walletService));
             this.pointsOffersRepository = new PointsOffersRepository();
