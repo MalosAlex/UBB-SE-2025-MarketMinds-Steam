@@ -11,20 +11,20 @@ namespace SteamProfile.ViewModels
 {
     public partial class AddMoneyViewModel : ObservableObject
     {
-        private readonly WalletViewModel _walletViewModel;
-        private readonly List<char> _digitsAsChar = new() { '0', '1', '2', '3', '4', '5', '6', '7', '8', '9' };
-        private const int MAX_AMOUNT = 500;
+        private readonly WalletViewModel walletViewModel;
+        private readonly List<char> allowedDigits = new() { '0', '1', '2', '3', '4', '5', '6', '7', '8', '9' };
+        private const int MAXIMUM_AMOUNT = 500;
 
         [ObservableProperty]
         [NotifyPropertyChangedFor(nameof(ErrorMessageVisibility))]
-        private bool _showErrorMessage;
+        private bool showErrorMessage;
 
         [ObservableProperty]
         [NotifyPropertyChangedFor(nameof(PaymentButtonsEnabled))]
-        private bool _isInputValid;
+        private bool isInputValid;
 
         [ObservableProperty]
-        private string _amountToAdd;
+        private string amountToAdd;
 
         public ICommand AddFundsCommand { get; }
 
@@ -34,9 +34,9 @@ namespace SteamProfile.ViewModels
 
         public AddMoneyViewModel(WalletViewModel walletViewModel)
         {
-            _walletViewModel = walletViewModel ?? throw new ArgumentNullException(nameof(walletViewModel));
-            _isInputValid = false;
-            _showErrorMessage = false;
+            this.walletViewModel = walletViewModel ?? throw new ArgumentNullException(nameof(walletViewModel));
+            isInputValid = false;
+            showErrorMessage = false;
 
             // Initialize the command
             AddFundsCommand = new RelayCommand(ProcessAddFunds, () => IsInputValid);
@@ -68,7 +68,7 @@ namespace SteamProfile.ViewModels
             }
 
             // Check if input contains only digits
-            if (input.Any(c => !_digitsAsChar.Contains(c)))
+            if (input.Any(character => !allowedDigits.Contains(character)))
             {
                 ShowErrorMessage = true;
                 return;
@@ -77,7 +77,7 @@ namespace SteamProfile.ViewModels
             // Check if amount is within limits
             if (int.TryParse(input, out int amount))
             {
-                if (amount > MAX_AMOUNT || amount <= 0)
+                if (amount > MAXIMUM_AMOUNT || amount <= 0)
                 {
                     ShowErrorMessage = true;
                     return;
@@ -98,7 +98,7 @@ namespace SteamProfile.ViewModels
 
             if (int.TryParse(AmountToAdd, out int amount))
             {
-                _walletViewModel.AddFunds(amount);
+                walletViewModel.AddFunds(amount);
                 AmountToAdd = string.Empty;
                 IsInputValid = false;
             }
@@ -109,7 +109,7 @@ namespace SteamProfile.ViewModels
             return new Dictionary<string, object>
             {
                 { "sum", int.Parse(AmountToAdd) },
-                { "viewModel", _walletViewModel }
+                { "viewModel", walletViewModel }
             };
         }
     }

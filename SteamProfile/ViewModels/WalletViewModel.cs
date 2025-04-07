@@ -12,16 +12,16 @@ namespace SteamProfile.ViewModels
 {
     public partial class WalletViewModel : ObservableObject
     {
-        private readonly WalletService _walletService;
-        private readonly PointsOffersRepository _pointsOffersRepository;
+        private readonly WalletService walletService;
+        private readonly PointsOffersRepository pointsOffersRepository;
 
         [ObservableProperty]
-        private decimal _balance;
+        private decimal balance;
 
         [ObservableProperty]
-        private int _points;
+        private int points;
 
-        private int _walletId;
+        private int walletId;
 
         public List<PointsOffer> PointsOffers { get; set; }
 
@@ -31,9 +31,9 @@ namespace SteamProfile.ViewModels
 
         public WalletViewModel(WalletService walletService)
         {
-            _walletService = walletService ?? throw new ArgumentNullException(nameof(walletService));
-            _pointsOffersRepository = new PointsOffersRepository();
-            PointsOffers = _pointsOffersRepository.Offers;
+            this.walletService = walletService ?? throw new ArgumentNullException(nameof(walletService));
+            this.pointsOffersRepository = new PointsOffersRepository();
+            PointsOffers = this.pointsOffersRepository.Offers;
             RefreshWalletData();
         }
 
@@ -50,8 +50,8 @@ namespace SteamProfile.ViewModels
         [RelayCommand]
         public void RefreshWalletData()
         {
-            Balance = _walletService.GetBalance();
-            Points = _walletService.GetPoints();
+            Balance = walletService.GetBalance();
+            Points = walletService.GetPoints();
         }
 
         [RelayCommand]
@@ -60,23 +60,23 @@ namespace SteamProfile.ViewModels
             if (amount <= 0)
                 return;
 
-            _walletService.AddMoney(amount);
+            walletService.AddMoney(amount);
             RefreshWalletData();
         }
 
         [RelayCommand]
-        public async Task<bool> AddPoints(PointsOffer offer)
+        public async Task<bool> AddPoints(PointsOffer pointsOffer)
         {
-            if (offer == null)
+            if (pointsOffer == null)
                 return false;
 
             // Check if user has enough balance to purchase the points
-            if (Balance >= offer.Price)
+            if (Balance >= pointsOffer.Price)
             {
                 try
                 {
                     // Use the service to handle the purchase transaction
-                    _walletService.PurchasePoints(offer);
+                    walletService.PurchasePoints(pointsOffer);
                     // Refresh wallet data after purchase
                     RefreshWalletData();
                     return true;

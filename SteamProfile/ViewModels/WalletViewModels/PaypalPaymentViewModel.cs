@@ -49,11 +49,11 @@ namespace SteamProfile.ViewModels
             ShowErrorMessage = false;
         }
 
-        public void Initialize(int amount, User user, WalletViewModel walletViewModel)
+        public void Initialize(int paymentAmount, User currentUser, WalletViewModel currentWalletViewModel)
         {
-            Amount = amount;
-            User = user;
-            WalletViewModel = walletViewModel;
+            Amount = paymentAmount;
+            User = currentUser;
+            WalletViewModel = currentWalletViewModel;
             AmountText = "Sum: " + Amount.ToString();
         }
 
@@ -70,15 +70,17 @@ namespace SteamProfile.ViewModels
             OnPropertyChanged(nameof(ErrorMessageVisibility));
         }
 
-        public void ValidateEmail(string email)
+        public void ValidateEmail(string emailAddress)
         {
-            IsEmailValid = !string.IsNullOrEmpty(email) && Regex.IsMatch(email, @"^[A-Za-z0-9._%+-]+@[A-Za-z0-9.-]+\.[A-Za-z]{2,}$");
+            IsEmailValid = !string.IsNullOrEmpty(emailAddress) &&
+                           Regex.IsMatch(emailAddress, @"^[A-Za-z0-9._%+-]+@[A-Za-z0-9.-]+\.[A-Za-z]{2,}$");
             ShowErrorMessage = !IsEmailValid;
         }
 
         public void ValidatePassword(string password)
         {
-            IsPasswordValid = !string.IsNullOrEmpty(password) && Regex.IsMatch(password, @"^(?=.*[A-Z])(?=.*[a-z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{8,}$");
+            IsPasswordValid = !string.IsNullOrEmpty(password) &&
+                              Regex.IsMatch(password, @"^(?=.*[A-Z])(?=.*[a-z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{8,}$");
             ShowErrorMessage = !IsPasswordValid;
         }
 
