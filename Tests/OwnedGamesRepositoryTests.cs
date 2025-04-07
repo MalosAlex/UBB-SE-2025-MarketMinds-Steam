@@ -11,6 +11,7 @@ using BusinessLayer.Repositories.Interfaces;
 using BusinessLayer.Exceptions;
 using Microsoft.Data.SqlClient;
 using System.Runtime.Serialization;
+using BusinessLayer.Services;
 
 namespace Tests
 {
@@ -26,6 +27,13 @@ namespace Tests
             // Arrange: Create a new mock IDataLink and instantiate repository with it.
             _mockDataLink = new Mock<IDataLink>();
             _repository = new OwnedGamesRepository(_mockDataLink.Object);
+        }
+
+        [Test]
+        public void OwnedGamesRepository_NullDataLink_ThrowsException()
+        {
+            // Assert
+            Assert.Throws<ArgumentNullException>(() => new OwnedGamesRepository(null));
         }
 
         #region Helper Methods

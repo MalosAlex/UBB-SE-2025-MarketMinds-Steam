@@ -254,6 +254,17 @@ namespace Tests
     [TestFixture]
     public class CollectionsServiceExceptionTests
     {
+        #region ConstructorTests
+
+        [Test]
+        public void CollectionsService_CollectionRepositoryNull_ThrowException()
+        {
+            // Assert
+            Assert.Throws<ArgumentNullException>(() => new CollectionsService(null));
+        }
+
+        #endregion
+
         #region GetAllCollections Exception Tests
 
         [Test]
