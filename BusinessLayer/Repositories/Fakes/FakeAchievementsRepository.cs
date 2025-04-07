@@ -135,7 +135,6 @@ public class FakeAchievementsRepository : IAchievementsRepository
     public int GetNumberOfPosts(int userId) => NumberOfPosts;
     // public int GetYearsOfAcftivity(int userId) => YearsOfAcftivity;
     public Func<int, int> GetYearsOfAcftivity { get; set; } = _ => 0;
-
     int IAchievementsRepository.GetYearsOfAcftivity(int userId) => GetYearsOfAcftivity(userId);
     public Func<int, bool> IsUserDeveloper { get; set; } = _ => false;
     bool IAchievementsRepository.IsUserDeveloper(int userId) => IsUserDeveloper(userId);
