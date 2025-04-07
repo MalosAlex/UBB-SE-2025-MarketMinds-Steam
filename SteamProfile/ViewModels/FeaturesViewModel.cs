@@ -1,151 +1,89 @@
-﻿using BusinessLayer.Services;
+﻿using BusinessLayer.Models;
+using BusinessLayer.Repositories;
+using BusinessLayer.Services;
+using BusinessLayer.Services.Interfaces;
+using CommunityToolkit.Mvvm.ComponentModel;
+using CommunityToolkit.Mvvm.Input;
+using Microsoft.UI;
+using Microsoft.UI.Xaml;
+using Microsoft.UI.Xaml.Controls;
+using Microsoft.UI.Xaml.Media;
+using Microsoft.UI.Xaml.Media.Imaging;
+using SteamProfile.Views;
 using System;
 using System.Collections.Generic;
+using System.Collections.ObjectModel;
+using System.ComponentModel;
+using System.Diagnostics;
+using System.IO;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
-using System.Collections.ObjectModel;
-using System.ComponentModel;
-using BusinessLayer.Models;
-using Microsoft.UI.Xaml.Media;
-using Microsoft.UI;
-using System.IO;
-using Microsoft.UI.Xaml.Controls;
-using Microsoft.UI.Xaml;
-using CommunityToolkit.Mvvm.Input;
-using SteamProfile.Views;
-using System.Diagnostics;
-using Microsoft.UI.Xaml.Media.Imaging;
-using BusinessLayer.Repositories;
-using BusinessLayer.Services.Interfaces;
 
 namespace SteamProfile.ViewModels
 {
-    public class FeatureDisplay : INotifyPropertyChanged
+    public partial class FeaturesViewModel : ObservableObject
     {
-        private readonly Feature _feature;
-        private readonly bool _isPurchased;
-        
-        public event PropertyChangedEventHandler PropertyChanged;
-
-        public FeatureDisplay(Feature feature, bool isPurchased)
-        {
-            _feature = feature;
-            _isPurchased = isPurchased;
-        }
-
-        public string Name => _feature?.Name ?? "Unknown";
-        public string Source
-        {
-            get
-            {
-                if (_feature == null)
-                {
-                    return string.Empty;
-                }
-
-                return $"ms-appx:///{_feature.Source}";
-            }
-        }
-        public string DisplayValue { get { return "Value: " + _feature.Value.ToString(); } }
-        public bool Equipped => _feature.Equipped;
-        public bool IsPurchased => _isPurchased;
-        public int FeatureId => _feature.FeatureId;
-        public string Type => _feature.Type;
-        
-        // New properties for UI
-        public double Opacity => IsPurchased ? 1.0 : 0.5;
-        public Brush BorderBrush => IsPurchased ? new SolidColorBrush(Colors.DodgerBlue) : new SolidColorBrush(Colors.Transparent);
-        public Visibility LockIconVisibility => IsPurchased ? Visibility.Collapsed : Visibility.Visible;
-
-        protected void OnPropertyChanged(string propertyName)
-        {
-            PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
-        }
-    }
-
-    public class FeaturesViewModel : INotifyPropertyChanged
-    {
-        private readonly FeaturesService _featuresService;
-        private readonly IUserService _userService;
+        private readonly FeaturesService featuresService;
+        private readonly IUserService userService;
+        private XamlRoot xamlRoot;
+        private string statusMessage = string.Empty;
         private readonly UserProfilesRepository _userProfilesRepository;
-        private string _statusMessage = string.Empty;
-        private Brush _statusColor;
-        private FeatureDisplay _selectedFeature;
+        private SolidColorBrush statusColor = new(Colors.Black);
+        private FeatureDisplay selectedFeature;
         private XamlRoot _xamlRoot;
-        private readonly Frame _frame;
 
-        public IRelayCommand ShowOptionsCommand { get; }
-        
+        public string StatusMessage
+        {
+            get => statusMessage;
+            set => SetProperty(ref statusMessage, value);
+        }
+
+        public SolidColorBrush StatusColor
+        {
+            get => statusColor;
+            set => SetProperty(ref statusColor, value);
+        }
+
         public FeatureDisplay SelectedFeature
         {
-            get => _selectedFeature;
-            set
-            {
-                _selectedFeature = value;
-                OnPropertyChanged(nameof(SelectedFeature));
-            }
+            get => selectedFeature;
+            set => SetProperty(ref selectedFeature, value);
         }
-
-        public event PropertyChangedEventHandler PropertyChanged;
 
         public ObservableCollection<FeatureDisplay> Frames { get; } = new();
         public ObservableCollection<FeatureDisplay> Emojis { get; } = new();
         public ObservableCollection<FeatureDisplay> Backgrounds { get; } = new();
         public ObservableCollection<FeatureDisplay> Pets { get; } = new();
         public ObservableCollection<FeatureDisplay> Hats { get; } = new();
-
-        public string StatusMessage
+  
+        public FeaturesViewModel(FeaturesService featuresService, IUserService userService)
         {
-            get => _statusMessage;
-            set
-            {
-                _statusMessage = value;
-                OnPropertyChanged(nameof(StatusMessage));
-            }
-        }
-
-        public Brush StatusColor
-        {
-            get => _statusColor;
-            set
-            {
-                _statusColor = value;
-                OnPropertyChanged(nameof(StatusColor));
-            }
-        }
-
-        public static event EventHandler<int> FeatureEquipStatusChanged;
-
-        public FeaturesViewModel(FeaturesService featuresService, Frame frame)
-        {
-            _featuresService = featuresService;
-            _userService = featuresService.UserService;
-            _userProfilesRepository = App.UserProfileRepository;
-            _frame = frame;
-            _statusColor = new SolidColorBrush(Colors.Black);
-            ShowOptionsCommand = new RelayCommand<FeatureDisplay>(ShowOptions);
+            this.featuresService = featuresService;
+            this.userService = userService;
             LoadFeatures();
         }
 
+        public void SetXamlRoot(XamlRoot xamlRoot)
+        {
+            this.xamlRoot = xamlRoot;
+        }
         public void Initialize(XamlRoot xamlRoot)
         {
             _xamlRoot = xamlRoot;
         }
-
         private void LoadFeatures()
         {
             try
             {
-                var features = _featuresService.GetFeaturesByCategories();
+                var features = featuresService.GetFeaturesByCategories();
                 
-                UpdateCollection(Frames, features.GetValueOrDefault("frame", new List<Feature>()));
-                UpdateCollection(Emojis, features.GetValueOrDefault("emoji", new List<Feature>()));
-                UpdateCollection(Backgrounds, features.GetValueOrDefault("background", new List<Feature>()));
-                UpdateCollection(Pets, features.GetValueOrDefault("pet", new List<Feature>()));
-                UpdateCollection(Hats, features.GetValueOrDefault("hat", new List<Feature>()));
+                UpdateCollection(Frames, features.GetValueOrDefault("frame", new()));
+                UpdateCollection(Emojis, features.GetValueOrDefault("emoji", new()));
+                UpdateCollection(Backgrounds, features.GetValueOrDefault("background", new()));
+                UpdateCollection(Pets, features.GetValueOrDefault("pet", new()));
+                UpdateCollection(Hats, features.GetValueOrDefault("hat", new()));
 
-                // Remove success message
                 StatusMessage = string.Empty;
             }
             catch (Exception ex)
@@ -155,171 +93,139 @@ namespace SteamProfile.ViewModels
             }
         }
 
-        private async void ShowOptions(FeatureDisplay feature)
+        private void UpdateCollection(ObservableCollection<FeatureDisplay> collection, List<Feature> features)
         {
-            if (feature == null || _xamlRoot == null) return;
+            collection.Clear();
+            var currentUser = userService.GetCurrentUser();
+            foreach (var feature in features)
+            {
+                bool isPurchased = featuresService.IsFeaturePurchased(currentUser.UserId, feature.FeatureId);
+                collection.Add(new FeatureDisplay(feature, isPurchased));
+            }
+        }
+
+        [RelayCommand]
+        private async Task ShowOptionsAsync(FeatureDisplay feature)
+        {
+            if (feature == null || xamlRoot == null) return;
 
             SelectedFeature = feature;
+            var currentUser = userService.GetCurrentUser();
             
             var dialog = new ContentDialog
             {
-                XamlRoot = _xamlRoot
+                XamlRoot = xamlRoot,
+                Title = feature.Name
             };
+
             var buttons = new StackPanel { Spacing = 10 };
 
-            if (!feature.IsPurchased)
-            {
-                var buyButton = new Button 
-                { 
-                    Content = "Buy",
-                    Style = Application.Current.Resources["AccentButtonStyle"] as Style,
-                    Tag = feature.FeatureId // Store the feature ID in the Tag property
-                };
-                buyButton.Click += BuyButton_Click;
-                buttons.Children.Add(buyButton);
-            }
-            else // Feature is purchased
+            if (feature.IsPurchased)
             {
                 if (feature.Equipped)
                 {
-                    var unequipButton = new Button 
-                    { 
-                        Content = "Unequip",
-                        Style = Application.Current.Resources["AccentButtonStyle"] as Style
-                    };
-                    unequipButton.Click += (s, e) => 
+                    buttons.Children.Add(new Button
                     {
-                        try
-                        {
-                            // Call service to unequip feature
-                            bool success = _featuresService.UnequipFeature(
-                                _userService.GetCurrentUser().UserId, 
-                                feature.FeatureId);
-                            
-                            if (success)
-                            {
-                                dialog.Hide();
-                                StatusMessage = $"{feature.Name} unequipped successfully";
-                                StatusColor = new SolidColorBrush(Colors.Green);
-                                
-                                // Refresh features list to update UI
-                                LoadFeatures();
-                            }
-                            else
-                            {
-                                StatusMessage = "Failed to unequip feature";
-                                StatusColor = new SolidColorBrush(Colors.Red);
-                            }
-                        }
-                        catch (Exception ex)
-                        {
-                            StatusMessage = $"Error: {ex.Message}";
-                            StatusColor = new SolidColorBrush(Colors.Red);
-                        }
-                    };
-                    buttons.Children.Add(unequipButton);
+                        Content = "Unequip",
+                        Command = new RelayCommand(() => UnequipFeature(currentUser.UserId, feature))
+                    });
                 }
                 else
                 {
-                    var equipButton = new Button 
-                    { 
-                        Content = "Equip",
-                        Style = Application.Current.Resources["AccentButtonStyle"] as Style
-                    };
-                    equipButton.Click += (s, e) => 
+                    buttons.Children.Add(new Button
                     {
-                        try
-                        {
-                            // Call service to equip feature
-                            bool success = _featuresService.EquipFeature(
-                                _userService.GetCurrentUser().UserId, 
-                                feature.FeatureId);
-                            
-                            if (success)
-                            {
-                                dialog.Hide();
-                                StatusMessage = $"{feature.Name} equipped successfully";
-                                StatusColor = new SolidColorBrush(Colors.Green);
-                                
-                                // Refresh features list to update UI
-                                LoadFeatures();
-                            }
-                            else
-                            {
-                                StatusMessage = "Failed to equip feature";
-                                StatusColor = new SolidColorBrush(Colors.Red);
-                            }
-                        }
-                        catch (Exception ex)
-                        {
-                            StatusMessage = $"Error: {ex.Message}";
-                            StatusColor = new SolidColorBrush(Colors.Red);
-                        }
-                    };
-                    buttons.Children.Add(equipButton);
+                        Content = "Equip",
+                        Command = new RelayCommand(() => EquipFeature(feature.FeatureId))
+                    });
                 }
             }
-
-            var previewButton = new Button 
-            { 
-                Content = "Preview",
-                Style = Application.Current.Resources["DefaultButtonStyle"] as Style
-            };
-            previewButton.Click += async (s, e) => 
+            else
             {
-                // Close the options dialog
-                dialog.Hide();
-                
-                // Show the preview dialog
-                await ShowPreviewDialog(feature);
-            };
-            buttons.Children.Add(previewButton);
+                buttons.Children.Add(new Button
+                {
+                    Content = "Purchase",
+                    Command = new RelayCommand(() => PurchaseFeature(currentUser.UserId, feature))
+                });
+            }
 
             dialog.Content = buttons;
-            dialog.Title = feature.Name;
-            dialog.CloseButtonText = "Cancel";
-
             await dialog.ShowAsync();
         }
 
-        // Event handler for Buy button click
-        private void BuyButton_Click(object sender, RoutedEventArgs e)
+        public static event EventHandler<int> FeatureEquipStatusChanged;
+        public bool EquipFeature(int featureId)
         {
-            if (sender is Button button)
+            try
             {
-                // Close the dialog
-                if (button.Parent is StackPanel panel && 
-                    panel.Parent is ContentDialog dialog)
+                // Call service to equip feature
+                bool success = featuresService.EquipFeature(
+                    userService.GetCurrentUser().UserId,
+                    featureId);
+
+                if (success)
                 {
-                    dialog.Hide();
+                    // Notify that a feature was equipped
+                    FeatureEquipStatusChanged ?.Invoke(this, userService.GetCurrentUser().UserId);
+
+                    StatusMessage = "Feature equipped successfully";
+                    StatusColor = new SolidColorBrush(Colors.Green);
+
+                    // Refresh features list to update UI
+                    LoadFeatures();
+                }
+                else
+                {
+                    StatusMessage = "Failed to equip feature";
+                    StatusColor = new SolidColorBrush(Colors.Red);
                 }
 
-                // Trigger event for navigation
-                NavigateToShopRequested?.Invoke(this, new NavigationEventArgs { FeatureId = (int)button.Tag });
+                return success;
+            }
+            catch (Exception ex)
+            {
+                StatusMessage = $"Error: {ex.Message}";
+                StatusColor = new SolidColorBrush(Colors.Red);
+                return false;
             }
         }
 
-        // Event to request navigation to the Shop page
-        public event EventHandler<NavigationEventArgs> NavigateToShopRequested;
-
-        // Navigation event args class
-        public class NavigationEventArgs : EventArgs
+        public bool UnequipFeature(int userId, FeatureDisplay feature)
         {
-            public int FeatureId { get; set; }
+            var result = featuresService.UnequipFeature(userId, feature.FeatureId);
+            StatusMessage = result.Item2;
+            StatusColor = new SolidColorBrush(result.Item1 ? Colors.Green : Colors.Red);
+            
+            if (result.Item1)
+            {
+                LoadFeatures();
+            }
+            return result.Item1;
+        }
+
+        public async void ShowPreview(FeatureDisplay feature)
+        {
+            await ShowPreviewDialog(feature);
+        }
+
+        private void PurchaseFeature(int userId, FeatureDisplay feature)
+        {
+            // TODO: Implement purchase logic
+            StatusMessage = "Purchase feature not implemented yet.";
+            StatusColor = new SolidColorBrush(Colors.Red);
         }
 
         private async Task ShowPreviewDialog(FeatureDisplay featureDisplay)
         {
             // Get current user and equipped features
-            var user = _userService.GetCurrentUser();
-            var userFeatures = _featuresService.GetUserEquippedFeatures(user.UserId);
-            
+            var user = userService.GetCurrentUser();
+            var userFeatures = featuresService.GetUserEquippedFeatures(user.UserId);
+
             // Get the user profile to access bio and profile picture
             var userProfile = _userProfilesRepository.GetUserProfileByUserId(user.UserId);
-            
+
             // Create adaptive profile control
             var profileControl = new AdaptiveProfileControl();
-            
+
             // Get profile picture path
             string profilePicturePath = "ms-appx:///Assets/default-profile.png";
             if (userProfile != null && !string.IsNullOrEmpty(userProfile.ProfilePicture))
@@ -330,31 +236,31 @@ namespace SteamProfile.ViewModels
                     profilePicturePath = $"ms-appx:///{profilePicturePath}";
                 }
             }
-            
+
             // Get bio text
             string bioText = "No bio available";
             if (userProfile != null && !string.IsNullOrEmpty(userProfile.Bio))
             {
                 bioText = userProfile.Bio;
             }
-            
+
             // Extract feature paths from equipped features
             string hatPath = null;
             string petPath = null;
             string emojiPath = null;
             string framePath = null;
             string backgroundPath = null;
-            
+
             foreach (var feature in userFeatures)
             {
                 if (!feature.Equipped) continue;
-                
+
                 string path = feature.Source;
                 if (!path.StartsWith("ms-appx:///"))
                 {
                     path = $"ms-appx:///{path}";
                 }
-                
+
                 switch (feature.Type.ToLower())
                 {
                     case "hat": hatPath = path; break;
@@ -364,7 +270,7 @@ namespace SteamProfile.ViewModels
                     case "background": backgroundPath = path; break;
                 }
             }
-            
+
             // Apply the preview feature
             string previewPath = featureDisplay.Source;
             switch (featureDisplay.Type.ToLower())
@@ -375,23 +281,23 @@ namespace SteamProfile.ViewModels
                 case "frame": framePath = previewPath; break;
                 case "background": backgroundPath = previewPath; break;
             }
-            
+
             // Update the profile control with all the information
             profileControl.UpdateProfile(
-                user.Username, 
-                bioText, 
+                user.Username,
+                bioText,
                 profilePicturePath,
-                hatPath, 
-                petPath, 
-                emojiPath, 
-                framePath, 
+                hatPath,
+                petPath,
+                emojiPath,
+                framePath,
                 backgroundPath
             );
-            
+
             // Adjust size for the dialog
             profileControl.Width = 350;
             profileControl.Height = 500;
-            
+
             // Create and show preview dialog
             var previewDialog = new ContentDialog
             {
@@ -400,97 +306,46 @@ namespace SteamProfile.ViewModels
                 Content = profileControl,
                 CloseButtonText = "Close"
             };
-            
+
             await previewDialog.ShowAsync();
         }
+    }
 
-        private void UpdateCollection(ObservableCollection<FeatureDisplay> collection, List<Feature> newItems)
+    public class FeatureDisplay : ObservableObject
+    {
+        private readonly Feature feature;
+        private readonly bool isPurchased;
+        private bool isEquipped;
+
+        public FeatureDisplay(Feature feature, bool isPurchased)
         {
-            collection.Clear();
-            foreach (var item in newItems)
-            {
-                var isPurchased = _featuresService.IsFeaturePurchased(_userService.GetCurrentUser().UserId, item.FeatureId);
-                collection.Add(new FeatureDisplay(item, isPurchased));
-            }
+            this.feature = feature;
+            this.isPurchased = isPurchased;
+            this.isEquipped = feature.Equipped;
         }
 
-        private void OnPropertyChanged(string propertyName)
+        public int FeatureId => feature.FeatureId;
+        public string Name => feature.Name;
+        public string Description => feature.Description;
+        public string Type => feature.Type;
+        public int Value => feature.Value;
+        public bool IsPurchased => isPurchased;
+        public bool Equipped
         {
-            PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
+            get => isEquipped;
+            set => SetProperty(ref isEquipped, value);
         }
-
-        public bool EquipFeature(int featureId)
+        public string Source
         {
-            try
+            get
             {
-                // Call service to equip feature
-                bool success = _featuresService.EquipFeature(
-                    _userService.GetCurrentUser().UserId, 
-                    featureId);
-                
-                if (success)
+                if (feature == null)
                 {
-                    // Notify that a feature was equipped
-                    FeatureEquipStatusChanged?.Invoke(this, _userService.GetCurrentUser().UserId);
-                    
-                    StatusMessage = "Feature equipped successfully";
-                    StatusColor = new SolidColorBrush(Colors.Green);
-                    
-                    // Refresh features list to update UI
-                    LoadFeatures();
+                    return string.Empty;
                 }
-                else
-                {
-                    StatusMessage = "Failed to equip feature";
-                    StatusColor = new SolidColorBrush(Colors.Red);
-                }
-                
-                return success;
-            }
-            catch (Exception ex)
-            {
-                StatusMessage = $"Error: {ex.Message}";
-                StatusColor = new SolidColorBrush(Colors.Red);
-                return false;
-            }
-        }
 
-        public bool UnequipFeature(int featureId)
-        {
-            try
-            {
-                // Call service to unequip feature
-                bool success = _featuresService.UnequipFeature(
-                    _userService.GetCurrentUser().UserId, 
-                    featureId);
-                
-                if (success)
-                {
-                    StatusMessage = "Feature unequipped successfully";
-                    StatusColor = new SolidColorBrush(Colors.Green);
-                    
-                    // Refresh features list to update UI
-                    LoadFeatures();
-                }
-                else
-                {
-                    StatusMessage = "Failed to unequip feature";
-                    StatusColor = new SolidColorBrush(Colors.Red);
-                }
-                
-                return success;
+                return $"ms-appx:///{feature.Source}";
             }
-            catch (Exception ex)
-            {
-                StatusMessage = $"Error: {ex.Message}";
-                StatusColor = new SolidColorBrush(Colors.Red);
-                return false;
-            }
-        }
-
-        public async void ShowPreview(FeatureDisplay feature)
-        {
-            await ShowPreviewDialog(feature);
         }
     }
 }
