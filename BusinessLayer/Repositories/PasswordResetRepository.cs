@@ -2,17 +2,10 @@ using System.Data;
 using BusinessLayer.Data;
 using Microsoft.Data.SqlClient;
 using BusinessLayer.Exceptions;
+using BusinessLayer.Repositories.Interfaces;
 
 namespace BusinessLayer.Repositories
 {
-    public interface IPasswordResetRepository
-    {
-        void StoreResetCode(int userId, string code, DateTime expiryTime);
-        bool VerifyResetCode(string email, string code);
-        bool ResetPassword(string email, string code, string hashedPassword);
-        void CleanupExpiredCodes();
-    }
-
     public class PasswordResetRepository : IPasswordResetRepository
     {
         private readonly IDataLink dataLink;

@@ -1,25 +1,21 @@
-﻿using System;
 using System.Collections.Generic;
-using System.Diagnostics;
 using System.Linq;
-using BusinessLayer.Exceptions;
 using BusinessLayer.Models;
-using BusinessLayer.Repositories;
+using BusinessLayer.Repositories.Fakes;
 using BusinessLayer.Repositories.Interfaces;
 using BusinessLayer.Services.Interfaces;
-using BusinessLayer.Validators;
 
-namespace BusinessLayer.Services
+namespace BusinessLayer.Services.Fakes
 {
-    public class FeaturesService : IFeaturesService
+    public class FakeFeaturesService : IFeaturesService
     {
         private readonly IFeaturesRepository featuresRepository;
         private readonly IUserService userService;
 
-        public FeaturesService(IFeaturesRepository featuresRepository, IUserService userService)
+        public FakeFeaturesService()
         {
-            this.featuresRepository = featuresRepository;
-            this.userService = userService;
+            featuresRepository = new FakeFeaturesRepository();
+            userService = new FakeUserService();
         }
 
         public IUserService UserService => userService;
@@ -82,30 +78,7 @@ namespace BusinessLayer.Services
 
         public List<Feature> GetUserFeatures(int userId)
         {
-            try
-            {
-                var features = featuresRepository.GetUserFeatures(userId);
-                // Validate all features
-                foreach (var feature in features)
-                {
-                    var validation = FeaturesValidator.ValidateFeature(feature);
-                    if (!validation.isValid)
-                    {
-                        throw new ValidationException(validation.errorMessage);
-                    }
-                }
-
-                return features;
-            }
-            catch (DatabaseOperationException ex)
-            {
-                throw new DatabaseOperationException($"Failed to retrieve features for user {userId}.", ex);
-            }
-        }
-
-        public FeaturesRepository GetRepository()
-        {
-            return featuresRepository as FeaturesRepository;
+            return featuresRepository.GetUserFeatures(userId);
         }
     }
 }
