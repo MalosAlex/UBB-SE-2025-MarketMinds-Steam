@@ -10,5 +10,6 @@ namespace BusinessLayer.Services.Interfaces
         int GetPoints();
         void AddMoney(decimal amount);
         void AddPoints(int points);
+        bool TryPurchasePoints(PointsOffer pointsOffer);
     }
 }

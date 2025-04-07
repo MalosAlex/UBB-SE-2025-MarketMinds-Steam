@@ -4,6 +4,7 @@ using BusinessLayer.Repositories;
 using BusinessLayer.Services.Interfaces;
 using BusinessLayer.Services;
 using SteamProfile.ViewModels;
+using BusinessLayer.Repositories.Interfaces;
 
 namespace SteamProfile
 {
@@ -14,7 +15,7 @@ namespace SteamProfile
         public static readonly IAchievementsService AchievementsService;
         public static readonly FeaturesService FeaturesService;
         public static readonly ICollectionsService CollectionsService;
-        public static readonly WalletService WalletService;
+        public static readonly IWalletService WalletService;
         public static readonly IUserService UserService;
         public static readonly IFriendsService FriendsService;
         public static readonly IOwnedGamesService OwnedGamesService;
@@ -43,7 +44,7 @@ namespace SteamProfile
             var usersRepository = new UsersRepository(dataLink);
             UserProfileRepository = new UserProfilesRepository(dataLink);
             CollectionsRepository = new CollectionsRepository(dataLink);
-            var walletRepository = new WalletRepository(dataLink);
+            IWalletRepository walletRepository = new WalletRepository(dataLink);
             var friendshipsRepository = new FriendshipsRepository(dataLink);
             var ownedGamesRepossitory = new OwnedGamesRepository(dataLink);
             var sessionRepository = new SessionRepository(dataLink);
@@ -56,11 +57,11 @@ namespace SteamProfile
             AchievementsService = new AchievementsService(achievementsRepository);
             CollectionsService = new CollectionsService(CollectionsRepository);
             AuthenticationService = new AuthenticationService(usersRepository);
-            WalletService = new WalletService(walletRepository, UserService);
             FriendsService = new FriendsService(friendshipsRepository, UserService);
             OwnedGamesService = new OwnedGamesService(ownedGamesRepossitory);
             PasswordResetService = new PasswordResetService(passwordResetRepo, UserService);
             FeaturesService = new FeaturesService(featuresRepository, UserService);
+            WalletService = new WalletService(walletRepository, UserService);
 
             // Initialize all view models
             UsersViewModel = UsersViewModel.Instance;

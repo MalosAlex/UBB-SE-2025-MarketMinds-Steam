@@ -7,21 +7,23 @@ using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Threading.Tasks;
+using BusinessLayer.Services.Interfaces;
+using BusinessLayer.Repositories.Interfaces;
 
 namespace SteamProfile.ViewModels
 {
     public partial class WalletViewModel : ObservableObject
     {
-        private readonly WalletService _walletService;
-        private readonly PointsOffersRepository _pointsOffersRepository;
+        private readonly IWalletService walletService;
+        private readonly IPointsOffersRepository pointsOffersRepository;
 
         [ObservableProperty]
-        private decimal _balance;
+        private decimal balance;
 
         [ObservableProperty]
-        private int _points;
+        private int points;
 
-        private int _walletId;
+        private int walletId;
 
         public List<PointsOffer> PointsOffers { get; set; }
 
@@ -29,11 +31,11 @@ namespace SteamProfile.ViewModels
 
         public string PointsText => $"{Points} pts";
 
-        public WalletViewModel(WalletService walletService)
+        public WalletViewModel(IWalletService walletService, IPointsOffersRepository pointsOffersRepository)
         {
-            _walletService = walletService ?? throw new ArgumentNullException(nameof(walletService));
-            _pointsOffersRepository = new PointsOffersRepository();
-            PointsOffers = _pointsOffersRepository.Offers;
+            this.walletService = walletService ?? throw new ArgumentNullException(nameof(walletService));
+            this.pointsOffersRepository = pointsOffersRepository ?? throw new ArgumentNullException(nameof(pointsOffersRepository));
+            PointsOffers = this.pointsOffersRepository.Offers;
             RefreshWalletData();
         }
 
@@ -50,8 +52,8 @@ namespace SteamProfile.ViewModels
         [RelayCommand]
         public void RefreshWalletData()
         {
-            Balance = _walletService.GetBalance();
-            Points = _walletService.GetPoints();
+            Balance = walletService.GetBalance();
+            Points = walletService.GetPoints();
         }
 
         [RelayCommand]
@@ -60,34 +62,22 @@ namespace SteamProfile.ViewModels
             if (amount <= 0)
                 return;
 
-            _walletService.AddMoney(amount);
+            walletService.AddMoney(amount);
             RefreshWalletData();
         }
 
         [RelayCommand]
-        public async Task<bool> AddPoints(PointsOffer offer)
+        public async Task<bool> AddPoints(PointsOffer pointsOffer)
         {
-            if (offer == null)
-                return false;
+            // Business logic moved to WalletService
+            bool success = walletService.TryPurchasePoints(pointsOffer);
 
-            // Check if user has enough balance to purchase the points
-            if (Balance >= offer.Price)
+            if (success)
             {
-                try
-                {
-                    // Use the service to handle the purchase transaction
-                    _walletService.PurchasePoints(offer);
-                    // Refresh wallet data after purchase
-                    RefreshWalletData();
-                    return true;
-                }
-                catch (Exception)
-                {
-                    // Return false if any exception occurs during the purchase
-                    return false;
-                }
+                RefreshWalletData();
             }
-            return false;
+
+            return success;
         }
 
         //[RelayCommand]

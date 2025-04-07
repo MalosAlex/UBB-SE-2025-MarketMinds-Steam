@@ -43,5 +43,26 @@ namespace BusinessLayer.Services.Fakes
             balance -= offer.Price;
             points += offer.Points;
         }
+        public bool TryPurchasePoints(PointsOffer pointsOffer)
+        {
+            if (pointsOffer == null)
+            {
+                return false;
+            }
+
+            try
+            {
+                if (balance >= pointsOffer.Price)
+                {
+                    PurchasePoints(pointsOffer);
+                    return true;
+                }
+                return false;
+            }
+            catch
+            {
+                return false;
+            }
+        }
     }
 }

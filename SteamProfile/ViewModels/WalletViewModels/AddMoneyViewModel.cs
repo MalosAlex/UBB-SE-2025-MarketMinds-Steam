@@ -1,8 +1,8 @@
 ﻿using Microsoft.UI.Xaml;
 using BusinessLayer.Models;
+using BusinessLayer.Validators;
 using System;
 using System.Collections.Generic;
-using System.Linq;
 using CommunityToolkit.Mvvm.Input;
 using System.Windows.Input;
 using CommunityToolkit.Mvvm.ComponentModel;
@@ -11,20 +11,19 @@ namespace SteamProfile.ViewModels
 {
     public partial class AddMoneyViewModel : ObservableObject
     {
-        private readonly WalletViewModel _walletViewModel;
-        private readonly List<char> _digitsAsChar = new() { '0', '1', '2', '3', '4', '5', '6', '7', '8', '9' };
-        private const int MAX_AMOUNT = 500;
+        private readonly WalletViewModel walletViewModel;
+        private const int MAXIMUM_AMOUNT = 500;
 
         [ObservableProperty]
         [NotifyPropertyChangedFor(nameof(ErrorMessageVisibility))]
-        private bool _showErrorMessage;
+        private bool showErrorMessage;
 
         [ObservableProperty]
         [NotifyPropertyChangedFor(nameof(PaymentButtonsEnabled))]
-        private bool _isInputValid;
+        private bool isInputValid;
 
         [ObservableProperty]
-        private string _amountToAdd;
+        private string amountToAdd;
 
         public ICommand AddFundsCommand { get; }
 
@@ -34,9 +33,9 @@ namespace SteamProfile.ViewModels
 
         public AddMoneyViewModel(WalletViewModel walletViewModel)
         {
-            _walletViewModel = walletViewModel ?? throw new ArgumentNullException(nameof(walletViewModel));
-            _isInputValid = false;
-            _showErrorMessage = false;
+            this.walletViewModel = walletViewModel ?? throw new ArgumentNullException(nameof(walletViewModel));
+            isInputValid = false;
+            showErrorMessage = false;
 
             // Initialize the command
             AddFundsCommand = new RelayCommand(ProcessAddFunds, () => IsInputValid);
@@ -52,6 +51,7 @@ namespace SteamProfile.ViewModels
 
         public void ValidateInput(string input)
         {
+            // Business logic moved to PaymentValidator
             ShowErrorMessage = false;
             IsInputValid = false;
 
@@ -60,35 +60,8 @@ namespace SteamProfile.ViewModels
                 return;
             }
 
-            // Check if input is too long
-            if (input.Length > 3)
-            {
-                ShowErrorMessage = true;
-                return;
-            }
-
-            // Check if input contains only digits
-            if (input.Any(c => !_digitsAsChar.Contains(c)))
-            {
-                ShowErrorMessage = true;
-                return;
-            }
-
-            // Check if amount is within limits
-            if (int.TryParse(input, out int amount))
-            {
-                if (amount > MAX_AMOUNT || amount <= 0)
-                {
-                    ShowErrorMessage = true;
-                    return;
-                }
-
-                IsInputValid = true;
-            }
-            else
-            {
-                ShowErrorMessage = true;
-            }
+            IsInputValid = PaymentValidator.IsMonetaryAmountValid(input, MAXIMUM_AMOUNT);
+            ShowErrorMessage = !IsInputValid;
         }
 
         private void ProcessAddFunds()
@@ -98,7 +71,7 @@ namespace SteamProfile.ViewModels
 
             if (int.TryParse(AmountToAdd, out int amount))
             {
-                _walletViewModel.AddFunds(amount);
+                walletViewModel.AddFunds(amount);
                 AmountToAdd = string.Empty;
                 IsInputValid = false;
             }
@@ -109,7 +82,7 @@ namespace SteamProfile.ViewModels
             return new Dictionary<string, object>
             {
                 { "sum", int.Parse(AmountToAdd) },
-                { "viewModel", _walletViewModel }
+                { "viewModel", walletViewModel }
             };
         }
     }
