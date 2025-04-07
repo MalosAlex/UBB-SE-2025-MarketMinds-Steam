@@ -8,13 +8,14 @@ using System;
 using System.Collections.ObjectModel;
 using System.Threading.Tasks;
 using System.Windows.Input;
+using BusinessLayer.Repositories.Interfaces;
 
 namespace SteamProfile.ViewModels
 {
     public partial class AddPointsViewModel : ObservableObject
     {
         private readonly WalletViewModel walletViewModel;
-        private readonly PointsOffersRepository offersRepository;
+        private readonly IPointsOffersRepository offersRepository;
         private readonly Frame navigationFrame;
 
         [ObservableProperty]
@@ -26,7 +27,7 @@ namespace SteamProfile.ViewModels
         public ObservableCollection<PointsOffer> PointsOffers { get; }
         public ICommand PurchasePointsCommand { get; }
 
-        public AddPointsViewModel(WalletViewModel walletViewModel, PointsOffersRepository offersRepository, Frame navigationFrame)
+        public AddPointsViewModel(WalletViewModel walletViewModel, IPointsOffersRepository offersRepository, Frame navigationFrame)
         {
             this.walletViewModel = walletViewModel ?? throw new ArgumentNullException(nameof(walletViewModel));
             this.offersRepository = offersRepository ?? throw new ArgumentNullException(nameof(offersRepository));

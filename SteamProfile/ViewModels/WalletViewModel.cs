@@ -31,10 +31,10 @@ namespace SteamProfile.ViewModels
 
         public string PointsText => $"{Points} pts";
 
-        public WalletViewModel(IWalletService walletService)
+        public WalletViewModel(IWalletService walletService, IPointsOffersRepository pointsOffersRepository)
         {
             this.walletService = walletService ?? throw new ArgumentNullException(nameof(walletService));
-            this.pointsOffersRepository = new PointsOffersRepository();
+            this.pointsOffersRepository = pointsOffersRepository ?? throw new ArgumentNullException(nameof(pointsOffersRepository));
             PointsOffers = this.pointsOffersRepository.Offers;
             RefreshWalletData();
         }

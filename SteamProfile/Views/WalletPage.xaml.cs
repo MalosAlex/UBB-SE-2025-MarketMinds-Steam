@@ -5,6 +5,8 @@ using SteamProfile.ViewModels;
 using System;
 using SteamProfile.Views.WalletViews;
 using BusinessLayer.Services;
+using BusinessLayer.Repositories.Interfaces;
+using BusinessLayer.Repositories;
 
 namespace SteamProfile.Views
 {
@@ -15,7 +17,9 @@ namespace SteamProfile.Views
         public WalletPage()
         {
             this.InitializeComponent();
-            ViewModel = new WalletViewModel(App.WalletService);
+            ViewModel = new WalletViewModel(
+                App.WalletService,
+                new PointsOffersRepository());
             this.DataContext = ViewModel;
         }
 
