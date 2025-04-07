@@ -87,10 +87,6 @@ namespace BusinessLayer.Services
                     System.Diagnostics.Debug.WriteLine("Achievements inserted successfully.");
                     UpdateAchievementIconUrls();
                 }
-                else
-                {
-                    System.Diagnostics.Debug.WriteLine("Achievements table is not empty. No need to insert achievements.");
-                }
             }
             catch (RepositoryException ex)
             {
@@ -121,10 +117,6 @@ namespace BusinessLayer.Services
             catch (RepositoryException ex)
             {
                 System.Diagnostics.Debug.WriteLine($"Error updating achievement icon URLs: {ex.Message}");
-                if (ex.InnerException != null)
-                {
-                    System.Diagnostics.Debug.WriteLine($"Inner Exception: {ex.InnerException.Message}");
-                }
             }
         }
 
