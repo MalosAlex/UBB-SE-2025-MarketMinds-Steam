@@ -322,6 +322,41 @@ namespace Tests
             Assert.That(result.AchievementName, Is.EqualTo("ACH1"));
         }
 
+
+        [Test]
+        public void GetAllAchievements_WhenDataReturned_MapsAllPropertiesCorrectly()
+        {
+            // Arrange
+            var table = new DataTable();
+            table.Columns.Add("achievement_id", typeof(int));
+            table.Columns.Add("achievement_name", typeof(string));
+            table.Columns.Add("description", typeof(string));
+            table.Columns.Add("achievement_type", typeof(string));
+            table.Columns.Add("points", typeof(int));
+            table.Columns.Add("icon_url", typeof(string));
+
+            table.Rows.Add(1, "ACH1", "Great job!", "TypeA", 10, "http://icon.url");
+
+            _mockDataLink
+                .Setup(dl => dl.ExecuteReader("GetAllAchievements", null))
+                .Returns(table);
+
+            // Act
+            var results = _repo.GetAllAchievements();
+
+            // Assert
+            Assert.That(results.Count, Is.EqualTo(1));
+            var ach = results[0];
+            Assert.Multiple(() =>
+            {
+                Assert.That(ach.AchievementId, Is.EqualTo(1));
+                Assert.That(ach.AchievementName, Is.EqualTo("ACH1"));
+                Assert.That(ach.Description, Is.EqualTo("Great job!"));
+                Assert.That(ach.AchievementType, Is.EqualTo("TypeA"));
+                Assert.That(ach.Points, Is.EqualTo(10)); // ✅ this is the key line for that yellow mark
+                Assert.That(ach.Icon, Is.EqualTo("http://icon.url"));
+            });
+        }
         [Test]
         public void IsAchievementUnlocked_WhenResultIs1_ReturnsTrue()
         {
@@ -711,10 +746,5 @@ namespace Tests
             var ex = Assert.Throws<RepositoryException>(() => _repo.GetNumberOfPosts(1));
             Assert.That(ex.Message, Does.Contain("number of posts"));
         }
-
-       
-
-
     }
-
 }

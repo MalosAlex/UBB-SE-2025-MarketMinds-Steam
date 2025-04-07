@@ -23,6 +23,18 @@ namespace BusinessLayer.Tests.Services
         }
 
         [Test]
+        public void Constructor_WithNullRepository_ThrowsArgumentNullException()
+        {
+            // Act & Assert
+            var ex = Assert.Throws<ArgumentNullException>(() =>
+            {
+                var service = new AchievementsService(null);
+            });
+
+            Assert.That(ex.ParamName, Is.EqualTo("achievementsRepository"));
+        }
+
+        [Test]
         public void GetGroupedAchievementsForUser_WhenSuccess_ReturnsGroupedResult()
         {
             // Arrange
@@ -142,21 +154,51 @@ namespace BusinessLayer.Tests.Services
         {
             var fakeRepo = new FakeAchievementsRepository();
             var service = new AchievementsService(fakeRepo);
+
             int userId = 1;
             int friendCount = 5;
             int expectedAchievementId = 123;
 
             fakeRepo.NumberOfFriends = friendCount;
 
-            // IMPORTANT: use the correct achievement name that your service will ask for (FRIENDSHIP2 for 5 friends)
-            fakeRepo.AchievementIds["Friendships"] = new Dictionary<int, int?> { { 2, expectedAchievementId } };
+            // Only set up the achievement ID mapping
+            fakeRepo.AchievementIds["Friendships"] = new Dictionary<int, int?>
+    {
+        { 2, expectedAchievementId } // 5 friends => FRIENDSHIP2 => index 2
+    };
 
+            // Do NOT mark it as already unlocked:
+            // fakeRepo.UnlockedAchievements.Add((userId, expectedAchievementId)); ❌ REMOVE THIS if it's there
+
+            // Act
             service.UnlockAchievementForUser(userId);
 
+            // Assert
             Assert.That(fakeRepo.UnlockedAchievements.Any(x =>
                 x.userId == userId && x.achievementId == expectedAchievementId), Is.True,
                 "The achievement should be unlocked for the valid friendship count.");
         }
+
+        [Test]
+        public void UnlockAchievementForUser_WithNoMatchingAchievementId_DoesNotUnlockAnything()
+        {
+            var fakeRepo = new FakeAchievementsRepository();
+            var service = new AchievementsService(fakeRepo);
+
+            int userId = 1;
+            int friendCount = 5;
+
+            fakeRepo.NumberOfFriends = friendCount;
+
+            // Act
+            service.UnlockAchievementForUser(userId);
+
+            // Assert
+            Assert.That(fakeRepo.UnlockedAchievements, Is.Empty,
+                "No achievements should be unlocked if the achievement ID is null.");
+        }
+
+
 
         [Test]
         public void UnlockAchievementForUser_WithValidOwnedGamesCount_UnlocksAchievement()
@@ -182,6 +224,22 @@ namespace BusinessLayer.Tests.Services
                 x.userId == userId && x.achievementId == expectedAchievementId), Is.True,
                 "The achievement should be unlocked for the valid owned games count.");
         }
+
+        [Test]
+        public void UnlockAchievementForUser_WithOwnedGamesAchievementIdNull_DoesNotUnlock()
+        {
+            var fakeRepo = new FakeAchievementsRepository();
+            var service = new AchievementsService(fakeRepo);
+            int userId = 1;
+            fakeRepo.NumberOfOwnedGames = 10;
+
+            // Do NOT set fakeRepo.AchievementIds mapping = returns null
+
+            service.UnlockAchievementForUser(userId);
+
+            Assert.That(fakeRepo.UnlockedAchievements, Is.Empty);
+        }
+
 
         [Test]
         public void UnlockAchievementForUser_UnlocksAchievement_ForValidSoldGames()
@@ -216,6 +274,22 @@ namespace BusinessLayer.Tests.Services
         }
 
         [Test]
+        public void UnlockAchievementForUser_WithSoldGamesAchievementIdNull_DoesNotUnlock()
+        {
+            var fakeRepo = new FakeAchievementsRepository();
+            var service = new AchievementsService(fakeRepo);
+            int userId = 1;
+            fakeRepo.NumberOfSoldGames = 5;
+
+            // No mapping setup → achievementId will be null
+
+            service.UnlockAchievementForUser(userId);
+
+            Assert.That(fakeRepo.UnlockedAchievements, Is.Empty);
+        }
+
+
+        [Test]
         public void UnlockAchievementForUser_WithValidReviewsGivenCount_UnlocksAchievement()
         {
             // Arrange
@@ -240,6 +314,19 @@ namespace BusinessLayer.Tests.Services
             Assert.That(fakeRepo.UnlockedAchievements.Any(x =>
                 x.userId == userId && x.achievementId == expectedAchievementId), Is.True,
                 "The achievement should be unlocked for the valid number of reviews given.");
+        }
+
+        [Test]
+        public void UnlockAchievementForUser_WithReviewsGivenAchievementIdNull_DoesNotUnlock()
+        {
+            var fakeRepo = new FakeAchievementsRepository();
+            var service = new AchievementsService(fakeRepo);
+            int userId = 1;
+            fakeRepo.NumberOfReviewsGiven = 1;
+
+            service.UnlockAchievementForUser(userId);
+
+            Assert.That(fakeRepo.UnlockedAchievements, Is.Empty);
         }
 
 
@@ -270,6 +357,20 @@ namespace BusinessLayer.Tests.Services
         }
 
         [Test]
+        public void UnlockAchievementForUser_WithReviewsReceivedAchievementIdNull_DoesNotUnlock()
+        {
+            var fakeRepo = new FakeAchievementsRepository();
+            var service = new AchievementsService(fakeRepo);
+            int userId = 1;
+            fakeRepo.NumberOfReviewsReceived = 10;
+
+            service.UnlockAchievementForUser(userId);
+
+            Assert.That(fakeRepo.UnlockedAchievements, Is.Empty);
+        }
+
+
+        [Test]
         public void UnlockAchievementForUser_UnlocksAchievement_ForValidNumberOfPosts()
         {
             // Arrange
@@ -296,6 +397,20 @@ namespace BusinessLayer.Tests.Services
                 Is.True,
                 "The achievement should be unlocked for the valid number of posts.");
         }
+
+        [Test]
+        public void UnlockAchievementForUser_WithPostsAchievementIdNull_DoesNotUnlock()
+        {
+            var fakeRepo = new FakeAchievementsRepository();
+            var service = new AchievementsService(fakeRepo);
+            int userId = 1;
+            fakeRepo.NumberOfPosts = 50;
+
+            service.UnlockAchievementForUser(userId);
+
+            Assert.That(fakeRepo.UnlockedAchievements, Is.Empty);
+        }
+
 
         [Test]
         public void UnlockAchievementForUser_UnlocksAchievement_ForValidYearsOfActivity()
@@ -327,6 +442,24 @@ namespace BusinessLayer.Tests.Services
         }
 
         [Test]
+        public void UnlockAchievementForUser_WithYearsOfActivityAchievementIdNull_DoesNotUnlock()
+        {
+            var fakeRepo = new FakeAchievementsRepository();
+            var service = new AchievementsService(fakeRepo);
+            int userId = 1;
+
+            // Simulate 3 years of activity (matches the if condition)
+            fakeRepo.GetYearsOfAcftivity = _ => 3;
+
+            // DO NOT define achievement ID → achievementId will be null
+            service.UnlockAchievementForUser(userId);
+
+            Assert.That(fakeRepo.UnlockedAchievements, Is.Empty);
+        }
+
+
+
+        [Test]
         public void UnlockAchievementForUser_UnlocksAchievement_ForDeveloper()
         {
             // Arrange
@@ -352,6 +485,24 @@ namespace BusinessLayer.Tests.Services
                 x.userId == userId && x.achievementId == expectedAchievementId),
                 Is.True, "The achievement should be unlocked for developer.");
         }
+
+        [Test]
+        public void UnlockAchievementForUser_WithDeveloperAchievementIdNull_DoesNotUnlock()
+        {
+            var fakeRepo = new FakeAchievementsRepository();
+            var service = new AchievementsService(fakeRepo);
+            int userId = 1;
+
+            // Simulate user is a developer
+            fakeRepo.IsUserDeveloper = _ => true;
+
+            // Do NOT define a developer achievement ID
+            service.UnlockAchievementForUser(userId);
+
+            Assert.That(fakeRepo.UnlockedAchievements, Is.Empty);
+        }
+
+
 
         [Test]
         public void UnlockAchievementForUser_WhenRepositoryThrowsException_IsHandledGracefully()
