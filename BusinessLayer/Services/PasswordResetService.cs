@@ -26,14 +26,20 @@ namespace BusinessLayer.Services
 
         public async Task<(bool isValid, string message)> SendResetCode(string email)
         {
+            var validationResult = validator.ValidateEmail(email);
+            if (!validationResult.isValid)
+            {
+                throw new InvalidOperationException(validationResult.message);
+            }
+
+            var user = userService.GetUserByEmail(email);
+            if (user == null)
+            {
+                return (false, "Email is not registered.");
+            }
+
             try
             {
-                var validationResult = validator.ValidateEmail(email);
-                if (!validationResult.isValid)
-                {
-                    return validationResult;
-                }
-
                 CleanupExpiredCodes();
 
                 var code = GenerateResetCode();
@@ -59,20 +65,20 @@ namespace BusinessLayer.Services
 
         public (bool isValid, string message) VerifyResetCode(string email, string code)
         {
+            var emailValidation = validator.ValidateEmail(email);
+            if (!emailValidation.isValid)
+            {
+                throw new InvalidOperationException(emailValidation.message);
+            }
+
+            var codeValidation = validator.ValidateResetCode(code);
+            if (!codeValidation.isValid)
+            {
+                throw new InvalidOperationException(codeValidation.message);
+            }
+
             try
             {
-                var emailValidation = validator.ValidateEmail(email);
-                if (!emailValidation.isValid)
-                {
-                    return emailValidation;
-                }
-
-                var codeValidation = validator.ValidateResetCode(code);
-                if (!codeValidation.isValid)
-                {
-                    return codeValidation;
-                }
-
                 var filePath = GetResetCodeFilePath(email);
                 if (!File.Exists(filePath))
                 {
@@ -90,18 +96,30 @@ namespace BusinessLayer.Services
 
         public (bool isValid, string message) ResetPassword(string email, string code, string newPassword)
         {
+            var emailValidation = validator.ValidateEmail(email);
+            if (!emailValidation.isValid)
+            {
+                throw new InvalidOperationException(emailValidation.message);
+            }
+
+            var codeValidation = validator.ValidateResetCode(code);
+            if (!codeValidation.isValid)
+            {
+                throw new InvalidOperationException(codeValidation.message);
+            }
+
+            var passwordValidation = validator.ValidatePassword(newPassword);
+            if (!passwordValidation.isValid)
+            {
+                throw new InvalidOperationException(passwordValidation.message);
+            }
+
             try
             {
                 var verificationResult = VerifyResetCode(email, code);
                 if (!verificationResult.isValid)
                 {
                     return verificationResult;
-                }
-
-                var passwordValidation = validator.ValidatePassword(newPassword);
-                if (!passwordValidation.isValid)
-                {
-                    return passwordValidation;
                 }
 
                 var user = userService.GetUserByEmail(email);

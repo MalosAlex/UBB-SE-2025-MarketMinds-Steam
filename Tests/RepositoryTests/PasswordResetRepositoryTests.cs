@@ -410,20 +410,24 @@ namespace Tests.RepositoryTests
             string code = "123456";
             string hashedPassword = "hashedPassword123";
             string getCodeProc = "GetResetCodeData";
+            string getUserProc = "GetUserByEmail";
+
+            // Setup mock for successful code verification
+            var resetCodeTable = new DataTable();
+            resetCodeTable.Columns.Add("expiration_time", typeof(DateTime));
+            resetCodeTable.Columns.Add("used", typeof(bool));
+            resetCodeTable.Rows.Add(DateTime.UtcNow.AddMinutes(10), false); // Valid code
 
             mockDataLink.Setup(dl => dl.ExecuteReader(getCodeProc, It.Is<SqlParameter[]>(p => p.Length == 2)))
+                .Returns(resetCodeTable);
+
+            // Setup mock to throw DatabaseOperationException on GetUserByEmail
+            mockDataLink.Setup(dl => dl.ExecuteReader(getUserProc, It.Is<SqlParameter[]>(p => p.Length == 1)))
                 .Throws(new DatabaseOperationException("Database error"));
 
             // Act & Assert
-            try
-            {
-                repository.ResetPassword(email, code, hashedPassword);
-                Assert.Fail("Expected RepositoryException was not thrown");
-            }
-            catch (RepositoryException ex)
-            {
-                Assert.That(ex.Message, Is.EqualTo("Failed to reset password."));
-            }
+            var ex = Assert.Throws<RepositoryException>(() => repository.ResetPassword(email, code, hashedPassword));
+            Assert.That(ex.Message, Is.EqualTo("Failed to reset password."));
         }
 
         [Test]
@@ -465,6 +469,10 @@ namespace Tests.RepositoryTests
             // Create a simple field-based mock
             var mockDataLink = new Mock<IDataLink>();
             var localRepository = new PasswordResetRepository(mockDataLink.Object);
+
+            // Setup mock to throw DatabaseOperationException
+            mockDataLink.Setup(dl => dl.ExecuteNonQuery(It.Is<string>(s => s == "CleanupResetCodes"), It.IsAny<SqlParameter[]>()))
+                .Throws(new DatabaseOperationException("Database error"));
 
             // Act & Assert
             try

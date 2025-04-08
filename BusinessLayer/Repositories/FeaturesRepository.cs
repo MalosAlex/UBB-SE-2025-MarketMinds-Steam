@@ -124,8 +124,8 @@ namespace BusinessLayer.Repositories
                 // Check if the relationship exists
                 var checkParams = new SqlParameter[]
                 {
-            new SqlParameter("@userId", userId),
-            new SqlParameter("@featureId", featureId)
+                    new SqlParameter("@userId", userId),
+                    new SqlParameter("@featureId", featureId)
                 };
 
                 var relationshipTable = dataLink.ExecuteReader("GetFeatureUserRelationship", checkParams);
@@ -135,27 +135,16 @@ namespace BusinessLayer.Repositories
                     // Update existing relationship
                     var updateParams = new SqlParameter[]
                     {
-                new SqlParameter("@userId", userId),
-                new SqlParameter("@featureId", featureId),
-                new SqlParameter("@equipped", 1)
+                        new SqlParameter("@userId", userId),
+                        new SqlParameter("@featureId", featureId),
+                        new SqlParameter("@equipped", 1)
                     };
 
                     dataLink.ExecuteNonQuery("UpdateFeatureUserEquipStatus", updateParams);
-                }
-                else
-                {
-                    // Create new relationship
-                    var createParams = new SqlParameter[]
-                    {
-                new SqlParameter("@userId", userId),
-                new SqlParameter("@featureId", featureId),
-                new SqlParameter("@equipped", 1)
-                    };
-
-                    dataLink.ExecuteNonQuery("CreateFeatureUserRelationship", createParams);
+                    return true;
                 }
 
-                return true;
+                return false; // Feature is not purchased
             }
             catch (DatabaseOperationException ex)
             {
@@ -168,14 +157,29 @@ namespace BusinessLayer.Repositories
         {
             try
             {
-                var parameters = new SqlParameter[]
+                // Check if the relationship exists
+                var checkParams = new SqlParameter[]
                 {
                     new SqlParameter("@userId", userId),
                     new SqlParameter("@featureId", featureId)
                 };
 
-                dataLink.ExecuteNonQuery("UnequipFeature", parameters);
-                return true;  // If no exception, consider it successful
+                var relationshipTable = dataLink.ExecuteReader("GetFeatureUserRelationship", checkParams);
+
+                if (relationshipTable.Rows.Count > 0)
+                {
+                    var parameters = new SqlParameter[]
+                    {
+                        new SqlParameter("@userId", userId),
+                        new SqlParameter("@featureId", featureId),
+                        new SqlParameter("@equipped", 0)
+                    };
+
+                    dataLink.ExecuteNonQuery("UpdateFeatureUserEquipStatus", parameters);
+                    return true;
+                }
+
+                return false; // Feature is not purchased
             }
             catch (DatabaseOperationException ex)
             {
@@ -214,8 +218,8 @@ namespace BusinessLayer.Repositories
                     new SqlParameter("@featureId", featureId)
                 };
 
-                var result = dataLink.ExecuteScalar<int>("CheckFeaturePurchase", parameters);
-                return result > 0;
+                var relationshipTable = dataLink.ExecuteReader("GetFeatureUserRelationship", parameters);
+                return relationshipTable.Rows.Count > 0;
             }
             catch (DatabaseOperationException ex)
             {

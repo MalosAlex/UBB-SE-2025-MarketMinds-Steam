@@ -258,10 +258,35 @@ namespace Tests.RepositoryTests
         // Helper method to check if a code exists in the repository
         private bool CodeExistsInRepository(string email, string code)
         {
-            // We'll use VerifyResetCode as a proxy, since we don't have direct access
-            // to the internal storage. This is not ideal, as VerifyResetCode also checks
-            // expiration, but it's the best we can do without more reflection
-            return repository.VerifyResetCode(email, code);
+            // Access the private resetCodes field using reflection to check if the code exists
+            // regardless of its expiration status
+            Type type = typeof(FakePasswordResetRepository);
+            FieldInfo fieldInfo = type.GetField("resetCodes", BindingFlags.NonPublic | BindingFlags.Instance);
+            var resetCodes = fieldInfo.GetValue(repository);
+            
+            // Get the type of the inner class ResetCode
+            Type resetCodeType = type.GetNestedType("ResetCode", BindingFlags.NonPublic);
+            
+            // Use reflection to get the list's Count property
+            int count = (int)resetCodes.GetType().GetProperty("Count").GetValue(resetCodes);
+            
+            // Iterate through the list using reflection
+            for (int i = 0; i < count; i++)
+            {
+                // Get item at index i
+                var item = resetCodes.GetType().GetProperty("Item").GetValue(resetCodes, new object[] { i });
+                
+                // Get Email and Code properties from the ResetCode object
+                string codeEmail = (string)resetCodeType.GetProperty("Email").GetValue(item);
+                string resetCodeValue = (string)resetCodeType.GetProperty("Code").GetValue(item);
+                
+                if (codeEmail == email && resetCodeValue == code)
+                {
+                    return true;
+                }
+            }
+            
+            return false;
         }
     }
 } 

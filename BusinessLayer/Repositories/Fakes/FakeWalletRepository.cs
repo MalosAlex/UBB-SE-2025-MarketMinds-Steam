@@ -9,14 +9,14 @@ namespace BusinessLayer.Repositories.Fakes
     public class FakeWalletRepository : IWalletRepository
     {
         private readonly Dictionary<int, Wallet> wallets;
-        private readonly Dictionary<int, int> userWalletMapping; // Maps user IDs to wallet IDs
+        private readonly Dictionary<int, int> userWalletMapping;
 
         public FakeWalletRepository()
         {
             wallets = new Dictionary<int, Wallet>();
             userWalletMapping = new Dictionary<int, int>();
 
-            // Initialize with some test data
+            // Initialize with test data
             var wallet1 = new Wallet
             {
                 WalletId = 1,
@@ -152,7 +152,6 @@ namespace BusinessLayer.Repositories.Fakes
                 wallets.Remove(walletId);
                 userWalletMapping.Remove(userId);
             }
-            // Silently ignore if wallet or user doesn't exist, matching the behavior in the real implementation
         }
     }
 }

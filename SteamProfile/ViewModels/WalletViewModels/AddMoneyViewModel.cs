@@ -27,9 +27,25 @@ namespace SteamProfile.ViewModels
 
         public ICommand AddFundsCommand { get; }
 
-        public Visibility ErrorMessageVisibility => ShowErrorMessage ? Visibility.Visible : Visibility.Collapsed;
+        public Visibility ErrorMessageVisibility
+        {
+            get
+            {
+                if (ShowErrorMessage)
+                {
+                    return Visibility.Visible;
+                }
+                else
+                {
+                    return Visibility.Collapsed;
+                }
+            }
+        }
 
-        public bool PaymentButtonsEnabled => IsInputValid;
+        public bool PaymentButtonsEnabled
+        {
+            get { return IsInputValid; }
+        }
 
         public AddMoneyViewModel(WalletViewModel walletViewModel)
         {
@@ -38,7 +54,7 @@ namespace SteamProfile.ViewModels
             showErrorMessage = false;
 
             // Initialize the command
-            AddFundsCommand = new RelayCommand(ProcessAddFunds, () => IsInputValid);
+            AddFundsCommand = new RelayCommand(ProcessAddFunds, CanProcessAddFunds);
         }
 
         // Called when AmountToAdd property changes
@@ -75,6 +91,11 @@ namespace SteamProfile.ViewModels
                 AmountToAdd = string.Empty;
                 IsInputValid = false;
             }
+        }
+
+        private bool CanProcessAddFunds()
+        {
+            return IsInputValid;
         }
 
         public Dictionary<string, object> CreateNavigationParameters()
