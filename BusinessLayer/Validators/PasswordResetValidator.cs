@@ -12,7 +12,7 @@ namespace BusinessLayer.Validators
                 return (false, "Email address is required.");
             }
 
-            var emailPattern = @"^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$";
+            var emailPattern = @"^[a-zA-Z0-9][a-zA-Z0-9._%+-]*@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$";
             if (!Regex.IsMatch(email, emailPattern))
             {
                 return (false, "Invalid email format.");
@@ -60,7 +60,7 @@ namespace BusinessLayer.Validators
 
             if (!Regex.IsMatch(newPassword, @"[0-9]"))
             {
-                return (false, "Password must contain at least one number.");
+                return (false, "Password must contain at least one digit.");
             }
 
             if (!Regex.IsMatch(newPassword, @"[!@#$%^&*(),.?""':{}|<>]"))
