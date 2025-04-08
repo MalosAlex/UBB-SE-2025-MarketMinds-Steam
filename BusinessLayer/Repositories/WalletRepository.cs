@@ -26,9 +26,9 @@ namespace BusinessLayer.Repositories
                 var dataTable = dataLink.ExecuteReader("GetWalletById", parameters);
                 return MapDataRowToWallet(dataTable.Rows[0]);
             }
-            catch (DatabaseOperationException ex)
+            catch (DatabaseOperationException exception)
             {
-                throw new RepositoryException($"Failed to retrieve wallet with ID {walletId} from the database.", ex);
+                throw new RepositoryException($"Failed to retrieve wallet with ID {walletId} from the database.", exception);
             }
         }
 
@@ -47,9 +47,9 @@ namespace BusinessLayer.Repositories
                 }
                 throw new RepositoryException($"No wallet found for user ID {userId}.");
             }
-            catch (DatabaseOperationException ex)
+            catch (DatabaseOperationException exception)
             {
-                throw new RepositoryException($"Failed to retrieve wallet ID for user ID {userId} from the database.", ex);
+                throw new RepositoryException($"Failed to retrieve wallet ID for user ID {userId} from the database.", exception);
             }
         }
 
@@ -111,9 +111,9 @@ namespace BusinessLayer.Repositories
                 };
                 var datatable = dataLink.ExecuteReader("CreateWallet", parameters);
             }
-            catch (Exception ex)
+            catch (Exception exception)
             {
-                Console.WriteLine(ex.Message);
+                Console.WriteLine(exception.Message);
             }
         }
         public void RemoveWallet(int walletId)
@@ -126,9 +126,9 @@ namespace BusinessLayer.Repositories
                 };
                 var datatable = dataLink.ExecuteReader("RemoveWallet", parameters);
             }
-            catch (Exception ex)
+            catch (Exception exception)
             {
-                Console.WriteLine(ex.Message);
+                Console.WriteLine(exception.Message);
             }
         }
     }
