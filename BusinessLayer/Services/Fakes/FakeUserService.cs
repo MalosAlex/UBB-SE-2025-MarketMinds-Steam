@@ -42,9 +42,15 @@ namespace BusinessLayer.Services.Fakes
 
         public User GetUserByEmail(string email)
         {
-            var fakeUser = new User();
-            fakeUser.Username = "fakeMail";
-            return fakeUser;
+            // Only return a user for specific test emails
+            if (email == "user1@example.com" || email == "user2@example.com")
+            {
+                var fakeUser = new User();
+                fakeUser.Username = "fakeMail";
+                fakeUser.Email = email;
+                return fakeUser;
+            }
+            return null;
         }
 
         public User GetUserById(int userId)
