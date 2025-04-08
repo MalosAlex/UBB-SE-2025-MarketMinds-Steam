@@ -1,6 +1,6 @@
 ﻿using BusinessLayer.Models;
 
-namespace Tests
+namespace Tests.Models
 {
     [TestFixture]
     internal class UserProfileModelTests
