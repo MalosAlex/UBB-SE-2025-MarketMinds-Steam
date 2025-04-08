@@ -1,15 +1,16 @@
 using BusinessLayer.Models;
 using BusinessLayer.Repositories;
 using BusinessLayer.Services.Interfaces;
+using BusinessLayer.Repositories.Interfaces;
 
 namespace BusinessLayer.Services
 {
     public class SessionService : ISessionService
     {
-        private readonly SessionRepository sessionRepository;
-        private readonly UsersRepository usersRepository;
+        private readonly ISessionRepository sessionRepository;
+        private readonly IUsersRepository usersRepository;
 
-        public SessionService(SessionRepository sessionRepository, UsersRepository usersRepository)
+        public SessionService(ISessionRepository sessionRepository, IUsersRepository usersRepository)
         {
             this.sessionRepository = sessionRepository ?? throw new ArgumentNullException(nameof(sessionRepository));
             this.usersRepository = usersRepository ?? throw new ArgumentNullException(nameof(usersRepository));
