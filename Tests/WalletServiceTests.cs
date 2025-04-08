@@ -122,7 +122,7 @@ namespace Tests
         [Test]
         public void PurchasePoints_NullOffer_ThrowsArgumentNullException()
         {
-            // Arrange & Act & Assert
+            // Act & Assert
             Assert.Throws<ArgumentNullException>(() => _walletService.PurchasePoints(null));
         }
 
@@ -135,6 +135,18 @@ namespace Tests
 
             // Act & Assert
             Assert.Throws<InvalidOperationException>(() => _walletService.PurchasePoints(offer));
+        }
+
+        [Test]
+        public void PurchasePoints_InsufficientBalance_ExceptionMessageContainsInsufficientFunds()
+        {
+            // Arrange
+            var offer = new PointsOffer(100, 200); // Price 100, points 200
+            _mockWalletRepository.Setup(r => r.GetMoneyFromWallet(WALLET_ID)).Returns(50m); // Only 50 in wallet
+
+            // Act & Assert
+            var ex = Assert.Throws<InvalidOperationException>(() => _walletService.PurchasePoints(offer));
+            Assert.That(ex.Message, Is.EqualTo("Insufficient funds"));
         }
 
         [Test]
@@ -154,7 +166,7 @@ namespace Tests
         [Test]
         public void TryPurchasePoints_NullOffer_ReturnsFalse()
         {
-            // Arrange & Act
+            // Act
             bool result = _walletService.TryPurchasePoints(null);
 
             // Assert

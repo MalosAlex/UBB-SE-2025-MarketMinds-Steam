@@ -18,35 +18,123 @@ namespace Tests
             _repository = new PointsOffersRepository();
         }
 
-
         [Test]
-        public void Offers_ReturnsHardcodedOffers() 
+        public void Offers_ReturnsNonNullList()
         {
+            // Act
             var offers = _repository.Offers;
 
+            // Assert
             Assert.That(offers, Is.Not.Null);
-            Assert.That(offers.Count, Is.EqualTo(5)); // It has 5 offers
+        }
 
-            // Check the first offer
+        [Test]
+        public void Offers_ReturnsCorrectNumberOfOffers()
+        {
+            // Act
+            var offers = _repository.Offers;
+
+            // Assert
+            Assert.That(offers.Count, Is.EqualTo(5));
+        }
+
+        [Test]
+        public void Offers_FirstOffer_HasCorrectPrice()
+        {
+            // Act
+            var offers = _repository.Offers;
+
+            // Assert
             Assert.That(offers[0].Price, Is.EqualTo(2));
+        }
+
+        [Test]
+        public void Offers_FirstOffer_HasCorrectPoints()
+        {
+            // Act
+            var offers = _repository.Offers;
+
+            // Assert
             Assert.That(offers[0].Points, Is.EqualTo(5));
+        }
 
+        [Test]
+        public void Offers_SecondOffer_HasCorrectPrice()
+        {
+            // Act
+            var offers = _repository.Offers;
 
-            // Check the second offer
+            // Assert
             Assert.That(offers[1].Price, Is.EqualTo(8));
+        }
+
+        [Test]
+        public void Offers_SecondOffer_HasCorrectPoints()
+        {
+            // Act
+            var offers = _repository.Offers;
+
+            // Assert
             Assert.That(offers[1].Points, Is.EqualTo(25));
+        }
 
+        [Test]
+        public void Offers_ThirdOffer_HasCorrectPrice()
+        {
+            // Act
+            var offers = _repository.Offers;
 
-            // Check the third offer
+            // Assert
             Assert.That(offers[2].Price, Is.EqualTo(15));
+        }
+
+        [Test]
+        public void Offers_ThirdOffer_HasCorrectPoints()
+        {
+            // Act
+            var offers = _repository.Offers;
+
+            // Assert
             Assert.That(offers[2].Points, Is.EqualTo(50));
+        }
 
-            // Check the fourth offer
+        [Test]
+        public void Offers_FourthOffer_HasCorrectPrice()
+        {
+            // Act
+            var offers = _repository.Offers;
+
+            // Assert
             Assert.That(offers[3].Price, Is.EqualTo(20));
-            Assert.That(offers[3].Points, Is.EqualTo(100));
+        }
 
-            // Check the fifth offer
+        [Test]
+        public void Offers_FourthOffer_HasCorrectPoints()
+        {
+            // Act
+            var offers = _repository.Offers;
+
+            // Assert
+            Assert.That(offers[3].Points, Is.EqualTo(100));
+        }
+
+        [Test]
+        public void Offers_FifthOffer_HasCorrectPrice()
+        {
+            // Act
+            var offers = _repository.Offers;
+
+            // Assert
             Assert.That(offers[4].Price, Is.EqualTo(50));
+        }
+
+        [Test]
+        public void Offers_FifthOffer_HasCorrectPoints()
+        {
+            // Act
+            var offers = _repository.Offers;
+
+            // Assert
             Assert.That(offers[4].Points, Is.EqualTo(500));
         }
     }

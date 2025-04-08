@@ -7,7 +7,21 @@ namespace Tests
     public class PointsOfferModelTests
     {
         [Test]
-        public void Constructor_ValidValues_SetsPropertiesCorrectly()
+        public void Constructor_ValidValues_SetsPointsCorrectly()
+        {
+            // Arrange
+            int expectedPrice = 10;
+            int expectedPoints = 50;
+
+            // Act
+            var offer = new PointsOffer(expectedPrice, expectedPoints);
+
+            // Assert
+            Assert.That(offer.Points, Is.EqualTo(expectedPoints));
+        }
+
+        [Test]
+        public void Constructor_ValidValues_SetsPriceCorrectly()
         {
             // Arrange
             int expectedPrice = 10;
@@ -18,7 +32,6 @@ namespace Tests
 
             // Assert
             Assert.That(offer.Price, Is.EqualTo(expectedPrice));
-            Assert.That(offer.Points, Is.EqualTo(expectedPoints));
         }
 
         [Test]
