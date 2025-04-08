@@ -17,46 +17,48 @@ namespace Tests.RepositoryTests
     [TestFixture]
     public class AchievementsRepositoryTests
     {
-        private AchievementsRepository _repo;
+        private AchievementsRepository _achievementsRepository;
         private Mock<IDataLink> _mockDataLink;
 
         [SetUp]
         public void Setup()
         {
             _mockDataLink = new Mock<IDataLink>();
-            _repo = new AchievementsRepository(_mockDataLink.Object);
+            _achievementsRepository = new AchievementsRepository(_mockDataLink.Object);
         }
 
         [Test]
         public void Constructor_WhenDataLinkIsNull_ThrowsArgumentNullException()
         {
-            // Arrange & Act & Assert
-            var ex = Assert.Throws<ArgumentNullException>(() => new AchievementsRepository(null));
-            Assert.That(ex.ParamName, Is.EqualTo("datalink"));
+            // Arrange & Act
+            var exception = Assert.Throws<ArgumentNullException>(() => new AchievementsRepository(null));
+
+            // Assert
+            Assert.That(exception.ParamName, Is.EqualTo("datalink"));
         }
 
         [Test]
         public void InsertAchievements_WhenNoException_DoesNotThrow()
         {
             // Arrange
-            _mockDataLink.Setup(dl => dl.ExecuteNonQuery("InsertAchievements", null)).Returns(1);
+            _mockDataLink.Setup(dataLink => dataLink.ExecuteNonQuery("InsertAchievements", null)).Returns(1);
 
 
             // Act & Assert
-            Assert.DoesNotThrow(() => _repo.InsertAchievements());
+            Assert.DoesNotThrow(() => _achievementsRepository.InsertAchievements());
         }
 
         [Test]
         public void InsertAchievements_WhenException_ThrowsRepositoryException()
         {
             // Arrange
-            _mockDataLink.Setup(dl => dl.ExecuteNonQuery("InsertAchievements", null)).Throws(new Exception("Simulated DB failure"));
+            _mockDataLink.Setup(dataLink => dataLink.ExecuteNonQuery("InsertAchievements", null)).Throws(new Exception("Simulated DB failure"));
 
             // Act A
-            var ex = Assert.Throws<RepositoryException>(() => _repo.InsertAchievements());
+            var exception = Assert.Throws<RepositoryException>(() => _achievementsRepository.InsertAchievements());
 
             // Assert
-            Assert.That(ex.Message, Does.Contain("inserting achievements"));
+            Assert.That(exception.Message, Does.Contain("inserting achievements"));
         }
 
         public class FakeSqlException : Exception { }
@@ -65,10 +67,10 @@ namespace Tests.RepositoryTests
         public void IsAchievementsTableEmpty_WhenResultIsZero_ReturnsTrue()
         {
             // Arrange
-            _mockDataLink.Setup(dl => dl.ExecuteScalar<int>("IsAchievementsTableEmpty" , null)).Returns(0);
+            _mockDataLink.Setup(dataLink => dataLink.ExecuteScalar<int>("IsAchievementsTableEmpty" , null)).Returns(0);
 
             // Act
-            bool result = _repo.IsAchievementsTableEmpty();
+            bool result = _achievementsRepository.IsAchievementsTableEmpty();
 
             // Assert
             Assert.That(result, Is.True);
@@ -78,10 +80,10 @@ namespace Tests.RepositoryTests
         public void IsAchievementsTableEmpty_WhenResultIsFive_ReturnsFalse()
         {
             // Arrange
-            _mockDataLink.Setup(dl => dl.ExecuteScalar<int>("IsAchievementsTableEmpty" , null)).Returns(5);
+            _mockDataLink.Setup(dataLink => dataLink.ExecuteScalar<int>("IsAchievementsTableEmpty" , null)).Returns(5);
 
             // Act
-            bool result = _repo.IsAchievementsTableEmpty();
+            bool result = _achievementsRepository.IsAchievementsTableEmpty();
 
             // Assert
             Assert.That(result, Is.False);
@@ -92,14 +94,14 @@ namespace Tests.RepositoryTests
         {
             // Arrange
             _mockDataLink
-                .Setup(dl => dl.ExecuteScalar<int>("IsAchievementsTableEmpty" , null))
+                .Setup(dataLink => dataLink.ExecuteScalar<int>("IsAchievementsTableEmpty" , null))
                 .Throws(new Exception("Something went wrong"));
 
             // Act
-            var ex = Assert.Throws<RepositoryException>(() => _repo.IsAchievementsTableEmpty());
+            var exception = Assert.Throws<RepositoryException>(() => _achievementsRepository.IsAchievementsTableEmpty());
 
             // Assert
-            Assert.That(ex.Message, Does.Contain("unexpected error occurred while checking if achievements table is empty"));
+            Assert.That(exception.Message, Does.Contain("unexpected error occurred while checking if achievements table is empty"));
         }
 
         [Test]
@@ -107,29 +109,29 @@ namespace Tests.RepositoryTests
         {
             // Arrange
             _mockDataLink
-                .Setup(dl => dl.ExecuteNonQuery("UpdateAchievementIcon", It.IsAny<SqlParameter[]>()))
+                .Setup(dataLink => dataLink.ExecuteNonQuery("UpdateAchievementIcon", It.IsAny<SqlParameter[]>()))
                 .Returns(1); // simulate success
 
             // Act & Assert
-            Assert.DoesNotThrow(() => _repo.UpdateAchievementIconUrl(10, "icon.png"));
+            Assert.DoesNotThrow(() => _achievementsRepository.UpdateAchievementIconUrl(10, "icon.png"));
         }
 
         [Test]
         public void UpdateAchievementIconUrl_WhenExceptionThrown_ThrowsRepositoryException()
         {
             // Arrange
-            _mockDataLink.Setup(dl => dl.ExecuteNonQuery("UpdateAchievementIcon", It.IsAny<SqlParameter[]>()))
+            _mockDataLink.Setup(dataLink => dataLink.ExecuteNonQuery("UpdateAchievementIcon", It.IsAny<SqlParameter[]>()))
                          .Throws(new Exception("test"));
 
             // Act
-            var ex = Assert.Throws<RepositoryException>(() => _repo.UpdateAchievementIconUrl(10, "url"));
+            var exception = Assert.Throws<RepositoryException>(() => _achievementsRepository.UpdateAchievementIconUrl(10, "url"));
 
             // Assert
-            Assert.That(ex.Message, Does.Contain("updating achievement icon URL"));
+            Assert.That(exception.Message, Does.Contain("updating achievement icon URL"));
         }
 
         [Test]
-        public void GetAllAchievements_WhenDataReturned_MapsCorrectly()
+        public void GetAllAchievements_WhenDataReturned_ResultNotNull()
         {
             // Arrange
             var table = new DataTable();
@@ -142,14 +144,62 @@ namespace Tests.RepositoryTests
 
             table.Rows.Add(1, "ACH1", "Desc", "TypeA", 10, "url.png");
 
-            _mockDataLink.Setup(dl => dl.ExecuteReader("GetAllAchievements" , null)).Returns(table);
+            _mockDataLink.Setup(dataLink => dataLink.ExecuteReader("GetAllAchievements" , null)).Returns(table);
 
             // Act
-            var result = _repo.GetAllAchievements();
+            var result = _achievementsRepository.GetAllAchievements();
 
             // Assert
             Assert.That(result, Is.Not.Null);
+         
+        }
+
+        [Test]
+        public void GetAllAchievements_WhenDataReturned_CountIsOne()
+        {
+            // Arrange
+            var table = new DataTable();
+            table.Columns.Add("achievement_id", typeof(int));
+            table.Columns.Add("achievement_name", typeof(string));
+            table.Columns.Add("description", typeof(string));
+            table.Columns.Add("achievement_type", typeof(string));
+            table.Columns.Add("points", typeof(int));
+            table.Columns.Add("icon_url", typeof(string));
+
+            table.Rows.Add(1, "ACH1", "Desc", "TypeA", 10, "url.png");
+
+            _mockDataLink.Setup(dataLink => dataLink.ExecuteReader("GetAllAchievements", null)).Returns(table);
+
+            // Act
+            var result = _achievementsRepository.GetAllAchievements();
+
+            // Assert
+           
             Assert.That(result.Count, Is.EqualTo(1));
+
+        }
+
+        [Test]
+        public void GetAllAchievements_WhenDataReturned_FirstAchievementNameACH1()
+        {
+            // Arrange
+            var table = new DataTable();
+            table.Columns.Add("achievement_id", typeof(int));
+            table.Columns.Add("achievement_name", typeof(string));
+            table.Columns.Add("description", typeof(string));
+            table.Columns.Add("achievement_type", typeof(string));
+            table.Columns.Add("points", typeof(int));
+            table.Columns.Add("icon_url", typeof(string));
+
+            table.Rows.Add(1, "ACH1", "Desc", "TypeA", 10, "url.png");
+
+            _mockDataLink.Setup(dataLink => dataLink.ExecuteReader("GetAllAchievements", null)).Returns(table);
+
+            // Act
+            var result = _achievementsRepository.GetAllAchievements();
+
+            // Assert
+            
             Assert.That(result[0].AchievementName, Is.EqualTo("ACH1"));
         }
 
@@ -157,14 +207,14 @@ namespace Tests.RepositoryTests
         public void GetAllAchievements_WhenExceptionThrown_ThrowsRepositoryException()
         {
             // Arrange
-            _mockDataLink.Setup(dl => dl.ExecuteReader("GetAllAchievements" , null))
+            _mockDataLink.Setup(dataLink => dataLink.ExecuteReader("GetAllAchievements" , null))
                          .Throws(new Exception("test"));
 
             // Act
-            var ex = Assert.Throws<RepositoryException>(() => _repo.GetAllAchievements());
+            var exception = Assert.Throws<RepositoryException>(() => _achievementsRepository.GetAllAchievements());
 
             // Assert
-            Assert.That(ex.Message, Does.Contain("retrieving achievements"));
+            Assert.That(exception.Message, Does.Contain("retrieving achievements"));
         }
 
         [Test]
@@ -173,18 +223,18 @@ namespace Tests.RepositoryTests
             // Arrange
             var parameters = new SqlParameter[] { new SqlParameter("@userId", 1) };
 
-            _mockDataLink.Setup(dl => dl.ExecuteReader("GetUnlockedAchievements", It.IsAny<SqlParameter[]>()))
+            _mockDataLink.Setup(dataLink => dataLink.ExecuteReader("GetUnlockedAchievements", It.IsAny<SqlParameter[]>()))
                          .Throws(new Exception("test"));
 
             // Act
-            var ex = Assert.Throws<RepositoryException>(() => _repo.GetUnlockedAchievementsForUser(1));
+            var exception = Assert.Throws<RepositoryException>(() => _achievementsRepository.GetUnlockedAchievementsForUser(1));
             
             // Assert
-            Assert.That(ex.Message, Does.Contain("retrieving unlocked achievements"));
+            Assert.That(exception.Message, Does.Contain("retrieving unlocked achievements"));
         }
 
         [Test]
-        public void GetUnlockedAchievementsForUser_WhenCalledWithValidUserId_ReturnsAchievements()
+        public void GetUnlockedAchievementsForUser_WhenCalledWithValidUserId_ReturnsAchievementNotNull()
         {
             // Arrange
             var table = new DataTable();
@@ -198,15 +248,67 @@ namespace Tests.RepositoryTests
             table.Rows.Add(1, "ACH1", "Desc", "Type", 10, "url.png");
 
             _mockDataLink
-                .Setup(dl => dl.ExecuteReader("GetUnlockedAchievements", It.IsAny<SqlParameter[]>()))
+                .Setup(dataLink => dataLink.ExecuteReader("GetUnlockedAchievements", It.IsAny<SqlParameter[]>()))
                 .Returns(table);
 
             // Act
-            var result = _repo.GetUnlockedAchievementsForUser(1);
+            var result = _achievementsRepository.GetUnlockedAchievementsForUser(1);
 
             // Assert
             Assert.That(result, Is.Not.Null);
+           
+        }
+
+        [Test]
+        public void GetUnlockedAchievementsForUser_WhenCalledWithValidUserId_ReturnsAchievementCountEqualTo1()
+        {
+            // Arrange
+            var table = new DataTable();
+            table.Columns.Add("achievement_id", typeof(int));
+            table.Columns.Add("achievement_name", typeof(string));
+            table.Columns.Add("description", typeof(string));
+            table.Columns.Add("achievement_type", typeof(string));
+            table.Columns.Add("points", typeof(int));
+            table.Columns.Add("icon_url", typeof(string));
+
+            table.Rows.Add(1, "ACH1", "Desc", "Type", 10, "url.png");
+
+            _mockDataLink
+                .Setup(dataLink => dataLink.ExecuteReader("GetUnlockedAchievements", It.IsAny<SqlParameter[]>()))
+                .Returns(table);
+
+            // Act
+            var result = _achievementsRepository.GetUnlockedAchievementsForUser(1);
+
+            // Assert
+           
             Assert.That(result.Count, Is.EqualTo(1));
+            
+        }
+
+        [Test]
+        public void GetUnlockedAchievementsForUser_WhenCalledWithValidUserId_ReturnsAchievementNameACH1()
+        {
+            // Arrange
+            var table = new DataTable();
+            table.Columns.Add("achievement_id", typeof(int));
+            table.Columns.Add("achievement_name", typeof(string));
+            table.Columns.Add("description", typeof(string));
+            table.Columns.Add("achievement_type", typeof(string));
+            table.Columns.Add("points", typeof(int));
+            table.Columns.Add("icon_url", typeof(string));
+
+            table.Rows.Add(1, "ACH1", "Desc", "Type", 10, "url.png");
+
+            _mockDataLink
+                .Setup(dataLink => dataLink.ExecuteReader("GetUnlockedAchievements", It.IsAny<SqlParameter[]>()))
+                .Returns(table);
+
+            // Act
+            var result = _achievementsRepository.GetUnlockedAchievementsForUser(1);
+
+            // Assert
+           
             Assert.That(result[0].AchievementName, Is.EqualTo("ACH1"));
         }
 
@@ -214,14 +316,14 @@ namespace Tests.RepositoryTests
         public void UnlockAchievement_WhenExceptionThrown_ThrowsRepositoryException()
         {
             // Arrange
-            _mockDataLink.Setup(dl => dl.ExecuteNonQuery("UnlockAchievement", It.IsAny<SqlParameter[]>()))
+            _mockDataLink.Setup(dataLink => dataLink.ExecuteNonQuery("UnlockAchievement", It.IsAny<SqlParameter[]>()))
                          .Throws(new Exception("test"));
 
             // Act
-            var ex = Assert.Throws<RepositoryException>(() => _repo.UnlockAchievement(1, 100));
+            var exception = Assert.Throws<RepositoryException>(() => _achievementsRepository.UnlockAchievement(1, 100));
             
             // Assert
-            Assert.That(ex.Message, Does.Contain("unlocking achievement"));
+            Assert.That(exception.Message, Does.Contain("unlocking achievement"));
         }
 
         [Test]
@@ -229,25 +331,25 @@ namespace Tests.RepositoryTests
         {
             // Arrange
             _mockDataLink
-                .Setup(dl => dl.ExecuteNonQuery("UnlockAchievement", It.IsAny<SqlParameter[]>()))
+                .Setup(dataLink => dataLink.ExecuteNonQuery("UnlockAchievement", It.IsAny<SqlParameter[]>()))
                 .Returns(1); // simulate successful update
 
             // Act & Assert
-            Assert.DoesNotThrow(() => _repo.UnlockAchievement(1, 100));
+            Assert.DoesNotThrow(() => _achievementsRepository.UnlockAchievement(1, 100));
         }
 
         [Test]
         public void RemoveAchievement_WhenExceptionThrown_ThrowsRepositoryException()
         {
             // Arrange
-            _mockDataLink.Setup(dl => dl.ExecuteNonQuery("RemoveAchievement", It.IsAny<SqlParameter[]>()))
+            _mockDataLink.Setup(dataLink => dataLink.ExecuteNonQuery("RemoveAchievement", It.IsAny<SqlParameter[]>()))
                          .Throws(new Exception("test"));
 
             // Act 
-            var ex = Assert.Throws<RepositoryException>(() => _repo.RemoveAchievement(1, 100));
+            var exception = Assert.Throws<RepositoryException>(() => _achievementsRepository.RemoveAchievement(1, 100));
 
             // Assert
-            Assert.That(ex.Message, Does.Contain("removing achievement"));
+            Assert.That(exception.Message, Does.Contain("removing achievement"));
         }
 
         [Test]
@@ -259,7 +361,7 @@ namespace Tests.RepositoryTests
                 .Returns(1);
 
             // Act & Assert
-            Assert.DoesNotThrow(() => _repo.RemoveAchievement(1, 100));
+            Assert.DoesNotThrow(() => _achievementsRepository.RemoveAchievement(1, 100));
         }
 
         [Test]
@@ -270,10 +372,10 @@ namespace Tests.RepositoryTests
                          .Throws(new Exception("test"));
 
             // Act 
-            var ex = Assert.Throws<RepositoryException>(() => _repo.GetUnlockedDataForAchievement(1, 2));
+            var exception = Assert.Throws<RepositoryException>(() => _achievementsRepository.GetUnlockedDataForAchievement(1, 2));
 
             // Assert
-            Assert.That(ex.Message, Does.Contain("retrieving achievement data"));
+            Assert.That(exception.Message, Does.Contain("retrieving achievement data"));
         }
 
         [Test]
@@ -292,7 +394,7 @@ namespace Tests.RepositoryTests
                 .Returns(table);
 
             // Act
-            var result = _repo.GetUnlockedDataForAchievement(1, 1);
+            var result = _achievementsRepository.GetUnlockedDataForAchievement(1, 1);
 
             // Assert
             Assert.That(result, Is.Null);
@@ -300,7 +402,7 @@ namespace Tests.RepositoryTests
 
 
         [Test]
-        public void GetUnlockedDataForAchievement_WhenDataExists_ReturnsData()
+        public void GetUnlockedDataForAchievement_WhenDataExists_ReturnsDataNotNull()
         {
             // Arrange
             var table = new DataTable();
@@ -315,16 +417,37 @@ namespace Tests.RepositoryTests
                 .Returns(table);
 
             // Act
-            var result = _repo.GetUnlockedDataForAchievement(1, 1);
+            var result = _achievementsRepository.GetUnlockedDataForAchievement(1, 1);
 
             // Assert
             Assert.That(result, Is.Not.Null);
+        }
+
+        [Test]
+        public void GetUnlockedDataForAchievement_WhenDataExists_ReturnsAchievementNameACH1()
+        {
+            // Arrange
+            var table = new DataTable();
+            table.Columns.Add("AchievementName", typeof(string));
+            table.Columns.Add("AchievementDescription", typeof(string));
+            table.Columns.Add("UnlockDate", typeof(DateTime));
+
+            table.Rows.Add("ACH1", "Description", DateTime.Today);
+
+            _mockDataLink
+                .Setup(dl => dl.ExecuteReader("GetUnlockedDataForAchievement", It.IsAny<SqlParameter[]>()))
+                .Returns(table);
+
+            // Act
+            var result = _achievementsRepository.GetUnlockedDataForAchievement(1, 1);
+
+            // Assert
             Assert.That(result.AchievementName, Is.EqualTo("ACH1"));
         }
 
 
         [Test]
-        public void GetAllAchievements_WhenDataReturned_MapsAllPropertiesCorrectly()
+        public void GetAllAchievements_WhenDataReturned_ResultCountIs1()
         {
             // Arrange
             var table = new DataTable();
@@ -342,21 +465,202 @@ namespace Tests.RepositoryTests
                 .Returns(table);
 
             // Act
-            var results = _repo.GetAllAchievements();
+            var results = _achievementsRepository.GetAllAchievements();
 
             // Assert
             Assert.That(results.Count, Is.EqualTo(1));
-            var ach = results[0];
-            Assert.Multiple(() =>
-            {
-                Assert.That(ach.AchievementId, Is.EqualTo(1));
-                Assert.That(ach.AchievementName, Is.EqualTo("ACH1"));
-                Assert.That(ach.Description, Is.EqualTo("Great job!"));
-                Assert.That(ach.AchievementType, Is.EqualTo("TypeA"));
-                Assert.That(ach.Points, Is.EqualTo(10)); // ✅ this is the key line for that yellow mark
-                Assert.That(ach.Icon, Is.EqualTo("http://icon.url"));
-            });
+            
         }
+
+        [Test]
+        public void GetAllAchievements_WhenDataReturned_AchievementIdIs1()
+        {
+            // Arrange
+            var table = new DataTable();
+            table.Columns.Add("achievement_id", typeof(int));
+            table.Columns.Add("achievement_name", typeof(string));
+            table.Columns.Add("description", typeof(string));
+            table.Columns.Add("achievement_type", typeof(string));
+            table.Columns.Add("points", typeof(int));
+            table.Columns.Add("icon_url", typeof(string));
+
+            table.Rows.Add(1, "ACH1", "Great job!", "TypeA", 10, "http://icon.url");
+
+            _mockDataLink
+                .Setup(dl => dl.ExecuteReader("GetAllAchievements", null))
+                .Returns(table);
+
+            // Act
+            var results = _achievementsRepository.GetAllAchievements();
+
+            // Assert
+     
+            var ach = results[0];
+            
+            Assert.That(ach.AchievementId, Is.EqualTo(1));
+               
+         
+        }
+
+        [Test]
+        public void GetAllAchievements_WhenDataReturned_AchievementNameIsACH1()
+        {
+            // Arrange
+            var table = new DataTable();
+            table.Columns.Add("achievement_id", typeof(int));
+            table.Columns.Add("achievement_name", typeof(string));
+            table.Columns.Add("description", typeof(string));
+            table.Columns.Add("achievement_type", typeof(string));
+            table.Columns.Add("points", typeof(int));
+            table.Columns.Add("icon_url", typeof(string));
+
+            table.Rows.Add(1, "ACH1", "Great job!", "TypeA", 10, "http://icon.url");
+
+            _mockDataLink
+                .Setup(dl => dl.ExecuteReader("GetAllAchievements", null))
+                .Returns(table);
+
+            // Act
+            var results = _achievementsRepository.GetAllAchievements();
+
+            // Assert
+
+            var ach = results[0];
+           
+                
+                Assert.That(ach.AchievementName, Is.EqualTo("ACH1"));
+
+        }
+
+        [Test]
+        public void GetAllAchievements_WhenDataReturned_AchievementDescriptionIsGreatJob()
+        {
+            // Arrange
+            var table = new DataTable();
+            table.Columns.Add("achievement_id", typeof(int));
+            table.Columns.Add("achievement_name", typeof(string));
+            table.Columns.Add("description", typeof(string));
+            table.Columns.Add("achievement_type", typeof(string));
+            table.Columns.Add("points", typeof(int));
+            table.Columns.Add("icon_url", typeof(string));
+
+            table.Rows.Add(1, "ACH1", "Great job!", "TypeA", 10, "http://icon.url");
+
+            _mockDataLink
+                .Setup(dl => dl.ExecuteReader("GetAllAchievements", null))
+                .Returns(table);
+
+            // Act
+            var results = _achievementsRepository.GetAllAchievements();
+
+            // Assert
+
+            var ach = results[0];
+          
+               
+                Assert.That(ach.Description, Is.EqualTo("Great job!"));
+               
+         
+
+        }
+
+        [Test]
+        public void GetAllAchievements_WhenDataReturned_AchievementTypeReturnsCorrectly()
+        {
+            // Arrange
+            var table = new DataTable();
+            table.Columns.Add("achievement_id", typeof(int));
+            table.Columns.Add("achievement_name", typeof(string));
+            table.Columns.Add("description", typeof(string));
+            table.Columns.Add("achievement_type", typeof(string));
+            table.Columns.Add("points", typeof(int));
+            table.Columns.Add("icon_url", typeof(string));
+
+            table.Rows.Add(1, "ACH1", "Great job!", "TypeA", 10, "http://icon.url");
+
+            _mockDataLink
+                .Setup(dl => dl.ExecuteReader("GetAllAchievements", null))
+                .Returns(table);
+
+            // Act
+            var results = _achievementsRepository.GetAllAchievements();
+
+            // Assert
+
+            var ach = results[0];
+
+
+            Assert.That(ach.AchievementType, Is.EqualTo("TypeA"));
+
+
+
+        }
+
+        [Test]
+        public void GetAllAchievements_WhenDataReturned_AchievementPointsReturnsCorrectly()
+        {
+            // Arrange
+            var table = new DataTable();
+            table.Columns.Add("achievement_id", typeof(int));
+            table.Columns.Add("achievement_name", typeof(string));
+            table.Columns.Add("description", typeof(string));
+            table.Columns.Add("achievement_type", typeof(string));
+            table.Columns.Add("points", typeof(int));
+            table.Columns.Add("icon_url", typeof(string));
+
+            table.Rows.Add(1, "ACH1", "Great job!", "TypeA", 10, "http://icon.url");
+
+            _mockDataLink
+                .Setup(dl => dl.ExecuteReader("GetAllAchievements", null))
+                .Returns(table);
+
+            // Act
+            var results = _achievementsRepository.GetAllAchievements();
+
+            // Assert
+
+            var ach = results[0];
+
+
+            Assert.That(ach.Points, Is.EqualTo(10));
+
+
+
+        }
+
+        [Test]
+        public void GetAllAchievements_WhenDataReturned_AchievementIconReturnsCorrectly()
+        {
+            // Arrange
+            var table = new DataTable();
+            table.Columns.Add("achievement_id", typeof(int));
+            table.Columns.Add("achievement_name", typeof(string));
+            table.Columns.Add("description", typeof(string));
+            table.Columns.Add("achievement_type", typeof(string));
+            table.Columns.Add("points", typeof(int));
+            table.Columns.Add("icon_url", typeof(string));
+
+            table.Rows.Add(1, "ACH1", "Great job!", "TypeA", 10, "http://icon.url");
+
+            _mockDataLink
+                .Setup(dl => dl.ExecuteReader("GetAllAchievements", null))
+                .Returns(table);
+
+            // Act
+            var results = _achievementsRepository.GetAllAchievements();
+
+            // Assert
+
+            var ach = results[0];
+
+
+            Assert.That(ach.Icon, Is.EqualTo("http://icon.url"));
+
+
+
+        }
+
+       
         [Test]
         public void IsAchievementUnlocked_WhenResultIs1_ReturnsTrue()
         {
@@ -364,7 +668,7 @@ namespace Tests.RepositoryTests
             _mockDataLink.Setup(dl => dl.ExecuteScalar<int>("IsAchievementUnlocked", It.IsAny<SqlParameter[]>())).Returns(1);
 
             // Act
-            bool isUnlocked = _repo.IsAchievementUnlocked(1, 2);
+            bool isUnlocked = _achievementsRepository.IsAchievementUnlocked(1, 2);
 
             // Assert
             Assert.That(isUnlocked, Is.True);
@@ -377,7 +681,7 @@ namespace Tests.RepositoryTests
             _mockDataLink.Setup(dl => dl.ExecuteScalar<int>("IsAchievementUnlocked", It.IsAny<SqlParameter[]>())).Returns(0);
 
             // Act
-            bool isUnlocked = _repo.IsAchievementUnlocked(1, 2);
+            bool isUnlocked = _achievementsRepository.IsAchievementUnlocked(1, 2);
 
             // Assert
             Assert.That(isUnlocked, Is.False);
@@ -392,8 +696,8 @@ namespace Tests.RepositoryTests
                 .Throws(new Exception("Simulated failure"));
 
             // Act & Assert
-            var ex = Assert.Throws<RepositoryException>(() => _repo.IsAchievementUnlocked(1, 10));
-            Assert.That(ex.Message, Does.Contain("achievement is unlocked"));
+            var exception = Assert.Throws<RepositoryException>(() => _achievementsRepository.IsAchievementUnlocked(1, 10));
+            Assert.That(exception.Message, Does.Contain("achievement is unlocked"));
         }
 
 
@@ -423,7 +727,7 @@ namespace Tests.RepositoryTests
         }
 
         [Test]
-        public void GetAchievementsWithStatusForUser_WhenCalled_ReturnsAchievementsWithStatus()
+        public void GetAchievementsWithStatusForUser_WhenCalled_ReturnsAchievementsCountEqualTo1()
         {
             // Arrange
             var achievements = new List<Achievement>
@@ -441,15 +745,41 @@ namespace Tests.RepositoryTests
                          .Returns(CreateMockUnlockDataTable());
 
             // Act
-            var result = _repo.GetAchievementsWithStatusForUser(1);
+            var result = _achievementsRepository.GetAchievementsWithStatusForUser(1);
 
             // Assert
             Assert.That(result, Has.Count.EqualTo(1));
+            
+        }
+
+        [Test]
+        public void GetAchievementsWithStatusForUser_WhenCalled_ReturnsAchievementsUnlocked()
+        {
+            // Arrange
+            var achievements = new List<Achievement>
+    {
+        new Achievement { AchievementId = 1, AchievementName = "A1" }
+    };
+
+            _mockDataLink.Setup(dl => dl.ExecuteReader("GetAllAchievements", null))
+                         .Returns(CreateMockAchievementTable());
+
+            _mockDataLink.Setup(dl => dl.ExecuteScalar<int>("IsAchievementUnlocked", It.IsAny<SqlParameter[]>()))
+                         .Returns(1);
+
+            _mockDataLink.Setup(dl => dl.ExecuteReader("GetUnlockedDataForAchievement", It.IsAny<SqlParameter[]>()))
+                         .Returns(CreateMockUnlockDataTable());
+
+            // Act
+            var result = _achievementsRepository.GetAchievementsWithStatusForUser(1);
+
+            // Assert
+            
             Assert.That(result[0].IsUnlocked, Is.True);
         }
 
         [Test]
-        public void GetAchievementsWithStatusForUser_WhenUnlockedDataIsNull_SetsUnlockedDateToNull()
+        public void GetAchievementsWithStatusForUser_WhenUnlockedDataIsNull_ResultCountIs1()
         {
             // Arrange
             var table = new DataTable();
@@ -471,13 +801,42 @@ namespace Tests.RepositoryTests
                          .Returns(new DataTable()); // empty table = null unlockedData
 
             // Act
-            var result = _repo.GetAchievementsWithStatusForUser(1);
+            var result = _achievementsRepository.GetAchievementsWithStatusForUser(1);
 
             // Assert
             Assert.That(result, Has.Count.EqualTo(1));
-            Assert.That(result[0].UnlockedDate, Is.Null); // <-- key point!
+           
         }
 
+        [Test]
+        public void GetAchievementsWithStatusForUser_WhenUnlockedDataIsNull_SetsUnlockedDateToNull()
+        {
+            // Arrange
+            var table = new DataTable();
+            table.Columns.Add("achievement_id", typeof(int));
+            table.Columns.Add("achievement_name", typeof(string));
+            table.Columns.Add("description", typeof(string));
+            table.Columns.Add("achievement_type", typeof(string));
+            table.Columns.Add("points", typeof(int));
+            table.Columns.Add("icon_url", typeof(string));
+            table.Rows.Add(1, "A1", "Desc", "Type", 10, "url");
+
+            _mockDataLink.Setup(dl => dl.ExecuteReader("GetAllAchievements", null))
+                         .Returns(table);
+
+            _mockDataLink.Setup(dl => dl.ExecuteScalar<int>("IsAchievementUnlocked", It.IsAny<SqlParameter[]>()))
+                         .Returns(1);
+
+            _mockDataLink.Setup(dl => dl.ExecuteReader("GetUnlockedDataForAchievement", It.IsAny<SqlParameter[]>()))
+                         .Returns(new DataTable()); // empty table = null unlockedData
+
+            // Act
+            var result = _achievementsRepository.GetAchievementsWithStatusForUser(1);
+
+            // Assert
+        
+            Assert.That(result[0].UnlockedDate, Is.Null); // <-- key point!
+        }
 
         [Test]
         public void GetAchievementsWithStatusForUser_WhenExceptionThrown_ThrowsRepositoryException()
@@ -487,10 +846,10 @@ namespace Tests.RepositoryTests
                          .Throws(new Exception("DB error"));
 
             // Act
-            var ex = Assert.Throws<RepositoryException>(() => _repo.GetAchievementsWithStatusForUser(1));
+            var exception = Assert.Throws<RepositoryException>(() => _achievementsRepository.GetAchievementsWithStatusForUser(1));
             
             // Assert
-            Assert.That(ex.Message, Does.Contain("achievements with status"));
+            Assert.That(exception.Message, Does.Contain("achievements with status"));
         }
 
         [Test]
@@ -501,7 +860,7 @@ namespace Tests.RepositoryTests
                          .Returns(5);
 
             // Act
-            var result = _repo.GetNumberOfSoldGames(1);
+            var result = _achievementsRepository.GetNumberOfSoldGames(1);
 
             // Assert
             Assert.That(result, Is.EqualTo(5));
@@ -515,10 +874,10 @@ namespace Tests.RepositoryTests
                          .Throws(new Exception("fail"));
 
             // Act
-            var ex = Assert.Throws<RepositoryException>(() => _repo.GetNumberOfSoldGames(1));
+            var exception = Assert.Throws<RepositoryException>(() => _achievementsRepository.GetNumberOfSoldGames(1));
 
             // Assert
-            Assert.That(ex.Message, Does.Contain("sold games"));
+            Assert.That(exception.Message, Does.Contain("sold games"));
         }
 
         [Test]
@@ -529,7 +888,7 @@ namespace Tests.RepositoryTests
                          .Returns(2);
 
             // Act
-            var result = _repo.GetFriendshipCount(1);
+            var result = _achievementsRepository.GetFriendshipCount(1);
 
             // Assert
             Assert.That(result, Is.EqualTo(2));
@@ -543,10 +902,10 @@ namespace Tests.RepositoryTests
                          .Throws(new Exception("fail"));
 
             // Act
-            var ex = Assert.Throws<RepositoryException>(() => _repo.GetFriendshipCount(1));
+            var exception = Assert.Throws<RepositoryException>(() => _achievementsRepository.GetFriendshipCount(1));
             
             // Assert
-            Assert.That(ex.Message, Does.Contain("friendship count"));
+            Assert.That(exception.Message, Does.Contain("friendship count"));
         }
 
         [Test]
@@ -557,7 +916,7 @@ namespace Tests.RepositoryTests
                          .Returns(3);
 
             // Act
-            var result = _repo.GetNumberOfOwnedGames(1);
+            var result = _achievementsRepository.GetNumberOfOwnedGames(1);
 
             // Assert
             Assert.That(result, Is.EqualTo(3));
@@ -571,10 +930,10 @@ namespace Tests.RepositoryTests
                          .Throws(new Exception("fail"));
 
             // Act
-            var ex = Assert.Throws<RepositoryException>(() => _repo.GetNumberOfOwnedGames(1));
+            var exception = Assert.Throws<RepositoryException>(() => _achievementsRepository.GetNumberOfOwnedGames(1));
 
             // Assert
-            Assert.That(ex.Message, Does.Contain("owned games"));
+            Assert.That(exception.Message, Does.Contain("owned games"));
         }
 
         [Test]
@@ -585,7 +944,7 @@ namespace Tests.RepositoryTests
                          .Returns(10);
 
             // Act
-            var result = _repo.GetNumberOfReviewsGiven(1);
+            var result = _achievementsRepository.GetNumberOfReviewsGiven(1);
 
             // Assert
             Assert.That(result, Is.EqualTo(10));
@@ -599,10 +958,10 @@ namespace Tests.RepositoryTests
                          .Throws(new Exception("fail"));
 
             // Act
-            var ex = Assert.Throws<RepositoryException>(() => _repo.GetNumberOfReviewsGiven(1));
+            var exception = Assert.Throws<RepositoryException>(() => _achievementsRepository.GetNumberOfReviewsGiven(1));
 
             // Assert
-            Assert.That(ex.Message, Does.Contain("reviews given"));
+            Assert.That(exception.Message, Does.Contain("reviews given"));
         }
 
         [Test]
@@ -613,7 +972,7 @@ namespace Tests.RepositoryTests
                          .Returns(8);
 
             // Act
-            var result = _repo.GetNumberOfReviewsReceived(1);
+            var result = _achievementsRepository.GetNumberOfReviewsReceived(1);
 
             // Assert
             Assert.That(result, Is.EqualTo(8));
@@ -627,10 +986,10 @@ namespace Tests.RepositoryTests
                          .Throws(new Exception("Simulated failure"));
 
             // Act
-            var ex = Assert.Throws<RepositoryException>(() => _repo.GetNumberOfReviewsReceived(1));
+            var exception = Assert.Throws<RepositoryException>(() => _achievementsRepository.GetNumberOfReviewsReceived(1));
 
             // Assert
-            Assert.That(ex.Message, Does.Contain("reviews received"));
+            Assert.That(exception.Message, Does.Contain("reviews received"));
         }
 
         [Test]
@@ -644,7 +1003,7 @@ namespace Tests.RepositoryTests
                          .Returns(fiveYearsAgo);
 
             // Act
-            var result = _repo.GetYearsOfAcftivity(1);
+            var result = _achievementsRepository.GetYearsOfAcftivity(1);
 
             // Assert
             Assert.That(result, Is.EqualTo(5).Or.EqualTo(4)); // Adjusted by day of year
@@ -658,10 +1017,10 @@ namespace Tests.RepositoryTests
                          .Throws(new Exception("Database fail"));
 
             // Act
-            var ex = Assert.Throws<RepositoryException>(() => _repo.GetYearsOfAcftivity(1));
+            var exception = Assert.Throws<RepositoryException>(() => _achievementsRepository.GetYearsOfAcftivity(1));
 
             // Assert
-            Assert.That(ex.Message, Does.Contain("years of activity"));
+            Assert.That(exception.Message, Does.Contain("years of activity"));
         }
 
         [Test]
@@ -672,7 +1031,7 @@ namespace Tests.RepositoryTests
                          .Returns(42);
 
             // Act
-            var result = _repo.GetAchievementIdByName("ACH_NAME");
+            var result = _achievementsRepository.GetAchievementIdByName("ACH_NAME");
 
             // Assert
             Assert.That(result, Is.EqualTo(42));
@@ -686,10 +1045,10 @@ namespace Tests.RepositoryTests
                          .Throws(new Exception("Database fail"));
 
             // Act
-            var ex = Assert.Throws<RepositoryException>(() => _repo.GetAchievementIdByName("ACH_NAME"));
+            var exception = Assert.Throws<RepositoryException>(() => _achievementsRepository.GetAchievementIdByName("ACH_NAME"));
 
             // Assert
-            Assert.That(ex.Message, Does.Contain("achievement ID"));
+            Assert.That(exception.Message, Does.Contain("achievement ID"));
         }
 
         [Test]
@@ -700,7 +1059,7 @@ namespace Tests.RepositoryTests
                          .Returns(true);
 
             // Act
-            var result = _repo.IsUserDeveloper(1);
+            var result = _achievementsRepository.IsUserDeveloper(1);
 
             // Assert
             Assert.That(result, Is.True);
@@ -714,10 +1073,10 @@ namespace Tests.RepositoryTests
                          .Throws(new Exception("fail"));
 
             // Act
-            var ex = Assert.Throws<RepositoryException>(() => _repo.IsUserDeveloper(1));
+            var exception = Assert.Throws<RepositoryException>(() => _achievementsRepository.IsUserDeveloper(1));
 
             // Assert
-            Assert.That(ex.Message, Does.Contain("developer status"));
+            Assert.That(exception.Message, Does.Contain("developer status"));
         }
 
 
@@ -728,7 +1087,7 @@ namespace Tests.RepositoryTests
             _mockDataLink.Setup(dl => dl.ExecuteScalar<int>("GetNumberOfPosts", It.IsAny<SqlParameter[]>())).Returns(3);
 
             // Act
-            int posts = _repo.GetNumberOfPosts(1);
+            int posts = _achievementsRepository.GetNumberOfPosts(1);
 
             // Assert
             Assert.That(posts, Is.EqualTo(3));
@@ -743,8 +1102,8 @@ namespace Tests.RepositoryTests
                 .Throws(new Exception("Simulated DB failure"));
 
             // Act & Assert
-            var ex = Assert.Throws<RepositoryException>(() => _repo.GetNumberOfPosts(1));
-            Assert.That(ex.Message, Does.Contain("number of posts"));
+            var exception = Assert.Throws<RepositoryException>(() => _achievementsRepository.GetNumberOfPosts(1));
+            Assert.That(exception.Message, Does.Contain("number of posts"));
         }
     }
 }
