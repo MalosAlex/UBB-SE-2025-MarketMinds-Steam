@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 using Moq;
 using NUnit.Framework;
@@ -31,219 +32,230 @@ namespace Tests.ServiceTests
         #region Exception Tests using Moq
 
         [Test]
-        public void FriendsService_NullFriendshipRepository_ThrowsException()
+        public void FriendsService_Constructor_NullFriendshipRepository_ThrowsArgumentNullException()
         {
-            // Assert
+            // Assert: A null friendship repository should trigger an ArgumentNullException.
             Assert.Throws<ArgumentNullException>(() => new FriendsService(null, new FakeUserService()));
         }
 
         [Test]
-        public void FriendsService_NullUserService_ThrowsException()
+        public void FriendsService_Constructor_NullUserService_ThrowsArgumentNullException()
         {
-            // Assert
+            // Assert: A null user service should trigger an ArgumentNullException.
             Assert.Throws<ArgumentNullException>(() => new FriendsService(new FakeFriendshipsRepository(), null));
         }
 
         [Test]
-        public void GetAllFriendships_RepositoryThrows_ServiceExceptionThrown()
+        public void GetAllFriendships_RepositoryThrows_ThrowsServiceException()
         {
             // Arrange
-            var mockRepo = new Mock<IFriendshipsRepository>();
-            mockRepo.Setup(r => r.GetAllFriendships(It.IsAny<int>()))
-                    .Throws(new RepositoryException("Repository error"));
-            var service = new FriendsService(mockRepo.Object, _fakeUserService);
+            var mockFriendshipsRepository = new Mock<IFriendshipsRepository>();
+            mockFriendshipsRepository.Setup(repo => repo.GetAllFriendships(It.IsAny<int>()))
+                                     .Throws(new RepositoryException("Repository error"));
+            var serviceWithFaultyRepo = new FriendsService(mockFriendshipsRepository.Object, _fakeUserService);
 
-            // Act & Assert (one assertion)
-            var ex = Assert.Throws<ServiceException>(() => service.GetAllFriendships());
-            Assert.That(ex.Message, Is.EqualTo("Error retrieving friendships for user."));
+            // Act & Assert: Expect a ServiceException with the specified message.
+            var exception = Assert.Throws<ServiceException>(() => serviceWithFaultyRepo.GetAllFriendships());
+            Assert.That(exception.Message, Is.EqualTo("Error retrieving friendships for user."));
         }
 
         [Test]
-        public void RemoveFriend_RepositoryThrows_ServiceExceptionThrown()
+        public void RemoveFriend_RepositoryThrows_ThrowsServiceException()
         {
             // Arrange
-            var mockRepo = new Mock<IFriendshipsRepository>();
-            mockRepo.Setup(r => r.RemoveFriendship(It.IsAny<int>()))
-                    .Throws(new RepositoryException("Repository error"));
-            var service = new FriendsService(mockRepo.Object, _fakeUserService);
+            var mockFriendshipsRepository = new Mock<IFriendshipsRepository>();
+            mockFriendshipsRepository.Setup(repo => repo.RemoveFriendship(It.IsAny<int>()))
+                                     .Throws(new RepositoryException("Repository error"));
+            var serviceWithFaultyRepo = new FriendsService(mockFriendshipsRepository.Object, _fakeUserService);
 
-            // Act & Assert
-            var ex = Assert.Throws<ServiceException>(() => service.RemoveFriend(1));
-            Assert.That(ex.Message, Is.EqualTo("Error removing friend."));
+            // Act & Assert: Expect a ServiceException with the specified message.
+            var exception = Assert.Throws<ServiceException>(() => serviceWithFaultyRepo.RemoveFriend(1));
+            Assert.That(exception.Message, Is.EqualTo("Error removing friend."));
         }
 
         [Test]
-        public void GetFriendshipCount_RepositoryThrows_ServiceExceptionThrown()
+        public void GetFriendshipCount_RepositoryThrows_ThrowsServiceException()
         {
             // Arrange
-            var mockRepo = new Mock<IFriendshipsRepository>();
-            mockRepo.Setup(r => r.GetFriendshipCount(It.IsAny<int>()))
-                    .Throws(new RepositoryException("Repository error"));
-            var service = new FriendsService(mockRepo.Object, _fakeUserService);
+            var mockFriendshipsRepository = new Mock<IFriendshipsRepository>();
+            mockFriendshipsRepository.Setup(repo => repo.GetFriendshipCount(It.IsAny<int>()))
+                                     .Throws(new RepositoryException("Repository error"));
+            var serviceWithFaultyRepo = new FriendsService(mockFriendshipsRepository.Object, _fakeUserService);
 
-            // Act & Assert
-            var ex = Assert.Throws<ServiceException>(() => service.GetFriendshipCount(1));
-            Assert.That(ex.Message, Is.EqualTo("Error retrieving friendship count."));
+            // Act & Assert: Expect a ServiceException with the specified message.
+            var exception = Assert.Throws<ServiceException>(() => serviceWithFaultyRepo.GetFriendshipCount(1));
+            Assert.That(exception.Message, Is.EqualTo("Error retrieving friendship count."));
         }
 
         [Test]
-        public void AreUsersFriends_RepositoryThrows_ServiceExceptionThrown()
+        public void AreUsersFriends_RepositoryThrows_ThrowsServiceException()
         {
             // Arrange
-            var mockRepo = new Mock<IFriendshipsRepository>();
-            mockRepo.Setup(r => r.GetAllFriendships(It.IsAny<int>()))
-                    .Throws(new RepositoryException("Repository error"));
-            var service = new FriendsService(mockRepo.Object, _fakeUserService);
+            var mockFriendshipsRepository = new Mock<IFriendshipsRepository>();
+            mockFriendshipsRepository.Setup(repo => repo.GetAllFriendships(It.IsAny<int>()))
+                                     .Throws(new RepositoryException("Repository error"));
+            var serviceWithFaultyRepo = new FriendsService(mockFriendshipsRepository.Object, _fakeUserService);
 
-            // Act & Assert
-            var ex = Assert.Throws<ServiceException>(() => service.AreUsersFriends(1, 2));
-            Assert.That(ex.Message, Is.EqualTo("Error checking friendship status."));
+            // Act & Assert: Expect a ServiceException with the specified message.
+            var exception = Assert.Throws<ServiceException>(() => serviceWithFaultyRepo.AreUsersFriends(1, 2));
+            Assert.That(exception.Message, Is.EqualTo("Error checking friendship status."));
         }
 
         [Test]
-        public void GetFriendshipId_RepositoryThrows_ServiceExceptionThrown()
+        public void GetFriendshipId_RepositoryThrows_ThrowsServiceException()
         {
             // Arrange
-            var mockRepo = new Mock<IFriendshipsRepository>();
-            mockRepo.Setup(r => r.GetAllFriendships(It.IsAny<int>()))
-                    .Throws(new RepositoryException("Repository error"));
-            var service = new FriendsService(mockRepo.Object, _fakeUserService);
+            var mockFriendshipsRepository = new Mock<IFriendshipsRepository>();
+            mockFriendshipsRepository.Setup(repo => repo.GetAllFriendships(It.IsAny<int>()))
+                                     .Throws(new RepositoryException("Repository error"));
+            var serviceWithFaultyRepo = new FriendsService(mockFriendshipsRepository.Object, _fakeUserService);
 
-            // Act & Assert
-            var ex = Assert.Throws<ServiceException>(() => service.GetFriendshipId(1, 2));
-            Assert.That(ex.Message, Is.EqualTo("Error retrieving friendship ID."));
+            // Act & Assert: Expect a ServiceException with the specified message.
+            var exception = Assert.Throws<ServiceException>(() => serviceWithFaultyRepo.GetFriendshipId(1, 2));
+            Assert.That(exception.Message, Is.EqualTo("Error retrieving friendship ID."));
         }
 
         [Test]
-        public void AddFriend_RepositoryThrows_ServiceExceptionThrown()
+        public void AddFriend_RepositoryThrows_ThrowsServiceException()
         {
             // Arrange
-            var mockRepo = new Mock<IFriendshipsRepository>();
-            mockRepo.Setup(r => r.AddFriendship(It.IsAny<int>(), It.IsAny<int>()))
-                    .Throws(new RepositoryException("Repository error"));
-            var service = new FriendsService(mockRepo.Object, _fakeUserService);
+            var mockFriendshipsRepository = new Mock<IFriendshipsRepository>();
+            mockFriendshipsRepository.Setup(repo => repo.AddFriendship(It.IsAny<int>(), It.IsAny<int>()))
+                                     .Throws(new RepositoryException("Repository error"));
+            var serviceWithFaultyRepo = new FriendsService(mockFriendshipsRepository.Object, _fakeUserService);
 
-            // Act & Assert
-            var ex = Assert.Throws<ServiceException>(() => service.AddFriend(1, 2));
-            Assert.That(ex.Message, Is.EqualTo("Error adding friend."));
+            // Act & Assert: Expect a ServiceException with the specified message.
+            var exception = Assert.Throws<ServiceException>(() => serviceWithFaultyRepo.AddFriend(1, 2));
+            Assert.That(exception.Message, Is.EqualTo("Error adding friend."));
         }
 
         #endregion
 
         #region Normal Flow Tests
 
-        // Split the previous GetAllFriendships test into separate tests.
-
         [Test]
-        public void GetAllFriendships_ResultIsNotNull()
+        public void GetAllFriendships_CurrentUser_ReturnsNonNullFriendshipList()
         {
-            // Act
-            List<Friendship> result = _friendsService.GetAllFriendships();
-            // Assert: Result is not null.
-            Assert.That(result, Is.Not.Null);
+            // Act: Retrieve all friendships.
+            List<Friendship> friendshipList = _friendsService.GetAllFriendships();
+
+            // Assert: The result should not be null.
+            Assert.That(friendshipList, Is.Not.Null);
         }
 
         [Test]
-        public void GetAllFriendships_ResultCountIsNonNegative()
+        public void GetAllFriendships_CurrentUser_ReturnsNonNegativeCount()
         {
-            // Act
-            List<Friendship> result = _friendsService.GetAllFriendships();
+            // Act: Retrieve all friendships.
+            List<Friendship> friendshipList = _friendsService.GetAllFriendships();
+
             // Assert: Count is greater than or equal to zero.
-            Assert.That(result.Count, Is.GreaterThanOrEqualTo(0));
+            Assert.That(friendshipList.Count, Is.GreaterThanOrEqualTo(0));
         }
 
         [Test]
-        public void GetAllFriendships_AllFriendshipsBelongToUser1()
+        public void GetAllFriendships_CurrentUser_AllFriendshipsHaveUserId1()
         {
-            // Act
-            List<Friendship> result = _friendsService.GetAllFriendships();
+            // Act: Retrieve all friendships.
+            List<Friendship> friendshipList = _friendsService.GetAllFriendships();
+
             // Assert: Every friendship has UserId equal to 1.
-            Assert.That(result, Has.All.Property("UserId").EqualTo(1));
+            Assert.That(friendshipList, Has.All.Property("UserId").EqualTo(1));
         }
 
         [Test]
-        public void RemoveFriend_RemovesFriendship_DecreasesCountByOne()
+        public void RemoveFriend_ValidFriendship_RemovesFriendshipAndDecreasesCountByOne()
         {
-            // Arrange
-            List<Friendship> before = _fakeFriendshipsRepository.GetAllFriendships(1);
-            int countBefore = before.Count;
-            Friendship toRemove = before.First();
-            // Act
-            _friendsService.RemoveFriend(toRemove.FriendshipId);
-            List<Friendship> after = _fakeFriendshipsRepository.GetAllFriendships(1);
-            // Assert: Count decreased by one.
-            Assert.That(after.Count, Is.EqualTo(countBefore - 1));
+            // Arrange: Retrieve the initial list of friendships for user with id 1.
+            List<Friendship> initialFriendshipList = _fakeFriendshipsRepository.GetAllFriendships(1);
+            int initialCount = initialFriendshipList.Count;
+            Friendship friendshipToRemove = initialFriendshipList.First();
+
+            // Act: Remove the selected friendship.
+            _friendsService.RemoveFriend(friendshipToRemove.FriendshipId);
+            List<Friendship> updatedFriendshipList = _fakeFriendshipsRepository.GetAllFriendships(1);
+
+            // Assert: Count should decrease by one.
+            Assert.That(updatedFriendshipList.Count, Is.EqualTo(initialCount - 1));
         }
 
         [Test]
-        public void GetFriendshipCount_ReturnsCorrectCount()
+        public void GetFriendshipCount_CurrentUser_ReturnsExpectedCount()
         {
-            // Act
-            int count = _friendsService.GetFriendshipCount(1);
-            // Arrange (from fake repo)
-            List<Friendship> all = _fakeFriendshipsRepository.GetAllFriendships(1);
-            int expected = all.Count;
-            // Assert: Count equals expected.
-            Assert.That(count, Is.EqualTo(expected));
+            // Act: Retrieve the friendship count for user with id 1.
+            int returnedFriendshipCount = _friendsService.GetFriendshipCount(1);
+
+            // Arrange: Get the expected count from the fake repository.
+            List<Friendship> allFriendships = _fakeFriendshipsRepository.GetAllFriendships(1);
+            int expectedFriendshipCount = allFriendships.Count;
+
+            // Assert: The returned count matches the expected count.
+            Assert.That(returnedFriendshipCount, Is.EqualTo(expectedFriendshipCount));
         }
 
         [Test]
-        public void AreUsersFriends_ReturnsTrueWhenFriends()
+        public void AreUsersFriends_Friends_ReturnsTrue()
         {
-            // Act
-            bool result = _friendsService.AreUsersFriends(1, 2);
-            // Assert: Should be true.
-            Assert.That(result, Is.True);
+            // Act: Check friendship status between user 1 and user 2 (existing friendship).
+            bool friendshipStatus = _friendsService.AreUsersFriends(1, 2);
+
+            // Assert: The status should be true.
+            Assert.That(friendshipStatus, Is.True);
         }
 
         [Test]
-        public void AreUsersFriends_ReturnsFalseWhenNotFriends()
+        public void AreUsersFriends_NotFriends_ReturnsFalse()
         {
-            // Act
-            bool result = _friendsService.AreUsersFriends(1, 999);
-            // Assert: Should be false.
-            Assert.That(result, Is.False);
+            // Act: Check friendship status between user 1 and a non-existing friend id.
+            bool friendshipStatus = _friendsService.AreUsersFriends(1, 999);
+
+            // Assert: The status should be false.
+            Assert.That(friendshipStatus, Is.False);
         }
 
-        // Splitting the GetFriendshipId tests.
         [Test]
         public void GetFriendshipId_ExistingRelationship_ReturnsNonNullId()
         {
-            // Act
-            int? id = _friendsService.GetFriendshipId(1, 2);
-            // Assert: Id is not null.
-            Assert.That(id, Is.Not.Null);
+            // Act: Retrieve friendship id between user 1 and user 2.
+            int? friendshipId = _friendsService.GetFriendshipId(1, 2);
+
+            // Assert: The returned id should not be null.
+            Assert.That(friendshipId, Is.Not.Null);
         }
 
         [Test]
         public void GetFriendshipId_ExistingRelationship_ReturnsExpectedId()
         {
-            // Act
-            int? id = _friendsService.GetFriendshipId(1, 2);
-            // Assert: Expected id equals 1.
-            Assert.That(id, Is.EqualTo(1));
+            // Act: Retrieve friendship id between user 1 and user 2.
+            int? friendshipId = _friendsService.GetFriendshipId(1, 2);
+
+            // Assert: The expected id equals 1 (as per the seeded data).
+            Assert.That(friendshipId, Is.EqualTo(1));
         }
 
         [Test]
         public void GetFriendshipId_NonExistingRelationship_ReturnsNull()
         {
-            // Act
-            int? id = _friendsService.GetFriendshipId(1, 999);
-            // Assert: Id is null.
-            Assert.That(id, Is.Null);
+            // Act: Attempt to retrieve friendship id between user 1 and a non-existent friend.
+            int? friendshipId = _friendsService.GetFriendshipId(1, 999);
+
+            // Assert: The returned id should be null.
+            Assert.That(friendshipId, Is.Null);
         }
 
         [Test]
-        public void AddFriend_AddsNewFriendship_IncreasesCountByOne()
+        public void AddFriend_NewFriend_AddsFriendshipAndIncreasesCountByOne()
         {
-            // Arrange
-            List<Friendship> before = _fakeFriendshipsRepository.GetAllFriendships(1);
-            int countBefore = before.Count;
-            // Act
+            // Arrange: Retrieve the initial list of friendships for user 1.
+            List<Friendship> initialFriendshipList = _fakeFriendshipsRepository.GetAllFriendships(1);
+            int initialCount = initialFriendshipList.Count;
+
+            // Act: Add a new friend (assume user 4 is not already a friend of user 1).
             _friendsService.AddFriend(1, 4);
-            List<Friendship> after = _fakeFriendshipsRepository.GetAllFriendships(1);
-            // Assert: Count increased by one.
-            Assert.That(after.Count, Is.EqualTo(countBefore + 1));
+            List<Friendship> updatedFriendshipList = _fakeFriendshipsRepository.GetAllFriendships(1);
+
+            // Assert: Count should increase by one.
+            Assert.That(updatedFriendshipList.Count, Is.EqualTo(initialCount + 1));
         }
 
         #endregion

@@ -12,32 +12,16 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="0161f655-4b51-48b1-8da8-59f3015ae934" name="Changes" comment="">
-      <change beforePath="$PROJECT_DIR$/../BusinessLayer/Data/DataLink.cs" beforeDir="false" afterPath="$PROJECT_DIR$/../BusinessLayer/Data/DataLink.cs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../BusinessLayer/Repositories/CollectionsRepository.cs" beforeDir="false" afterPath="$PROJECT_DIR$/../BusinessLayer/Repositories/CollectionsRepository.cs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../BusinessLayer/Repositories/Fakes/FakeCollectionsRepository.cs" beforeDir="false" afterPath="$PROJECT_DIR$/../BusinessLayer/Repositories/Fakes/FakeCollectionsRepository.cs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../BusinessLayer/Repositories/Fakes/FakeFriendshipsRepository.cs" beforeDir="false" afterPath="$PROJECT_DIR$/../BusinessLayer/Repositories/Fakes/FakeFriendshipsRepository.cs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../BusinessLayer/Repositories/Fakes/FakeOwnedGamesRepository.cs" beforeDir="false" afterPath="$PROJECT_DIR$/../BusinessLayer/Repositories/Fakes/FakeOwnedGamesRepository.cs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../BusinessLayer/Repositories/FriendshipsRepository.cs" beforeDir="false" afterPath="$PROJECT_DIR$/../BusinessLayer/Repositories/FriendshipsRepository.cs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../BusinessLayer/Repositories/OwnedGamesRepository.cs" beforeDir="false" afterPath="$PROJECT_DIR$/../BusinessLayer/Repositories/OwnedGamesRepository.cs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../BusinessLayer/Services/CollectionsService.cs" beforeDir="false" afterPath="$PROJECT_DIR$/../BusinessLayer/Services/CollectionsService.cs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../BusinessLayer/Services/Fakes/FakeCollectionsService.cs" beforeDir="false" afterPath="$PROJECT_DIR$/../BusinessLayer/Services/Fakes/FakeCollectionsService.cs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../BusinessLayer/Services/Fakes/FakeFriendsService.cs" beforeDir="false" afterPath="$PROJECT_DIR$/../BusinessLayer/Services/Fakes/FakeFriendsService.cs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../BusinessLayer/Services/Fakes/FakeOwnedGamesService.cs" beforeDir="false" afterPath="$PROJECT_DIR$/../BusinessLayer/Services/Fakes/FakeOwnedGamesService.cs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../BusinessLayer/Services/FriendsService.cs" beforeDir="false" afterPath="$PROJECT_DIR$/../BusinessLayer/Services/FriendsService.cs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../BusinessLayer/Services/OwnedGamesService.cs" beforeDir="false" afterPath="$PROJECT_DIR$/../BusinessLayer/Services/OwnedGamesService.cs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../BusinessLayer/Validators/CollectionValidator.cs" beforeDir="false" afterPath="$PROJECT_DIR$/../BusinessLayer/Validators/CollectionValidator.cs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../BusinessLayer/Validators/FriendshipValidator.cs" beforeDir="false" afterPath="$PROJECT_DIR$/../BusinessLayer/Validators/FriendshipValidator.cs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../BusinessLayer/Validators/OwnedGamesValidator.cs" beforeDir="false" afterPath="$PROJECT_DIR$/../BusinessLayer/Validators/OwnedGamesValidator.cs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/App.xaml.cs" beforeDir="false" afterPath="$PROJECT_DIR$/App.xaml.cs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Converters/BooleanToVisibilityConverter.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Converters/BooleanToVisibilityConverter.cs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/ViewModels/AddGameToCollectionViewModel.cs" beforeDir="false" afterPath="$PROJECT_DIR$/ViewModels/AddGameToCollectionViewModel.cs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/ViewModels/CollectionGamesViewModel.cs" beforeDir="false" afterPath="$PROJECT_DIR$/ViewModels/CollectionGamesViewModel.cs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/ViewModels/CollectionsViewModel.cs" beforeDir="false" afterPath="$PROJECT_DIR$/ViewModels/CollectionsViewModel.cs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/ViewModels/FriendsViewModel.cs" beforeDir="false" afterPath="$PROJECT_DIR$/ViewModels/FriendsViewModel.cs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Views/CollectionGamesPage.xaml.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Views/CollectionGamesPage.xaml.cs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Views/CollectionsForVisitorsPage.xaml.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Views/CollectionsForVisitorsPage.xaml.cs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Views/CollectionsPage.xaml.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Views/CollectionsPage.xaml.cs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Views/FriendsPage.xaml.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Views/FriendsPage.xaml.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/.idea.SteamProfile/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/.idea.SteamProfile/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../Tests/RepositoryTests/CollectionsRepositoryTests.cs" beforeDir="false" afterPath="$PROJECT_DIR$/../Tests/RepositoryTests/CollectionsRepositoryTests.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../Tests/RepositoryTests/FakeCollectionsRepositoryTests.cs" beforeDir="false" afterPath="$PROJECT_DIR$/../Tests/RepositoryTests/FakeCollectionsRepositoryTests.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../Tests/RepositoryTests/FakeFriendshipsRepositoryTests.cs" beforeDir="false" afterPath="$PROJECT_DIR$/../Tests/RepositoryTests/FakeFriendshipsRepositoryTests.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../Tests/RepositoryTests/FakeOwnedGamesRepositoryTests.cs" beforeDir="false" afterPath="$PROJECT_DIR$/../Tests/RepositoryTests/FakeOwnedGamesRepositoryTests.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../Tests/RepositoryTests/FriendshipsRepositoryTests.cs" beforeDir="false" afterPath="$PROJECT_DIR$/../Tests/RepositoryTests/FriendshipsRepositoryTests.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../Tests/RepositoryTests/OwnedGamesRepositoryTests.cs" beforeDir="false" afterPath="$PROJECT_DIR$/../Tests/RepositoryTests/OwnedGamesRepositoryTests.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../Tests/ServiceTests/CollectionsServiceTests.cs" beforeDir="false" afterPath="$PROJECT_DIR$/../Tests/ServiceTests/CollectionsServiceTests.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../Tests/ServiceTests/FakeCollectionsServiceTests.cs" beforeDir="false" afterPath="$PROJECT_DIR$/../Tests/ServiceTests/FakeCollectionsServiceTests.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../Tests/ServiceTests/FakeFriendsServiceTests.cs" beforeDir="false" afterPath="$PROJECT_DIR$/../Tests/ServiceTests/FakeFriendsServiceTests.cs" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -149,7 +133,7 @@
       <workItem from="1743964333864" duration="846000" />
       <workItem from="1744020076817" duration="320000" />
       <workItem from="1744117365832" duration="270000" />
-      <workItem from="1744117647693" duration="2753000" />
+      <workItem from="1744117647693" duration="5380000" />
     </task>
     <servers />
   </component>
@@ -160,55 +144,23 @@
     <option name="coveragePercentColumnWidth" value="150" />
     <option name="sortOrder" value="DESCENDING" />
     <option name="sortedColumn" value="1" />
-    <option name="symbolColumnWidth" value="1217" />
+    <option name="symbolColumnWidth" value="1222" />
     <coverage-tree-state>
       <expand>
         <path>
           <item name="rootNode" type="c53c71d1:RiderDotCoverCoverageTreeModel$RootNode" />
-          <item name="Total 69% 3760/12321" type="8b8fad3a:RiderDotCoverCoverageTreeNode" />
+          <item name="Total 55% 5568/12321" type="8b8fad3a:RiderDotCoverCoverageTreeNode" />
         </path>
         <path>
           <item name="rootNode" type="c53c71d1:RiderDotCoverCoverageTreeModel$RootNode" />
-          <item name="Total 69% 3760/12321" type="8b8fad3a:RiderDotCoverCoverageTreeNode" />
-          <item name="BusinessLayer 81% 729/3914" type="8b8fad3a:RiderDotCoverCoverageTreeNode" />
+          <item name="Total 55% 5568/12321" type="8b8fad3a:RiderDotCoverCoverageTreeNode" />
+          <item name="BusinessLayer 64% 1398/3914" type="8b8fad3a:RiderDotCoverCoverageTreeNode" />
         </path>
         <path>
           <item name="rootNode" type="c53c71d1:RiderDotCoverCoverageTreeModel$RootNode" />
-          <item name="Total 69% 3760/12321" type="8b8fad3a:RiderDotCoverCoverageTreeNode" />
-          <item name="BusinessLayer 81% 729/3914" type="8b8fad3a:RiderDotCoverCoverageTreeNode" />
-          <item name="(1.0.0.0, net8.0) 81% 729/3914" type="8b8fad3a:RiderDotCoverCoverageTreeNode" />
-        </path>
-        <path>
-          <item name="rootNode" type="c53c71d1:RiderDotCoverCoverageTreeModel$RootNode" />
-          <item name="Total 69% 3760/12321" type="8b8fad3a:RiderDotCoverCoverageTreeNode" />
-          <item name="BusinessLayer 81% 729/3914" type="8b8fad3a:RiderDotCoverCoverageTreeNode" />
-          <item name="(1.0.0.0, net8.0) 81% 729/3914" type="8b8fad3a:RiderDotCoverCoverageTreeNode" />
-          <item name="BusinessLayer 81% 725/3748" type="8b8fad3a:RiderDotCoverCoverageTreeNode" />
-        </path>
-        <path>
-          <item name="rootNode" type="c53c71d1:RiderDotCoverCoverageTreeModel$RootNode" />
-          <item name="Total 69% 3760/12321" type="8b8fad3a:RiderDotCoverCoverageTreeNode" />
-          <item name="BusinessLayer 81% 729/3914" type="8b8fad3a:RiderDotCoverCoverageTreeNode" />
-          <item name="(1.0.0.0, net8.0) 81% 729/3914" type="8b8fad3a:RiderDotCoverCoverageTreeNode" />
-          <item name="BusinessLayer 81% 725/3748" type="8b8fad3a:RiderDotCoverCoverageTreeNode" />
-          <item name="Services 85% 223/1487" type="8b8fad3a:RiderDotCoverCoverageTreeNode" />
-        </path>
-        <path>
-          <item name="rootNode" type="c53c71d1:RiderDotCoverCoverageTreeModel$RootNode" />
-          <item name="Total 69% 3760/12321" type="8b8fad3a:RiderDotCoverCoverageTreeNode" />
-          <item name="BusinessLayer 81% 729/3914" type="8b8fad3a:RiderDotCoverCoverageTreeNode" />
-          <item name="(1.0.0.0, net8.0) 81% 729/3914" type="8b8fad3a:RiderDotCoverCoverageTreeNode" />
-          <item name="BusinessLayer 81% 725/3748" type="8b8fad3a:RiderDotCoverCoverageTreeNode" />
-          <item name="Services 85% 223/1487" type="8b8fad3a:RiderDotCoverCoverageTreeNode" />
-          <item name="Fakes 78% 118/540" type="8b8fad3a:RiderDotCoverCoverageTreeNode" />
-        </path>
-        <path>
-          <item name="rootNode" type="c53c71d1:RiderDotCoverCoverageTreeModel$RootNode" />
-          <item name="Total 69% 3760/12321" type="8b8fad3a:RiderDotCoverCoverageTreeNode" />
-          <item name="BusinessLayer 81% 729/3914" type="8b8fad3a:RiderDotCoverCoverageTreeNode" />
-          <item name="(1.0.0.0, net8.0) 81% 729/3914" type="8b8fad3a:RiderDotCoverCoverageTreeNode" />
-          <item name="BusinessLayer 81% 725/3748" type="8b8fad3a:RiderDotCoverCoverageTreeNode" />
-          <item name="Repositories 84% 258/1598" type="8b8fad3a:RiderDotCoverCoverageTreeNode" />
+          <item name="Total 55% 5568/12321" type="8b8fad3a:RiderDotCoverCoverageTreeNode" />
+          <item name="BusinessLayer 64% 1398/3914" type="8b8fad3a:RiderDotCoverCoverageTreeNode" />
+          <item name="(1.0.0.0, net8.0) 64% 1398/3914" type="8b8fad3a:RiderDotCoverCoverageTreeNode" />
         </path>
       </expand>
       <select />
