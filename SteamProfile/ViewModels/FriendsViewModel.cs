@@ -56,21 +56,21 @@ namespace SteamProfile.ViewModels
                     Friendships.Add(friendship);
                 }
             }
-            catch (ServiceException ex)
+            catch (ServiceException serviceException)
             {
-                Debug.WriteLine($"Service error: {ex.Message}");
-                Debug.WriteLine($"Inner exception: {ex.InnerException?.Message}");
-                ErrorMessage = $"Error loading friends: {ex.Message}";
-                if (ex.InnerException != null)
+                Debug.WriteLine($"Service error: {serviceException.Message}");
+                Debug.WriteLine($"Inner exception: {serviceException.InnerException?.Message}");
+                ErrorMessage = $"Error loading friends: {serviceException.Message}";
+                if (serviceException.InnerException != null)
                 {
-                    ErrorMessage += $"\nDetails: {ex.InnerException.Message}";
+                    ErrorMessage += $"\nDetails: {serviceException.InnerException.Message}";
                 }
             }
-            catch (Exception ex)
+            catch (Exception generalException)
             {
-                Debug.WriteLine($"Unexpected error: {ex.Message}");
-                Debug.WriteLine($"Stack trace: {ex.StackTrace}");
-                ErrorMessage = $"Unexpected error loading friends: {ex.Message}";
+                Debug.WriteLine($"Unexpected error: {generalException.Message}");
+                Debug.WriteLine($"Stack trace: {generalException.StackTrace}");
+                ErrorMessage = $"Unexpected error loading friends: {generalException.Message}";
             }
             finally
             {
@@ -101,23 +101,23 @@ namespace SteamProfile.ViewModels
                 }
                 Debug.WriteLine($"Friends list reloaded. New count: {Friendships.Count}");
             }
-            catch (ServiceException ex)
+            catch (ServiceException serviceException)
             {
-                Debug.WriteLine($"Service error: {ex.Message}");
-                Debug.WriteLine($"Inner exception: {ex.InnerException?.Message}");
-                Debug.WriteLine($"Stack trace: {ex.StackTrace}");
-                ErrorMessage = $"Error removing friend: {ex.Message}";
-                if (ex.InnerException != null)
+                Debug.WriteLine($"Service error: {serviceException.Message}");
+                Debug.WriteLine($"Inner exception: {serviceException.InnerException?.Message}");
+                Debug.WriteLine($"Stack trace: {serviceException.StackTrace}");
+                ErrorMessage = $"Error removing friend: {serviceException.Message}";
+                if (serviceException.InnerException != null)
                 {
-                    ErrorMessage += $"\nDetails: {ex.InnerException.Message}";
+                    ErrorMessage += $"\nDetails: {serviceException.InnerException.Message}";
                 }
             }
-            catch (Exception ex)
+            catch (Exception generalException)
             {
-                Debug.WriteLine($"Unexpected error: {ex.Message}");
-                Debug.WriteLine($"Stack trace: {ex.StackTrace}");
-                Debug.WriteLine($"Inner exception: {ex.InnerException?.Message}");
-                ErrorMessage = $"Unexpected error removing friend: {ex.Message}";
+                Debug.WriteLine($"Unexpected error: {generalException.Message}");
+                Debug.WriteLine($"Stack trace: {generalException.StackTrace}");
+                Debug.WriteLine($"Inner exception: {generalException.InnerException?.Message}");
+                ErrorMessage = $"Unexpected error removing friend: {generalException.Message}";
             }
             finally
             {

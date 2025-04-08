@@ -20,28 +20,28 @@ namespace BusinessLayer.Repositories
         {
             try
             {
-                var parameters = new SqlParameter[]
+                var sqlParameters = new SqlParameter[]
                 {
                     new SqlParameter("@user_id", userId)
                 };
 
-                var dataTable = dataLink.ExecuteReader("GetAllCollectionsForUser", parameters);
+                var resultTable = dataLink.ExecuteReader("GetAllCollectionsForUser", sqlParameters);
 
-                if (dataTable == null || dataTable.Rows.Count == 0)
+                if (resultTable == null || resultTable.Rows.Count == 0)
                 {
                     return new List<Collection>();
                 }
 
-                var collections = MapDataTableToCollections(dataTable);
-                return collections;
+                var collectionsList = MapDataTableToCollections(resultTable);
+                return collectionsList;
             }
-            catch (SqlException ex)
+            catch (SqlException sqlException)
             {
-                throw new RepositoryException("Database error while retrieving collections.", ex);
+                throw new RepositoryException("Database error while retrieving collections.", sqlException);
             }
-            catch (Exception ex)
+            catch (Exception generalException)
             {
-                throw new RepositoryException("An unexpected error occurred while retrieving collections.", ex);
+                throw new RepositoryException("An unexpected error occurred while retrieving collections.", generalException);
             }
         }
 
@@ -49,17 +49,18 @@ namespace BusinessLayer.Repositories
         {
             try
             {
-                var allCollections = GetAllCollections(userId);
-                var lastThreeCollections = allCollections
-                    .OrderByDescending(c => c.CreatedAt)
+                var allUserCollections = GetAllCollections(userId);
+
+                var lastThreeCollections = allUserCollections
+                    .OrderByDescending(collection => collection.CreatedAt)
                     .Take(3)
                     .ToList();
 
                 return lastThreeCollections;
             }
-            catch (Exception ex)
+            catch (Exception generalException)
             {
-                throw new RepositoryException("An unexpected error occurred while retrieving the last three collections.", ex);
+                throw new RepositoryException("An unexpected error occurred while retrieving the last three collections.", generalException);
             }
         }
 
@@ -67,29 +68,29 @@ namespace BusinessLayer.Repositories
         {
             try
             {
-                var parameters = new SqlParameter[]
+                var sqlParameters = new SqlParameter[]
                 {
                     new SqlParameter("@collectionId", collectionId),
                     new SqlParameter("@user_id", userId)
                 };
 
-                var dataTable = dataLink.ExecuteReader("GetCollectionById", parameters);
+                var resultTable = dataLink.ExecuteReader("GetCollectionById", sqlParameters);
 
-                if (dataTable == null || dataTable.Rows.Count == 0)
+                if (resultTable == null || resultTable.Rows.Count == 0)
                 {
                     return null;
                 }
 
-                var collection = MapDataRowToCollection(dataTable.Rows[0]);
+                var collection = MapDataRowToCollection(resultTable.Rows[0]);
                 return collection;
             }
-            catch (SqlException ex)
+            catch (SqlException sqlException)
             {
-                throw new RepositoryException("Database error while retrieving collection by ID.", ex);
+                throw new RepositoryException("Database error while retrieving collection by ID.", sqlException);
             }
-            catch (Exception ex)
+            catch (Exception generalException)
             {
-                throw new RepositoryException("An unexpected error occurred while retrieving collection by ID.", ex);
+                throw new RepositoryException("An unexpected error occurred while retrieving collection by ID.", generalException);
             }
         }
 
@@ -97,39 +98,39 @@ namespace BusinessLayer.Repositories
         {
             try
             {
-                var parameters = new SqlParameter[]
+                var sqlParameters = new SqlParameter[]
                 {
                     new SqlParameter("@collection_id", collectionId)
                 };
 
-                var dataTable = dataLink.ExecuteReader("GetGamesInCollection", parameters);
+                var resultTable = dataLink.ExecuteReader("GetGamesInCollection", sqlParameters);
 
-                if (dataTable == null || dataTable.Rows.Count == 0)
+                if (resultTable == null || resultTable.Rows.Count == 0)
                 {
                     return new List<OwnedGame>();
                 }
 
-                var games = dataTable.AsEnumerable().Select(row =>
+                var gamesInCollection = resultTable.AsEnumerable().Select(row =>
                 {
-                    // Create OwnedGame using the new constructor
-                    var game = new OwnedGame(
+                    var ownedGame = new OwnedGame(
                         Convert.ToInt32(row["user_id"]),
                         row["title"].ToString(),
                         row["description"]?.ToString(),
                         row["cover_picture"]?.ToString());
-                    game.GameId = Convert.ToInt32(row["game_id"]);
-                    return game;
+
+                    ownedGame.GameId = Convert.ToInt32(row["game_id"]);
+                    return ownedGame;
                 }).ToList();
 
-                return games;
+                return gamesInCollection;
             }
-            catch (SqlException ex)
+            catch (SqlException sqlException)
             {
-                throw new RepositoryException("Database error while retrieving games in collection.", ex);
+                throw new RepositoryException("Database error while retrieving games in collection.", sqlException);
             }
-            catch (Exception ex)
+            catch (Exception generalException)
             {
-                throw new RepositoryException("An unexpected error occurred while retrieving games in collection.", ex);
+                throw new RepositoryException("An unexpected error occurred while retrieving games in collection.", generalException);
             }
         }
 
@@ -139,42 +140,44 @@ namespace BusinessLayer.Repositories
             {
                 if (collectionId == 1)
                 {
-                    var parameters = new SqlParameter[]
+                    var sqlParameters = new SqlParameter[]
                     {
                         new SqlParameter("@user_id", userId)
                     };
-                    var dataTable = dataLink.ExecuteReader("GetAllGamesForUser", parameters);
 
-                    if (dataTable == null || dataTable.Rows.Count == 0)
+                    var resultTable = dataLink.ExecuteReader("GetAllGamesForUser", sqlParameters);
+
+                    if (resultTable == null || resultTable.Rows.Count == 0)
                     {
                         return new List<OwnedGame>();
                     }
 
-                    var games = dataTable.AsEnumerable().Select(row =>
+                    var userOwnedGames = resultTable.AsEnumerable().Select(row =>
                     {
-                        var game = new OwnedGame(
+                        var ownedGame = new OwnedGame(
                             Convert.ToInt32(row["user_id"]),
                             row["title"].ToString(),
                             row["description"]?.ToString(),
                             row["cover_picture"]?.ToString());
-                        game.GameId = Convert.ToInt32(row["game_id"]);
-                        return game;
+
+                        ownedGame.GameId = Convert.ToInt32(row["game_id"]);
+                        return ownedGame;
                     }).ToList();
 
-                    return games;
+                    return userOwnedGames;
                 }
                 else
                 {
                     return GetGamesInCollection(collectionId);
                 }
             }
-            catch (SqlException ex)
+            catch (SqlException sqlException)
             {
-                throw new RepositoryException("Database error while retrieving games in collection.", ex);
+                throw new RepositoryException("Database error while retrieving games in collection.", sqlException);
             }
-            catch (Exception ex)
+            catch (Exception generalException)
             {
-                throw new RepositoryException("An unexpected error occurred while retrieving games in collection.", ex);
+                throw new RepositoryException("An unexpected error occurred while retrieving games in collection.", generalException);
             }
         }
 
@@ -182,21 +185,21 @@ namespace BusinessLayer.Repositories
         {
             try
             {
-                var parameters = new SqlParameter[]
+                var sqlParameters = new SqlParameter[]
                 {
                     new SqlParameter("@collection_id", collectionId),
                     new SqlParameter("@game_id", gameId)
                 };
 
-                dataLink.ExecuteNonQuery("AddGameToCollection", parameters);
+                dataLink.ExecuteNonQuery("AddGameToCollection", sqlParameters);
             }
-            catch (SqlException ex)
+            catch (SqlException sqlException)
             {
-                throw new RepositoryException("Database error while adding game to collection.", ex);
+                throw new RepositoryException("Database error while adding game to collection.", sqlException);
             }
-            catch (Exception ex)
+            catch (Exception generalException)
             {
-                throw new RepositoryException("An unexpected error occurred while adding game to collection.", ex);
+                throw new RepositoryException("An unexpected error occurred while adding game to collection.", generalException);
             }
         }
 
@@ -204,20 +207,21 @@ namespace BusinessLayer.Repositories
         {
             try
             {
-                var parameters = new SqlParameter[]
+                var sqlParameters = new SqlParameter[]
                 {
                     new SqlParameter("@collection_id", collectionId),
                     new SqlParameter("@game_id", gameId)
                 };
-                dataLink.ExecuteNonQuery("RemoveGameFromCollection", parameters);
+
+                dataLink.ExecuteNonQuery("RemoveGameFromCollection", sqlParameters);
             }
-            catch (SqlException ex)
+            catch (SqlException sqlException)
             {
-                throw new RepositoryException("Database error while removing game from collection.", ex);
+                throw new RepositoryException("Database error while removing game from collection.", sqlException);
             }
-            catch (Exception ex)
+            catch (Exception generalException)
             {
-                throw new RepositoryException("An unexpected error occurred while removing game from collection.", ex);
+                throw new RepositoryException("An unexpected error occurred while removing game from collection.", generalException);
             }
         }
 
@@ -225,17 +229,17 @@ namespace BusinessLayer.Repositories
         {
             try
             {
-                var parameters = new SqlParameter[]
+                var sqlParameters = new SqlParameter[]
                 {
                     new SqlParameter("@user_id", userId),
                     new SqlParameter("@collection_id", collectionId)
                 };
 
-                dataLink.ExecuteReader("MakeCollectionPrivate", parameters);
+                dataLink.ExecuteReader("MakeCollectionPrivate", sqlParameters);
             }
-            catch (DatabaseOperationException ex)
+            catch (DatabaseOperationException dbOperationException)
             {
-                throw new RepositoryException($"Failed to make collection {collectionId} private for user {userId}.", ex);
+                throw new RepositoryException($"Failed to make collection {collectionId} private for user {userId}.", dbOperationException);
             }
         }
 
@@ -243,17 +247,17 @@ namespace BusinessLayer.Repositories
         {
             try
             {
-                var parameters = new SqlParameter[]
+                var sqlParameters = new SqlParameter[]
                 {
                     new SqlParameter("@user_id", userId),
                     new SqlParameter("@collection_id", collectionId)
                 };
 
-                dataLink.ExecuteReader("MakeCollectionPublic", parameters);
+                dataLink.ExecuteReader("MakeCollectionPublic", sqlParameters);
             }
-            catch (DatabaseOperationException ex)
+            catch (DatabaseOperationException dbOperationException)
             {
-                throw new RepositoryException($"Failed to make collection {collectionId} public for user {userId}.", ex);
+                throw new RepositoryException($"Failed to make collection {collectionId} public for user {userId}.", dbOperationException);
             }
         }
 
@@ -261,17 +265,17 @@ namespace BusinessLayer.Repositories
         {
             try
             {
-                var parameters = new SqlParameter[]
+                var sqlParameters = new SqlParameter[]
                 {
                     new SqlParameter("@user_id", userId),
                     new SqlParameter("@collection_id", collectionId)
                 };
 
-                dataLink.ExecuteReader("DeleteCollection", parameters);
+                dataLink.ExecuteReader("DeleteCollection", sqlParameters);
             }
-            catch (DatabaseOperationException ex)
+            catch (DatabaseOperationException dbOperationException)
             {
-                throw new RepositoryException($"Failed to remove collection {collectionId} for user {userId}.", ex);
+                throw new RepositoryException($"Failed to remove collection {collectionId} for user {userId}.", dbOperationException);
             }
         }
 
@@ -281,7 +285,7 @@ namespace BusinessLayer.Repositories
             {
                 if (collection.CollectionId == 0)
                 {
-                    var parameters = new SqlParameter[]
+                    var sqlParameters = new SqlParameter[]
                     {
                         new SqlParameter("@user_id", userId),
                         new SqlParameter("@name", collection.Name),
@@ -290,11 +294,11 @@ namespace BusinessLayer.Repositories
                         new SqlParameter("@created_at", collection.CreatedAt.ToDateTime(TimeOnly.MinValue))
                     };
 
-                    dataLink.ExecuteReader("CreateCollection", parameters);
+                    dataLink.ExecuteReader("CreateCollection", sqlParameters);
                 }
                 else
                 {
-                    var parameters = new SqlParameter[]
+                    var sqlParameters = new SqlParameter[]
                     {
                         new SqlParameter("@collection_id", collection.CollectionId),
                         new SqlParameter("@user_id", userId),
@@ -304,12 +308,12 @@ namespace BusinessLayer.Repositories
                         new SqlParameter("@created_at", collection.CreatedAt.ToDateTime(TimeOnly.MinValue))
                     };
 
-                    dataLink.ExecuteReader("UpdateCollection", parameters);
+                    dataLink.ExecuteReader("UpdateCollection", sqlParameters);
                 }
             }
-            catch (DatabaseOperationException ex)
+            catch (DatabaseOperationException dbOperationException)
             {
-                throw new RepositoryException($"Failed to save collection for user {userId}.", ex);
+                throw new RepositoryException($"Failed to save collection for user {userId}.", dbOperationException);
             }
         }
 
@@ -317,21 +321,21 @@ namespace BusinessLayer.Repositories
         {
             try
             {
-                var parameters = new SqlParameter[]
+                var sqlParameters = new SqlParameter[]
                 {
                     new SqlParameter("@collection_id", collectionId),
                     new SqlParameter("@user_id", userId)
                 };
 
-                dataLink.ExecuteNonQuery("DeleteCollection", parameters);
+                dataLink.ExecuteNonQuery("DeleteCollection", sqlParameters);
             }
-            catch (SqlException ex)
+            catch (SqlException sqlException)
             {
-                throw new RepositoryException("Database error while deleting collection.", ex);
+                throw new RepositoryException("Database error while deleting collection.", sqlException);
             }
-            catch (Exception ex)
+            catch (Exception generalException)
             {
-                throw new RepositoryException("An unexpected error occurred while deleting collection.", ex);
+                throw new RepositoryException("An unexpected error occurred while deleting collection.", generalException);
             }
         }
 
@@ -339,7 +343,7 @@ namespace BusinessLayer.Repositories
         {
             try
             {
-                var parameters = new SqlParameter[]
+                var sqlParameters = new SqlParameter[]
                 {
                     new SqlParameter("@user_id", userId),
                     new SqlParameter("@name", name),
@@ -348,15 +352,15 @@ namespace BusinessLayer.Repositories
                     new SqlParameter("@created_at", createdAt.ToDateTime(TimeOnly.MinValue))
                 };
 
-                dataLink.ExecuteNonQuery("CreateCollection", parameters);
+                dataLink.ExecuteNonQuery("CreateCollection", sqlParameters);
             }
-            catch (SqlException ex)
+            catch (SqlException sqlException)
             {
-                throw new RepositoryException("Database error while creating collection.", ex);
+                throw new RepositoryException("Database error while creating collection.", sqlException);
             }
-            catch (Exception ex)
+            catch (Exception generalException)
             {
-                throw new RepositoryException("An unexpected error occurred while creating collection.", ex);
+                throw new RepositoryException("An unexpected error occurred while creating collection.", generalException);
             }
         }
 
@@ -364,7 +368,7 @@ namespace BusinessLayer.Repositories
         {
             try
             {
-                var parameters = new SqlParameter[]
+                var sqlParameters = new SqlParameter[]
                 {
                     new SqlParameter("@collection_id", collectionId),
                     new SqlParameter("@user_id", userId),
@@ -374,15 +378,15 @@ namespace BusinessLayer.Repositories
                     new SqlParameter("@created_at", DateOnly.FromDateTime(DateTime.Now).ToDateTime(TimeOnly.MinValue))
                 };
 
-                dataLink.ExecuteReader("UpdateCollection", parameters);
+                dataLink.ExecuteReader("UpdateCollection", sqlParameters);
             }
-            catch (SqlException ex)
+            catch (SqlException sqlException)
             {
-                throw new RepositoryException("Database error while updating collection.", ex);
+                throw new RepositoryException("Database error while updating collection.", sqlException);
             }
-            catch (Exception ex)
+            catch (Exception generalException)
             {
-                throw new RepositoryException("An unexpected error occurred while updating collection.", ex);
+                throw new RepositoryException("An unexpected error occurred while updating collection.", generalException);
             }
         }
 
@@ -390,28 +394,28 @@ namespace BusinessLayer.Repositories
         {
             try
             {
-                var parameters = new SqlParameter[]
+                var sqlParameters = new SqlParameter[]
                 {
                     new SqlParameter("@user_id", userId)
                 };
 
-                var dataTable = dataLink.ExecuteReader("GetPublicCollectionsForUser", parameters);
+                var resultTable = dataLink.ExecuteReader("GetPublicCollectionsForUser", sqlParameters);
 
-                if (dataTable == null || dataTable.Rows.Count == 0)
+                if (resultTable == null || resultTable.Rows.Count == 0)
                 {
                     return new List<Collection>();
                 }
 
-                var collections = MapDataTableToCollections(dataTable);
-                return collections;
+                var publicCollections = MapDataTableToCollections(resultTable);
+                return publicCollections;
             }
-            catch (SqlException ex)
+            catch (SqlException sqlException)
             {
-                throw new RepositoryException("Database error while retrieving public collections.", ex);
+                throw new RepositoryException("Database error while retrieving public collections.", sqlException);
             }
-            catch (Exception ex)
+            catch (Exception generalException)
             {
-                throw new RepositoryException("An unexpected error occurred while retrieving public collections.", ex);
+                throw new RepositoryException("An unexpected error occurred while retrieving public collections.", generalException);
             }
         }
 
@@ -419,45 +423,45 @@ namespace BusinessLayer.Repositories
         {
             try
             {
-                var parameters = new SqlParameter[]
+                var sqlParameters = new SqlParameter[]
                 {
                     new SqlParameter("@collection_id", collectionId),
                     new SqlParameter("@user_id", userId)
                 };
 
-                var dataTable = dataLink.ExecuteReader("GetGamesNotInCollection", parameters);
+                var resultTable = dataLink.ExecuteReader("GetGamesNotInCollection", sqlParameters);
 
-                if (dataTable == null || dataTable.Rows.Count == 0)
+                if (resultTable == null || resultTable.Rows.Count == 0)
                 {
                     return new List<OwnedGame>();
                 }
 
-                var games = dataTable.AsEnumerable().Select(row =>
+                var unassignedGames = resultTable.AsEnumerable().Select(row =>
                 {
-                    var game = new OwnedGame(
+                    var ownedGame = new OwnedGame(
                         Convert.ToInt32(row["user_id"]),
                         row["title"].ToString(),
                         row["description"]?.ToString(),
                         row["cover_picture"]?.ToString());
-                    game.GameId = Convert.ToInt32(row["game_id"]);
-                    return game;
+                    ownedGame.GameId = Convert.ToInt32(row["game_id"]);
+                    return ownedGame;
                 }).ToList();
 
-                return games;
+                return unassignedGames;
             }
-            catch (SqlException ex)
+            catch (SqlException sqlException)
             {
-                throw new RepositoryException("Database error while getting games not in collection.", ex);
+                throw new RepositoryException("Database error while getting games not in collection.", sqlException);
             }
-            catch (Exception ex)
+            catch (Exception generalException)
             {
-                throw new RepositoryException("An unexpected error occurred while getting games not in collection.", ex);
+                throw new RepositoryException("An unexpected error occurred while getting games not in collection.", generalException);
             }
         }
 
         private static List<Collection> MapDataTableToCollections(DataTable dataTable)
         {
-            var collections = dataTable.AsEnumerable().Select(row =>
+            var collectionList = dataTable.AsEnumerable().Select(row =>
             {
                 var collection = new Collection(
                     userId: Convert.ToInt32(row["user_id"]),
@@ -469,18 +473,20 @@ namespace BusinessLayer.Repositories
                 collection.CollectionId = Convert.ToInt32(row["collection_id"]);
                 return collection;
             }).ToList();
-            return collections;
+
+            return collectionList;
         }
 
-        private static Collection MapDataRowToCollection(DataRow row)
+        private static Collection MapDataRowToCollection(DataRow dataRow)
         {
             var collection = new Collection(
-                userId: Convert.ToInt32(row["user_id"]),
-                name: row["name"].ToString(),
-                createdAt: DateOnly.FromDateTime(Convert.ToDateTime(row["created_at"])),
-                coverPicture: row["cover_picture"]?.ToString(),
-                isPublic: Convert.ToBoolean(row["is_public"]));
-            collection.CollectionId = Convert.ToInt32(row["collection_id"]);
+                userId: Convert.ToInt32(dataRow["user_id"]),
+                name: dataRow["name"].ToString(),
+                createdAt: DateOnly.FromDateTime(Convert.ToDateTime(dataRow["created_at"])),
+                coverPicture: dataRow["cover_picture"]?.ToString(),
+                isPublic: Convert.ToBoolean(dataRow["is_public"]));
+
+            collection.CollectionId = Convert.ToInt32(dataRow["collection_id"]);
             return collection;
         }
     }

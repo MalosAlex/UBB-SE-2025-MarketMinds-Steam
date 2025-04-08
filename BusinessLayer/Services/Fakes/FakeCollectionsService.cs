@@ -5,37 +5,37 @@ namespace BusinessLayer.Services.Fakes
 {
     public class FakeCollectionsService : ICollectionsService
     {
-        private List<Collection> collections;
-        private List<OwnedGame> games;
+        private List<Collection> collectionList;
+        private List<OwnedGame> ownedGameList;
 
         public FakeCollectionsService()
         {
             // Seed some fake collections.
-            collections = new List<Collection>();
-            collections.Add(new Collection(1, "Collection 1", DateOnly.FromDateTime(DateTime.Now.AddDays(-5)), "cover1.jpg", true) { CollectionId = 1 });
-            collections.Add(new Collection(1, "Collection 2", DateOnly.FromDateTime(DateTime.Now.AddDays(-3)), "cover2.jpg", false) { CollectionId = 2 });
-            collections.Add(new Collection(1, "Collection 3", DateOnly.FromDateTime(DateTime.Now.AddDays(-1)), "cover3.jpg", true) { CollectionId = 3 });
-            collections.Add(new Collection(2, "Other User Collection", DateOnly.FromDateTime(DateTime.Now.AddDays(-2)), "cover4.jpg", true) { CollectionId = 4 });
+            collectionList = new List<Collection>();
+            collectionList.Add(new Collection(1, "Collection 1", DateOnly.FromDateTime(DateTime.Now.AddDays(-5)), "cover1.jpg", true) { CollectionId = 1 });
+            collectionList.Add(new Collection(1, "Collection 2", DateOnly.FromDateTime(DateTime.Now.AddDays(-3)), "cover2.jpg", false) { CollectionId = 2 });
+            collectionList.Add(new Collection(1, "Collection 3", DateOnly.FromDateTime(DateTime.Now.AddDays(-1)), "cover3.jpg", true) { CollectionId = 3 });
+            collectionList.Add(new Collection(2, "Other User Collection", DateOnly.FromDateTime(DateTime.Now.AddDays(-2)), "cover4.jpg", true) { CollectionId = 4 });
 
-            // Seed some dummy games (only for collectionId == 1) using the new constructor.
-            games = new List<OwnedGame>();
-            var gameA = new OwnedGame(1, "Game A", "Desc A", "gameA.jpg");
+            // Seed some dummy owned games (only for collectionId == 1) using the new constructor.
+            ownedGameList = new List<OwnedGame>();
+            var gameA = new OwnedGame(1, "Game A", "Description for Game A", "gameA.jpg");
             gameA.GameId = 1;
-            games.Add(gameA);
+            ownedGameList.Add(gameA);
 
-            var gameB = new OwnedGame(1, "Game B", "Desc B", "gameB.jpg");
+            var gameB = new OwnedGame(1, "Game B", "Description for Game B", "gameB.jpg");
             gameB.GameId = 2;
-            games.Add(gameB);
+            ownedGameList.Add(gameB);
         }
 
         public List<Collection> GetAllCollections(int userId)
         {
             List<Collection> result = new List<Collection>();
-            foreach (Collection c in collections)
+            foreach (Collection collection in collectionList)
             {
-                if (c.UserId == userId)
+                if (collection.UserId == userId)
                 {
-                    result.Add(c);
+                    result.Add(collection);
                 }
             }
             return result;
@@ -43,30 +43,30 @@ namespace BusinessLayer.Services.Fakes
 
         public Collection GetCollectionById(int collectionId, int userId)
         {
-            Collection found = null;
-            foreach (Collection c in collections)
+            Collection foundCollection = null;
+            foreach (Collection collection in collectionList)
             {
-                if (c.CollectionId == collectionId && c.UserId == userId)
+                if (collection.CollectionId == collectionId && collection.UserId == userId)
                 {
-                    found = c;
+                    foundCollection = collection;
                     break;
                 }
             }
-            if (found != null && found.CollectionId == 1)
+            if (foundCollection != null && foundCollection.CollectionId == 1)
             {
-                // For collection 1, attach dummy games.
-                found.Games = new List<OwnedGame>();
-                foreach (OwnedGame g in games)
+                // For collection 1, attach owned games.
+                foundCollection.Games = new List<OwnedGame>();
+                foreach (OwnedGame ownedGame in ownedGameList)
                 {
-                    found.Games.Add(g);
+                    foundCollection.Games.Add(ownedGame);
                 }
             }
-            return found;
+            return foundCollection;
         }
 
         public List<OwnedGame> GetGamesInCollection(int collectionId)
         {
-            // When user is not specified, return empty list.
+            // When user is not specified, return an empty list.
             return new List<OwnedGame>();
         }
 
@@ -75,9 +75,9 @@ namespace BusinessLayer.Services.Fakes
             if (collectionId == 1)
             {
                 List<OwnedGame> result = new List<OwnedGame>();
-                foreach (OwnedGame g in games)
+                foreach (OwnedGame ownedGame in ownedGameList)
                 {
-                    result.Add(g);
+                    result.Add(ownedGame);
                 }
                 return result;
             }
@@ -106,40 +106,40 @@ namespace BusinessLayer.Services.Fakes
 
         public void RemoveCollectionForUser(string userId, string collectionId)
         {
-            int uid = int.Parse(userId);
-            int cid = int.Parse(collectionId);
-            Collection toRemove = null;
-            foreach (Collection c in collections)
+            int userIdentifier = int.Parse(userId);
+            int collectionIdentifier = int.Parse(collectionId);
+            Collection collectionToRemove = null;
+            foreach (Collection collection in collectionList)
             {
-                if (c.UserId == uid && c.CollectionId == cid)
+                if (collection.UserId == userIdentifier && collection.CollectionId == collectionIdentifier)
                 {
-                    toRemove = c;
+                    collectionToRemove = collection;
                     break;
                 }
             }
-            if (toRemove != null)
+            if (collectionToRemove != null)
             {
-                collections.Remove(toRemove);
+                collectionList.Remove(collectionToRemove);
             }
         }
 
         public void SaveCollection(string userId, Collection collection)
         {
-            int uid = int.Parse(userId);
+            int userIdentifier = int.Parse(userId);
             if (collection.CollectionId == 0)
             {
-                int newId = collections.Count > 0 ? collections[collections.Count - 1].CollectionId + 1 : 1;
+                int newId = collectionList.Count > 0 ? collectionList[collectionList.Count - 1].CollectionId + 1 : 1;
                 collection.CollectionId = newId;
-                collection.UserId = uid;
-                collections.Add(collection);
+                collection.UserId = userIdentifier;
+                collectionList.Add(collection);
             }
             else
             {
-                for (int i = 0; i < collections.Count; i++)
+                for (int i = 0; i < collectionList.Count; i++)
                 {
-                    if (collections[i].CollectionId == collection.CollectionId && collections[i].UserId == uid)
+                    if (collectionList[i].CollectionId == collection.CollectionId && collectionList[i].UserId == userIdentifier)
                     {
-                        collections[i] = collection;
+                        collectionList[i] = collection;
                         break;
                     }
                 }
@@ -148,41 +148,41 @@ namespace BusinessLayer.Services.Fakes
 
         public void DeleteCollection(int collectionId, int userId)
         {
-            Collection toDelete = null;
-            foreach (Collection c in collections)
+            Collection collectionToDelete = null;
+            foreach (Collection collection in collectionList)
             {
-                if (c.CollectionId == collectionId && c.UserId == userId)
+                if (collection.CollectionId == collectionId && collection.UserId == userId)
                 {
-                    toDelete = c;
+                    collectionToDelete = collection;
                     break;
                 }
             }
-            if (toDelete != null)
+            if (collectionToDelete != null)
             {
-                collections.Remove(toDelete);
+                collectionList.Remove(collectionToDelete);
             }
         }
 
         public void CreateCollection(int userId, string name, string coverPicture, bool isPublic, DateOnly createdAt)
         {
-            int newId = collections.Count > 0 ? collections[collections.Count - 1].CollectionId + 1 : 1;
-            Collection newCol = new Collection(userId, name, createdAt, coverPicture, isPublic)
+            int newId = collectionList.Count > 0 ? collectionList[collectionList.Count - 1].CollectionId + 1 : 1;
+            Collection newCollection = new Collection(userId, name, createdAt, coverPicture, isPublic)
             {
                 CollectionId = newId
             };
-            collections.Add(newCol);
+            collectionList.Add(newCollection);
         }
 
         public void UpdateCollection(int collectionId, int userId, string name, string coverPicture, bool isPublic)
         {
-            foreach (Collection c in collections)
+            foreach (Collection collection in collectionList)
             {
-                if (c.CollectionId == collectionId && c.UserId == userId)
+                if (collection.CollectionId == collectionId && collection.UserId == userId)
                 {
-                    c.Name = name;
-                    c.CoverPicture = coverPicture;
-                    c.IsPublic = isPublic;
-                    c.CreatedAt = DateOnly.FromDateTime(DateTime.Now);
+                    collection.Name = name;
+                    collection.CoverPicture = coverPicture;
+                    collection.IsPublic = isPublic;
+                    collection.CreatedAt = DateOnly.FromDateTime(DateTime.Now);
                     break;
                 }
             }
@@ -191,11 +191,11 @@ namespace BusinessLayer.Services.Fakes
         public List<Collection> GetPublicCollectionsForUser(int userId)
         {
             List<Collection> result = new List<Collection>();
-            foreach (Collection c in collections)
+            foreach (Collection collection in collectionList)
             {
-                if (c.UserId == userId && c.IsPublic)
+                if (collection.UserId == userId && collection.IsPublic)
                 {
-                    result.Add(c);
+                    result.Add(collection);
                 }
             }
             return result;
@@ -204,15 +204,15 @@ namespace BusinessLayer.Services.Fakes
         public List<OwnedGame> GetGamesNotInCollection(int collectionId, int userId)
         {
             List<OwnedGame> result = new List<OwnedGame>();
-            var gameC = new OwnedGame(userId, "Game C", "Desc C", "gameC.jpg");
+            var gameC = new OwnedGame(userId, "Game C", "Description for Game C", "gameC.jpg");
             gameC.GameId = 3;
             result.Add(gameC);
             return result;
         }
 
-        private int CompareByCreatedAtDescending(Collection a, Collection b)
+        private int CompareByCreatedAtDescending(Collection firstCollection, Collection secondCollection)
         {
-            return b.CreatedAt.CompareTo(a.CreatedAt);
+            return secondCollection.CreatedAt.CompareTo(firstCollection.CreatedAt);
         }
 
         public List<Collection> GetLastThreeCollectionsForUser(int userId)

@@ -5,118 +5,126 @@ namespace BusinessLayer.Services.Fakes
 {
     public class FakeFriendsService : IFriendsService
     {
-        private List<Friendship> friendships;
+        private List<Friendship> friendshipList;
 
         public FakeFriendsService()
         {
-            friendships = new List<Friendship>();
+            friendshipList = new List<Friendship>();
 
             // Seed with some dummy friendships for testing.
-            friendships.Add(new Friendship(1, 1, 2)
+            friendshipList.Add(new Friendship(1, 1, 2)
             {
                 FriendUsername = "Alice",
                 FriendProfilePicture = "alice.jpg"
             });
-            friendships.Add(new Friendship(2, 1, 3)
+            friendshipList.Add(new Friendship(2, 1, 3)
             {
                 FriendUsername = "Bob",
                 FriendProfilePicture = "bob.jpg"
             });
         }
 
-        private int CompareByUsername(Friendship f1, Friendship f2)
+        private int CompareByUsername(Friendship firstFriendship, Friendship secondFriendship)
         {
-            return string.Compare(f1.FriendUsername, f2.FriendUsername, StringComparison.Ordinal);
+            return string.Compare(firstFriendship.FriendUsername, secondFriendship.FriendUsername, StringComparison.Ordinal);
         }
 
         public List<Friendship> GetAllFriendships()
         {
-            List<Friendship> result = new List<Friendship>();
-            foreach (Friendship f in friendships)
+            List<Friendship> filteredFriendships = new List<Friendship>();
+
+            foreach (Friendship friendship in friendshipList)
             {
                 // Assume current user is 1
-                if (f.UserId == 1)
+                if (friendship.UserId == 1)
                 {
-                    result.Add(f);
+                    filteredFriendships.Add(friendship);
                 }
             }
 
-            result.Sort(CompareByUsername);
-            return result;
+            filteredFriendships.Sort(CompareByUsername);
+            return filteredFriendships;
         }
 
         public void RemoveFriend(int friendshipId)
         {
-            Friendship toRemove = null;
-            foreach (Friendship f in friendships)
+            Friendship friendshipToRemove = null;
+
+            foreach (Friendship friendship in friendshipList)
             {
-                if (f.FriendshipId == friendshipId)
+                if (friendship.FriendshipId == friendshipId)
                 {
-                    toRemove = f;
+                    friendshipToRemove = friendship;
                     break;
                 }
             }
-            if (toRemove != null)
+
+            if (friendshipToRemove != null)
             {
-                friendships.Remove(toRemove);
+                friendshipList.Remove(friendshipToRemove);
             }
         }
 
         public int GetFriendshipCount(int userId)
         {
-            int count = 0;
-            foreach (Friendship f in friendships)
+            int friendshipCount = 0;
+
+            foreach (Friendship friendship in friendshipList)
             {
-                if (f.UserId == userId)
+                if (friendship.UserId == userId)
                 {
-                    count++;
+                    friendshipCount++;
                 }
             }
-            return count;
+
+            return friendshipCount;
         }
 
-        public bool AreUsersFriends(int userId1, int userId2)
+        public bool AreUsersFriends(int firstUserId, int secondUserId)
         {
-            bool result = false;
-            foreach (Friendship f in friendships)
+            foreach (Friendship friendship in friendshipList)
             {
-                if (f.UserId == userId1 && f.FriendId == userId2)
+                if (friendship.UserId == firstUserId && friendship.FriendId == secondUserId)
                 {
-                    result = true;
-                    break;
+                    return true;
                 }
             }
-            return result;
+
+            return false;
         }
 
-        public int? GetFriendshipId(int userId1, int userId2)
+        public int? GetFriendshipId(int firstUserId, int secondUserId)
         {
-            foreach (Friendship f in friendships)
+            foreach (Friendship friendship in friendshipList)
             {
-                if (f.UserId == userId1 && f.FriendId == userId2)
+                if (friendship.UserId == firstUserId && friendship.FriendId == secondUserId)
                 {
-                    return f.FriendshipId;
+                    return friendship.FriendshipId;
                 }
             }
+
             return null;
         }
 
         public void AddFriend(int userId, int friendId)
         {
-            foreach (Friendship f in friendships)
+            foreach (Friendship friendship in friendshipList)
             {
-                if (f.UserId == userId && f.FriendId == friendId)
+                if (friendship.UserId == userId && friendship.FriendId == friendId)
                 {
                     throw new Exception("Friendship already exists.");
                 }
             }
-            int newId = friendships.Count > 0 ? friendships[friendships.Count - 1].FriendshipId + 1 : 1;
-            Friendship newFriendship = new Friendship(newId, userId, friendId)
+
+            int newFriendshipId = friendshipList.Count > 0 ? friendshipList[friendshipList.Count - 1].FriendshipId + 1 : 1;
+
+            Friendship newFriendship = new Friendship(newFriendshipId, userId, friendId)
             {
                 FriendUsername = "User" + friendId.ToString(),
                 FriendProfilePicture = "user" + friendId.ToString() + ".jpg"
             };
-            friendships.Add(newFriendship);
+
+            friendshipList.Add(newFriendship);
         }
     }
 }
