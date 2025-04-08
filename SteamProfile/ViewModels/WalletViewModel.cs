@@ -27,9 +27,15 @@ namespace SteamProfile.ViewModels
 
         public List<PointsOffer> PointsOffers { get; set; }
 
-        public string BalanceText => $"${Balance:F2}";
+        public string BalanceText
+        {
+            get { return $"${Balance:F2}"; }
+        }
 
-        public string PointsText => $"{Points} pts";
+        public string PointsText
+        {
+            get { return $"{Points} pts"; }
+        }
 
         public WalletViewModel(IWalletService walletService, IPointsOffersRepository pointsOffersRepository)
         {

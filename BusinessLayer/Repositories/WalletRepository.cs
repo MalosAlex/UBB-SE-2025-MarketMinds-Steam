@@ -53,13 +53,16 @@ namespace BusinessLayer.Repositories
             }
         }
 
-        private Wallet MapDataRowToWallet(DataRow dataRow) => new Wallet
+        private Wallet MapDataRowToWallet(DataRow dataRow)
         {
-            WalletId = Convert.ToInt32(dataRow["wallet_id"]),
-            UserId = Convert.ToInt32(dataRow["user_id"]),
-            Balance = Convert.ToDecimal(dataRow["money_for_games"]),
-            Points = Convert.ToInt32(dataRow["points"]),
-        };
+            return new Wallet
+            {
+                WalletId = Convert.ToInt32(dataRow["wallet_id"]),
+                UserId = Convert.ToInt32(dataRow["user_id"]),
+                Balance = Convert.ToDecimal(dataRow["money_for_games"]),
+                Points = Convert.ToInt32(dataRow["points"]),
+            };
+        }
 
         public void AddMoneyToWallet(decimal amount, int waletId)
         {

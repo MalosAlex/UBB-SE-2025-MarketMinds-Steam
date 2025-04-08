@@ -31,8 +31,6 @@ namespace Tests.Integration
                 Email = "test@mail.com"
             };
 
-            // Setup fake user service to return the test user
-
             // Create the WalletService with fake dependencies
             _walletService = new WalletService(_walletRepository, _service);
         }

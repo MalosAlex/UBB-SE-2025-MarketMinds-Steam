@@ -40,7 +40,10 @@ namespace SteamProfile.ViewModels
             PurchasePointsCommand = new RelayCommand<PointsOffer>(BuyPoints, CanBuyPoints);
         }
 
-        private bool CanBuyPoints(PointsOffer pointsOffer) => pointsOffer != null && !IsProcessing;
+        private bool CanBuyPoints(PointsOffer pointsOffer)
+        {
+            return pointsOffer != null && !IsProcessing;
+        }
 
         private async void BuyPoints(PointsOffer pointsOffer)
         {
