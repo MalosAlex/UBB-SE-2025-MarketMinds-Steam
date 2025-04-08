@@ -1,5 +1,7 @@
 ﻿/.vs/
+/.idea/
 SteamProfile/.vs/
+SteamProfile/.idea/
 BusinessLayer/bin/
 Tests/bin/
 SteamProfile/bin/
