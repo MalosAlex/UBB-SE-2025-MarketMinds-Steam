@@ -20,19 +20,19 @@ namespace BusinessLayer.Validators
             return coverPicture == null || coverPicture.Length <= 255;
         }
 
-        public static void ValidateOwnedGame(OwnedGame game)
+        public static void ValidateOwnedGame(OwnedGame ownedGame)
         {
-            if (!IsUserIdValid(game.UserId))
+            if (!IsUserIdValid(ownedGame.UserId))
             {
                 throw new ValidationException("User ID must be greater than 0");
             }
 
-            if (!IsTitleValid(game.Title))
+            if (!IsTitleValid(ownedGame.Title))
             {
                 throw new ValidationException("Title cannot be empty or longer than 100 characters");
             }
 
-            if (!IsCoverPictureValid(game.CoverPicture))
+            if (!IsCoverPictureValid(ownedGame.CoverPicture))
             {
                 throw new ValidationException("Cover picture URL cannot exceed 255 characters");
             }

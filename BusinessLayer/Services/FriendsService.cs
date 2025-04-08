@@ -21,11 +21,12 @@ namespace BusinessLayer.Services
             try
             {
                 int currentUserId = userService.GetCurrentUser().UserId;
-                return friendshipsRepository.GetAllFriendships(currentUserId);
+                var userFriendships = friendshipsRepository.GetAllFriendships(currentUserId);
+                return userFriendships;
             }
-            catch (RepositoryException ex)
+            catch (RepositoryException repositoryException)
             {
-                throw new ServiceException("Error retrieving friendships for user.", ex);
+                throw new ServiceException("Error retrieving friendships for user.", repositoryException);
             }
         }
 
@@ -35,9 +36,9 @@ namespace BusinessLayer.Services
             {
                 friendshipsRepository.RemoveFriendship(friendshipId);
             }
-            catch (RepositoryException ex)
+            catch (RepositoryException repositoryException)
             {
-                throw new ServiceException("Error removing friend.", ex);
+                throw new ServiceException("Error removing friend.", repositoryException);
             }
         }
 
@@ -45,11 +46,12 @@ namespace BusinessLayer.Services
         {
             try
             {
-                return friendshipsRepository.GetFriendshipCount(userId);
+                int friendshipCount = friendshipsRepository.GetFriendshipCount(userId);
+                return friendshipCount;
             }
-            catch (RepositoryException ex)
+            catch (RepositoryException repositoryException)
             {
-                throw new ServiceException("Error retrieving friendship count.", ex);
+                throw new ServiceException("Error retrieving friendship count.", repositoryException);
             }
         }
 
@@ -57,21 +59,19 @@ namespace BusinessLayer.Services
         {
             try
             {
-                List<Friendship> friendships = friendshipsRepository.GetAllFriendships(userId1);
-                bool areFriends = false;
-                foreach (Friendship f in friendships)
+                var user1Friendships = friendshipsRepository.GetAllFriendships(userId1);
+                foreach (var friendship in user1Friendships)
                 {
-                    if (f.FriendId == userId2)
+                    if (friendship.FriendId == userId2)
                     {
-                        areFriends = true;
-                        break;
+                        return true;
                     }
                 }
-                return areFriends;
+                return false;
             }
-            catch (RepositoryException ex)
+            catch (RepositoryException repositoryException)
             {
-                throw new ServiceException("Error checking friendship status.", ex);
+                throw new ServiceException("Error checking friendship status.", repositoryException);
             }
         }
 
@@ -79,21 +79,19 @@ namespace BusinessLayer.Services
         {
             try
             {
-                List<Friendship> friendships = friendshipsRepository.GetAllFriendships(userId1);
-                Friendship found = null;
-                foreach (Friendship f in friendships)
+                var user1Friendships = friendshipsRepository.GetAllFriendships(userId1);
+                foreach (var friendship in user1Friendships)
                 {
-                    if (f.FriendId == userId2)
+                    if (friendship.FriendId == userId2)
                     {
-                        found = f;
-                        break;
+                        return friendship.FriendshipId;
                     }
                 }
-                return found != null ? new int?(found.FriendshipId) : null;
+                return null;
             }
-            catch (RepositoryException ex)
+            catch (RepositoryException repositoryException)
             {
-                throw new ServiceException("Error retrieving friendship ID.", ex);
+                throw new ServiceException("Error retrieving friendship ID.", repositoryException);
             }
         }
 
@@ -103,9 +101,9 @@ namespace BusinessLayer.Services
             {
                 friendshipsRepository.AddFriendship(userId, friendId);
             }
-            catch (RepositoryException ex)
+            catch (RepositoryException repositoryException)
             {
-                throw new ServiceException("Error adding friend.", ex);
+                throw new ServiceException("Error adding friend.", repositoryException);
             }
         }
     }

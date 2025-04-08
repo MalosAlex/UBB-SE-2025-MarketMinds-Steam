@@ -21,9 +21,9 @@ namespace SteamProfile.Views
             this.DataContext = _collectionsViewModel;
         }
 
-        protected override void OnNavigatedTo(NavigationEventArgs e)
+        protected override void OnNavigatedTo(NavigationEventArgs eventArgs)
         {
-            base.OnNavigatedTo(e);
+            base.OnNavigatedTo(eventArgs);
             LoadCollections();
         }
 
@@ -32,7 +32,7 @@ namespace SteamProfile.Views
             _collectionsViewModel.LoadCollectionsCommand.Execute(null);
         }
 
-        private void ViewCollection_Click(object sender, RoutedEventArgs e)
+        private void ViewCollection_Click(object sender, RoutedEventArgs eventArgs)
         {
             if (sender is Button button && button.CommandParameter is Collection collection)
             {
@@ -40,7 +40,7 @@ namespace SteamProfile.Views
             }
         }
 
-        private void DeleteCollection_Click(object sender, RoutedEventArgs e)
+        private void DeleteCollection_Click(object sender, RoutedEventArgs eventArgs)
         {
             if (sender is Button button && button.CommandParameter is int collectionId)
             {
@@ -48,7 +48,7 @@ namespace SteamProfile.Views
             }
         }
 
-        private async void EditCollection_Click(object sender, RoutedEventArgs e)
+        private async void EditCollection_Click(object sender, RoutedEventArgs eventArgs)
         {
             if (sender is Button button && button.CommandParameter is Collection collection)
             {
@@ -103,7 +103,7 @@ namespace SteamProfile.Views
                             IsPublic = isPublicToggle.IsOn
                         });
                     }
-                    catch (Exception ex)
+                    catch (Exception exception)
                     {
                         var errorDialog = new ContentDialog
                         {
@@ -118,7 +118,7 @@ namespace SteamProfile.Views
             }
         }
 
-        private async void CreateCollection_Click(object sender, RoutedEventArgs e)
+        private async void CreateCollection_Click(object sender, RoutedEventArgs eventArgs)
         {
             var dialog = new ContentDialog
             {
@@ -169,7 +169,7 @@ namespace SteamProfile.Views
                         CreatedAt = DateOnly.FromDateTime(DateTime.Now)
                     });
                 }
-                catch (Exception ex)
+                catch (Exception exception)
                 {
                     var errorDialog = new ContentDialog
                     {
@@ -183,7 +183,7 @@ namespace SteamProfile.Views
             }
         }
 
-        private void BackToProfileButton_Click(object sender, RoutedEventArgs e)
+        private void BackToProfileButton_Click(object sender, RoutedEventArgs eventArgs)
         {
             Frame.Navigate(typeof(ProfilePage), _usersViewModel.GetCurrentUser().UserId);
         }

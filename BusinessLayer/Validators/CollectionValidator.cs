@@ -10,9 +10,9 @@ namespace BusinessLayer.Validators
             return userId > 0;
         }
 
-        public static bool IsNameValid(string name)
+        public static bool IsNameValid(string collectionName)
         {
-            return !string.IsNullOrWhiteSpace(name) && name.Length <= 100;
+            return !string.IsNullOrWhiteSpace(collectionName) && collectionName.Length <= 100;
         }
 
         public static bool IsCoverPictureValid(string? coverPicture)

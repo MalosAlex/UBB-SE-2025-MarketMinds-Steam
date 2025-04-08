@@ -13,41 +13,42 @@ namespace SteamProfile.ViewModels
 {
     public class AddGameToCollectionViewModel : ObservableObject
     {
-        private readonly ICollectionsService _collectionsService;
-        private readonly IUserService _userService;
-        private readonly int _userId;
-        private ObservableCollection<OwnedGame> _availableGames;
-        private bool _isLoading;
-        private string _errorMessage;
-        private int _collectionId;
+        private readonly ICollectionsService collectionsService;
+        private readonly IUserService userService;
+        private int userId;
+        private ObservableCollection<OwnedGame> availableGames;
+        private bool isLoading;
+        private string errorMessage;
+        private int collectionId;
 
         public ObservableCollection<OwnedGame> AvailableGames
         {
-            get => _availableGames;
-            set => SetProperty(ref _availableGames, value);
+            get => availableGames;
+            set => SetProperty(ref availableGames, value);
         }
 
         public bool IsLoading
         {
-            get => _isLoading;
-            set => SetProperty(ref _isLoading, value);
+            get => isLoading;
+            set => SetProperty(ref isLoading, value);
         }
 
         public string ErrorMessage
         {
-            get => _errorMessage;
-            set => SetProperty(ref _errorMessage, value);
+            get => errorMessage;
+            set => SetProperty(ref errorMessage, value);
         }
 
-        public AddGameToCollectionViewModel(ICollectionsService collectionsService)
+        public AddGameToCollectionViewModel(ICollectionsService collectionsService, IUserService userService)
         {
-            _collectionsService = collectionsService;
-            _availableGames = new ObservableCollection<OwnedGame>();
+            this.collectionsService = collectionsService ?? throw new ArgumentNullException(nameof(collectionsService));
+            this.userService = userService ?? throw new ArgumentNullException(nameof(userService));
+            availableGames = new ObservableCollection<OwnedGame>();
         }
 
         public void Initialize(int collectionId)
         {
-            _collectionId = collectionId;
+            this.collectionId = collectionId;
             LoadAvailableGames();
         }
 
@@ -55,27 +56,27 @@ namespace SteamProfile.ViewModels
         {
             try
             {
-                IsLoading = true;
-                ErrorMessage = null;
+                isLoading = true;
+                errorMessage = null;
 
-                Debug.WriteLine($"Loading available games for collection {_collectionId}");
-                var games = _collectionsService.GetGamesNotInCollection(_collectionId, App.UserService.GetCurrentUser().UserId);
-                Debug.WriteLine($"Retrieved {games.Count} available games");
+                Debug.WriteLine($"Loading available games for collection {collectionId}");
+                var gamesNotInCollection = collectionsService.GetGamesNotInCollection(collectionId, userService.GetCurrentUser().UserId);
+                Debug.WriteLine($"Retrieved {gamesNotInCollection.Count} available games");
 
                 AvailableGames.Clear();
-                foreach (var game in games)
+                foreach (var availableGame in gamesNotInCollection)
                 {
-                    AvailableGames.Add(game);
+                    AvailableGames.Add(availableGame);
                 }
             }
             catch (Exception ex)
             {
                 Debug.WriteLine($"Error loading available games: {ex.Message}");
-                ErrorMessage = "Failed to load available games. Please try again.";
+                errorMessage = "Failed to load available games. Please try again.";
             }
             finally
             {
-                IsLoading = false;
+                isLoading = false;
             }
         }
 
@@ -83,13 +84,13 @@ namespace SteamProfile.ViewModels
         {
             try
             {
-                _collectionsService.AddGameToCollection(_collectionId, game.GameId, App.UserService.GetCurrentUser().UserId);
+                collectionsService.AddGameToCollection(collectionId, game.GameId, userService.GetCurrentUser().UserId);
                 AvailableGames.Remove(game);
             }
             catch (Exception ex)
             {
                 Debug.WriteLine($"Error adding game to collection: {ex.Message}");
-                ErrorMessage = "Failed to add game to collection. Please try again.";
+                errorMessage = "Failed to add game to collection. Please try again.";
             }
         }
 
@@ -108,4 +109,4 @@ namespace SteamProfile.ViewModels
 
         public event PropertyChangedEventHandler PropertyChanged;
     }
-} 
+}

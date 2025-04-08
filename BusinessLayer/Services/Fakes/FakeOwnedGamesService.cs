@@ -5,12 +5,12 @@ namespace BusinessLayer.Services.Fakes
 {
     public class FakeOwnedGamesService : IOwnedGamesService
     {
-        private readonly List<OwnedGame> ownedGames;
+        private readonly List<OwnedGame> ownedGameList;
 
         public FakeOwnedGamesService()
         {
             // Seed with some dummy owned games using the proper OwnedGame constructor.
-            ownedGames = new List<OwnedGame>
+            ownedGameList = new List<OwnedGame>
             {
                 new OwnedGame(1, "Game A", "Description for Game A", "gamea.jpg") { GameId = 100 },
                 new OwnedGame(1, "Game B", "Description for Game B", "gameb.jpg") { GameId = 101 },
@@ -20,20 +20,20 @@ namespace BusinessLayer.Services.Fakes
 
         public List<OwnedGame> GetAllOwnedGames(int userId)
         {
-            return ownedGames.Where(game => game.UserId == userId).ToList();
+            return ownedGameList.Where(ownedGame => ownedGame.UserId == userId).ToList();
         }
 
         public OwnedGame GetOwnedGameById(int gameId, int userId)
         {
-            return ownedGames.FirstOrDefault(game => game.GameId == gameId && game.UserId == userId);
+            return ownedGameList.FirstOrDefault(ownedGame => ownedGame.GameId == gameId && ownedGame.UserId == userId);
         }
 
         public void RemoveOwnedGame(int gameId, int userId)
         {
-            var game = ownedGames.FirstOrDefault(g => g.GameId == gameId && g.UserId == userId);
-            if (game != null)
+            var ownedGameToRemove = ownedGameList.FirstOrDefault(ownedGame => ownedGame.GameId == gameId && ownedGame.UserId == userId);
+            if (ownedGameToRemove != null)
             {
-                ownedGames.Remove(game);
+                ownedGameList.Remove(ownedGameToRemove);
             }
         }
     }

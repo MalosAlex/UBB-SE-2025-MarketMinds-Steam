@@ -91,10 +91,10 @@ namespace SteamProfile.ViewModels
                 }
                 Debug.WriteLine($"Added {collections.Count} collections to ObservableCollection");
             }
-            catch (Exception ex)
+            catch (Exception exception)
             {
-                Debug.WriteLine($"Error loading collections: {ex.Message}");
-                Debug.WriteLine($"Stack trace: {ex.StackTrace}");
+                Debug.WriteLine($"Error loading collections: {exception.Message}");
+                Debug.WriteLine($"Stack trace: {exception.StackTrace}");
                 ErrorMessage = "Error loading collections. Please try again.";
             }
             finally
@@ -134,9 +134,9 @@ namespace SteamProfile.ViewModels
                 SelectedCollection = collection;
                 // TODO: Navigate to collection details page
             }
-            catch (Exception ex)
+            catch (Exception exception)
             {
-                Debug.WriteLine($"Error viewing collection: {ex.Message}");
+                Debug.WriteLine($"Error viewing collection: {exception.Message}");
                 ErrorMessage = "Error viewing collection. Please try again.";
             }
         }
@@ -156,9 +156,9 @@ namespace SteamProfile.ViewModels
                 _collectionsService.AddGameToCollection(SelectedCollection.CollectionId, gameId, _userId);
                 LoadCollections(); // Reload collections to update the UI
             }
-            catch (Exception ex)
+            catch (Exception exception)
             {
-                Debug.WriteLine($"Error adding game to collection: {ex.Message}");
+                Debug.WriteLine($"Error adding game to collection: {exception.Message}");
                 ErrorMessage = "Error adding game to collection. Please try again.";
             }
         }
@@ -178,9 +178,9 @@ namespace SteamProfile.ViewModels
                 _collectionsService.RemoveGameFromCollection(SelectedCollection.CollectionId, gameId);
                 LoadCollections(); // Reload collections to update the UI
             }
-            catch (Exception ex)
+            catch (Exception exception)
             {
-                Debug.WriteLine($"Error removing game from collection: {ex.Message}");
+                Debug.WriteLine($"Error removing game from collection: {exception.Message}");
                 ErrorMessage = "Error removing game from collection. Please try again.";
             }
         }
@@ -200,9 +200,9 @@ namespace SteamProfile.ViewModels
                 );
                 LoadCollections(); // Reload collections after creation
             }
-            catch (Exception ex)
+            catch (Exception exception)
             {
-                Debug.WriteLine($"Error creating collection: {ex.Message}");
+                Debug.WriteLine($"Error creating collection: {exception.Message}");
                 ErrorMessage = "Error creating collection. Please try again.";
             }
         }

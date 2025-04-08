@@ -10,7 +10,7 @@ namespace BusinessLayer.Data
     {
         private static readonly Lazy<DataLink> DataLinkInstance = new(() => new DataLink());
         private readonly string connectionString;
-        private bool disposed;
+        private bool isConnectionDisposed;
 
         private DataLink()
         {
@@ -52,7 +52,7 @@ namespace BusinessLayer.Data
 
         private SqlConnection CreateConnection()
         {
-            if (disposed)
+            if (isConnectionDisposed)
             {
                 throw new ObjectDisposedException(nameof(DataLink));
             }
@@ -232,9 +232,9 @@ namespace BusinessLayer.Data
 
         private void Dispose(bool disposing)
         {
-            if (!disposed)
+            if (!isConnectionDisposed)
             {
-                disposed = true;
+                isConnectionDisposed = true;
             }
         }
     }
