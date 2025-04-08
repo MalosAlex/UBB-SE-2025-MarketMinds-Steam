@@ -5,17 +5,17 @@ namespace BusinessLayer.Repositories.Fakes
 {
     public class FakeFriendshipsRepository : IFriendshipsRepository
     {
-        private readonly List<Friendship> friendships = new();
+        private readonly List<Friendship> friendshipsList = new();
 
         public FakeFriendshipsRepository()
         {
             // Seed some dummy friendships for testing.
-            friendships.Add(new Friendship(friendshipId: 1, userId: 1, friendId: 2)
+            friendshipsList.Add(new Friendship(friendshipId: 1, userId: 1, friendId: 2)
             {
                 FriendUsername = "Alice",
                 FriendProfilePicture = "alice.jpg"
             });
-            friendships.Add(new Friendship(friendshipId: 2, userId: 1, friendId: 3)
+            friendshipsList.Add(new Friendship(friendshipId: 2, userId: 1, friendId: 3)
             {
                 FriendUsername = "Bob",
                 FriendProfilePicture = "bob.jpg"
@@ -24,18 +24,18 @@ namespace BusinessLayer.Repositories.Fakes
 
         public List<Friendship> GetAllFriendships(int userId)
         {
-            return friendships.Where(f => f.UserId == userId).OrderBy(f => f.FriendUsername).ToList();
+            return friendshipsList.Where(friendship => friendship.UserId == userId).OrderBy(friendship => friendship.FriendUsername).ToList();
         }
 
         public void AddFriendship(int userId, int friendId)
         {
-            if (friendships.Any(f => f.UserId == userId && f.FriendId == friendId))
+            if (friendshipsList.Any(friendship => friendship.UserId == userId && friendship.FriendId == friendId))
             {
                 throw new Exception("Friendship already exists.");
             }
 
-            int newId = friendships.Any() ? friendships.Max(f => f.FriendshipId) + 1 : 1;
-            friendships.Add(new Friendship(newId, userId, friendId)
+            int newFriendshipId = friendshipsList.Any() ? friendshipsList.Max(f => f.FriendshipId) + 1 : 1;
+            friendshipsList.Add(new Friendship(newFriendshipId, userId, friendId)
             {
                 FriendUsername = $"User{friendId}",
                 FriendProfilePicture = $"user{friendId}.jpg"
@@ -44,26 +44,26 @@ namespace BusinessLayer.Repositories.Fakes
 
         public Friendship GetFriendshipById(int friendshipId)
         {
-            return friendships.FirstOrDefault(f => f.FriendshipId == friendshipId);
+            return friendshipsList.FirstOrDefault(friendship => friendship.FriendshipId == friendshipId);
         }
 
         public void RemoveFriendship(int friendshipId)
         {
-            var friendship = friendships.FirstOrDefault(f => f.FriendshipId == friendshipId);
+            var friendship = friendshipsList.FirstOrDefault(friendship => friendship.FriendshipId == friendshipId);
             if (friendship != null)
             {
-                friendships.Remove(friendship);
+                friendshipsList.Remove(friendship);
             }
         }
 
         public int GetFriendshipCount(int userId)
         {
-            return friendships.Count(f => f.UserId == userId);
+            return friendshipsList.Count(friendship => friendship.UserId == userId);
         }
 
         public int? GetFriendshipId(int userId, int friendId)
         {
-            return friendships.FirstOrDefault(f => f.UserId == userId && f.FriendId == friendId)?.FriendshipId;
+            return friendshipsList.FirstOrDefault(friendship => friendship.UserId == userId && friendship.FriendId == friendId)?.FriendshipId;
         }
     }
 }

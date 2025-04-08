@@ -41,16 +41,16 @@ namespace SteamProfile.ViewModels
                 ErrorMessage = string.Empty;
                 IsAllOwnedGamesCollection = collectionId == 1;
                 Debug.WriteLine($"Loading games for collection {collectionId}");
-                var games = _collectionsService.GetGamesInCollection(collectionId);
+                var gamesInCollection = _collectionsService.GetGamesInCollection(collectionId);
                 Games.Clear();
-                foreach (var game in games)
+                foreach (var game in gamesInCollection)
                 {
                     Games.Add(game);
                 }
             }
-            catch (Exception ex)
+            catch (Exception exception)
             {
-                Debug.WriteLine($"Error loading games: {ex.Message}");
+                Debug.WriteLine($"Error loading games: {exception.Message}");
                 ErrorMessage = "Failed to load games";
             }
             finally

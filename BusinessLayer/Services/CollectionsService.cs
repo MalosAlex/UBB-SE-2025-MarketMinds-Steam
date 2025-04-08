@@ -18,16 +18,16 @@ namespace BusinessLayer.Services
         {
             try
             {
-                var collections = collectionsRepository.GetAllCollections(userId);
-                return collections;
+                var userCollections = collectionsRepository.GetAllCollections(userId);
+                return userCollections;
             }
-            catch (RepositoryException ex)
+            catch (RepositoryException repositoryException)
             {
-                throw new ServiceException("Failed to retrieve collections from database", ex);
+                throw new ServiceException("Failed to retrieve collections from database", repositoryException);
             }
-            catch (Exception ex)
+            catch (Exception generalException)
             {
-                throw new ServiceException("An unexpected error occurred while retrieving collections", ex);
+                throw new ServiceException("An unexpected error occurred while retrieving collections", generalException);
             }
         }
 
@@ -37,17 +37,17 @@ namespace BusinessLayer.Services
             {
                 var collection = collectionsRepository.GetCollectionById(collectionId, userId);
 
-                // Load games for the collection.
+                // Attach the games to the collection
                 collection.Games = collectionsRepository.GetGamesInCollection(collectionId, userId);
                 return collection;
             }
-            catch (RepositoryException ex)
+            catch (RepositoryException repositoryException)
             {
-                throw new ServiceException("Failed to retrieve collection.", ex);
+                throw new ServiceException("Failed to retrieve collection.", repositoryException);
             }
-            catch (Exception ex)
+            catch (Exception generalException)
             {
-                throw new ServiceException("An unexpected error occurred while retrieving collection.", ex);
+                throw new ServiceException("An unexpected error occurred while retrieving collection.", generalException);
             }
         }
 
@@ -55,16 +55,16 @@ namespace BusinessLayer.Services
         {
             try
             {
-                var games = collectionsRepository.GetGamesInCollection(collectionId);
-                return games;
+                var ownedGamesInCollection = collectionsRepository.GetGamesInCollection(collectionId);
+                return ownedGamesInCollection;
             }
-            catch (RepositoryException ex)
+            catch (RepositoryException repositoryException)
             {
-                throw new ServiceException("Failed to retrieve games from database", ex);
+                throw new ServiceException("Failed to retrieve games from database", repositoryException);
             }
-            catch (Exception ex)
+            catch (Exception generalException)
             {
-                throw new ServiceException("An unexpected error occurred while retrieving games", ex);
+                throw new ServiceException("An unexpected error occurred while retrieving games", generalException);
             }
         }
 
@@ -74,13 +74,13 @@ namespace BusinessLayer.Services
             {
                 collectionsRepository.AddGameToCollection(collectionId, gameId, userId);
             }
-            catch (RepositoryException ex)
+            catch (RepositoryException repositoryException)
             {
-                throw new ServiceException("Failed to add game to collection", ex);
+                throw new ServiceException("Failed to add game to collection", repositoryException);
             }
-            catch (Exception ex)
+            catch (Exception generalException)
             {
-                throw new ServiceException("An unexpected error occurred", ex);
+                throw new ServiceException("An unexpected error occurred", generalException);
             }
         }
 
@@ -90,13 +90,13 @@ namespace BusinessLayer.Services
             {
                 collectionsRepository.RemoveGameFromCollection(collectionId, gameId);
             }
-            catch (RepositoryException ex)
+            catch (RepositoryException repositoryException)
             {
-                throw new ServiceException("Failed to remove game from collection.", ex);
+                throw new ServiceException("Failed to remove game from collection.", repositoryException);
             }
-            catch (Exception ex)
+            catch (Exception generalException)
             {
-                throw new ServiceException("An unexpected error occurred while removing game from collection.", ex);
+                throw new ServiceException("An unexpected error occurred while removing game from collection.", generalException);
             }
         }
 
@@ -106,9 +106,9 @@ namespace BusinessLayer.Services
             {
                 collectionsRepository.DeleteCollection(collectionId, userId);
             }
-            catch (Exception ex)
+            catch (Exception generalException)
             {
-                throw new Exception("Failed to delete collection", ex);
+                throw new Exception("Failed to delete collection", generalException);
             }
         }
 
@@ -118,13 +118,13 @@ namespace BusinessLayer.Services
             {
                 collectionsRepository.CreateCollection(userId, name, coverPicture, isPublic, createdAt);
             }
-            catch (RepositoryException ex)
+            catch (RepositoryException repositoryException)
             {
-                throw new ServiceException("Failed to create collection in database", ex);
+                throw new ServiceException("Failed to create collection in database", repositoryException);
             }
-            catch (Exception ex)
+            catch (Exception generalException)
             {
-                throw new ServiceException("An unexpected error occurred while creating collection", ex);
+                throw new ServiceException("An unexpected error occurred while creating collection", generalException);
             }
         }
 
@@ -134,13 +134,13 @@ namespace BusinessLayer.Services
             {
                 collectionsRepository.UpdateCollection(collectionId, userId, name, coverPicture, isPublic);
             }
-            catch (RepositoryException ex)
+            catch (RepositoryException repositoryException)
             {
-                throw new ServiceException("Failed to update collection in database", ex);
+                throw new ServiceException("Failed to update collection in database", repositoryException);
             }
-            catch (Exception ex)
+            catch (Exception generalException)
             {
-                throw new ServiceException("An unexpected error occurred while updating collection", ex);
+                throw new ServiceException("An unexpected error occurred while updating collection", generalException);
             }
         }
 
@@ -148,22 +148,23 @@ namespace BusinessLayer.Services
         {
             try
             {
-                var collections = collectionsRepository.GetPublicCollectionsForUser(userId);
-                return collections;
+                var publicCollections = collectionsRepository.GetPublicCollectionsForUser(userId);
+                return publicCollections;
             }
-            catch (RepositoryException ex)
+            catch (RepositoryException repositoryException)
             {
-                throw new ServiceException("Failed to retrieve public collections from database", ex);
+                throw new ServiceException("Failed to retrieve public collections from database", repositoryException);
             }
-            catch (Exception ex)
+            catch (Exception generalException)
             {
-                throw new ServiceException("An unexpected error occurred while retrieving public collections", ex);
+                throw new ServiceException("An unexpected error occurred while retrieving public collections", generalException);
             }
         }
 
         public List<OwnedGame> GetGamesNotInCollection(int collectionId, int userId)
         {
-            return collectionsRepository.GetGamesNotInCollection(collectionId, userId);
+            var gamesNotInCollection = collectionsRepository.GetGamesNotInCollection(collectionId, userId);
+            return gamesNotInCollection;
         }
     }
 }

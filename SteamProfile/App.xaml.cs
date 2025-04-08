@@ -71,7 +71,7 @@ namespace SteamProfile
 
             // Initialize all view models
             UsersViewModel = UsersViewModel.Instance;
-            AddGameToCollectionViewModel = new AddGameToCollectionViewModel(CollectionsService);
+            AddGameToCollectionViewModel = new AddGameToCollectionViewModel(CollectionsService, UserService);
             FriendsViewModel = new FriendsViewModel(FriendsService, UserService);
             CollectionGamesViewModel = new CollectionGamesViewModel(CollectionsService);
             CollectionsViewModel = new CollectionsViewModel(CollectionsService, UserService);

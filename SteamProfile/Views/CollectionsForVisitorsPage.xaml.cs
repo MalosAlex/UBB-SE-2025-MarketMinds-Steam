@@ -20,10 +20,10 @@ namespace SteamProfile.Views
             this.DataContext = _collectionsViewModel;
         }
 
-        protected override void OnNavigatedTo(NavigationEventArgs e)
+        protected override void OnNavigatedTo(NavigationEventArgs eventArgs)
         {
-            base.OnNavigatedTo(e);
-            if (e.Parameter is int userId)
+            base.OnNavigatedTo(eventArgs);
+            if (eventArgs.Parameter is int userId)
             {
                 _userId = userId;
                 LoadCollections();
@@ -40,10 +40,10 @@ namespace SteamProfile.Views
                 var collections = _collectionsViewModel.GetPublicCollectionsForUser(_userId);
                 _collectionsViewModel.Collections = new System.Collections.ObjectModel.ObservableCollection<BusinessLayer.Models.Collection>(collections);
             }
-            catch (Exception ex)
+            catch (Exception exception)
             {
                 _collectionsViewModel.ErrorMessage = "Failed to load collections. Please try again later.";
-                Debug.WriteLine($"Error loading collections: {ex.Message}");
+                Debug.WriteLine($"Error loading collections: {exception.Message}");
             }
             finally
             {
@@ -51,7 +51,7 @@ namespace SteamProfile.Views
             }
         }
 
-        private void ViewCollection_Click(object sender, RoutedEventArgs e)
+        private void ViewCollection_Click(object sender, RoutedEventArgs eventArgs)
         {
             if (sender is Button button && button.Tag is int collectionId)
             {

@@ -20,7 +20,7 @@ namespace SteamProfile.Views
             _friendsViewModel.LoadFriends();
         }
 
-        private void RemoveFriend_Click(object sender, RoutedEventArgs e)
+        private void RemoveFriend_Click(object sender, RoutedEventArgs eventArgs)
         {
             if (sender is Button button && button.Tag is int friendshipId)
             {
@@ -28,7 +28,7 @@ namespace SteamProfile.Views
             }
         }
 
-        private void ViewFriend_Click(object sender, RoutedEventArgs e)
+        private void ViewFriend_Click(object sender, RoutedEventArgs eventArgs)
         {
             if (sender is Button button && button.Tag is int friendId)
             {
@@ -36,7 +36,7 @@ namespace SteamProfile.Views
             }
         }
 
-        private void BackToProfileButton_Click(object sender, RoutedEventArgs e)
+        private void BackToProfileButton_Click(object sender, RoutedEventArgs eventArgs)
         {
             Frame.Navigate(typeof(ProfilePage), _usersViewModel.GetCurrentUser().UserId);
         }

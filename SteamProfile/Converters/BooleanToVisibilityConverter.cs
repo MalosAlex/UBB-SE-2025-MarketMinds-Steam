@@ -8,29 +8,29 @@ namespace SteamProfile.Converters
     {
         public object Convert(object value, Type targetType, object parameter, string language)
         {
-            if (value is bool boolValue)
+            if (value is bool booleanValue)
             {
-                // If parameter is "inverse", invert the boolean value
+                // If the parameter is "inverse", invert the boolean value
                 if (parameter?.ToString()?.ToLower() == "inverse")
                 {
-                    boolValue = !boolValue;
+                    booleanValue = !booleanValue;
                 }
-                return boolValue ? Visibility.Visible : Visibility.Collapsed;
+                return booleanValue ? Visibility.Visible : Visibility.Collapsed;
             }
             return Visibility.Collapsed;
         }
 
         public object ConvertBack(object value, Type targetType, object parameter, string language)
         {
-            if (value is Visibility visibility)
+            if (value is Visibility visibilityState)
             {
-                bool result = visibility == Visibility.Visible;
-                // If parameter is "inverse", invert the boolean value
+                bool booleanResult = visibilityState == Visibility.Visible;
+                // If the parameter is "inverse", invert the boolean value
                 if (parameter?.ToString()?.ToLower() == "inverse")
                 {
-                    result = !result;
+                    booleanResult = !booleanResult;
                 }
-                return result;
+                return booleanResult;
             }
             return false;
         }

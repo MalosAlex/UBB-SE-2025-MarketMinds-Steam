@@ -27,16 +27,16 @@ namespace SteamProfile.Views
             this.DataContext = _collectionGamesViewModel;
         }
 
-        protected override void OnNavigatedTo(NavigationEventArgs e)
+        protected override void OnNavigatedTo(NavigationEventArgs eventArgs)
         {
-            base.OnNavigatedTo(e);
-            if (e.Parameter is (int collectionId, string collectionName))
+            base.OnNavigatedTo(eventArgs);
+            if (eventArgs.Parameter is (int collectionId, string collectionName))
             {
                 _collectionId = collectionId;
                 _collectionName = collectionName;
                 LoadCollectionGames();
             }
-            else if (e.Parameter is int backCollectionId)
+            else if (eventArgs.Parameter is int backCollectionId)
             {
                 // Handle back navigation from AddGameToCollectionPage
                 _collectionId = backCollectionId;
@@ -57,23 +57,23 @@ namespace SteamProfile.Views
                 _collectionGamesViewModel.CollectionName = _collectionName;
                 _collectionGamesViewModel.LoadGames(_collectionId);
             }
-            catch (Exception ex)
+            catch (Exception exception)
             {
-                Debug.WriteLine($"Error loading collection games: {ex.Message}");
+                Debug.WriteLine($"Error loading collection games: {exception.Message}");
             }
         }
 
-        private void BackButton_Click(object sender, RoutedEventArgs e)
+        private void BackButton_Click(object sender, RoutedEventArgs eventArgs)
         {
             Frame.Navigate(typeof(CollectionsPage));
         }
 
-        private void AddGameToCollection_Click(object sender, RoutedEventArgs e)
+        private void AddGameToCollection_Click(object sender, RoutedEventArgs eventArgs)
         {
             Frame.Navigate(typeof(AddGameToCollectionPage), _collectionId);
         }
 
-        private void RemoveGame_Click(object sender, RoutedEventArgs e)
+        private void RemoveGame_Click(object sender, RoutedEventArgs eventArgs)
         {
             try
             {
@@ -86,9 +86,9 @@ namespace SteamProfile.Views
                 _collectionsViewModel.RemoveGameFromCollection(_collectionId, gameId);
                 _collectionGamesViewModel.LoadGames(_collectionId);
             }
-            catch (Exception ex)
+            catch (Exception exception)
             {
-                Debug.WriteLine($"Error removing game from collection: {ex.Message}");
+                Debug.WriteLine($"Error removing game from collection: {exception.Message}");
                 var dialog = new ContentDialog
                 {
                     Title = "Error",
@@ -100,7 +100,7 @@ namespace SteamProfile.Views
             }
         }
 
-        private void ViewGame_Click(object sender, RoutedEventArgs e)
+        private void ViewGame_Click(object sender, RoutedEventArgs eventArgs)
         {
             try
             {
@@ -111,15 +111,15 @@ namespace SteamProfile.Views
                 Debug.WriteLine($"Navigating to game page for game {gameId}");
                 Frame.Navigate(typeof(GamePage), gameId);
             }
-            catch (Exception ex)
+            catch (Exception exception)
             {
-                Debug.WriteLine($"Error navigating to game page: {ex.Message}");
+                Debug.WriteLine($"Error navigating to game page: {exception.Message}");
             }
         }
 
-        private void Image_ImageFailed(object sender, ExceptionRoutedEventArgs e)
+        private void Image_ImageFailed(object sender, ExceptionRoutedEventArgs eventArgs)
         {
-            Debug.WriteLine($"Failed to load image: {e.ErrorMessage}");
+            Debug.WriteLine($"Failed to load image: {eventArgs.ErrorMessage}");
             if (sender is Image image && image.DataContext is OwnedGame game)
             {
                 Debug.WriteLine($"Failed to load image for game: {game.Title}");

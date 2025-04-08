@@ -5,12 +5,12 @@ namespace BusinessLayer.Repositories.Fakes
 {
     public class FakeOwnedGamesRepository : IOwnedGamesRepository
     {
-        private readonly List<OwnedGame> ownedGames;
+        private readonly List<OwnedGame> ownedGamesList;
 
         public FakeOwnedGamesRepository()
         {
             // Seed with some dummy owned games for testing.
-            ownedGames = new List<OwnedGame>
+            ownedGamesList = new List<OwnedGame>
             {
                 // Creating OwnedGame using the new constructor, then assigning GameId.
                 CreateOwnedGame(1, 1, "Game A", "Description A", "gameA.jpg"),
@@ -21,29 +21,29 @@ namespace BusinessLayer.Repositories.Fakes
 
         public List<OwnedGame> GetAllOwnedGames(int userId)
         {
-            return ownedGames.Where(g => g.UserId == userId).ToList();
+            return ownedGamesList.Where(ownedGame => ownedGame.UserId == userId).ToList();
         }
 
         public OwnedGame GetOwnedGameById(int gameId, int userId)
         {
-            return ownedGames.FirstOrDefault(g => g.GameId == gameId && g.UserId == userId);
+            return ownedGamesList.FirstOrDefault(ownedGame => ownedGame.GameId == gameId && ownedGame.UserId == userId);
         }
 
         public void RemoveOwnedGame(int gameId, int userId)
         {
-            var game = ownedGames.FirstOrDefault(g => g.GameId == gameId && g.UserId == userId);
-            if (game != null)
+            var ownedGame = ownedGamesList.FirstOrDefault(ownedGame => ownedGame.GameId == gameId && ownedGame.UserId == userId);
+            if (ownedGame != null)
             {
-                ownedGames.Remove(game);
+                ownedGamesList.Remove(ownedGame);
             }
         }
 
         // Helper method to create an OwnedGame using the new constructor.
         private OwnedGame CreateOwnedGame(int userId, int gameId, string title, string description, string coverPicture)
         {
-            var game = new OwnedGame(userId, title, description, coverPicture);
-            game.GameId = gameId;
-            return game;
+            var ownedGame = new OwnedGame(userId, title, description, coverPicture);
+            ownedGame.GameId = gameId;
+            return ownedGame;
         }
     }
 }

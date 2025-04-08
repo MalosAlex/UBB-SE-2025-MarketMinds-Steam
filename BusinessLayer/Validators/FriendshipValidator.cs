@@ -9,14 +9,14 @@ namespace BusinessLayer.Validators
             return userId > 0;
         }
 
-        public static bool IsFriendIdValid(int friendId)
+        public static bool IsFriendIdValid(int friendUserId)
         {
-            return friendId > 0;
+            return friendUserId > 0;
         }
 
-        public static bool IsNotSelfFriendship(int userId, int friendId)
+        public static bool IsNotSelfFriendship(int userId, int friendUserId)
         {
-            return userId != friendId;
+            return userId != friendUserId;
         }
 
         public static void ValidateFriendship(Friendship friendship)

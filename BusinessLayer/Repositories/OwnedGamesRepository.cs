@@ -20,22 +20,23 @@ namespace BusinessLayer.Repositories
         {
             try
             {
-                var parameters = new SqlParameter[]
+                var sqlParameters = new SqlParameter[]
                 {
                     new SqlParameter("@user_id", userId)
                 };
 
-                var dataTable = dataLink.ExecuteReader("GetAllOwnedGames", parameters);
-                var games = MapDataTableToOwnedGames(dataTable);
-                return games;
+                var ownedGamesDataTable = dataLink.ExecuteReader("GetAllOwnedGames", sqlParameters);
+                var ownedGamesList = MapDataTableToOwnedGames(ownedGamesDataTable);
+
+                return ownedGamesList;
             }
-            catch (SqlException ex)
+            catch (SqlException sqlException)
             {
-                throw new RepositoryException("Database error while retrieving owned games.", ex);
+                throw new RepositoryException("Database error while retrieving owned games.", sqlException);
             }
-            catch (Exception ex)
+            catch (Exception generalException)
             {
-                throw new RepositoryException("An unexpected error occurred while retrieving owned games.", ex);
+                throw new RepositoryException("An unexpected error occurred while retrieving owned games.", generalException);
             }
         }
 
@@ -43,21 +44,29 @@ namespace BusinessLayer.Repositories
         {
             try
             {
-                var parameters = new SqlParameter[]
+                var sqlParameters = new SqlParameter[]
                 {
                     new SqlParameter("@gameId", gameId),
                     new SqlParameter("@userId", userId)
                 };
-                var dataTable = dataLink.ExecuteReader("GetOwnedGameById", parameters);
-                return dataTable.Rows.Count > 0 ? MapDataRowToOwnedGame(dataTable.Rows[0]) : null;
+
+                var ownedGameDataTable = dataLink.ExecuteReader("GetOwnedGameById", sqlParameters);
+
+                if (ownedGameDataTable.Rows.Count == 0)
+                {
+                    return null;
+                }
+
+                var ownedGame = MapDataRowToOwnedGame(ownedGameDataTable.Rows[0]);
+                return ownedGame;
             }
-            catch (SqlException ex)
+            catch (SqlException sqlException)
             {
-                throw new RepositoryException("Database error while retrieving owned game by ID.", ex);
+                throw new RepositoryException("Database error while retrieving owned game by ID.", sqlException);
             }
-            catch (Exception ex)
+            catch (Exception generalException)
             {
-                throw new RepositoryException("An unexpected error occurred while retrieving owned game by ID.", ex);
+                throw new RepositoryException("An unexpected error occurred while retrieving owned game by ID.", generalException);
             }
         }
 
@@ -65,54 +74,53 @@ namespace BusinessLayer.Repositories
         {
             try
             {
-                var parameters = new SqlParameter[]
+                var sqlParameters = new SqlParameter[]
                 {
                     new SqlParameter("@game_id", gameId),
                     new SqlParameter("@user_id", userId)
                 };
-                dataLink.ExecuteNonQuery("RemoveOwnedGame", parameters);
+
+                dataLink.ExecuteNonQuery("RemoveOwnedGame", sqlParameters);
             }
-            catch (SqlException ex)
+            catch (SqlException sqlException)
             {
-                throw new RepositoryException("Database error while removing owned game.", ex);
+                throw new RepositoryException("Database error while removing owned game.", sqlException);
             }
-            catch (Exception ex)
+            catch (Exception generalException)
             {
-                throw new RepositoryException("An unexpected error occurred while removing owned game.", ex);
+                throw new RepositoryException("An unexpected error occurred while removing owned game.", generalException);
             }
         }
 
         private static List<OwnedGame> MapDataTableToOwnedGames(DataTable dataTable)
         {
-            var games = dataTable.AsEnumerable().Select(row =>
+            var ownedGamesList = dataTable.AsEnumerable().Select(row =>
             {
-                // Create a new OwnedGame using the new constructor
-                var game = new OwnedGame(
+                var ownedGame = new OwnedGame(
                     Convert.ToInt32(row["user_id"]),
                     row["title"].ToString(),
                     row["description"]?.ToString(),
                     row["cover_picture"]?.ToString());
 
-                // Set the GameId separately
-                game.GameId = Convert.ToInt32(row["game_id"]);
+                ownedGame.GameId = Convert.ToInt32(row["game_id"]);
 
-                return game;
+                return ownedGame;
             }).ToList();
-            return games;
+
+            return ownedGamesList;
         }
 
-        private static OwnedGame MapDataRowToOwnedGame(DataRow row)
+        private static OwnedGame MapDataRowToOwnedGame(DataRow dataRow)
         {
-            // Create a new OwnedGame using the new constructor
-            var game = new OwnedGame(
-                Convert.ToInt32(row["user_id"]),
-                row["title"].ToString(),
-                row["description"]?.ToString(),
-                row["cover_picture"]?.ToString());
+            var ownedGame = new OwnedGame(
+                Convert.ToInt32(dataRow["user_id"]),
+                dataRow["title"].ToString(),
+                dataRow["description"]?.ToString(),
+                dataRow["cover_picture"]?.ToString());
 
-            // Set the GameId separately
-            game.GameId = Convert.ToInt32(row["game_id"]);
-            return game;
+            ownedGame.GameId = Convert.ToInt32(dataRow["game_id"]);
+
+            return ownedGame;
         }
     }
 }

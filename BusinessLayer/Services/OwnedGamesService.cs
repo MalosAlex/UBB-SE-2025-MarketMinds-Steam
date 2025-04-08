@@ -2,7 +2,6 @@
 using BusinessLayer.Models;
 using BusinessLayer.Exceptions;
 using BusinessLayer.Repositories.Interfaces;
-using BusinessLayer.Exceptions;
 using BusinessLayer.Services.Interfaces;
 
 namespace BusinessLayer.Services
@@ -21,19 +20,19 @@ namespace BusinessLayer.Services
             try
             {
                 Debug.WriteLine($"Getting all owned games for user {userId}");
-                var games = ownedGamesRepository.GetAllOwnedGames(userId);
-                Debug.WriteLine($"Successfully retrieved {games.Count} owned games");
-                return games;
+                var ownedGamesList = ownedGamesRepository.GetAllOwnedGames(userId);
+                Debug.WriteLine($"Successfully retrieved {ownedGamesList.Count} owned games");
+                return ownedGamesList;
             }
-            catch (RepositoryException ex)
+            catch (RepositoryException repositoryException)
             {
-                Debug.WriteLine($"Repository error: {ex.Message}");
-                throw new ServiceException("Failed to retrieve owned games.", ex);
+                Debug.WriteLine($"Repository error: {repositoryException.Message}");
+                throw new ServiceException("Failed to retrieve owned games.", repositoryException);
             }
-            catch (Exception ex)
+            catch (Exception unexpectedException)
             {
-                Debug.WriteLine($"Unexpected error: {ex.Message}");
-                throw new ServiceException("An unexpected error occurred while retrieving owned games.", ex);
+                Debug.WriteLine($"Unexpected error: {unexpectedException.Message}");
+                throw new ServiceException("An unexpected error occurred while retrieving owned games.", unexpectedException);
             }
         }
 
@@ -42,24 +41,26 @@ namespace BusinessLayer.Services
             try
             {
                 Debug.WriteLine($"Getting owned game {gameId} for user {userId}");
-                var game = ownedGamesRepository.GetOwnedGameById(gameId, userId);
-                if (game == null)
+                var ownedGame = ownedGamesRepository.GetOwnedGameById(gameId, userId);
+
+                if (ownedGame == null)
                 {
                     Debug.WriteLine($"No owned game found with ID {gameId} for user {userId}");
                     return null;
                 }
+
                 Debug.WriteLine($"Successfully retrieved owned game {gameId}");
-                return game;
+                return ownedGame;
             }
-            catch (RepositoryException ex)
+            catch (RepositoryException repositoryException)
             {
-                Debug.WriteLine($"Repository error: {ex.Message}");
-                throw new ServiceException("Failed to retrieve owned game.", ex);
+                Debug.WriteLine($"Repository error: {repositoryException.Message}");
+                throw new ServiceException("Failed to retrieve owned game.", repositoryException);
             }
-            catch (Exception ex)
+            catch (Exception unexpectedException)
             {
-                Debug.WriteLine($"Unexpected error: {ex.Message}");
-                throw new ServiceException("An unexpected error occurred while retrieving owned game.", ex);
+                Debug.WriteLine($"Unexpected error: {unexpectedException.Message}");
+                throw new ServiceException("An unexpected error occurred while retrieving owned game.", unexpectedException);
             }
         }
 
@@ -71,15 +72,15 @@ namespace BusinessLayer.Services
                 ownedGamesRepository.RemoveOwnedGame(gameId, userId);
                 Debug.WriteLine($"Successfully removed owned game {gameId}");
             }
-            catch (RepositoryException ex)
+            catch (RepositoryException repositoryException)
             {
-                Debug.WriteLine($"Repository error: {ex.Message}");
-                throw new ServiceException("Failed to remove owned game.", ex);
+                Debug.WriteLine($"Repository error: {repositoryException.Message}");
+                throw new ServiceException("Failed to remove owned game.", repositoryException);
             }
-            catch (Exception ex)
+            catch (Exception unexpectedException)
             {
-                Debug.WriteLine($"Unexpected error: {ex.Message}");
-                throw new ServiceException("An unexpected error occurred while removing owned game.", ex);
+                Debug.WriteLine($"Unexpected error: {unexpectedException.Message}");
+                throw new ServiceException("An unexpected error occurred while removing owned game.", unexpectedException);
             }
         }
     }
