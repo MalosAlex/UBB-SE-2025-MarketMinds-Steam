@@ -41,9 +41,9 @@ namespace SteamProfile.Views.WalletViews
             ViewModel.ValidateCardNumber(CardNumberTextBox.Text);
         }
 
-        private void ValidCVV(object sender, TextChangedEventArgs e)
+        private void ValidCardVerificationValue(object sender, TextChangedEventArgs e)
         {
-            ViewModel.ValidateCVV(CVVTextBox.Text);
+            ViewModel.ValidateCardVerificationValue(CardVerificationValueTextBox.Text);
         }
 
         private void ValidDate(object sender, TextChangedEventArgs e)

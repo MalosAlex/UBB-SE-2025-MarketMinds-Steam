@@ -64,12 +64,12 @@ namespace BusinessLayer.Repositories
             };
         }
 
-        public void AddMoneyToWallet(decimal amount, int waletId)
+        public void AddMoneyToWallet(decimal amount, int walletId)
         {
             SqlParameter[] parameters = new SqlParameter[]
             {
                 new SqlParameter("@amount",  amount),
-                new SqlParameter("@userId", waletId)
+                new SqlParameter("@userId", walletId)
             };
             dataLink.ExecuteReader("AddMoney", parameters);
         }

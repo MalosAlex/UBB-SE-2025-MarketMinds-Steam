@@ -26,7 +26,7 @@ namespace SteamProfile.ViewModels
         private bool isCardNumberValid;
 
         [ObservableProperty]
-        private bool isCvvValid;
+        private bool isCardVerificationValueValid;
 
         [ObservableProperty]
         private bool isDateValid;
@@ -48,7 +48,7 @@ namespace SteamProfile.ViewModels
 
         public bool AreAllFieldsValid
         {
-            get { return IsNameValid && IsCardNumberValid && IsCvvValid && IsDateValid; }
+            get { return IsNameValid && IsCardNumberValid && IsCardVerificationValueValid && IsDateValid; }
         }
 
         // Initialization
@@ -82,9 +82,9 @@ namespace SteamProfile.ViewModels
             UpdateErrorMessageVisibility();
         }
 
-        public void ValidateCVV(string cvv)
+        public void ValidateCardVerificationValue(string cardVerificationValue)
         {
-            IsCvvValid = PaymentValidator.IsCvvValid(cvv);
+            IsCardVerificationValueValid = PaymentValidator.IsCardVerificationValueValid(cardVerificationValue);
             UpdateErrorMessageVisibility();
         }
 
@@ -105,7 +105,7 @@ namespace SteamProfile.ViewModels
             UpdateErrorMessageVisibility();
             OnPropertyChanged(nameof(AreAllFieldsValid));
         }
-        partial void OnIsCvvValidChanged(bool value)
+        partial void OnIsCardVerificationValueValidChanged(bool value)
         {
             UpdateErrorMessageVisibility();
             OnPropertyChanged(nameof(AreAllFieldsValid));
@@ -118,7 +118,7 @@ namespace SteamProfile.ViewModels
 
         private void UpdateErrorMessageVisibility()
         {
-            ShowErrorMessage = !IsNameValid || !IsCardNumberValid || !IsCvvValid || !IsDateValid;
+            ShowErrorMessage = !IsNameValid || !IsCardNumberValid || !IsCardVerificationValueValid || !IsDateValid;
             OnPropertyChanged(nameof(ErrorMessageVisibility));
         }
 

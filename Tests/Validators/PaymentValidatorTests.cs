@@ -295,107 +295,107 @@ namespace Tests.Validators
 
         #endregion
 
-        #region IsCvvValid Tests
+        #region IsCardVerificationValueValid Tests
 
         [Test]
-        public void IsCvvValid_ThreeDigitCVV_ReturnsTrue()
+        public void IsCardVerificationValueValid_ThreeDigitValue_ReturnsTrue()
         {
             // Arrange
-            string cvv = "123";
+            string cardVerificationValue = "123";
 
             // Act
-            bool result = PaymentValidator.IsCvvValid(cvv);
+            bool result = PaymentValidator.IsCardVerificationValueValid(cardVerificationValue);
 
             // Assert
             Assert.That(result, Is.True);
         }
 
         [Test]
-        public void IsCvvValid_AllNinesCVV_ReturnsTrue()
+        public void IsCardVerificationValueValid_AllNines_ReturnsTrue()
         {
             // Arrange
-            string cvv = "999";
+            string cardVerificationValue = "999";
 
             // Act
-            bool result = PaymentValidator.IsCvvValid(cvv);
+            bool result = PaymentValidator.IsCardVerificationValueValid(cardVerificationValue);
 
             // Assert
             Assert.That(result, Is.True);
         }
 
         [Test]
-        public void IsCvvValid_AllZerosCVV_ReturnsTrue()
+        public void IsCardVerificationValueValid_AllZeros_ReturnsTrue()
         {
             // Arrange
-            string cvv = "000";
+            string cardVerificationValue = "000";
 
             // Act
-            bool result = PaymentValidator.IsCvvValid(cvv);
+            bool result = PaymentValidator.IsCardVerificationValueValid(cardVerificationValue);
 
             // Assert
             Assert.That(result, Is.True);
         }
 
         [Test]
-        public void IsCvvValid_TooShortCVV_ReturnsFalse()
+        public void IsCardVerificationValueValid_TooShort_ReturnsFalse()
         {
             // Arrange
-            string tooShortCVV = "12";
+            string tooShortValue = "12";
 
             // Act
-            bool result = PaymentValidator.IsCvvValid(tooShortCVV);
+            bool result = PaymentValidator.IsCardVerificationValueValid(tooShortValue);
 
             // Assert
             Assert.That(result, Is.False);
         }
 
         [Test]
-        public void IsCvvValid_TooLongCVV_ReturnsFalse()
+        public void IsCardVerificationValueValid_TooLong_ReturnsFalse()
         {
             // Arrange
-            string tooLongCVV = "12345";
+            string tooLongValue = "12345";
 
             // Act
-            bool result = PaymentValidator.IsCvvValid(tooLongCVV);
+            bool result = PaymentValidator.IsCardVerificationValueValid(tooLongValue);
 
             // Assert
             Assert.That(result, Is.False);
         }
 
         [Test]
-        public void IsCvvValid_EmptyCVV_ReturnsFalse()
+        public void IsCardVerificationValueValid_Empty_ReturnsFalse()
         {
             // Arrange
-            string emptyCVV = "";
+            string emptyValue = "";
 
             // Act
-            bool result = PaymentValidator.IsCvvValid(emptyCVV);
+            bool result = PaymentValidator.IsCardVerificationValueValid(emptyValue);
 
             // Assert
             Assert.That(result, Is.False);
         }
 
         [Test]
-        public void IsCvvValid_NullCVV_ReturnsFalse()
+        public void IsCardVerificationValueValid_Null_ReturnsFalse()
         {
             // Arrange
-            string nullCVV = null;
+            string nullValue = null;
 
             // Act
-            bool result = PaymentValidator.IsCvvValid(nullCVV);
+            bool result = PaymentValidator.IsCardVerificationValueValid(nullValue);
 
             // Assert
             Assert.That(result, Is.False);
         }
 
         [Test]
-        public void IsCvvValid_NonNumericCVV_ReturnsFalse()
+        public void IsCardVerificationValueValid_NonNumeric_ReturnsFalse()
         {
             // Arrange
-            string nonNumericCVV = "12A";
+            string nonNumericValue = "12A";
 
             // Act
-            bool result = PaymentValidator.IsCvvValid(nonNumericCVV);
+            bool result = PaymentValidator.IsCardVerificationValueValid(nonNumericValue);
 
             // Assert
             Assert.That(result, Is.False);

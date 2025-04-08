@@ -39,13 +39,13 @@ namespace BusinessLayer.Validators
             return Regex.IsMatch(cardNumber, @"^\d{16}$");
         }
 
-        public static bool IsCvvValid(string cvv)
+        public static bool IsCardVerificationValueValid(string cardVerificationValue)
         {
-            if (string.IsNullOrEmpty(cvv))
+            if (string.IsNullOrEmpty(cardVerificationValue))
             {
                 return false;
             }
-            return Regex.IsMatch(cvv, @"^\d{3}$");
+            return Regex.IsMatch(cardVerificationValue, @"^\d{3}$");
         }
 
         public static bool IsExpirationDateValid(string expirationDate)

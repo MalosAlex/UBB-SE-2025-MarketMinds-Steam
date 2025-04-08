@@ -12,7 +12,7 @@ namespace Tests.Integration
     public class WalletIntegrationTests
     {
         private FakeWalletRepository _walletRepository;
-        private UserService _service;
+        private UserService _userService;
         private WalletService _walletService;
         private User _testUser;
         private const int USER_ID = 1;
@@ -21,7 +21,7 @@ namespace Tests.Integration
         public void SetUp()
         {
             _walletRepository = new FakeWalletRepository();
-            _service = new UserService(new FakeUsersRepository(), new FakeSessionService());
+            _userService = new UserService(new FakeUsersRepository(), new FakeSessionService());
 
             // Configure the fake user service to return the test user
             _testUser = new User
@@ -32,7 +32,7 @@ namespace Tests.Integration
             };
 
             // Create the WalletService with fake dependencies
-            _walletService = new WalletService(_walletRepository, _service);
+            _walletService = new WalletService(_walletRepository, _userService);
         }
 
         [Test]
