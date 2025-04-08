@@ -40,9 +40,15 @@ namespace SteamProfile.ViewModels
         [ObservableProperty]
         private Visibility statusMessageVisibility = Visibility.Collapsed;
 
-        public Visibility ErrorMessageVisibility => ShowErrorMessage ? Visibility.Visible : Visibility.Collapsed;
+        public Visibility ErrorMessageVisibility
+        {
+            get { return ShowErrorMessage ? Visibility.Visible : Visibility.Collapsed; }
+        }
 
-        public bool AreAllFieldsValid => IsEmailValid && IsPasswordValid;
+        public bool AreAllFieldsValid
+        {
+            get { return IsEmailValid && IsPasswordValid; }
+        }
 
         public PaypalPaymentViewModel()
         {
