@@ -6,25 +6,25 @@ namespace SteamProfile.Views
 {
     public sealed partial class FriendsPage : Page
     {
-        private readonly FriendsViewModel _friendsViewModel;
-        private readonly UsersViewModel _usersViewModel;
+        private readonly FriendsViewModel friendsViewModel;
+        private readonly UsersViewModel usersViewModel;
 
         public FriendsPage()
         {
             InitializeComponent();
-            _friendsViewModel = App.FriendsViewModel;
-            _usersViewModel = App.UsersViewModel;
-            DataContext = _friendsViewModel;
-            
+            friendsViewModel = App.FriendsViewModel;
+            usersViewModel = App.UsersViewModel;
+            DataContext = friendsViewModel;
+
             // Load friends immediately when page is created
-            _friendsViewModel.LoadFriends();
+            friendsViewModel.LoadFriends();
         }
 
         private void RemoveFriend_Click(object sender, RoutedEventArgs eventArgs)
         {
             if (sender is Button button && button.Tag is int friendshipId)
             {
-                _friendsViewModel.RemoveFriend(friendshipId);
+                friendsViewModel.RemoveFriend(friendshipId);
             }
         }
 
@@ -38,7 +38,7 @@ namespace SteamProfile.Views
 
         private void BackToProfileButton_Click(object sender, RoutedEventArgs eventArgs)
         {
-            Frame.Navigate(typeof(ProfilePage), _usersViewModel.GetCurrentUser().UserId);
+            Frame.Navigate(typeof(ProfilePage), usersViewModel.GetCurrentUser().UserId);
         }
     }
 }

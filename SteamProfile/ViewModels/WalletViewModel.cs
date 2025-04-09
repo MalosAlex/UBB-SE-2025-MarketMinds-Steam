@@ -1,12 +1,12 @@
-﻿using CommunityToolkit.Mvvm.ComponentModel;
+﻿using System;
+using System.Collections.Generic;
+using System.Collections.ObjectModel;
+using System.Threading.Tasks;
+using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
 using BusinessLayer.Models;
 using BusinessLayer.Repositories;
 using BusinessLayer.Services;
-using System;
-using System.Collections.Generic;
-using System.Collections.ObjectModel;
-using System.Threading.Tasks;
 using BusinessLayer.Services.Interfaces;
 using BusinessLayer.Repositories.Interfaces;
 
@@ -50,11 +50,6 @@ namespace SteamProfile.ViewModels
             OnPropertyChanged(nameof(BalanceText));
         }
 
-        //partial void OnPointsChanged(decimal value)
-        //{
-        //    OnPropertyChanged(nameof(PointsText));
-        //}
-
         [RelayCommand]
         public void RefreshWalletData()
         {
@@ -66,7 +61,9 @@ namespace SteamProfile.ViewModels
         public void AddFunds(decimal amount)
         {
             if (amount <= 0)
+            {
                 return;
+            }
 
             walletService.AddMoney(amount);
             RefreshWalletData();
@@ -85,15 +82,5 @@ namespace SteamProfile.ViewModels
 
             return success;
         }
-
-        //[RelayCommand]
-        //public void AddPoints(int points)
-        //{
-        //    if (points <= 0)
-        //        return;
-
-        //    _walletService.AddPoints(points);
-        //    RefreshWalletData();
-        //}
     }
 }

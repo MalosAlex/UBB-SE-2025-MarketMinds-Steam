@@ -16,44 +16,44 @@ namespace Tests.ServiceTests
     [TestFixture]
     public class CollectionsServiceTests
     {
-        private ICollectionsService _collectionsService;
-        private FakeCollectionsRepository _fakeCollectionsRepository;
+        private ICollectionsService collectionsServiceInstance;
+        private FakeCollectionsRepository fakeCollectionsRepositoryInstance;
 
         [SetUp]
         public void SetUp()
         {
-            // Arrange: Use the existing fake repository.
-            _fakeCollectionsRepository = new FakeCollectionsRepository();
-            _collectionsService = new CollectionsService(_fakeCollectionsRepository);
+            // Arrange: Instantiate the fake collections repository and the service using it.
+            fakeCollectionsRepositoryInstance = new FakeCollectionsRepository();
+            collectionsServiceInstance = new CollectionsService(fakeCollectionsRepositoryInstance);
         }
 
         #region GetAllCollections Normal Flow
 
         [Test]
-        public void GetAllCollections_ResultIsNotNull()
+        public void GetAllCollections_ForValidUser_ReturnsNonNullList()
         {
-            // Act
-            List<Collection> result = _collectionsService.GetAllCollections(1);
-            // Assert: Result is not null.
-            Assert.That(result, Is.Not.Null);
+            // Act: Retrieve all collections for user with ID 1.
+            List<Collection> collectionsForUser1 = collectionsServiceInstance.GetAllCollections(1);
+            // Assert: The returned list should not be null.
+            Assert.That(collectionsForUser1, Is.Not.Null);
         }
 
         [Test]
-        public void GetAllCollections_ResultCountIsAtLeastThree()
+        public void GetAllCollections_ForValidUser_ReturnsCountAtLeastThree()
         {
-            // Act
-            List<Collection> result = _collectionsService.GetAllCollections(1);
-            // Assert: Count is at least 3.
-            Assert.That(result.Count, Is.GreaterThanOrEqualTo(3));
+            // Act: Retrieve all collections for user with ID 1.
+            List<Collection> collectionsForUser1 = collectionsServiceInstance.GetAllCollections(1);
+            // Assert: The count of collections should be at least 3.
+            Assert.That(collectionsForUser1.Count, Is.GreaterThanOrEqualTo(3));
         }
 
         [Test]
-        public void GetAllCollections_AllCollectionsBelongToUser1()
+        public void GetAllCollections_ForValidUser_AllCollectionsHaveUserIdOne()
         {
-            // Act
-            List<Collection> result = _collectionsService.GetAllCollections(1);
-            // Assert: Every collection belongs to user 1.
-            Assert.That(result, Has.All.Property("UserId").EqualTo(1));
+            // Act: Retrieve all collections for user with ID 1.
+            List<Collection> collectionsForUser1 = collectionsServiceInstance.GetAllCollections(1);
+            // Assert: Every collection's UserId should equal 1.
+            Assert.That(collectionsForUser1, Has.All.Property("UserId").EqualTo(1));
         }
 
         #endregion
@@ -61,39 +61,39 @@ namespace Tests.ServiceTests
         #region GetCollectionById Normal Flow
 
         [Test]
-        public void GetCollectionById_ResultIsNotNull()
+        public void GetCollectionById_ForExistingCollection_ReturnsNonNullCollection()
         {
-            // Arrange: Use an existing collection id from the fake repository.
-            List<Collection> all = _fakeCollectionsRepository.GetAllCollections(1);
-            int colId = all[0].CollectionId;
-            // Act
-            Collection result = _collectionsService.GetCollectionById(colId, 1);
-            // Assert: Collection is not null.
-            Assert.That(result, Is.Not.Null);
+            // Arrange: Retrieve seeded collection list and pick the first collection's ID.
+            List<Collection> seededCollectionsForUser1 = fakeCollectionsRepositoryInstance.GetAllCollections(1);
+            int existingCollectionId = seededCollectionsForUser1[0].CollectionId;
+            // Act: Retrieve the collection by its ID for user 1.
+            Collection retrievedCollection = collectionsServiceInstance.GetCollectionById(existingCollectionId, 1);
+            // Assert: The returned collection should not be null.
+            Assert.That(retrievedCollection, Is.Not.Null);
         }
 
         [Test]
-        public void GetCollectionById_ResultHasCorrectCollectionId()
+        public void GetCollectionById_ForExistingCollection_ReturnsExpectedCollectionId()
         {
-            // Arrange
-            List<Collection> all = _fakeCollectionsRepository.GetAllCollections(1);
-            int colId = all[0].CollectionId;
-            // Act
-            Collection result = _collectionsService.GetCollectionById(colId, 1);
-            // Assert: Returned collection's CollectionId equals expected.
-            Assert.That(result.CollectionId, Is.EqualTo(colId));
+            // Arrange: Retrieve seeded collections and get the ID of the first collection.
+            List<Collection> seededCollectionsForUser1 = fakeCollectionsRepositoryInstance.GetAllCollections(1);
+            int expectedCollectionId = seededCollectionsForUser1[0].CollectionId;
+            // Act: Retrieve the collection by its ID for user 1.
+            Collection retrievedCollection = collectionsServiceInstance.GetCollectionById(expectedCollectionId, 1);
+            // Assert: The returned collection's CollectionId should equal the expected ID.
+            Assert.That(retrievedCollection.CollectionId, Is.EqualTo(expectedCollectionId));
         }
 
         [Test]
-        public void GetCollectionById_ResultHasGamesLoaded()
+        public void GetCollectionById_ForExistingCollection_ReturnsCollectionWithGamesLoaded()
         {
-            // Arrange
-            List<Collection> all = _fakeCollectionsRepository.GetAllCollections(1);
-            int colId = all[0].CollectionId;
-            // Act
-            Collection result = _collectionsService.GetCollectionById(colId, 1);
-            // Assert: The Games property is not null.
-            Assert.That(result.Games, Is.Not.Null);
+            // Arrange: Retrieve seeded collections and choose the first collection.
+            List<Collection> seededCollectionsForUser1 = fakeCollectionsRepositoryInstance.GetAllCollections(1);
+            int selectedCollectionId = seededCollectionsForUser1[0].CollectionId;
+            // Act: Retrieve the collection by its ID.
+            Collection retrievedCollection = collectionsServiceInstance.GetCollectionById(selectedCollectionId, 1);
+            // Assert: The Games property of the collection should not be null.
+            Assert.That(retrievedCollection.Games, Is.Not.Null);
         }
 
         #endregion
@@ -101,30 +101,30 @@ namespace Tests.ServiceTests
         #region GetGamesInCollection Normal Flow
 
         [Test]
-        public void GetGamesInCollection_ResultIsNotNull()
+        public void GetGamesInCollection_ForValidCollection_ReturnsNonNullList()
         {
-            // Act
-            List<OwnedGame> result = _collectionsService.GetGamesInCollection(1);
-            // Assert: Result is not null.
-            Assert.That(result, Is.Not.Null);
+            // Act: Retrieve the list of owned games in a collection for user 1.
+            List<OwnedGame> ownedGamesForCollection = collectionsServiceInstance.GetGamesInCollection(1);
+            // Assert: The returned list should not be null.
+            Assert.That(ownedGamesForCollection, Is.Not.Null);
         }
 
         [Test]
-        public void GetGamesInCollection_ResultCountIsCorrect()
+        public void GetGamesInCollection_ForValidCollection_ReturnsExactCountZero()
         {
-            // Act
-            List<OwnedGame> result = _collectionsService.GetGamesInCollection(1);
-            // Assert: Count is exactly 0 (per fake repository design).
-            Assert.That(result.Count, Is.EqualTo(0));
+            // Act: Retrieve the owned games list for collection 1 (per fake repository design).
+            List<OwnedGame> ownedGamesForCollection = collectionsServiceInstance.GetGamesInCollection(1);
+            // Assert: The count should be exactly 0.
+            Assert.That(ownedGamesForCollection.Count, Is.EqualTo(0));
         }
 
         [Test]
-        public void GetGamesInCollection_AllGamesBelongToUser1()
+        public void GetGamesInCollection_ForValidCollection_AllGamesHaveUserIdOne()
         {
-            // Arrange & Act
-            List<OwnedGame> result = _collectionsService.GetGamesInCollection(1);
-            // Assert: Every returned game has UserId equal to 1.
-            Assert.That(result, Has.All.Property("UserId").EqualTo(1));
+            // Act: Retrieve the owned games list for collection 1.
+            List<OwnedGame> ownedGamesForCollection = collectionsServiceInstance.GetGamesInCollection(1);
+            // Assert: Every owned game in the list should have UserId equal to 1.
+            Assert.That(ownedGamesForCollection, Has.All.Property("UserId").EqualTo(1));
         }
 
         #endregion
@@ -132,10 +132,10 @@ namespace Tests.ServiceTests
         #region AddGameToCollection Normal Flow
 
         [Test]
-        public void AddGameToCollection_DoesNotThrowException()
+        public void AddGameToCollection_ForValidInput_DoesNotThrowException()
         {
-            // Act & Assert: Verify that adding a game does not throw.
-            Assert.DoesNotThrow(() => _collectionsService.AddGameToCollection(1, 10, 1));
+            // Act & Assert: Adding a game to a collection should not throw an exception.
+            Assert.DoesNotThrow(() => collectionsServiceInstance.AddGameToCollection(1, 10, 1));
         }
 
         #endregion
@@ -143,10 +143,10 @@ namespace Tests.ServiceTests
         #region RemoveGameFromCollection Normal Flow
 
         [Test]
-        public void RemoveGameFromCollection_DoesNotThrowException()
+        public void RemoveGameFromCollection_ForValidInput_DoesNotThrowException()
         {
-            // Act & Assert: Verify that removing a game does not throw.
-            Assert.DoesNotThrow(() => _collectionsService.RemoveGameFromCollection(1, 10));
+            // Act & Assert: Removing a game from a collection should not throw an exception.
+            Assert.DoesNotThrow(() => collectionsServiceInstance.RemoveGameFromCollection(1, 10));
         }
 
         #endregion
@@ -154,19 +154,18 @@ namespace Tests.ServiceTests
         #region DeleteCollection Normal Flow
 
         [Test]
-        public void DeleteCollection_RemovesExistingCollection()
+        public void DeleteCollection_ForExistingCollection_RemovesCollectionSuccessfully()
         {
-            // Arrange: Create a new collection.
-            _collectionsService.CreateCollection(1, "Service Delete Test", "test.jpg", true, DateOnly.FromDateTime(DateTime.Now));
-            List<Collection> all = _fakeCollectionsRepository.GetAllCollections(1);
-            Collection toDelete = all.FirstOrDefault(c => c.Name == "Service Delete Test");
-            // (Assume the fake repository always returns the created collection)
-            _collectionsService.DeleteCollection(toDelete.CollectionId, 1);
-            // Act: Check if collection still exists.
-            List<Collection> after = _fakeCollectionsRepository.GetAllCollections(1);
-            bool exists = after.Any(c => c.CollectionId == toDelete.CollectionId);
-            // Assert: The collection no longer exists.
-            Assert.That(exists, Is.False);
+            // Arrange: Create a new collection to later delete.
+            collectionsServiceInstance.CreateCollection(1, "Service Delete Test", "test.jpg", true, DateOnly.FromDateTime(DateTime.Now));
+            List<Collection> seededCollectionsForUser1 = fakeCollectionsRepositoryInstance.GetAllCollections(1);
+            Collection collectionToDelete = seededCollectionsForUser1.FirstOrDefault(c => c.Name == "Service Delete Test");
+            // Act: Delete the specified collection.
+            collectionsServiceInstance.DeleteCollection(collectionToDelete.CollectionId, 1);
+            // Assert: Verify that the collection no longer exists.
+            List<Collection> collectionsAfterDeletion = fakeCollectionsRepositoryInstance.GetAllCollections(1);
+            bool collectionExists = collectionsAfterDeletion.Any(c => c.CollectionId == collectionToDelete.CollectionId);
+            Assert.That(collectionExists, Is.False);
         }
 
         #endregion
@@ -174,15 +173,15 @@ namespace Tests.ServiceTests
         #region CreateCollection Normal Flow
 
         [Test]
-        public void CreateCollection_IncreasesCollectionCountByOne()
+        public void CreateCollection_ForNewCollection_IncreasesCollectionCountByOne()
         {
-            // Arrange: Get initial count.
-            int initialCount = _fakeCollectionsRepository.GetAllCollections(1).Count;
+            // Arrange: Retrieve the initial count of collections for user 1.
+            int initialCollectionCount = fakeCollectionsRepositoryInstance.GetAllCollections(1).Count;
             // Act: Create a new collection.
-            _collectionsService.CreateCollection(1, "Service Create Test", "cover.jpg", false, DateOnly.FromDateTime(DateTime.Now));
-            int newCount = _fakeCollectionsRepository.GetAllCollections(1).Count;
-            // Assert: Count increased by one.
-            Assert.That(newCount, Is.EqualTo(initialCount + 1));
+            collectionsServiceInstance.CreateCollection(1, "Service Create Test", "cover.jpg", false, DateOnly.FromDateTime(DateTime.Now));
+            int newCollectionCount = fakeCollectionsRepositoryInstance.GetAllCollections(1).Count;
+            // Assert: The collection count should increase by one.
+            Assert.That(newCollectionCount, Is.EqualTo(initialCollectionCount + 1));
         }
 
         #endregion
@@ -190,25 +189,25 @@ namespace Tests.ServiceTests
         #region UpdateCollection Normal Flow
 
         [Test]
-        public void UpdateCollection_UpdatesCollectionPropertiesCorrectly()
+        public void UpdateCollection_ForExistingCollection_UpdatesPropertiesCorrectly()
         {
-            // Arrange: Get an existing collection.
-            List<Collection> all = _fakeCollectionsRepository.GetAllCollections(1);
-            Collection col = new Collection(1, all[0].Name, all[0].CreatedAt, all[0].CoverPicture, all[0].IsPublic)
+            // Arrange: Retrieve an existing collection and prepare updated properties.
+            List<Collection> seededCollectionsForUser1 = fakeCollectionsRepositoryInstance.GetAllCollections(1);
+            Collection originalCollection = new Collection(1, seededCollectionsForUser1[0].Name, seededCollectionsForUser1[0].CreatedAt, seededCollectionsForUser1[0].CoverPicture, seededCollectionsForUser1[0].IsPublic)
             {
-                CollectionId = all[0].CollectionId
+                CollectionId = seededCollectionsForUser1[0].CollectionId
             };
-            int id = col.CollectionId;
-            string newName = "Updated Service Name";
-            string newCover = "newcover.jpg";
-            bool newVisibility = !col.IsPublic;
+            int collectionIdToUpdate = originalCollection.CollectionId;
+            string updatedCollectionName = "Updated Service Name";
+            string updatedCoverPicture = "newcover.jpg";
+            bool updatedVisibilitySetting = !originalCollection.IsPublic;
             // Act: Update the collection.
-            _collectionsService.UpdateCollection(id, 1, newName, newCover, newVisibility);
-            Collection updated = _fakeCollectionsRepository.GetCollectionById(id, 1);
-            // Assert: Verify all updated properties using a composite constraint.
-            Assert.That(updated, Has.Property("Name").EqualTo(newName)
-                                  .And.Property("CoverPicture").EqualTo(newCover)
-                                  .And.Property("IsPublic").EqualTo(newVisibility));
+            collectionsServiceInstance.UpdateCollection(collectionIdToUpdate, 1, updatedCollectionName, updatedCoverPicture, updatedVisibilitySetting);
+            Collection updatedCollection = fakeCollectionsRepositoryInstance.GetCollectionById(collectionIdToUpdate, 1);
+            // Assert: The collection's properties should match the updated values.
+            Assert.That(updatedCollection, Has.Property("Name").EqualTo(updatedCollectionName)
+                                             .And.Property("CoverPicture").EqualTo(updatedCoverPicture)
+                                             .And.Property("IsPublic").EqualTo(updatedVisibilitySetting));
         }
 
         #endregion
@@ -216,12 +215,12 @@ namespace Tests.ServiceTests
         #region GetPublicCollectionsForUser Normal Flow
 
         [Test]
-        public void GetPublicCollectionsForUser_AllCollectionsArePublic()
+        public void GetPublicCollectionsForUser_ForValidUser_ReturnsAllCollectionsAsPublic()
         {
-            // Act
-            List<Collection> result = _collectionsService.GetPublicCollectionsForUser(1);
-            // Assert: Every returned collection is public.
-            Assert.That(result, Has.All.Property("IsPublic").EqualTo(true));
+            // Act: Retrieve public collections for user 1.
+            List<Collection> publicCollectionsForUser1 = collectionsServiceInstance.GetPublicCollectionsForUser(1);
+            // Assert: Every returned collection should have IsPublic equal to true.
+            Assert.That(publicCollectionsForUser1, Has.All.Property("IsPublic").EqualTo(true));
         }
 
         #endregion
@@ -229,22 +228,22 @@ namespace Tests.ServiceTests
         #region GetGamesNotInCollection Normal Flow
 
         [Test]
-        public void GetGamesNotInCollection_ReturnsExpectedGames()
+        public void GetGamesNotInCollection_ForValidInput_ReturnsExpectedOwnedGamesList()
         {
-            // Arrange: Prepare expected games using the proper OwnedGame constructor.
-            var expectedGames = new List<OwnedGame>
+            // Arrange: Prepare an expected list of owned games.
+            List<OwnedGame> expectedOwnedGamesList = new List<OwnedGame>
             {
                 new OwnedGame(1, "Title1", "Description1", "cover1.jpg") { GameId = 1 },
                 new OwnedGame(1, "Title2", "Description2", "cover2.jpg") { GameId = 2 }
             };
-            var mockRepo = new Mock<ICollectionsRepository>();
-            mockRepo.Setup(r => r.GetGamesNotInCollection(It.IsAny<int>(), It.IsAny<int>()))
-                    .Returns(expectedGames);
-            var service = new CollectionsService(mockRepo.Object);
-            // Act
-            var result = service.GetGamesNotInCollection(1, 1);
-            // Assert: Returned list exactly equals the expected list.
-            Assert.That(result, Is.EqualTo(expectedGames));
+            var collectionsRepositoryMock = new Mock<ICollectionsRepository>();
+            collectionsRepositoryMock.Setup(repository => repository.GetGamesNotInCollection(It.IsAny<int>(), It.IsAny<int>()))
+                                     .Returns(expectedOwnedGamesList);
+            ICollectionsService collectionsServiceMockInstance = new CollectionsService(collectionsRepositoryMock.Object);
+            // Act: Retrieve the owned games not in a collection.
+            List<OwnedGame> actualOwnedGamesList = collectionsServiceMockInstance.GetGamesNotInCollection(1, 1);
+            // Assert: The returned list should exactly equal the expected list.
+            Assert.That(actualOwnedGamesList, Is.EqualTo(expectedOwnedGamesList));
         }
 
         #endregion
@@ -254,12 +253,12 @@ namespace Tests.ServiceTests
     [TestFixture]
     public class CollectionsServiceExceptionTests
     {
-        #region ConstructorTests
+        #region Constructor Exception Tests
 
         [Test]
-        public void CollectionsService_CollectionRepositoryNull_ThrowException()
+        public void CollectionsService_Constructor_NullRepository_ThrowsArgumentNullException()
         {
-            // Assert
+            // Assert: Instantiating CollectionsService with a null repository should throw an ArgumentNullException.
             Assert.Throws<ArgumentNullException>(() => new CollectionsService(null));
         }
 
@@ -268,28 +267,28 @@ namespace Tests.ServiceTests
         #region GetAllCollections Exception Tests
 
         [Test]
-        public void GetAllCollections_RepositoryException_ThrowsServiceExceptionWithExpectedMessage()
+        public void GetAllCollections_WhenRepositoryThrowsRepositoryException_ThrowsServiceExceptionWithExpectedMessage()
         {
-            // Arrange
-            var mockRepo = new Mock<ICollectionsRepository>();
-            mockRepo.Setup(r => r.GetAllCollections(It.IsAny<int>()))
-                    .Throws(new RepositoryException("Repo error"));
-            var service = new CollectionsService(mockRepo.Object);
-            // Act & Assert
-            Assert.That(Assert.Throws<ServiceException>(() => service.GetAllCollections(1)).Message,
+            // Arrange: Setup the repository mock to throw a RepositoryException.
+            var collectionsRepositoryMockInstance = new Mock<ICollectionsRepository>();
+            collectionsRepositoryMockInstance.Setup(repository => repository.GetAllCollections(It.IsAny<int>()))
+                                             .Throws(new RepositoryException("Repo error"));
+            ICollectionsService collectionsServiceExceptionInstance = new CollectionsService(collectionsRepositoryMockInstance.Object);
+            // Act & Assert: A ServiceException should be thrown with the expected message.
+            Assert.That(Assert.Throws<ServiceException>(() => collectionsServiceExceptionInstance.GetAllCollections(1)).Message,
                         Is.EqualTo("Failed to retrieve collections from database"));
         }
 
         [Test]
-        public void GetAllCollections_GenericException_ThrowsServiceExceptionWithExpectedMessage()
+        public void GetAllCollections_WhenRepositoryThrowsGenericException_ThrowsServiceExceptionWithExpectedMessage()
         {
-            // Arrange
-            var mockRepo = new Mock<ICollectionsRepository>();
-            mockRepo.Setup(r => r.GetAllCollections(It.IsAny<int>()))
-                    .Throws(new Exception("Generic error"));
-            var service = new CollectionsService(mockRepo.Object);
-            // Act & Assert
-            Assert.That(Assert.Throws<ServiceException>(() => service.GetAllCollections(1)).Message,
+            // Arrange: Setup the repository mock to throw a generic exception.
+            var collectionsRepositoryMockInstance = new Mock<ICollectionsRepository>();
+            collectionsRepositoryMockInstance.Setup(repository => repository.GetAllCollections(It.IsAny<int>()))
+                                             .Throws(new Exception("Generic error"));
+            ICollectionsService collectionsServiceExceptionInstance = new CollectionsService(collectionsRepositoryMockInstance.Object);
+            // Act & Assert: A ServiceException should be thrown with the expected message.
+            Assert.That(Assert.Throws<ServiceException>(() => collectionsServiceExceptionInstance.GetAllCollections(1)).Message,
                         Is.EqualTo("An unexpected error occurred while retrieving collections"));
         }
 
@@ -298,60 +297,60 @@ namespace Tests.ServiceTests
         #region GetCollectionById Exception Tests
 
         [Test]
-        public void GetCollectionById_RepositoryException_ThrowsServiceExceptionWithExpectedMessage()
+        public void GetCollectionById_WhenRepositoryThrowsRepositoryException_ThrowsServiceExceptionWithExpectedMessage()
         {
-            // Arrange
-            var mockRepo = new Mock<ICollectionsRepository>();
-            mockRepo.Setup(r => r.GetCollectionById(It.IsAny<int>(), It.IsAny<int>()))
-                    .Throws(new RepositoryException("Repo error"));
-            var service = new CollectionsService(mockRepo.Object);
+            // Arrange: Setup the repository mock to throw a RepositoryException on GetCollectionById.
+            var collectionsRepositoryMockInstance = new Mock<ICollectionsRepository>();
+            collectionsRepositoryMockInstance.Setup(repository => repository.GetCollectionById(It.IsAny<int>(), It.IsAny<int>()))
+                                             .Throws(new RepositoryException("Repo error"));
+            ICollectionsService collectionsServiceExceptionInstance = new CollectionsService(collectionsRepositoryMockInstance.Object);
             // Act & Assert
-            Assert.That(Assert.Throws<ServiceException>(() => service.GetCollectionById(1, 1)).Message,
+            Assert.That(Assert.Throws<ServiceException>(() => collectionsServiceExceptionInstance.GetCollectionById(1, 1)).Message,
                         Is.EqualTo("Failed to retrieve collection."));
         }
 
         [Test]
-        public void GetCollectionById_GenericException_ThrowsServiceExceptionWithExpectedMessage()
+        public void GetCollectionById_WhenRepositoryThrowsGenericException_ThrowsServiceExceptionWithExpectedMessage()
         {
-            // Arrange
-            var mockRepo = new Mock<ICollectionsRepository>();
-            mockRepo.Setup(r => r.GetCollectionById(It.IsAny<int>(), It.IsAny<int>()))
-                    .Throws(new Exception("Generic error"));
-            var service = new CollectionsService(mockRepo.Object);
+            // Arrange: Setup the repository mock to throw a generic exception.
+            var collectionsRepositoryMockInstance = new Mock<ICollectionsRepository>();
+            collectionsRepositoryMockInstance.Setup(repository => repository.GetCollectionById(It.IsAny<int>(), It.IsAny<int>()))
+                                             .Throws(new Exception("Generic error"));
+            ICollectionsService collectionsServiceExceptionInstance = new CollectionsService(collectionsRepositoryMockInstance.Object);
             // Act & Assert
-            Assert.That(Assert.Throws<ServiceException>(() => service.GetCollectionById(1, 1)).Message,
+            Assert.That(Assert.Throws<ServiceException>(() => collectionsServiceExceptionInstance.GetCollectionById(1, 1)).Message,
                         Is.EqualTo("An unexpected error occurred while retrieving collection."));
         }
 
         [Test]
-        public void GetCollectionById_GetGamesInCollectionRepositoryException_ThrowsServiceExceptionWithExpectedMessage()
+        public void GetCollectionById_WhenGetGamesInCollectionRepositoryThrowsRepositoryException_ThrowsServiceExceptionWithExpectedMessage()
         {
-            // Arrange
-            var collection = new Collection(1, "Test", DateOnly.FromDateTime(DateTime.Now)) { CollectionId = 1 };
-            var mockRepo = new Mock<ICollectionsRepository>();
-            mockRepo.Setup(r => r.GetCollectionById(It.IsAny<int>(), It.IsAny<int>()))
-                    .Returns(collection);
-            mockRepo.Setup(r => r.GetGamesInCollection(It.IsAny<int>(), It.IsAny<int>()))
-                    .Throws(new RepositoryException("Repo error"));
-            var service = new CollectionsService(mockRepo.Object);
+            // Arrange: Prepare a test collection and setup the repository mock so that GetGamesInCollection throws a RepositoryException.
+            var testCollectionInstance = new Collection(1, "Test", DateOnly.FromDateTime(DateTime.Now)) { CollectionId = 1 };
+            var collectionsRepositoryMockInstance = new Mock<ICollectionsRepository>();
+            collectionsRepositoryMockInstance.Setup(repository => repository.GetCollectionById(It.IsAny<int>(), It.IsAny<int>()))
+                                             .Returns(testCollectionInstance);
+            collectionsRepositoryMockInstance.Setup(repository => repository.GetGamesInCollection(It.IsAny<int>(), It.IsAny<int>()))
+                                             .Throws(new RepositoryException("Repo error"));
+            ICollectionsService collectionsServiceExceptionInstance = new CollectionsService(collectionsRepositoryMockInstance.Object);
             // Act & Assert
-            Assert.That(Assert.Throws<ServiceException>(() => service.GetCollectionById(1, 1)).Message,
+            Assert.That(Assert.Throws<ServiceException>(() => collectionsServiceExceptionInstance.GetCollectionById(1, 1)).Message,
                         Is.EqualTo("Failed to retrieve collection."));
         }
 
         [Test]
-        public void GetCollectionById_GetGamesInCollectionGenericException_ThrowsServiceExceptionWithExpectedMessage()
+        public void GetCollectionById_WhenGetGamesInCollectionThrowsGenericException_ThrowsServiceExceptionWithExpectedMessage()
         {
-            // Arrange
-            var collection = new Collection(1, "Test", DateOnly.FromDateTime(DateTime.Now)) { CollectionId = 1 };
-            var mockRepo = new Mock<ICollectionsRepository>();
-            mockRepo.Setup(r => r.GetCollectionById(It.IsAny<int>(), It.IsAny<int>()))
-                    .Returns(collection);
-            mockRepo.Setup(r => r.GetGamesInCollection(It.IsAny<int>(), It.IsAny<int>()))
-                    .Throws(new Exception("Generic error"));
-            var service = new CollectionsService(mockRepo.Object);
+            // Arrange: Prepare a test collection and setup the repository mock so that GetGamesInCollection throws a generic exception.
+            var testCollectionInstance = new Collection(1, "Test", DateOnly.FromDateTime(DateTime.Now)) { CollectionId = 1 };
+            var collectionsRepositoryMockInstance = new Mock<ICollectionsRepository>();
+            collectionsRepositoryMockInstance.Setup(repository => repository.GetCollectionById(It.IsAny<int>(), It.IsAny<int>()))
+                                             .Returns(testCollectionInstance);
+            collectionsRepositoryMockInstance.Setup(repository => repository.GetGamesInCollection(It.IsAny<int>(), It.IsAny<int>()))
+                                             .Throws(new Exception("Generic error"));
+            ICollectionsService collectionsServiceExceptionInstance = new CollectionsService(collectionsRepositoryMockInstance.Object);
             // Act & Assert
-            Assert.That(Assert.Throws<ServiceException>(() => service.GetCollectionById(1, 1)).Message,
+            Assert.That(Assert.Throws<ServiceException>(() => collectionsServiceExceptionInstance.GetCollectionById(1, 1)).Message,
                         Is.EqualTo("An unexpected error occurred while retrieving collection."));
         }
 
@@ -360,28 +359,28 @@ namespace Tests.ServiceTests
         #region GetGamesInCollection Exception Tests
 
         [Test]
-        public void GetGamesInCollection_RepositoryException_ThrowsServiceExceptionWithExpectedMessage()
+        public void GetGamesInCollection_WhenRepositoryThrowsRepositoryException_ThrowsServiceExceptionWithExpectedMessage()
         {
-            // Arrange
-            var mockRepo = new Mock<ICollectionsRepository>();
-            mockRepo.Setup(r => r.GetGamesInCollection(It.IsAny<int>()))
-                    .Throws(new RepositoryException("Repo error"));
-            var service = new CollectionsService(mockRepo.Object);
+            // Arrange: Setup the repository mock to throw a RepositoryException on GetGamesInCollection.
+            var collectionsRepositoryMockInstance = new Mock<ICollectionsRepository>();
+            collectionsRepositoryMockInstance.Setup(repository => repository.GetGamesInCollection(It.IsAny<int>()))
+                                             .Throws(new RepositoryException("Repo error"));
+            ICollectionsService collectionsServiceExceptionInstance = new CollectionsService(collectionsRepositoryMockInstance.Object);
             // Act & Assert
-            Assert.That(Assert.Throws<ServiceException>(() => service.GetGamesInCollection(1)).Message,
+            Assert.That(Assert.Throws<ServiceException>(() => collectionsServiceExceptionInstance.GetGamesInCollection(1)).Message,
                         Is.EqualTo("Failed to retrieve games from database"));
         }
 
         [Test]
-        public void GetGamesInCollection_GenericException_ThrowsServiceExceptionWithExpectedMessage()
+        public void GetGamesInCollection_WhenRepositoryThrowsGenericException_ThrowsServiceExceptionWithExpectedMessage()
         {
-            // Arrange
-            var mockRepo = new Mock<ICollectionsRepository>();
-            mockRepo.Setup(r => r.GetGamesInCollection(It.IsAny<int>()))
-                    .Throws(new Exception("Generic error"));
-            var service = new CollectionsService(mockRepo.Object);
+            // Arrange: Setup the repository mock to throw a generic exception on GetGamesInCollection.
+            var collectionsRepositoryMockInstance = new Mock<ICollectionsRepository>();
+            collectionsRepositoryMockInstance.Setup(repository => repository.GetGamesInCollection(It.IsAny<int>()))
+                                             .Throws(new Exception("Generic error"));
+            ICollectionsService collectionsServiceExceptionInstance = new CollectionsService(collectionsRepositoryMockInstance.Object);
             // Act & Assert
-            Assert.That(Assert.Throws<ServiceException>(() => service.GetGamesInCollection(1)).Message,
+            Assert.That(Assert.Throws<ServiceException>(() => collectionsServiceExceptionInstance.GetGamesInCollection(1)).Message,
                         Is.EqualTo("An unexpected error occurred while retrieving games"));
         }
 
@@ -390,28 +389,28 @@ namespace Tests.ServiceTests
         #region AddGameToCollection Exception Tests
 
         [Test]
-        public void AddGameToCollection_RepositoryException_ThrowsServiceExceptionWithExpectedMessage()
+        public void AddGameToCollection_WhenRepositoryThrowsRepositoryException_ThrowsServiceExceptionWithExpectedMessage()
         {
-            // Arrange
-            var mockRepo = new Mock<ICollectionsRepository>();
-            mockRepo.Setup(r => r.AddGameToCollection(It.IsAny<int>(), It.IsAny<int>(), It.IsAny<int>()))
-                    .Throws(new RepositoryException("Repo error"));
-            var service = new CollectionsService(mockRepo.Object);
+            // Arrange: Setup the repository mock to throw a RepositoryException on AddGameToCollection.
+            var collectionsRepositoryMockInstance = new Mock<ICollectionsRepository>();
+            collectionsRepositoryMockInstance.Setup(repository => repository.AddGameToCollection(It.IsAny<int>(), It.IsAny<int>(), It.IsAny<int>()))
+                                             .Throws(new RepositoryException("Repo error"));
+            ICollectionsService collectionsServiceExceptionInstance = new CollectionsService(collectionsRepositoryMockInstance.Object);
             // Act & Assert
-            Assert.That(Assert.Throws<ServiceException>(() => service.AddGameToCollection(1, 10, 1)).Message,
+            Assert.That(Assert.Throws<ServiceException>(() => collectionsServiceExceptionInstance.AddGameToCollection(1, 10, 1)).Message,
                         Is.EqualTo("Failed to add game to collection"));
         }
 
         [Test]
-        public void AddGameToCollection_GenericException_ThrowsServiceExceptionWithExpectedMessage()
+        public void AddGameToCollection_WhenRepositoryThrowsGenericException_ThrowsServiceExceptionWithExpectedMessage()
         {
-            // Arrange
-            var mockRepo = new Mock<ICollectionsRepository>();
-            mockRepo.Setup(r => r.AddGameToCollection(It.IsAny<int>(), It.IsAny<int>(), It.IsAny<int>()))
-                    .Throws(new Exception("Generic error"));
-            var service = new CollectionsService(mockRepo.Object);
+            // Arrange: Setup the repository mock to throw a generic exception on AddGameToCollection.
+            var collectionsRepositoryMockInstance = new Mock<ICollectionsRepository>();
+            collectionsRepositoryMockInstance.Setup(repository => repository.AddGameToCollection(It.IsAny<int>(), It.IsAny<int>(), It.IsAny<int>()))
+                                             .Throws(new Exception("Generic error"));
+            ICollectionsService collectionsServiceExceptionInstance = new CollectionsService(collectionsRepositoryMockInstance.Object);
             // Act & Assert
-            Assert.That(Assert.Throws<ServiceException>(() => service.AddGameToCollection(1, 10, 1)).Message,
+            Assert.That(Assert.Throws<ServiceException>(() => collectionsServiceExceptionInstance.AddGameToCollection(1, 10, 1)).Message,
                         Is.EqualTo("An unexpected error occurred"));
         }
 
@@ -420,28 +419,28 @@ namespace Tests.ServiceTests
         #region RemoveGameFromCollection Exception Tests
 
         [Test]
-        public void RemoveGameFromCollection_RepositoryException_ThrowsServiceExceptionWithExpectedMessage()
+        public void RemoveGameFromCollection_WhenRepositoryThrowsRepositoryException_ThrowsServiceExceptionWithExpectedMessage()
         {
-            // Arrange
-            var mockRepo = new Mock<ICollectionsRepository>();
-            mockRepo.Setup(r => r.RemoveGameFromCollection(It.IsAny<int>(), It.IsAny<int>()))
-                    .Throws(new RepositoryException("Repo error"));
-            var service = new CollectionsService(mockRepo.Object);
+            // Arrange: Setup the repository mock to throw a RepositoryException on RemoveGameFromCollection.
+            var collectionsRepositoryMockInstance = new Mock<ICollectionsRepository>();
+            collectionsRepositoryMockInstance.Setup(repository => repository.RemoveGameFromCollection(It.IsAny<int>(), It.IsAny<int>()))
+                                             .Throws(new RepositoryException("Repo error"));
+            ICollectionsService collectionsServiceExceptionInstance = new CollectionsService(collectionsRepositoryMockInstance.Object);
             // Act & Assert
-            Assert.That(Assert.Throws<ServiceException>(() => service.RemoveGameFromCollection(1, 10)).Message,
+            Assert.That(Assert.Throws<ServiceException>(() => collectionsServiceExceptionInstance.RemoveGameFromCollection(1, 10)).Message,
                         Is.EqualTo("Failed to remove game from collection."));
         }
 
         [Test]
-        public void RemoveGameFromCollection_GenericException_ThrowsServiceExceptionWithExpectedMessage()
+        public void RemoveGameFromCollection_WhenRepositoryThrowsGenericException_ThrowsServiceExceptionWithExpectedMessage()
         {
-            // Arrange
-            var mockRepo = new Mock<ICollectionsRepository>();
-            mockRepo.Setup(r => r.RemoveGameFromCollection(It.IsAny<int>(), It.IsAny<int>()))
-                    .Throws(new Exception("Generic error"));
-            var service = new CollectionsService(mockRepo.Object);
+            // Arrange: Setup the repository mock to throw a generic exception on RemoveGameFromCollection.
+            var collectionsRepositoryMockInstance = new Mock<ICollectionsRepository>();
+            collectionsRepositoryMockInstance.Setup(repository => repository.RemoveGameFromCollection(It.IsAny<int>(), It.IsAny<int>()))
+                                             .Throws(new Exception("Generic error"));
+            ICollectionsService collectionsServiceExceptionInstance = new CollectionsService(collectionsRepositoryMockInstance.Object);
             // Act & Assert
-            Assert.That(Assert.Throws<ServiceException>(() => service.RemoveGameFromCollection(1, 10)).Message,
+            Assert.That(Assert.Throws<ServiceException>(() => collectionsServiceExceptionInstance.RemoveGameFromCollection(1, 10)).Message,
                         Is.EqualTo("An unexpected error occurred while removing game from collection."));
         }
 
@@ -450,15 +449,15 @@ namespace Tests.ServiceTests
         #region DeleteCollection Exception Tests
 
         [Test]
-        public void DeleteCollection_GenericException_ThrowsExceptionWithExpectedMessage()
+        public void DeleteCollection_WhenRepositoryThrowsGenericException_ThrowsExceptionWithExpectedMessage()
         {
-            // Arrange
-            var mockRepo = new Mock<ICollectionsRepository>();
-            mockRepo.Setup(r => r.DeleteCollection(It.IsAny<int>(), It.IsAny<int>()))
-                    .Throws(new Exception("Generic error"));
-            var service = new CollectionsService(mockRepo.Object);
-            // Act & Assert
-            Assert.That(Assert.Throws<Exception>(() => service.DeleteCollection(1, 1)).Message,
+            // Arrange: Setup the repository mock to throw a generic exception on DeleteCollection.
+            var collectionsRepositoryMockInstance = new Mock<ICollectionsRepository>();
+            collectionsRepositoryMockInstance.Setup(repository => repository.DeleteCollection(It.IsAny<int>(), It.IsAny<int>()))
+                                             .Throws(new Exception("Generic error"));
+            ICollectionsService collectionsServiceExceptionInstance = new CollectionsService(collectionsRepositoryMockInstance.Object);
+            // Act & Assert: The exception message should match the expected text.
+            Assert.That(Assert.Throws<Exception>(() => collectionsServiceExceptionInstance.DeleteCollection(1, 1)).Message,
                         Is.EqualTo("Failed to delete collection"));
         }
 
@@ -467,28 +466,30 @@ namespace Tests.ServiceTests
         #region CreateCollection Exception Tests
 
         [Test]
-        public void CreateCollection_RepositoryException_ThrowsServiceExceptionWithExpectedMessage()
+        public void CreateCollection_WhenRepositoryThrowsRepositoryException_ThrowsServiceExceptionWithExpectedMessage()
         {
-            // Arrange
-            var mockRepo = new Mock<ICollectionsRepository>();
-            mockRepo.Setup(r => r.CreateCollection(It.IsAny<int>(), It.IsAny<string>(), It.IsAny<string>(), It.IsAny<bool>(), It.IsAny<DateOnly>()))
-                    .Throws(new RepositoryException("Repo error"));
-            var service = new CollectionsService(mockRepo.Object);
+            // Arrange: Setup the repository mock to throw a RepositoryException on CreateCollection.
+            var collectionsRepositoryMockInstance = new Mock<ICollectionsRepository>();
+            collectionsRepositoryMockInstance.Setup(repository => repository.CreateCollection(
+                                                It.IsAny<int>(), It.IsAny<string>(), It.IsAny<string>(), It.IsAny<bool>(), It.IsAny<DateOnly>()))
+                                             .Throws(new RepositoryException("Repo error"));
+            ICollectionsService collectionsServiceExceptionInstance = new CollectionsService(collectionsRepositoryMockInstance.Object);
             // Act & Assert
-            Assert.That(Assert.Throws<ServiceException>(() => service.CreateCollection(1, "Test", "cover.jpg", true, DateOnly.FromDateTime(DateTime.Now))).Message,
+            Assert.That(Assert.Throws<ServiceException>(() => collectionsServiceExceptionInstance.CreateCollection(1, "Test", "cover.jpg", true, DateOnly.FromDateTime(DateTime.Now))).Message,
                         Is.EqualTo("Failed to create collection in database"));
         }
 
         [Test]
-        public void CreateCollection_GenericException_ThrowsServiceExceptionWithExpectedMessage()
+        public void CreateCollection_WhenRepositoryThrowsGenericException_ThrowsServiceExceptionWithExpectedMessage()
         {
-            // Arrange
-            var mockRepo = new Mock<ICollectionsRepository>();
-            mockRepo.Setup(r => r.CreateCollection(It.IsAny<int>(), It.IsAny<string>(), It.IsAny<string>(), It.IsAny<bool>(), It.IsAny<DateOnly>()))
-                    .Throws(new Exception("Generic error"));
-            var service = new CollectionsService(mockRepo.Object);
+            // Arrange: Setup the repository mock to throw a generic exception on CreateCollection.
+            var collectionsRepositoryMockInstance = new Mock<ICollectionsRepository>();
+            collectionsRepositoryMockInstance.Setup(repository => repository.CreateCollection(
+                                                It.IsAny<int>(), It.IsAny<string>(), It.IsAny<string>(), It.IsAny<bool>(), It.IsAny<DateOnly>()))
+                                             .Throws(new Exception("Generic error"));
+            ICollectionsService collectionsServiceExceptionInstance = new CollectionsService(collectionsRepositoryMockInstance.Object);
             // Act & Assert
-            Assert.That(Assert.Throws<ServiceException>(() => service.CreateCollection(1, "Test", "cover.jpg", true, DateOnly.FromDateTime(DateTime.Now))).Message,
+            Assert.That(Assert.Throws<ServiceException>(() => collectionsServiceExceptionInstance.CreateCollection(1, "Test", "cover.jpg", true, DateOnly.FromDateTime(DateTime.Now))).Message,
                         Is.EqualTo("An unexpected error occurred while creating collection"));
         }
 
@@ -497,28 +498,30 @@ namespace Tests.ServiceTests
         #region UpdateCollection Exception Tests
 
         [Test]
-        public void UpdateCollection_RepositoryException_ThrowsServiceExceptionWithExpectedMessage()
+        public void UpdateCollection_WhenRepositoryThrowsRepositoryException_ThrowsServiceExceptionWithExpectedMessage()
         {
-            // Arrange
-            var mockRepo = new Mock<ICollectionsRepository>();
-            mockRepo.Setup(r => r.UpdateCollection(It.IsAny<int>(), It.IsAny<int>(), It.IsAny<string>(), It.IsAny<string>(), It.IsAny<bool>()))
-                    .Throws(new RepositoryException("Repo error"));
-            var service = new CollectionsService(mockRepo.Object);
+            // Arrange: Setup the repository mock to throw a RepositoryException on UpdateCollection.
+            var collectionsRepositoryMockInstance = new Mock<ICollectionsRepository>();
+            collectionsRepositoryMockInstance.Setup(repository => repository.UpdateCollection(
+                                                It.IsAny<int>(), It.IsAny<int>(), It.IsAny<string>(), It.IsAny<string>(), It.IsAny<bool>()))
+                                             .Throws(new RepositoryException("Repo error"));
+            ICollectionsService collectionsServiceExceptionInstance = new CollectionsService(collectionsRepositoryMockInstance.Object);
             // Act & Assert
-            Assert.That(Assert.Throws<ServiceException>(() => service.UpdateCollection(1, 1, "New Name", "newcover.jpg", true)).Message,
+            Assert.That(Assert.Throws<ServiceException>(() => collectionsServiceExceptionInstance.UpdateCollection(1, 1, "New Name", "newcover.jpg", true)).Message,
                         Is.EqualTo("Failed to update collection in database"));
         }
 
         [Test]
-        public void UpdateCollection_GenericException_ThrowsServiceExceptionWithExpectedMessage()
+        public void UpdateCollection_WhenRepositoryThrowsGenericException_ThrowsServiceExceptionWithExpectedMessage()
         {
-            // Arrange
-            var mockRepo = new Mock<ICollectionsRepository>();
-            mockRepo.Setup(r => r.UpdateCollection(It.IsAny<int>(), It.IsAny<int>(), It.IsAny<string>(), It.IsAny<string>(), It.IsAny<bool>()))
-                    .Throws(new Exception("Generic error"));
-            var service = new CollectionsService(mockRepo.Object);
+            // Arrange: Setup the repository mock to throw a generic exception on UpdateCollection.
+            var collectionsRepositoryMockInstance = new Mock<ICollectionsRepository>();
+            collectionsRepositoryMockInstance.Setup(repository => repository.UpdateCollection(
+                                                It.IsAny<int>(), It.IsAny<int>(), It.IsAny<string>(), It.IsAny<string>(), It.IsAny<bool>()))
+                                             .Throws(new Exception("Generic error"));
+            ICollectionsService collectionsServiceExceptionInstance = new CollectionsService(collectionsRepositoryMockInstance.Object);
             // Act & Assert
-            Assert.That(Assert.Throws<ServiceException>(() => service.UpdateCollection(1, 1, "New Name", "newcover.jpg", true)).Message,
+            Assert.That(Assert.Throws<ServiceException>(() => collectionsServiceExceptionInstance.UpdateCollection(1, 1, "New Name", "newcover.jpg", true)).Message,
                         Is.EqualTo("An unexpected error occurred while updating collection"));
         }
 
@@ -527,28 +530,28 @@ namespace Tests.ServiceTests
         #region GetPublicCollectionsForUser Exception Tests
 
         [Test]
-        public void GetPublicCollectionsForUser_RepositoryException_ThrowsServiceExceptionWithExpectedMessage()
+        public void GetPublicCollectionsForUser_WhenRepositoryThrowsRepositoryException_ThrowsServiceExceptionWithExpectedMessage()
         {
-            // Arrange
-            var mockRepo = new Mock<ICollectionsRepository>();
-            mockRepo.Setup(r => r.GetPublicCollectionsForUser(It.IsAny<int>()))
-                    .Throws(new RepositoryException("Repo error"));
-            var service = new CollectionsService(mockRepo.Object);
+            // Arrange: Setup the repository mock to throw a RepositoryException on GetPublicCollectionsForUser.
+            var collectionsRepositoryMockInstance = new Mock<ICollectionsRepository>();
+            collectionsRepositoryMockInstance.Setup(repository => repository.GetPublicCollectionsForUser(It.IsAny<int>()))
+                                             .Throws(new RepositoryException("Repo error"));
+            ICollectionsService collectionsServiceExceptionInstance = new CollectionsService(collectionsRepositoryMockInstance.Object);
             // Act & Assert
-            Assert.That(Assert.Throws<ServiceException>(() => service.GetPublicCollectionsForUser(1)).Message,
+            Assert.That(Assert.Throws<ServiceException>(() => collectionsServiceExceptionInstance.GetPublicCollectionsForUser(1)).Message,
                         Is.EqualTo("Failed to retrieve public collections from database"));
         }
 
         [Test]
-        public void GetPublicCollectionsForUser_GenericException_ThrowsServiceExceptionWithExpectedMessage()
+        public void GetPublicCollectionsForUser_WhenRepositoryThrowsGenericException_ThrowsServiceExceptionWithExpectedMessage()
         {
-            // Arrange
-            var mockRepo = new Mock<ICollectionsRepository>();
-            mockRepo.Setup(r => r.GetPublicCollectionsForUser(It.IsAny<int>()))
-                    .Throws(new Exception("Generic error"));
-            var service = new CollectionsService(mockRepo.Object);
+            // Arrange: Setup the repository mock to throw a generic exception on GetPublicCollectionsForUser.
+            var collectionsRepositoryMockInstance = new Mock<ICollectionsRepository>();
+            collectionsRepositoryMockInstance.Setup(repository => repository.GetPublicCollectionsForUser(It.IsAny<int>()))
+                                             .Throws(new Exception("Generic error"));
+            ICollectionsService collectionsServiceExceptionInstance = new CollectionsService(collectionsRepositoryMockInstance.Object);
             // Act & Assert
-            Assert.That(Assert.Throws<ServiceException>(() => service.GetPublicCollectionsForUser(1)).Message,
+            Assert.That(Assert.Throws<ServiceException>(() => collectionsServiceExceptionInstance.GetPublicCollectionsForUser(1)).Message,
                         Is.EqualTo("An unexpected error occurred while retrieving public collections"));
         }
 

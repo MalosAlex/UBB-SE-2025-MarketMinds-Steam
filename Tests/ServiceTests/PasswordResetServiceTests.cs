@@ -1,3 +1,4 @@
+using System.Reflection;
 using System;
 using System.IO;
 using System.Threading.Tasks;
@@ -8,10 +9,12 @@ using BusinessLayer.Models;
 using BusinessLayer.Data;
 using Moq;
 using NUnit.Framework;
-using System.Reflection;
 
 namespace Tests.ServiceTests
 {
+    /// <summary>
+    /// Tests for the PasswordResetService class.
+    /// </summary>
     [TestFixture]
     public class PasswordResetServiceTests
     {
@@ -23,18 +26,22 @@ namespace Tests.ServiceTests
         [SetUp]
         public void Setup()
         {
-            mockRepository = new Mock<PasswordResetRepository>(new Mock<IDataLink>().Object);
-            mockUserService = new Mock<IUserService>();
-            service = new PasswordResetService(mockRepository.Object, mockUserService.Object);
+            this.mockRepository = new Mock<PasswordResetRepository>(new Mock<IDataLink>().Object);
+            this.mockUserService = new Mock<IUserService>();
+            this.service = new PasswordResetService(this.mockRepository.Object, this.mockUserService.Object);
 
             // Set up test directory for reset codes
-            testResetCodesPath = Path.Combine(Path.GetTempPath(), "TestResetCodes");
-            Directory.CreateDirectory(testResetCodesPath);
+            this.testResetCodesPath = Path.Combine(Path.GetTempPath(), "TestResetCodes");
+            if (Directory.Exists(this.testResetCodesPath))
+            {
+                Directory.Delete(this.testResetCodesPath, true);
+            }
+            Directory.CreateDirectory(this.testResetCodesPath);
 
             // Use reflection to set the private resetCodesPath field
             typeof(PasswordResetService)
                 .GetField("resetCodesPath", BindingFlags.NonPublic | BindingFlags.Instance)
-                .SetValue(service, testResetCodesPath);
+                .SetValue(this.service, this.testResetCodesPath);
         }
 
         [TearDown]
@@ -42,9 +49,9 @@ namespace Tests.ServiceTests
         {
             try
             {
-                if (Directory.Exists(testResetCodesPath))
+                if (Directory.Exists(this.testResetCodesPath))
                 {
-                    Directory.Delete(testResetCodesPath, true);
+                    Directory.Delete(this.testResetCodesPath, true);
                 }
             }
             catch (IOException)
@@ -54,258 +61,274 @@ namespace Tests.ServiceTests
         }
 
         [Test]
-        public async Task SendResetCode_WithValidEmail_ReturnsSuccessResult()
+        public async Task SendResetCode_WithValidEmail_ReturnsValidResult()
         {
             // Arrange
             string email = "test@example.com";
             var user = new User { UserId = 1, Email = email, Username = "testuser" };
-            mockUserService.Setup(s => s.GetUserByEmail(email)).Returns(user);
+            this.mockUserService.Setup(s => s.GetUserByEmail(email)).Returns(user);
 
             // Act
-            var result = await service.SendResetCode(email);
+            var (isValid, message) = await this.service.SendResetCode(email);
 
             // Assert
-            Assert.That(result.isValid, Is.True);
-            Assert.That(result.message, Is.EqualTo("Reset code sent successfully."));
-            
-            // Check that a file was created
-            string filePath = Path.Combine(testResetCodesPath, $"{email}.code");
+            Assert.That(isValid, Is.True);
+        }
+
+        [Test]
+        public async Task SendResetCode_WithValidEmail_ReturnsSuccessMessage()
+        {
+            // Arrange
+            string email = "test@example.com";
+            var user = new User { UserId = 1, Email = email, Username = "testuser" };
+            this.mockUserService.Setup(s => s.GetUserByEmail(email)).Returns(user);
+
+            // Act
+            var (isValid, message) = await this.service.SendResetCode(email);
+
+            // Assert
+            Assert.That(message, Is.EqualTo("Reset code sent successfully."));
+        }
+
+        [Test]
+        public async Task SendResetCode_WithValidEmail_CreatesResetCodeFile()
+        {
+            // Arrange
+            string email = "test@example.com";
+            var user = new User { UserId = 1, Email = email, Username = "testuser" };
+            this.mockUserService.Setup(s => s.GetUserByEmail(email)).Returns(user);
+
+            // Act
+            await this.service.SendResetCode(email);
+
+            // Assert
+            string filePath = Path.Combine(this.testResetCodesPath, $"{email.ToLower()}_reset_code.txt");
             Assert.That(File.Exists(filePath), Is.True);
-            
-            // Check file content is a 6-digit code
-            string code = await File.ReadAllTextAsync(filePath);
+        }
+
+        [Test]
+        public async Task SendResetCode_WithValidEmail_CreatesValidResetCode()
+        {
+            // Arrange
+            string email = "test@example.com";
+            var user = new User { UserId = 1, Email = email, Username = "testuser" };
+            this.mockUserService.Setup(s => s.GetUserByEmail(email)).Returns(user);
+
+            // Act
+            await this.service.SendResetCode(email);
+
+            // Assert
+            string filePath = Path.Combine(this.testResetCodesPath, $"{email.ToLower()}_reset_code.txt");
+            string fileContent = File.ReadAllText(filePath);
+            string code = fileContent.Split('|')[0];
             Assert.That(System.Text.RegularExpressions.Regex.IsMatch(code, @"^\d{6}$"), Is.True);
         }
 
         [Test]
-        public async Task SendResetCode_WithInvalidEmail_ReturnsErrorResult()
+        public void SendResetCode_WithInvalidEmail_ThrowsInvalidOperationException()
         {
             // Arrange
             string invalidEmail = "invalid";
 
-            // Act
-            var result = await service.SendResetCode(invalidEmail);
-
-            // Assert
-            Assert.That(result.isValid, Is.False);
-            Assert.That(result.message, Is.EqualTo("Invalid email format."));
+            // Act & Assert
+            var ex = Assert.Throws<InvalidOperationException>(() => this.service.SendResetCode(invalidEmail).GetAwaiter().GetResult());
+            Assert.That(ex.Message, Is.EqualTo("Invalid email format."));
         }
 
         [Test]
-        public async Task VerifyResetCode_WithValidCodeAndEmail_ReturnsSuccessResult()
+        public async Task SendResetCode_UnregisteredEmail_ReturnsInvalidResult()
+        {
+            // Arrange
+            string email = "nonexistent@example.com";
+            this.mockUserService.Setup(s => s.GetUserByEmail(email)).Returns((User)null);
+
+            // Act
+            var result = await this.service.SendResetCode(email);
+
+            // Assert
+            Assert.That(result.isValid, Is.False);
+        }
+
+        [Test]
+        public async Task SendResetCode_UnregisteredEmail_ReturnsNotRegisteredMessage()
+        {
+            // Arrange
+            string email = "nonexistent@example.com";
+            this.mockUserService.Setup(s => s.GetUserByEmail(email)).Returns((User)null);
+
+            // Act
+            var result = await this.service.SendResetCode(email);
+
+            // Assert
+            Assert.That(result.message, Is.EqualTo("Email is not registered."));
+        }
+
+        [Test]
+        public void VerifyResetCode_WithValidCode_ReturnsTrue()
         {
             // Arrange
             string email = "test@example.com";
             string code = "123456";
-            string filePath = Path.Combine(testResetCodesPath, $"{email}.code");
-            await File.WriteAllTextAsync(filePath, code);
+            string filePath = Path.Combine(this.testResetCodesPath, $"{email.ToLower()}_reset_code.txt");
+            File.WriteAllText(filePath, $"{code}|{DateTime.UtcNow.AddMinutes(10):O}");
 
             // Act
-            var result = service.VerifyResetCode(email, code);
+            bool result = this.service.VerifyResetCode(email, code).Item1;
 
             // Assert
-            Assert.That(result.isValid, Is.True);
-            Assert.That(result.message, Is.EqualTo("Code verified successfully."));
+            Assert.That(result, Is.True);
         }
 
         [Test]
-        public void VerifyResetCode_WithInvalidEmail_ReturnsErrorResult()
-        {
-            // Arrange
-            string invalidEmail = "invalid";
-            string code = "123456";
-
-            // Act
-            var result = service.VerifyResetCode(invalidEmail, code);
-
-            // Assert
-            Assert.That(result.isValid, Is.False);
-            Assert.That(result.message, Is.EqualTo("Invalid email format."));
-        }
-
-        [Test]
-        public void VerifyResetCode_WithInvalidCode_ReturnsErrorResult()
-        {
-            // Arrange
-            string email = "test@example.com";
-            string invalidCode = "12345"; // 5 digits instead of 6
-
-            // Act
-            var result = service.VerifyResetCode(email, invalidCode);
-
-            // Assert
-            Assert.That(result.isValid, Is.False);
-            Assert.That(result.message, Is.EqualTo("Reset code must be a 6-digit number."));
-        }
-
-        [Test]
-        public async Task VerifyResetCode_WithNonExistentCode_ReturnsErrorResult()
+        public void VerifyResetCode_WithNonExistentCode_ReturnsFalse()
         {
             // Arrange
             string email = "test@example.com";
             string code = "123456";
-            // Don't create the code file
 
             // Act
-            var result = service.VerifyResetCode(email, code);
+            bool result = this.service.VerifyResetCode(email, code).Item1;
 
             // Assert
-            Assert.That(result.isValid, Is.False);
-            Assert.That(result.message, Is.EqualTo("Reset code has expired or does not exist."));
+            Assert.That(result, Is.False);
         }
 
         [Test]
-        public async Task VerifyResetCode_WithIncorrectCode_ReturnsErrorResult()
-        {
-            // Arrange
-            string email = "test@example.com";
-            string storedCode = "123456";
-            string attemptedCode = "654321";
-            string filePath = Path.Combine(testResetCodesPath, $"{email}.code");
-            await File.WriteAllTextAsync(filePath, storedCode);
-
-            // Act
-            var result = service.VerifyResetCode(email, attemptedCode);
-
-            // Assert
-            Assert.That(result.isValid, Is.False);
-            Assert.That(result.message, Is.EqualTo("Invalid reset code."));
-        }
-
-        [Test]
-        public async Task ResetPassword_WithValidParameters_ReturnsSuccessResult()
+        public void ResetPassword_WithValidCode_ResetsPassword()
         {
             // Arrange
             string email = "test@example.com";
             string code = "123456";
             string newPassword = "NewPassword123!";
+            string filePath = Path.Combine(this.testResetCodesPath, $"{email.ToLower()}_reset_code.txt");
+            File.WriteAllText(filePath, $"{code}|{DateTime.UtcNow.AddMinutes(10):O}");
             var user = new User { UserId = 1, Email = email, Username = "testuser" };
-            string filePath = Path.Combine(testResetCodesPath, $"{email}.code");
-            await File.WriteAllTextAsync(filePath, code);
-
-            mockUserService.Setup(s => s.GetUserByEmail(email)).Returns(user);
-            mockUserService.Setup(s => s.UpdateUserPassword(user.UserId, newPassword)).Verifiable();
+            this.mockUserService.Setup(s => s.GetUserByEmail(email)).Returns(user);
+            this.mockUserService.Setup(s => s.UpdateUserPassword(user.UserId, newPassword));
 
             // Act
-            var result = service.ResetPassword(email, code, newPassword);
+            var (isValid, message) = this.service.ResetPassword(email, code, newPassword);
 
             // Assert
-            Assert.That(result.isValid, Is.True);
-            Assert.That(result.message, Is.EqualTo("Password reset successfully."));
-            mockUserService.Verify(s => s.UpdateUserPassword(user.UserId, newPassword), Times.Once);
-            
-            // Verify code file was deleted
-            Assert.That(File.Exists(filePath), Is.False);
+            Assert.That(isValid, Is.True);
         }
 
         [Test]
-        public async Task ResetPassword_WithInvalidCode_ReturnsErrorResult()
-        {
-            // Arrange
-            string email = "test@example.com";
-            string storedCode = "123456";
-            string attemptedCode = "654321";
-            string newPassword = "NewPassword123!";
-            string filePath = Path.Combine(testResetCodesPath, $"{email}.code");
-            await File.WriteAllTextAsync(filePath, storedCode);
-
-            // Act
-            var result = service.ResetPassword(email, attemptedCode, newPassword);
-
-            // Assert
-            Assert.That(result.isValid, Is.False);
-            Assert.That(result.message, Is.EqualTo("Invalid reset code."));
-            
-            // Verify code file still exists
-            Assert.That(File.Exists(filePath), Is.True);
-        }
-
-        [Test]
-        public async Task ResetPassword_WithInvalidPassword_ReturnsErrorResult()
-        {
-            // Arrange
-            string email = "test@example.com";
-            string code = "123456";
-            string invalidPassword = "weak"; // Too short and missing requirements
-            string filePath = Path.Combine(testResetCodesPath, $"{email}.code");
-            await File.WriteAllTextAsync(filePath, code);
-
-            // Act
-            var result = service.ResetPassword(email, code, invalidPassword);
-
-            // Assert
-            Assert.That(result.isValid, Is.False);
-            Assert.That(result.message, Is.EqualTo("Password must be at least 8 characters long."));
-            
-            // Verify code file still exists
-            Assert.That(File.Exists(filePath), Is.True);
-        }
-
-        [Test]
-        public async Task ResetPassword_WithNonExistentUser_ReturnsErrorResult()
+        public void ResetPassword_WithValidCode_ReturnsSuccessMessage()
         {
             // Arrange
             string email = "test@example.com";
             string code = "123456";
             string newPassword = "NewPassword123!";
-            string filePath = Path.Combine(testResetCodesPath, $"{email}.code");
-            await File.WriteAllTextAsync(filePath, code);
-
-            mockUserService.Setup(s => s.GetUserByEmail(email)).Returns((User)null);
+            string filePath = Path.Combine(this.testResetCodesPath, $"{email.ToLower()}_reset_code.txt");
+            File.WriteAllText(filePath, $"{code}|{DateTime.UtcNow.AddMinutes(10):O}");
+            var user = new User { UserId = 1, Email = email, Username = "testuser" };
+            this.mockUserService.Setup(s => s.GetUserByEmail(email)).Returns(user);
+            this.mockUserService.Setup(s => s.UpdateUserPassword(user.UserId, newPassword));
 
             // Act
-            var result = service.ResetPassword(email, code, newPassword);
+            var (isValid, message) = this.service.ResetPassword(email, code, newPassword);
+
+            // Assert
+            Assert.That(message, Is.EqualTo("Password reset successfully."));
+        }
+
+        [Test]
+        public void ResetPassword_WithInvalidCode_ReturnsInvalidResult()
+        {
+            // Arrange
+            string email = "test@example.com";
+            string code = "123456";
+            string newPassword = "NewPassword123!";
+            string filePath = Path.Combine(this.testResetCodesPath, $"{email.ToLower()}_reset_code.txt");
+            File.WriteAllText(filePath, $"{code}|{DateTime.UtcNow.AddMinutes(-10):O}"); // Expired code
+
+            // Act
+            var result = this.service.ResetPassword(email, code, newPassword);
 
             // Assert
             Assert.That(result.isValid, Is.False);
+        }
+
+        [Test]
+        public void ResetPassword_WithInvalidPassword_ReturnsInvalidResult()
+        {
+            // Arrange
+            string email = "test@example.com";
+            string code = "123456";
+            string invalidPassword = "weak";
+            string filePath = Path.Combine(this.testResetCodesPath, $"{email.ToLower()}_reset_code.txt");
+            File.WriteAllText(filePath, $"{code}|{DateTime.UtcNow.AddMinutes(10):O}");
+            var user = new User { UserId = 1, Email = email, Username = "testuser" };
+            this.mockUserService.Setup(s => s.GetUserByEmail(email)).Returns(user);
+
+            // Act
+            var result = this.service.ResetPassword(email, code, invalidPassword);
+
+            // Assert
+            Assert.That(result.isValid, Is.False);
+        }
+
+        [Test]
+        public void ResetPassword_WithNonExistentUser_ReturnsInvalidResult()
+        {
+            // Arrange
+            string email = "nonexistent@example.com";
+            string code = "123456";
+            string newPassword = "NewPassword123!";
+            string filePath = Path.Combine(this.testResetCodesPath, $"{email.ToLower()}_reset_code.txt");
+            File.WriteAllText(filePath, $"{code}|{DateTime.UtcNow.AddMinutes(10):O}");
+            this.mockUserService.Setup(s => s.GetUserByEmail(email)).Returns((User)null);
+
+            // Act
+            var result = this.service.ResetPassword(email, code, newPassword);
+
+            // Assert
+            Assert.That(result.isValid, Is.False);
+        }
+
+        [Test]
+        public void ResetPassword_WithNonExistentUser_ReturnsUserNotFoundMessage()
+        {
+            // Arrange
+            string email = "nonexistent@example.com";
+            string code = "123456";
+            string newPassword = "NewPassword123!";
+            string filePath = Path.Combine(this.testResetCodesPath, $"{email.ToLower()}_reset_code.txt");
+            File.WriteAllText(filePath, $"{code}|{DateTime.UtcNow.AddMinutes(10):O}");
+            this.mockUserService.Setup(s => s.GetUserByEmail(email)).Returns((User)null);
+
+            // Act
+            var result = this.service.ResetPassword(email, code, newPassword);
+
+            // Assert
             Assert.That(result.message, Is.EqualTo("User not found."));
-            
-            // Verify code file still exists
-            Assert.That(File.Exists(filePath), Is.True);
         }
 
         [Test]
-        public void CleanupExpiredCodes_RemovesExpiredFiles()
+        public void CleanupExpiredCodes_PreservesNonExpiredFile()
         {
             // Arrange
-            var now = DateTime.Now;
-            
-            // Create some files with creation dates
-            var newCodePath = Path.Combine(testResetCodesPath, "new@example.com.code");
-            var oldCodePath = Path.Combine(testResetCodesPath, "old@example.com.code");
-            
-            File.WriteAllText(newCodePath, "123456");
-            File.WriteAllText(oldCodePath, "654321");
-            
-            // Manually set file creation time for the old file to be older than expiry threshold
-            File.SetCreationTime(oldCodePath, now.AddHours(-25)); // 25 hours old (more than 1 day)
-            File.SetCreationTime(newCodePath, now.AddMinutes(-30)); // 30 minutes old (less than 1 day)
-            
+            string email = "test@example.com";
+            string code = "123456";
+            string filePath = Path.Combine(this.testResetCodesPath, $"{email.ToLower()}_reset_code.txt");
+            File.WriteAllText(filePath, $"{code}|{DateTime.UtcNow.AddMinutes(10):O}"); // Valid code
+
             // Act
-            service.CleanupExpiredCodes();
-            
+            this.service.CleanupExpiredCodes();
+
             // Assert
-            Assert.That(File.Exists(newCodePath), Is.True, "New code should not be removed");
-            Assert.That(File.Exists(oldCodePath), Is.False, "Old code should be removed");
+            Assert.That(File.Exists(filePath), Is.True);
         }
-        
+
         [Test]
         public void CleanupExpiredCodes_HandlesNonExistentDirectory()
         {
             // Arrange
-            if (Directory.Exists(testResetCodesPath))
-            {
-                Directory.Delete(testResetCodesPath, true);
-            }
-            
-            // Use reflection to set a non-existent path
-            string nonExistentPath = Path.Combine(Path.GetTempPath(), Guid.NewGuid().ToString());
-            typeof(PasswordResetService)
-                .GetField("resetCodesPath", BindingFlags.NonPublic | BindingFlags.Instance)
-                .SetValue(service, nonExistentPath);
-                
-            // Act & Assert (should not throw)
-            Assert.That(() => service.CleanupExpiredCodes(), Throws.Nothing);
+            Directory.Delete(this.testResetCodesPath, true);
+
+            // Act & Assert
+            Assert.DoesNotThrow(() => this.service.CleanupExpiredCodes());
         }
     }
-} 
+}

@@ -4,21 +4,28 @@ namespace BusinessLayer.Exceptions
 {
     public class EmailAlreadyExistsException : Exception
     {
-        public EmailAlreadyExistsException(string email) : base($"An account with the email '{email}' already exists.")
+        private const string MessageTemplate = "An account with the email '{0}' already exists.";
+
+        public EmailAlreadyExistsException(string email)
+            : base(string.Format(MessageTemplate, email))
         {
         }
     }
 
     public class UsernameAlreadyTakenException : Exception
     {
-        public UsernameAlreadyTakenException(string username) : base($"The username '{username}' is already taken.")
+        private const string MessageTemplate = "The username '{0}' is already taken.";
+
+        public UsernameAlreadyTakenException(string username)
+            : base(string.Format(MessageTemplate, username))
         {
         }
     }
 
     public class UserValidationException : Exception
     {
-        public UserValidationException(string message) : base(message)
+        public UserValidationException(string message)
+            : base(message)
         {
         }
     }

@@ -1,8 +1,8 @@
+using System;
 using Microsoft.UI.Xaml;
 using Microsoft.UI.Xaml.Controls;
 using Microsoft.UI.Xaml.Navigation;
 using SteamProfile.ViewModels;
-using System;
 using SteamProfile.Views.WalletViews;
 using BusinessLayer.Services;
 using BusinessLayer.Repositories.Interfaces;
@@ -44,7 +44,5 @@ namespace SteamProfile.Views
         {
             Frame.GoBack();
         }
-
-
     }
 }

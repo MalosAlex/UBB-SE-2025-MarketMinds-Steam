@@ -1,23 +1,26 @@
+using System;
+using System.Collections.ObjectModel;
 using Microsoft.UI.Xaml;
 using Microsoft.UI.Xaml.Controls;
 using SteamProfile.ViewModels;
-using System;
-using System.Diagnostics;
 using Microsoft.UI.Xaml.Navigation;
+using BusinessLayer.Models;
 
 namespace SteamProfile.Views
 {
     public sealed partial class CollectionsForVisitorsPage : Page
     {
-        private CollectionsViewModel _collectionsViewModel;
-        private int _userId;
+        private const string FailedToLoadCollectionsErrorMessage = "Failed to load collections. Please try again later.";
+
+        private CollectionsViewModel collectionsViewModel;
+        private int userIdentifier;
 
         public CollectionsForVisitorsPage()
         {
             this.InitializeComponent();
-            _collectionsViewModel = App.CollectionsViewModel;
-            _collectionsViewModel.LoadCollections();
-            this.DataContext = _collectionsViewModel;
+            collectionsViewModel = App.CollectionsViewModel;
+            collectionsViewModel.LoadCollections();
+            this.DataContext = collectionsViewModel;
         }
 
         protected override void OnNavigatedTo(NavigationEventArgs eventArgs)
@@ -25,7 +28,7 @@ namespace SteamProfile.Views
             base.OnNavigatedTo(eventArgs);
             if (eventArgs.Parameter is int userId)
             {
-                _userId = userId;
+                userIdentifier = userId;
                 LoadCollections();
             }
         }
@@ -34,20 +37,19 @@ namespace SteamProfile.Views
         {
             try
             {
-                _collectionsViewModel.IsLoading = true;
-                _collectionsViewModel.ErrorMessage = string.Empty;
-                
-                var collections = _collectionsViewModel.GetPublicCollectionsForUser(_userId);
-                _collectionsViewModel.Collections = new System.Collections.ObjectModel.ObservableCollection<BusinessLayer.Models.Collection>(collections);
+                collectionsViewModel.IsLoading = true;
+                collectionsViewModel.ErrorMessage = string.Empty;
+
+                var collections = collectionsViewModel.GetPublicCollectionsForUser(userIdentifier);
+                collectionsViewModel.Collections = new ObservableCollection<Collection>(collections);
             }
-            catch (Exception exception)
+            catch (Exception)
             {
-                _collectionsViewModel.ErrorMessage = "Failed to load collections. Please try again later.";
-                Debug.WriteLine($"Error loading collections: {exception.Message}");
+                collectionsViewModel.ErrorMessage = FailedToLoadCollectionsErrorMessage;
             }
             finally
             {
-                _collectionsViewModel.IsLoading = false;
+                collectionsViewModel.IsLoading = false;
             }
         }
 
@@ -59,4 +61,4 @@ namespace SteamProfile.Views
             }
         }
     }
-} 
+}

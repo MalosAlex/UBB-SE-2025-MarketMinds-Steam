@@ -10,18 +10,17 @@ using BusinessLayer.Models;
 using BusinessLayer.Exceptions;
 using BusinessLayer.Utils;
 
-
 namespace Tests.ServiceTests
 {
     [TestFixture]
     internal class UserServiceTests
     {
-        private UserService _service;
+        private UserService userService;
 
         [SetUp]
         public void Setup()
         {
-            _service = new UserService(new FakeUsersRepository(), new FakeSessionService());
+            userService = new UserService(new FakeUsersRepository(), new FakeSessionService());
         }
 
         [Test]
@@ -31,11 +30,10 @@ namespace Tests.ServiceTests
             // nothing
 
             // Act
-            List<User> users = _service.GetAllUsers();
+            List<User> users = userService.GetAllUsers();
 
             // Assert
             Assert.That(users.Count(), Is.EqualTo(2));
-
         }
 
         [Test]
@@ -45,10 +43,10 @@ namespace Tests.ServiceTests
             // nothing
 
             // Act
-            User user = _service.GetUserById(1);
+            User user = userService.GetUserById(1);
 
-            // Assert 
-            Assert.That(user.UserId , Is.EqualTo(1));
+            // Assert
+            Assert.That(user.UserId, Is.EqualTo(1));
         }
 
         [Test]
@@ -58,9 +56,9 @@ namespace Tests.ServiceTests
             // nothing
 
             // Act
-            User user = _service.GetUserByEmail("email");
+            User user = userService.GetUserByEmail("email");
 
-            // Assert 
+            // Assert
             Assert.That(user.Email, Is.EqualTo("email"));
         }
 
@@ -71,23 +69,23 @@ namespace Tests.ServiceTests
             // nothing
 
             // Act
-            User user = _service.GetUserByUsername("user");
+            User user = userService.GetUserByUsername("user");
 
-            // Assert 
+            // Assert
             Assert.That(user.Username, Is.EqualTo("user"));
         }
 
         [Test]
         public void ValidateUserAndEmail_DuplicateEmail_ThrowsException()
         {
-            // Arrange 
+            // Arrange
             var email = "DupeEmail";
-            var username = "";
+            var username = string.Empty;
 
             // Act & Assert
             var ex = Assert.Throws<EmailAlreadyExistsException>(() =>
             {
-                _service.ValidateUserAndEmail(email, username);
+                userService.ValidateUserAndEmail(email, username);
             });
 
             Assert.That(ex.Message, Is.EqualTo("An account with the email '" + email + "' already exists."));
@@ -96,14 +94,14 @@ namespace Tests.ServiceTests
         [Test]
         public void ValidateUserAndEmail_DuplicateUser_ThrowsException()
         {
-            // Arrange 
-            var email = "";
+            // Arrange
+            var email = string.Empty;
             var username = "DupeUsername";
 
             // Act & Assert
             var ex = Assert.Throws<UsernameAlreadyTakenException>(() =>
             {
-                _service.ValidateUserAndEmail(email, username);
+                userService.ValidateUserAndEmail(email, username);
             });
 
             Assert.That(ex.Message, Is.EqualTo($"The username '{username}' is already taken."));
@@ -112,14 +110,14 @@ namespace Tests.ServiceTests
         [Test]
         public void ValidateUserAndEmail_EmptyEmailAndEmptyUsername_ThrowsException()
         {
-            // Arrange 
-            var email = "";
-            var username = "";
+            // Arrange
+            var email = string.Empty;
+            var username = string.Empty;
 
             // Act & Assert
             var ex = Assert.Throws<UserValidationException>(() =>
             {
-                _service.ValidateUserAndEmail(email, username);
+                userService.ValidateUserAndEmail(email, username);
             });
 
             Assert.That(ex.Message, Is.EqualTo("Unknown validation error: OTHER_ERROR"));
@@ -128,14 +126,14 @@ namespace Tests.ServiceTests
         [Test]
         public void CreateUser_CorrectCredentials_UserCreated()
         {
-            // Arrange 
+            // Arrange
             User user = new User();
             user.Email = "test@gmail.com";
             user.Username = "username";
             user.Password = "password";
 
             // Act
-            User user1 = _service.CreateUser(user);
+            User user1 = userService.CreateUser(user);
 
             // Assert
             Assert.That(user1.Username, Is.EqualTo("username"));
@@ -149,7 +147,7 @@ namespace Tests.ServiceTests
             user.Username = "test";
 
             // Act
-            User user1 = _service.UpdateUser(user);
+            User user1 = userService.UpdateUser(user);
 
             // Assert
             Assert.That(user1.Username, Is.EqualTo("test"));
@@ -160,12 +158,11 @@ namespace Tests.ServiceTests
         {
             // Arrange
             var user = new User();
-            user.Username= "test";
+            user.Username = "test";
             user.UserId = 1;
 
             // Act and Assert
-            Assert.DoesNotThrow(() => _service.DeleteUser(user.UserId));
-
+            Assert.DoesNotThrow(() => userService.DeleteUser(user.UserId));
         }
 
         [Test]
@@ -178,7 +175,7 @@ namespace Tests.ServiceTests
             user.UserId = 1;
 
             // Act
-            bool result = _service.AcceptChanges(user.UserId = 1, "password");
+            bool result = userService.AcceptChanges(user.UserId = 1, "password");
 
             // Assert
             Assert.That(result, Is.True);
@@ -194,7 +191,7 @@ namespace Tests.ServiceTests
             user.UserId = 1;
 
             // Act
-            bool result = _service.AcceptChanges(user.UserId = 1, "notPassword");
+            bool result = userService.AcceptChanges(user.UserId = 1, "notPassword");
 
             // Assert
             Assert.That(result, Is.False);
@@ -210,8 +207,7 @@ namespace Tests.ServiceTests
             user.Email = "test@gmail.com";
 
             // Act and Assert
-            Assert.DoesNotThrow(() => _service.UpdateUserEmail(user.UserId, "test@yahoo.com"));
-
+            Assert.DoesNotThrow(() => userService.UpdateUserEmail(user.UserId, "test@yahoo.com"));
         }
 
         [Test]
@@ -224,8 +220,7 @@ namespace Tests.ServiceTests
             user.Password = "password";
 
             // Act and Assert
-            Assert.DoesNotThrow(() => _service.UpdateUserPassword(user.UserId, PasswordHasher.HashPassword(user.Password)));
-
+            Assert.DoesNotThrow(() => userService.UpdateUserPassword(user.UserId, PasswordHasher.HashPassword(user.Password)));
         }
 
         [Test]
@@ -237,8 +232,7 @@ namespace Tests.ServiceTests
             user.UserId = 1;
 
             // Act and Assert
-            Assert.DoesNotThrow(() => _service.UpdateUserUsername(user.UserId, "newTest"));
-
+            Assert.DoesNotThrow(() => userService.UpdateUserUsername(user.UserId, "newTest"));
         }
 
         [Test]
@@ -249,9 +243,9 @@ namespace Tests.ServiceTests
             string password = "password";
 
             // Act
-            User user = _service.Login(mailOrUser, password);
+            User user = userService.Login(mailOrUser, password);
 
-            // Assert 
+            // Assert
             Assert.That(user, Is.Not.Null);
         }
 
@@ -263,9 +257,9 @@ namespace Tests.ServiceTests
             string password = "passWrong";
 
             // Act
-            User user = _service.Login(mailOrUser, password);
+            User user = userService.Login(mailOrUser, password);
 
-            // Assert 
+            // Assert
             Assert.That(user, Is.Null);
         }
 
@@ -275,7 +269,7 @@ namespace Tests.ServiceTests
             // Arrange
 
             // Act and Assert
-            Assert.DoesNotThrow(() => _service.Logout());
+            Assert.DoesNotThrow(() => userService.Logout());
         }
 
         [Test]
@@ -284,7 +278,7 @@ namespace Tests.ServiceTests
             // Arrange
 
             // Act
-            User user = _service.GetCurrentUser();
+            User user = userService.GetCurrentUser();
 
             // Assert
             Assert.That(user, Is.Not.Null);
@@ -296,7 +290,7 @@ namespace Tests.ServiceTests
             // Arrange
 
             // Act
-            bool value = _service.IsUserLoggedIn();
+            bool value = userService.IsUserLoggedIn();
 
             // Assert
             Assert.That(value, Is.True);
@@ -309,7 +303,7 @@ namespace Tests.ServiceTests
             string password = "password";
 
             // Act
-            bool value = _service.VerifyUserPassword(password);
+            bool value = userService.VerifyUserPassword(password);
 
             // Assert
             Assert.That(value, Is.True);
@@ -322,7 +316,7 @@ namespace Tests.ServiceTests
             string password = "passWrong";
 
             // Act
-            bool value = _service.VerifyUserPassword(password);
+            bool value = userService.VerifyUserPassword(password);
 
             // Assert
             Assert.That(value, Is.False);
@@ -336,7 +330,7 @@ namespace Tests.ServiceTests
             string password = "password";
 
             // Act
-            bool value = _service.UpdateUserUsername(username, password);
+            bool value = userService.UpdateUserUsername(username, password);
 
             // Assert
             Assert.That(value, Is.True);
@@ -350,7 +344,7 @@ namespace Tests.ServiceTests
             string password = "passWrong";
 
             // Act
-            bool value = _service.UpdateUserUsername(username, password);
+            bool value = userService.UpdateUserUsername(username, password);
 
             // Assert
             Assert.That(value, Is.False);
@@ -364,7 +358,7 @@ namespace Tests.ServiceTests
             string password = "password";
 
             // Act
-            bool value = _service.UpdateUserPassword(newPassword, password);
+            bool value = userService.UpdateUserPassword(newPassword, password);
 
             // Assert
             Assert.That(value, Is.True);
@@ -378,7 +372,7 @@ namespace Tests.ServiceTests
             string password = "passWrong";
 
             // Act
-            bool value = _service.UpdateUserPassword(newPassword, password);
+            bool value = userService.UpdateUserPassword(newPassword, password);
 
             // Assert
             Assert.That(value, Is.False);
@@ -392,7 +386,7 @@ namespace Tests.ServiceTests
             string password = "password";
 
             // Act
-            bool value = _service.UpdateUserEmail(email, password);
+            bool value = userService.UpdateUserEmail(email, password);
 
             // Assert
             Assert.That(value, Is.True);
@@ -406,7 +400,7 @@ namespace Tests.ServiceTests
             string password = "passWrong";
 
             // Act
-            bool value = _service.UpdateUserEmail(email, password);
+            bool value = userService.UpdateUserEmail(email, password);
 
             // Assert
             Assert.That(value, Is.False);

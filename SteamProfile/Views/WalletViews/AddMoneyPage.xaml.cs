@@ -25,7 +25,7 @@ namespace SteamProfile.Views.WalletViews
             }
         }
 
-        private void sumToBeAddedTextBox_TextChanged(object sender, TextChangedEventArgs e)
+        private void SumToBeAddedTextBox_TextChanged(object sender, TextChangedEventArgs e)
         {
             ViewModel.ValidateInput(sumToBeAddedTextBox.Text);
         }

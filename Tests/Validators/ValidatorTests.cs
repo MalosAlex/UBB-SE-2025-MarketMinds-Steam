@@ -1,8 +1,8 @@
-﻿using NUnit.Framework;
+﻿using System.ComponentModel.DataAnnotations;
+using System;
+using NUnit.Framework;
 using BusinessLayer.Models;
 using BusinessLayer.Validators;
-using System.ComponentModel.DataAnnotations;
-using System;
 
 namespace Tests.Validators
 {
@@ -10,7 +10,6 @@ namespace Tests.Validators
     public class ValidatorTests
     {
         // --- CollectionValidator Tests ---
-
         [Test]
         public void ValidateCollection_ValidCollection_DoesNotThrow()
         {
@@ -20,8 +19,7 @@ namespace Tests.Validators
                 name: "My Collection",
                 createdAt: DateOnly.FromDateTime(DateTime.Today),
                 coverPicture: "http://example.com/pic.jpg",
-                isPublic: true
-            );
+                isPublic: true);
             // Act & Assert
             Assert.That(() => CollectionValidator.ValidateCollection(collection), Throws.Nothing);
         }
@@ -33,8 +31,7 @@ namespace Tests.Validators
             var collection = new Collection(
                 userId: 0,
                 name: "My Collection",
-                createdAt: DateOnly.FromDateTime(DateTime.Today)
-            );
+                createdAt: DateOnly.FromDateTime(DateTime.Today));
             // Act & Assert
             Assert.That(() => CollectionValidator.ValidateCollection(collection),
                 Throws.TypeOf<ValidationException>());
@@ -47,8 +44,7 @@ namespace Tests.Validators
             var collection = new Collection(
                 userId: 1,
                 name: new string('x', 101),
-                createdAt: DateOnly.FromDateTime(DateTime.Today)
-            );
+                createdAt: DateOnly.FromDateTime(DateTime.Today));
             // Act & Assert
             Assert.That(() => CollectionValidator.ValidateCollection(collection),
                 Throws.TypeOf<ValidationException>());
@@ -62,8 +58,7 @@ namespace Tests.Validators
                 userId: 1,
                 name: "Valid",
                 createdAt: DateOnly.FromDateTime(DateTime.Today),
-                coverPicture: new string('x', 256)
-            );
+                coverPicture: new string('x', 256));
             // Act & Assert
             Assert.That(() => CollectionValidator.ValidateCollection(collection),
                 Throws.TypeOf<ValidationException>());
@@ -109,7 +104,7 @@ namespace Tests.Validators
         public void IsNameValid_EmptyName_ReturnsFalse()
         {
             // Arrange & Act
-            var result = CollectionValidator.IsNameValid("");
+            var result = CollectionValidator.IsNameValid(string.Empty);
             // Assert
             Assert.That(result, Is.False);
         }
@@ -160,7 +155,6 @@ namespace Tests.Validators
         }
 
         // --- FriendshipValidator Tests ---
-
         [Test]
         public void ValidateFriendship_ValidFriendship_DoesNotThrow()
         {
@@ -170,8 +164,7 @@ namespace Tests.Validators
                 userId: 1,
                 friendId: 2,
                 friendUsername: "FriendUser",
-                friendProfilePicture: "http://example.com/pfp.jpg"
-            );
+                friendProfilePicture: "http://example.com/pfp.jpg");
             // Act & Assert
             Assert.That(() => FriendshipValidator.ValidateFriendship(friendship), Throws.Nothing);
         }
@@ -183,8 +176,7 @@ namespace Tests.Validators
             var friendship = new Friendship(
                 friendshipId: 1,
                 userId: 0,
-                friendId: 2
-            );
+                friendId: 2);
             // Act & Assert
             Assert.That(() => FriendshipValidator.ValidateFriendship(friendship),
                 Throws.TypeOf<InvalidOperationException>());
@@ -197,8 +189,7 @@ namespace Tests.Validators
             var friendship = new Friendship(
                 friendshipId: 1,
                 userId: 1,
-                friendId: 0
-            );
+                friendId: 0);
             // Act & Assert
             Assert.That(() => FriendshipValidator.ValidateFriendship(friendship),
                 Throws.TypeOf<InvalidOperationException>());
@@ -211,8 +202,7 @@ namespace Tests.Validators
             var friendship = new Friendship(
                 friendshipId: 1,
                 userId: 1,
-                friendId: 1
-            );
+                friendId: 1);
             // Act & Assert
             Assert.That(() => FriendshipValidator.ValidateFriendship(friendship),
                 Throws.TypeOf<InvalidOperationException>());
@@ -264,7 +254,6 @@ namespace Tests.Validators
         }
 
         // --- OwnedGameValidator Tests ---
-
         [Test]
         public void ValidateOwnedGame_ValidGame_DoesNotThrow()
         {
@@ -273,8 +262,7 @@ namespace Tests.Validators
                 userId: 1,
                 title: "Elden Ring",
                 description: "Awesome RPG",
-                coverPicture: null
-            );
+                coverPicture: null);
             // Act & Assert
             Assert.That(() => OwnedGameValidator.ValidateOwnedGame(game), Throws.Nothing);
         }
@@ -286,8 +274,7 @@ namespace Tests.Validators
             var game = new OwnedGame(
                 userId: 0,
                 title: "Valid Game",
-                description: "Test Game"
-            );
+                description: "Test Game");
             // Act & Assert
             Assert.That(() => OwnedGameValidator.ValidateOwnedGame(game),
                 Throws.TypeOf<ValidationException>());
@@ -299,9 +286,8 @@ namespace Tests.Validators
             // Arrange
             var game = new OwnedGame(
                 userId: 1,
-                title: "",
-                description: "Test Game"
-            );
+                title: string.Empty,
+                description: "Test Game");
             // Act & Assert
             Assert.That(() => OwnedGameValidator.ValidateOwnedGame(game),
                 Throws.TypeOf<ValidationException>());
@@ -315,8 +301,7 @@ namespace Tests.Validators
                 userId: 1,
                 title: "Valid Game",
                 description: "Great Game",
-                coverPicture: new string('x', 256)
-            );
+                coverPicture: new string('x', 256));
             // Act & Assert
             Assert.That(() => OwnedGameValidator.ValidateOwnedGame(game),
                 Throws.TypeOf<ValidationException>());
@@ -362,7 +347,7 @@ namespace Tests.Validators
         public void IsTitleValid_EmptyTitle_ReturnsFalse()
         {
             // Arrange & Act
-            var result = OwnedGameValidator.IsTitleValid("");
+            var result = OwnedGameValidator.IsTitleValid(string.Empty);
             // Assert
             Assert.That(result, Is.False);
         }
@@ -422,7 +407,6 @@ namespace Tests.Validators
         }
 
         // --- UserValidator Tests ---
-
         [Test]
         public void ValidateUser_ValidUser_DoesNotThrow()
         {
@@ -473,7 +457,7 @@ namespace Tests.Validators
             // Arrange
             var user = new User
             {
-                Username = "",
+                Username = string.Empty,
                 Password = "StrongPass1!",
                 Email = "test@example.com"
             };
@@ -549,7 +533,7 @@ namespace Tests.Validators
         public void IsPasswordValid_EmptyPassword_ReturnsFalse()
         {
             // Arrange & Act
-            var result = UserValidator.IsPasswordValid("");
+            var result = UserValidator.IsPasswordValid(string.Empty);
             // Assert
             Assert.That(result, Is.False);
         }
@@ -612,7 +596,7 @@ namespace Tests.Validators
         public void IsEmailValid_EmptyEmail_ReturnsFalse()
         {
             // Arrange & Act
-            var result = UserValidator.IsEmailValid("");
+            var result = UserValidator.IsEmailValid(string.Empty);
             // Assert
             Assert.That(result, Is.False);
         }
@@ -627,7 +611,6 @@ namespace Tests.Validators
         }
 
         // --- Additional Tests for UserValidator ---
-
         [Test]
         public void IsValidUsername_ValidUsername_ReturnsTrue()
         {
@@ -650,7 +633,7 @@ namespace Tests.Validators
         public void IsValidUsername_EmptyUsername_ReturnsFalse()
         {
             // Arrange & Act
-            var result = UserValidator.IsValidUsername("");
+            var result = UserValidator.IsValidUsername(string.Empty);
             // Assert
             Assert.That(result, Is.False);
         }

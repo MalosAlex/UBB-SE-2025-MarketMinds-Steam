@@ -2,7 +2,7 @@
 
 namespace BusinessLayer.Repositories.Interfaces
 {
-    internal interface ISessionRepository
+    public interface ISessionRepository
     {
         SessionDetails CreateSession(int userId);
         void DeleteUserSessions(int userId);

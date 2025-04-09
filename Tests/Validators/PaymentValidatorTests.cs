@@ -93,7 +93,7 @@ namespace Tests.Validators
         public void IsMonetaryAmountValid_EmptyString_ReturnsFalse()
         {
             // Arrange
-            string amount = "";
+            string amount = string.Empty;
 
             // Act
             bool result = PaymentValidator.IsMonetaryAmountValid(amount, MAX_AMOUNT);
@@ -150,7 +150,7 @@ namespace Tests.Validators
         public void IsCardNameValid_EmptyName_ReturnsFalse()
         {
             // Arrange
-            string name = "";
+            string name = string.Empty;
 
             // Act
             bool result = PaymentValidator.IsCardNameValid(name);
@@ -258,7 +258,7 @@ namespace Tests.Validators
         public void IsCardNumberValid_EmptyNumber_ReturnsFalse()
         {
             // Arrange
-            string emptyNumber = "";
+            string emptyNumber = string.Empty;
 
             // Act
             bool result = PaymentValidator.IsCardNumberValid(emptyNumber);
@@ -295,107 +295,107 @@ namespace Tests.Validators
 
         #endregion
 
-        #region IsCardVerificationValueValid Tests
+        #region IsCvvValid Tests
 
         [Test]
-        public void IsCardVerificationValueValid_ThreeDigitValue_ReturnsTrue()
+        public void IsCvvValid_ThreeDigitCVV_ReturnsTrue()
         {
             // Arrange
-            string cardVerificationValue = "123";
+            string cvv = "123";
 
             // Act
-            bool result = PaymentValidator.IsCardVerificationValueValid(cardVerificationValue);
+            bool result = PaymentValidator.IsCvvValid(cvv);
 
             // Assert
             Assert.That(result, Is.True);
         }
 
         [Test]
-        public void IsCardVerificationValueValid_AllNines_ReturnsTrue()
+        public void IsCvvValid_AllNinesCVV_ReturnsTrue()
         {
             // Arrange
-            string cardVerificationValue = "999";
+            string cvv = "999";
 
             // Act
-            bool result = PaymentValidator.IsCardVerificationValueValid(cardVerificationValue);
+            bool result = PaymentValidator.IsCvvValid(cvv);
 
             // Assert
             Assert.That(result, Is.True);
         }
 
         [Test]
-        public void IsCardVerificationValueValid_AllZeros_ReturnsTrue()
+        public void IsCvvValid_AllZerosCVV_ReturnsTrue()
         {
             // Arrange
-            string cardVerificationValue = "000";
+            string cvv = "000";
 
             // Act
-            bool result = PaymentValidator.IsCardVerificationValueValid(cardVerificationValue);
+            bool result = PaymentValidator.IsCvvValid(cvv);
 
             // Assert
             Assert.That(result, Is.True);
         }
 
         [Test]
-        public void IsCardVerificationValueValid_TooShort_ReturnsFalse()
+        public void IsCvvValid_TooShortCVV_ReturnsFalse()
         {
             // Arrange
-            string tooShortValue = "12";
+            string tooShortCVV = "12";
 
             // Act
-            bool result = PaymentValidator.IsCardVerificationValueValid(tooShortValue);
+            bool result = PaymentValidator.IsCvvValid(tooShortCVV);
 
             // Assert
             Assert.That(result, Is.False);
         }
 
         [Test]
-        public void IsCardVerificationValueValid_TooLong_ReturnsFalse()
+        public void IsCvvValid_TooLongCVV_ReturnsFalse()
         {
             // Arrange
-            string tooLongValue = "12345";
+            string tooLongCVV = "12345";
 
             // Act
-            bool result = PaymentValidator.IsCardVerificationValueValid(tooLongValue);
+            bool result = PaymentValidator.IsCvvValid(tooLongCVV);
 
             // Assert
             Assert.That(result, Is.False);
         }
 
         [Test]
-        public void IsCardVerificationValueValid_Empty_ReturnsFalse()
+        public void IsCvvValid_EmptyCVV_ReturnsFalse()
         {
             // Arrange
-            string emptyValue = "";
+            string emptyCVV = string.Empty;
 
             // Act
-            bool result = PaymentValidator.IsCardVerificationValueValid(emptyValue);
+            bool result = PaymentValidator.IsCvvValid(emptyCVV);
 
             // Assert
             Assert.That(result, Is.False);
         }
 
         [Test]
-        public void IsCardVerificationValueValid_Null_ReturnsFalse()
+        public void IsCvvValid_NullCVV_ReturnsFalse()
         {
             // Arrange
-            string nullValue = null;
+            string nullCVV = null;
 
             // Act
-            bool result = PaymentValidator.IsCardVerificationValueValid(nullValue);
+            bool result = PaymentValidator.IsCvvValid(nullCVV);
 
             // Assert
             Assert.That(result, Is.False);
         }
 
         [Test]
-        public void IsCardVerificationValueValid_NonNumeric_ReturnsFalse()
+        public void IsCvvValid_NonNumericCVV_ReturnsFalse()
         {
             // Arrange
-            string nonNumericValue = "12A";
+            string nonNumericCVV = "12A";
 
             // Act
-            bool result = PaymentValidator.IsCardVerificationValueValid(nonNumericValue);
+            bool result = PaymentValidator.IsCvvValid(nonNumericCVV);
 
             // Assert
             Assert.That(result, Is.False);
@@ -516,7 +516,7 @@ namespace Tests.Validators
         public void IsExpirationDateValid_EmptyDate_ReturnsFalse()
         {
             // Arrange
-            string emptyDate = "";
+            string emptyDate = string.Empty;
 
             // Act
             bool result = PaymentValidator.IsExpirationDateValid(emptyDate);
@@ -689,7 +689,7 @@ namespace Tests.Validators
         public void IsEmailValid_EmptyEmail_ReturnsFalse()
         {
             // Arrange
-            string emptyEmail = "";
+            string emptyEmail = string.Empty;
 
             // Act
             bool result = PaymentValidator.IsEmailValid(emptyEmail);
@@ -732,7 +732,7 @@ namespace Tests.Validators
         public void IsPasswordValid_EmptyPassword_ReturnsFalse()
         {
             // Arrange
-            string emptyPassword = "";
+            string emptyPassword = string.Empty;
 
             // Act
             bool result = PaymentValidator.IsPasswordValid(emptyPassword);

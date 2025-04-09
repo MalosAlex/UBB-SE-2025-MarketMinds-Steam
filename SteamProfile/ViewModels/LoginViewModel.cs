@@ -1,19 +1,19 @@
-﻿using CommunityToolkit.Mvvm.ComponentModel;
+﻿using System;
+using System.Threading.Tasks;
+using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
 using Microsoft.UI.Xaml.Controls;
 using BusinessLayer.Models;
 using BusinessLayer.Services;
 using SteamProfile.Views;
-using System;
-using System.Threading.Tasks;
 using BusinessLayer.Services.Interfaces;
 
 namespace SteamProfile.ViewModels
 {
     public partial class LoginViewModel : ObservableObject
     {
-        private readonly IUserService _userService;
-        private readonly Frame _frame;
+        private readonly IUserService userService;
+        private readonly Frame loginViewFrame;
 
         [ObservableProperty]
         private string username;
@@ -26,8 +26,8 @@ namespace SteamProfile.ViewModels
 
         public LoginViewModel(Frame frame)
         {
-            _userService = App.UserService;
-            _frame = frame;
+            userService = App.UserService;
+            loginViewFrame = frame;
         }
 
         [RelayCommand]
@@ -43,11 +43,11 @@ namespace SteamProfile.ViewModels
                     return;
                 }
 
-                var user = _userService.Login(Username, Password);
+                var user = userService.Login(Username, Password);
                 if (user != null)
                 {
                     // Navigate to profile page after successful login
-                    _frame.Navigate(typeof(ProfilePage), user.UserId);  // !!!!!!!
+                    loginViewFrame.Navigate(typeof(ProfilePage), user.UserId);  // !!!!!!!
                 }
                 else
                 {
@@ -63,13 +63,13 @@ namespace SteamProfile.ViewModels
         [RelayCommand]
         private void NavigateToRegister()
         {
-            _frame.Navigate(typeof(RegisterPage));
+            loginViewFrame.Navigate(typeof(RegisterPage));
         }
 
         [RelayCommand]
         private void NavigateToForgotPassword()
         {
-            _frame.Navigate(typeof(ForgotPasswordPage));
+            loginViewFrame.Navigate(typeof(ForgotPasswordPage));
         }
     }
 }
