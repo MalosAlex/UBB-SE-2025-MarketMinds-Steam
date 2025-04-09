@@ -10,6 +10,10 @@ namespace SteamProfile.ViewModels
 {
     public partial class CollectionGamesViewModel : ObservableObject
     {
+        // Constants to replace magic numbers and strings
+        private const int AllOwnedGamesCollectionId = 1;
+        private const string FailedToLoadGamesErrorMessage = "Failed to load games";
+
         private readonly ICollectionsService _collectionsService;
 
         [ObservableProperty]
@@ -39,8 +43,7 @@ namespace SteamProfile.ViewModels
             {
                 IsLoading = true;
                 ErrorMessage = string.Empty;
-                IsAllOwnedGamesCollection = collectionId == 1;
-                Debug.WriteLine($"Loading games for collection {collectionId}");
+                IsAllOwnedGamesCollection = collectionId == AllOwnedGamesCollectionId;
                 var gamesInCollection = _collectionsService.GetGamesInCollection(collectionId);
                 Games.Clear();
                 foreach (var game in gamesInCollection)
@@ -50,8 +53,7 @@ namespace SteamProfile.ViewModels
             }
             catch (Exception exception)
             {
-                Debug.WriteLine($"Error loading games: {exception.Message}");
-                ErrorMessage = "Failed to load games";
+                ErrorMessage = FailedToLoadGamesErrorMessage;
             }
             finally
             {
@@ -59,4 +61,4 @@ namespace SteamProfile.ViewModels
             }
         }
     }
-} 
+}

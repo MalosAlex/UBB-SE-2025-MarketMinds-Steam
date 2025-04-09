@@ -102,29 +102,14 @@ namespace SteamProfile.Views
 
         private void ViewGame_Click(object sender, RoutedEventArgs eventArgs)
         {
-            try
+            var button = sender as Button;
+            if (button?.Tag == null)
             {
-                var button = sender as Button;
-                if (button?.Tag == null) return;
+                return;
+            }
 
-                int gameId = Convert.ToInt32(button.Tag);
-                Debug.WriteLine($"Navigating to game page for game {gameId}");
-                Frame.Navigate(typeof(GamePage), gameId);
-            }
-            catch (Exception exception)
-            {
-                Debug.WriteLine($"Error navigating to game page: {exception.Message}");
-            }
-        }
-
-        private void Image_ImageFailed(object sender, ExceptionRoutedEventArgs eventArgs)
-        {
-            Debug.WriteLine($"Failed to load image: {eventArgs.ErrorMessage}");
-            if (sender is Image image && image.DataContext is OwnedGame game)
-            {
-                Debug.WriteLine($"Failed to load image for game: {game.Title}");
-                Debug.WriteLine($"Image path: {game.CoverPicture}");
-            }
+            int gameId = Convert.ToInt32(button.Tag);
+            Frame.Navigate(typeof(GamePage), gameId);
         }
     }
 } 
