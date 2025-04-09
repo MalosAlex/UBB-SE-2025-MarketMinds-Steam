@@ -60,8 +60,7 @@ namespace Tests.Validators
         public void ValidateEmail_WithEmptyEmail_ReturnsRequiredMessage()
         {
             // Arrange
-            string email = "";
-
+            string email = string.Empty;
 
             // Act
             var result = validator.ValidateEmail(email);
@@ -227,8 +226,7 @@ namespace Tests.Validators
         public void ValidateResetCode_WithEmptyCode_ReturnsRequiredMessage()
         {
             // Arrange
-            string code = "";
-
+            string code = string.Empty;
 
             // Act
             var result = validator.ValidateResetCode(code);
@@ -390,9 +388,7 @@ namespace Tests.Validators
         public void ValidatePassword_WithEmptyPassword_ReturnsRequiredMessage()
         {
             // Arrange
-
-            string password = "";
-
+            string password = string.Empty;
 
             // Act
             var result = validator.ValidatePassword(password);

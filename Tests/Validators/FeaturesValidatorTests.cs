@@ -31,14 +31,13 @@ namespace Tests.Validators
         public void ValidateFeature_WithValidFeature_ReturnsEmptyErrorMessage()
         {
             // Arrange
-            var feature = new Feature 
-            { 
-                FeatureId = 1, 
-                Name = "Gold Frame", 
-                Type = "frame", 
-                Value = 100, 
-                Description = "A premium gold frame" 
-
+            var feature = new Feature
+            {
+                FeatureId = 1,
+                Name = "Gold Frame",
+                Type = "frame",
+                Value = 100,
+                Description = "A premium gold frame"
             };
 
             // Act
@@ -61,7 +60,6 @@ namespace Tests.Validators
             Assert.That(result.isValid, Is.False);
         }
 
-      
         [Test]
         public void ValidateFeature_WithNullFeature_ReturnsNullErrorMessage()
         {
@@ -95,19 +93,17 @@ namespace Tests.Validators
             Assert.That(result.isValid, Is.False);
         }
 
-      
         [Test]
         public void ValidateFeature_WithEmptyName_ReturnsEmptyNameErrorMessage()
         {
             // Arrange
-            var feature = new Feature 
-            { 
-                FeatureId = 1, 
-                Name = "", 
-                Type = "frame", 
-                Value = 100, 
-                Description = "A premium gold frame" 
-
+            var feature = new Feature
+            {
+                FeatureId = 1,
+                Name = string.Empty,
+                Type = "frame",
+                Value = 100,
+                Description = "A premium gold frame"
             };
 
             // Act
@@ -141,14 +137,13 @@ namespace Tests.Validators
         public void ValidateFeature_WithNullName_ReturnsEmptyNameErrorMessage()
         {
             // Arrange
-            var feature = new Feature 
-            { 
-                FeatureId = 1, 
-                Name = null, 
-                Type = "frame", 
-                Value = 100, 
-                Description = "A premium gold frame" 
-
+            var feature = new Feature
+            {
+                FeatureId = 1,
+                Name = null,
+                Type = "frame",
+                Value = 100,
+                Description = "A premium gold frame"
             };
 
             // Act
@@ -177,18 +172,18 @@ namespace Tests.Validators
             // Assert
             Assert.That(result.isValid, Is.False);
         }
+
         [Test]
         public void ValidateFeature_WithEmptyType_ReturnsEmptyTypeErrorMessage()
         {
             // Arrange
-            var feature = new Feature 
-            { 
-                FeatureId = 1, 
-                Name = "Gold Frame", 
-                Type = "", 
-                Value = 100, 
-                Description = "A premium gold frame" 
-
+            var feature = new Feature
+            {
+                FeatureId = 1,
+                Name = "Gold Frame",
+                Type = string.Empty,
+                Value = 100,
+                Description = "A premium gold frame"
             };
 
             // Act
@@ -258,7 +253,6 @@ namespace Tests.Validators
             Assert.That(result.isValid, Is.False);
         }
 
-      
         [Test]
         public void ValidateFeature_WithNegativeValue_ReturnsNegativeValueErrorMessage()
         {
@@ -322,8 +316,7 @@ namespace Tests.Validators
         public void ValidateFeatureType_WithEmptyType_ReturnsEmptyTypeErrorMessage()
         {
             // Arrange
-            string type = "";
-
+            string type = string.Empty;
 
             // Act
             var result = FeaturesValidator.ValidateFeatureType(type);
