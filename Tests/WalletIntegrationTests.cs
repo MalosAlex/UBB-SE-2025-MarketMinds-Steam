@@ -11,20 +11,20 @@ namespace Tests.Integration
     [TestFixture]
     public class WalletIntegrationTests
     {
-        private FakeWalletRepository _walletRepository;
-        private UserService _service;
-        private WalletService _walletService;
-        private User _testUser;
+        private FakeWalletRepository walletRepository;
+        private UserService userService;
+        private WalletService walletService;
+        private User testUser;
         private const int USER_ID = 1;
 
         [SetUp]
         public void SetUp()
         {
-            _walletRepository = new FakeWalletRepository();
-            _service = new UserService(new FakeUsersRepository(), new FakeSessionService());
+            walletRepository = new FakeWalletRepository();
+            userService = new UserService(new FakeUsersRepository(), new FakeSessionService());
 
             // Configure the fake user service to return the test user
-            _testUser = new User
+            testUser = new User
             {
                 UserId = USER_ID,
                 Username = "testuser",
@@ -32,19 +32,19 @@ namespace Tests.Integration
             };
 
             // Create the WalletService with fake dependencies
-            _walletService = new WalletService(_walletRepository, _service);
+            walletService = new WalletService(walletRepository, userService);
         }
 
         [Test]
         public void AddMoney_IncreasesBalance()
         {
             // Arrange
-            decimal initialBalance = _walletService.GetBalance();
+            decimal initialBalance = walletService.GetBalance();
             decimal amountToAdd = 50.25m;
 
             // Act
-            _walletService.AddMoney(amountToAdd);
-            decimal newBalance = _walletService.GetBalance();
+            walletService.AddMoney(amountToAdd);
+            decimal newBalance = walletService.GetBalance();
 
             // Assert
             Assert.That(newBalance, Is.EqualTo(initialBalance + amountToAdd));
@@ -54,12 +54,12 @@ namespace Tests.Integration
         public void AddPoints_IncreasesPoints()
         {
             // Arrange
-            int initialPoints = _walletService.GetPoints();
+            int initialPoints = walletService.GetPoints();
             int pointsToAdd = 100;
 
             // Act
-            _walletService.AddPoints(pointsToAdd);
-            int newPoints = _walletService.GetPoints();
+            walletService.AddPoints(pointsToAdd);
+            int newPoints = walletService.GetPoints();
 
             // Assert
             Assert.That(newPoints, Is.EqualTo(initialPoints + pointsToAdd));
@@ -69,12 +69,12 @@ namespace Tests.Integration
         public void PurchasePoints_DecreasesBalance()
         {
             // Arrange
-            decimal initialBalance = _walletService.GetBalance();
+            decimal initialBalance = walletService.GetBalance();
             var offer = new PointsOffer(50, 200); // $50 for 200 points
 
             // Act
-            _walletService.PurchasePoints(offer);
-            decimal newBalance = _walletService.GetBalance();
+            walletService.PurchasePoints(offer);
+            decimal newBalance = walletService.GetBalance();
 
             // Assert
             Assert.That(newBalance, Is.EqualTo(initialBalance - offer.Price));
@@ -84,12 +84,12 @@ namespace Tests.Integration
         public void PurchasePoints_IncreasesPoints()
         {
             // Arrange
-            int initialPoints = _walletService.GetPoints();
+            int initialPoints = walletService.GetPoints();
             var offer = new PointsOffer(50, 200); // $50 for 200 points
 
             // Act
-            _walletService.PurchasePoints(offer);
-            int newPoints = _walletService.GetPoints();
+            walletService.PurchasePoints(offer);
+            int newPoints = walletService.GetPoints();
 
             // Assert
             Assert.That(newPoints, Is.EqualTo(initialPoints + offer.Points));
@@ -102,7 +102,7 @@ namespace Tests.Integration
             var offer = new PointsOffer(200, 500); // $200 for 500 points (more than the test user has)
 
             // Act & Assert
-            Assert.Throws<InvalidOperationException>(() => _walletService.PurchasePoints(offer));
+            Assert.Throws<InvalidOperationException>(() => walletService.PurchasePoints(offer));
         }
 
         [Test]
@@ -112,7 +112,7 @@ namespace Tests.Integration
             var offer = new PointsOffer(200, 500); // $200 for 500 points (more than the test user has)
 
             // Act & Assert
-            var ex = Assert.Throws<InvalidOperationException>(() => _walletService.PurchasePoints(offer));
+            var ex = Assert.Throws<InvalidOperationException>(() => walletService.PurchasePoints(offer));
             Assert.That(ex.Message, Is.EqualTo("Insufficient funds"));
         }
 
@@ -123,7 +123,7 @@ namespace Tests.Integration
             var offer = new PointsOffer(50, 200); // $50 for 200 points
 
             // Act
-            bool result = _walletService.TryPurchasePoints(offer);
+            bool result = walletService.TryPurchasePoints(offer);
 
             // Assert
             Assert.That(result, Is.True);
@@ -133,12 +133,12 @@ namespace Tests.Integration
         public void TryPurchasePoints_SufficientFunds_UpdatesBalance()
         {
             // Arrange
-            decimal initialBalance = _walletService.GetBalance();
+            decimal initialBalance = walletService.GetBalance();
             var offer = new PointsOffer(50, 200); // $50 for 200 points
 
             // Act
-            _walletService.TryPurchasePoints(offer);
-            decimal newBalance = _walletService.GetBalance();
+            walletService.TryPurchasePoints(offer);
+            decimal newBalance = walletService.GetBalance();
 
             // Assert
             Assert.That(newBalance, Is.EqualTo(initialBalance - offer.Price));
@@ -148,12 +148,12 @@ namespace Tests.Integration
         public void TryPurchasePoints_SufficientFunds_UpdatesPoints()
         {
             // Arrange
-            int initialPoints = _walletService.GetPoints();
+            int initialPoints = walletService.GetPoints();
             var offer = new PointsOffer(50, 200); // $50 for 200 points
 
             // Act
-            _walletService.TryPurchasePoints(offer);
-            int newPoints = _walletService.GetPoints();
+            walletService.TryPurchasePoints(offer);
+            int newPoints = walletService.GetPoints();
 
             // Assert
             Assert.That(newPoints, Is.EqualTo(initialPoints + offer.Points));
@@ -166,7 +166,7 @@ namespace Tests.Integration
             var offer = new PointsOffer(200, 500); // $200 for 500 points (more than the test user has)
 
             // Act
-            bool result = _walletService.TryPurchasePoints(offer);
+            bool result = walletService.TryPurchasePoints(offer);
 
             // Assert
             Assert.That(result, Is.False);
@@ -176,12 +176,12 @@ namespace Tests.Integration
         public void TryPurchasePoints_InsufficientFunds_DoesNotUpdateBalance()
         {
             // Arrange
-            decimal initialBalance = _walletService.GetBalance();
+            decimal initialBalance = walletService.GetBalance();
             var offer = new PointsOffer(200, 500); // $200 for 500 points (more than the test user has)
 
             // Act
-            _walletService.TryPurchasePoints(offer);
-            decimal newBalance = _walletService.GetBalance();
+            walletService.TryPurchasePoints(offer);
+            decimal newBalance = walletService.GetBalance();
 
             // Assert
             Assert.That(newBalance, Is.EqualTo(initialBalance));
@@ -191,12 +191,12 @@ namespace Tests.Integration
         public void TryPurchasePoints_InsufficientFunds_DoesNotUpdatePoints()
         {
             // Arrange
-            int initialPoints = _walletService.GetPoints();
+            int initialPoints = walletService.GetPoints();
             var offer = new PointsOffer(200, 500); // $200 for 500 points (more than the test user has)
 
             // Act
-            _walletService.TryPurchasePoints(offer);
-            int newPoints = _walletService.GetPoints();
+            walletService.TryPurchasePoints(offer);
+            int newPoints = walletService.GetPoints();
 
             // Assert
             Assert.That(newPoints, Is.EqualTo(initialPoints));
@@ -209,10 +209,10 @@ namespace Tests.Integration
             int newUserId = 999; // A user ID that doesn't exist yet
 
             // Act - Create the wallet
-            _walletService.CreateWallet(newUserId);
+            walletService.CreateWallet(newUserId);
 
             // Assert - Now the wallet should exist
-            int walletId = _walletRepository.GetWalletIdByUserId(newUserId);
+            int walletId = walletRepository.GetWalletIdByUserId(newUserId);
             Assert.That(walletId, Is.GreaterThan(0));
         }
 
@@ -223,9 +223,9 @@ namespace Tests.Integration
             int newUserId = 999; // A user ID that doesn't exist yet
 
             // Act - Create the wallet
-            _walletService.CreateWallet(newUserId);
-            int walletId = _walletRepository.GetWalletIdByUserId(newUserId);
-            var wallet = _walletRepository.GetWallet(walletId);
+            walletService.CreateWallet(newUserId);
+            int walletId = walletRepository.GetWalletIdByUserId(newUserId);
+            var wallet = walletRepository.GetWallet(walletId);
 
             // Assert
             Assert.That(wallet.UserId, Is.EqualTo(newUserId));
@@ -238,9 +238,9 @@ namespace Tests.Integration
             int newUserId = 999; // A user ID that doesn't exist yet
 
             // Act - Create the wallet
-            _walletService.CreateWallet(newUserId);
-            int walletId = _walletRepository.GetWalletIdByUserId(newUserId);
-            var wallet = _walletRepository.GetWallet(walletId);
+            walletService.CreateWallet(newUserId);
+            int walletId = walletRepository.GetWalletIdByUserId(newUserId);
+            var wallet = walletRepository.GetWallet(walletId);
 
             // Assert
             Assert.That(wallet.Balance, Is.EqualTo(0));
@@ -253,9 +253,9 @@ namespace Tests.Integration
             int newUserId = 999; // A user ID that doesn't exist yet
 
             // Act - Create the wallet
-            _walletService.CreateWallet(newUserId);
-            int walletId = _walletRepository.GetWalletIdByUserId(newUserId);
-            var wallet = _walletRepository.GetWallet(walletId);
+            walletService.CreateWallet(newUserId);
+            int walletId = walletRepository.GetWalletIdByUserId(newUserId);
+            var wallet = walletRepository.GetWallet(walletId);
 
             // Assert
             Assert.That(wallet.Points, Is.EqualTo(0));
@@ -265,12 +265,12 @@ namespace Tests.Integration
         public void CompleteUserFlow_AddMoney_IncreasesBalance()
         {
             // Arrange
-            decimal initialBalance = _walletService.GetBalance();
+            decimal initialBalance = walletService.GetBalance();
             decimal moneyToAdd = 150m;
 
             // Act - First add money to the wallet
-            _walletService.AddMoney(moneyToAdd);
-            decimal balanceAfterAddingMoney = _walletService.GetBalance();
+            walletService.AddMoney(moneyToAdd);
+            decimal balanceAfterAddingMoney = walletService.GetBalance();
 
             // Assert
             Assert.That(balanceAfterAddingMoney, Is.EqualTo(initialBalance + moneyToAdd));
@@ -280,17 +280,17 @@ namespace Tests.Integration
         public void CompleteUserFlow_PurchasePointsAfterAddingMoney_DecreasesBalance()
         {
             // Arrange
-            decimal initialBalance = _walletService.GetBalance();
+            decimal initialBalance = walletService.GetBalance();
             decimal moneyToAdd = 150m;
             var offer = new PointsOffer(100, 300); // $100 for 300 points
 
             // Act - First add money to the wallet
-            _walletService.AddMoney(moneyToAdd);
-            decimal balanceAfterAddingMoney = _walletService.GetBalance();
+            walletService.AddMoney(moneyToAdd);
+            decimal balanceAfterAddingMoney = walletService.GetBalance();
 
             // Then purchase points
-            _walletService.PurchasePoints(offer);
-            decimal finalBalance = _walletService.GetBalance();
+            walletService.PurchasePoints(offer);
+            decimal finalBalance = walletService.GetBalance();
 
             // Assert
             Assert.That(finalBalance, Is.EqualTo(initialBalance + moneyToAdd - offer.Price));
@@ -300,16 +300,16 @@ namespace Tests.Integration
         public void CompleteUserFlow_PurchasePointsAfterAddingMoney_IncreasesPoints()
         {
             // Arrange
-            int initialPoints = _walletService.GetPoints();
+            int initialPoints = walletService.GetPoints();
             decimal moneyToAdd = 150m;
             var offer = new PointsOffer(100, 300); // $100 for 300 points
 
             // Act - First add money to the wallet
-            _walletService.AddMoney(moneyToAdd);
+            walletService.AddMoney(moneyToAdd);
 
             // Then purchase points
-            _walletService.PurchasePoints(offer);
-            int finalPoints = _walletService.GetPoints();
+            walletService.PurchasePoints(offer);
+            int finalPoints = walletService.GetPoints();
 
             // Assert
             Assert.That(finalPoints, Is.EqualTo(initialPoints + offer.Points));

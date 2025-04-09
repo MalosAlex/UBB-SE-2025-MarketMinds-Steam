@@ -93,7 +93,7 @@ namespace Tests.Validators
         public void IsMonetaryAmountValid_EmptyString_ReturnsFalse()
         {
             // Arrange
-            string amount = "";
+            string amount = string.Empty;
 
             // Act
             bool result = PaymentValidator.IsMonetaryAmountValid(amount, MAX_AMOUNT);
@@ -150,7 +150,7 @@ namespace Tests.Validators
         public void IsCardNameValid_EmptyName_ReturnsFalse()
         {
             // Arrange
-            string name = "";
+            string name = string.Empty;
 
             // Act
             bool result = PaymentValidator.IsCardNameValid(name);
@@ -258,7 +258,7 @@ namespace Tests.Validators
         public void IsCardNumberValid_EmptyNumber_ReturnsFalse()
         {
             // Arrange
-            string emptyNumber = "";
+            string emptyNumber = string.Empty;
 
             // Act
             bool result = PaymentValidator.IsCardNumberValid(emptyNumber);
@@ -366,7 +366,7 @@ namespace Tests.Validators
         public void IsCvvValid_EmptyCVV_ReturnsFalse()
         {
             // Arrange
-            string emptyCVV = "";
+            string emptyCVV = string.Empty;
 
             // Act
             bool result = PaymentValidator.IsCvvValid(emptyCVV);
@@ -516,7 +516,7 @@ namespace Tests.Validators
         public void IsExpirationDateValid_EmptyDate_ReturnsFalse()
         {
             // Arrange
-            string emptyDate = "";
+            string emptyDate = string.Empty;
 
             // Act
             bool result = PaymentValidator.IsExpirationDateValid(emptyDate);
@@ -689,7 +689,7 @@ namespace Tests.Validators
         public void IsEmailValid_EmptyEmail_ReturnsFalse()
         {
             // Arrange
-            string emptyEmail = "";
+            string emptyEmail = string.Empty;
 
             // Act
             bool result = PaymentValidator.IsEmailValid(emptyEmail);
@@ -732,7 +732,7 @@ namespace Tests.Validators
         public void IsPasswordValid_EmptyPassword_ReturnsFalse()
         {
             // Arrange
-            string emptyPassword = "";
+            string emptyPassword = string.Empty;
 
             // Act
             bool result = PaymentValidator.IsPasswordValid(emptyPassword);

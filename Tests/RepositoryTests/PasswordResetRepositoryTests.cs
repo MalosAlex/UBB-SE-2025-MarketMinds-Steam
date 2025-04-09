@@ -1,3 +1,4 @@
+using System.Collections.Generic;
 using System;
 using System.Data;
 using System.Linq;
@@ -54,6 +55,7 @@ namespace Tests.RepositoryTests
                 .Verifiable();
 
             this.mockDataLink.Setup(dataLink => dataLink.ExecuteNonQuery("StorePasswordResetCode", It.Is<SqlParameter[]>(sqlParameter => sqlParameter.Length == 3)))
+
                 .Verifiable();
 
             // Act
@@ -61,6 +63,7 @@ namespace Tests.RepositoryTests
 
             // Assert
             bool deleteProcedureCalled = false;
+
             foreach (var invocation in this.mockDataLink.Invocations)
             {
                 if (invocation.Method.Name == "ExecuteNonQuery")
@@ -89,6 +92,7 @@ namespace Tests.RepositoryTests
                 .Verifiable();
 
             this.mockDataLink.Setup(dataLink => dataLink.ExecuteNonQuery(storeProcedure, It.Is<SqlParameter[]>(sqlParameter => sqlParameter.Length == 3)))
+
                 .Verifiable();
 
             // Act
@@ -96,6 +100,7 @@ namespace Tests.RepositoryTests
 
             // Assert
             bool storeProcedureCalled = false;
+
             foreach (var invocation in this.mockDataLink.Invocations)
             {
                 if (invocation.Method.Name == "ExecuteNonQuery")
@@ -109,6 +114,7 @@ namespace Tests.RepositoryTests
             }
 
             Assert.That(storeProcedureCalled, Is.True, "StorePasswordResetCode was not called");
+
         }
 
         [Test]
@@ -121,6 +127,7 @@ namespace Tests.RepositoryTests
             string deleteProcedure = "DeleteExistingResetCodes";
 
             this.mockDataLink.Setup(dataLink => dataLink.ExecuteNonQuery(deleteProcedure, It.Is<SqlParameter[]>(sqlParameter => sqlParameter.Length == 1)))
+
                 .Throws(new DatabaseOperationException("Database error"));
 
             // Act & Assert
@@ -249,6 +256,7 @@ namespace Tests.RepositoryTests
                 It.IsAny<string>(),
                 It.Is<SqlParameter[]>(sqlParameter => sqlParameter.Length == 2))).Throws(new DatabaseOperationException("Database error"));
 
+
             // Act & Assert
             try
             {
@@ -363,6 +371,7 @@ namespace Tests.RepositoryTests
             string procedureName = "CleanupExpiredResetCodes";
 
             this.mockDataLink.Setup(dataLink => dataLink.ExecuteNonQuery(procedureName, It.Is<SqlParameter[]>(sqlParameter => sqlParameter.Length == 0)))
+
                 .Verifiable();
 
             // Act
@@ -392,6 +401,7 @@ namespace Tests.RepositoryTests
             string procedureName = "CleanupExpiredResetCodes";
 
             this.mockDataLink.Setup(dataLink => dataLink.ExecuteNonQuery(procedureName, It.Is<SqlParameter[]>(sqlParameter => sqlParameter.Length == 0)))
+
                 .Throws(new DatabaseOperationException("Database error"));
 
             // Act & Assert

@@ -143,7 +143,7 @@ namespace BusinessLayer.Services
                 {
                     // Always return 'Invalid or expired reset code.' for expired codes
                     if (verificationResult.message == "Invalid reset code." || 
-                        verificationResult.message == "Reset code has expired or does not exist.")
+                    verificationResult.message == "Reset code has expired or does not exist.")
                     {
                         return (false, "Invalid or expired reset code.");
                     }

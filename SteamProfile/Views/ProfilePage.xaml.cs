@@ -1,3 +1,11 @@
+using System;
+using System.Collections.Generic;
+using System.IO;
+using System.Linq;
+using System.Runtime.InteropServices.WindowsRuntime;
+using System.Threading.Tasks;
+using System.Diagnostics;
+using System.Data.SqlClient;
 using Microsoft.UI.Xaml;
 using Microsoft.UI.Xaml.Controls;
 using Microsoft.UI.Xaml.Controls.Primitives;
@@ -6,25 +14,14 @@ using Microsoft.UI.Xaml.Input;
 using Microsoft.UI.Xaml.Media;
 using Microsoft.UI.Xaml.Navigation;
 using SteamProfile.ViewModels;
-using System;
-using System.Collections.Generic;
-using System.IO;
-using System.Linq;
-using System.Runtime.InteropServices.WindowsRuntime;
 using Windows.Foundation;
 using Windows.Foundation.Collections;
-using System.Diagnostics;
 using BusinessLayer.Data;
 using BusinessLayer.Repositories;
 using BusinessLayer.Services;
-using System.Threading.Tasks;
 using SteamProfile.Views;
 using BusinessLayer.Services;
 using Microsoft.UI;
-using System.Data.SqlClient;
-
-// To learn more about WinUI, the WinUI project structure,
-// and more about our project templates, see: http://aka.ms/winui-project-info.
 
 namespace SteamProfile.Views
 {
@@ -34,9 +31,8 @@ namespace SteamProfile.Views
     public sealed partial class ProfilePage : Page
     {
         public ProfileViewModel ViewModel { get; private set; }
-        //private bool _isOwnProfile;
-        private int _userId;
-        private bool _isNavigatingAway = false;
+        private int userIdentifier;
+        private bool isNavigatingAway = false;
 
         public ProfilePage()
         {
@@ -62,19 +58,18 @@ namespace SteamProfile.Views
 
                     // Add the UserProfileRepository parameter
                     ProfileViewModel.Initialize(
-                        App.UserService, 
-                        friendsService, 
+                        App.UserService,
+                        friendsService,
                         Microsoft.UI.Dispatching.DispatcherQueue.GetForCurrentThread(),
                         App.UserProfileRepository,
                         App.CollectionsRepository,
                         App.FeaturesService,
-                        App.AchievementsService
-                    );
+                        App.AchievementsService);
                     Debug.WriteLine("ProfileViewModel initialized with services.");
-                    
+
                     ViewModel = ProfileViewModel.Instance;
                 }
-                
+
                 DataContext = ViewModel; // Ensure this is set correctly
                 Debug.WriteLine("Profile data loading initiated.");
             }
@@ -102,7 +97,7 @@ namespace SteamProfile.Views
             Debug.WriteLine($"Navigated away from ProfilePage to {e.SourcePageType.Name}");
 
             base.OnNavigatedFrom(e);
-            _isNavigatingAway = true;
+            isNavigatingAway = true;
             Debug.WriteLine("Navigated away from ProfilePage");
         }
 
@@ -122,14 +117,13 @@ namespace SteamProfile.Views
 
                 // Initialize ProfileViewModel with all required services
                 ProfileViewModel.Initialize(
-                    App.UserService, 
-                    friendsService, 
+                    App.UserService,
+                    friendsService,
                     Microsoft.UI.Dispatching.DispatcherQueue.GetForCurrentThread(),
                     App.UserProfileRepository,
                     App.CollectionsRepository,
                     App.FeaturesService,
-                    App.AchievementsService
-                );
+                    App.AchievementsService);
                 Debug.WriteLine("ProfileViewModel initialized with services.");
             }
 
@@ -144,21 +138,21 @@ namespace SteamProfile.Views
             if (e.Parameter != null)
             {
                 // Use the parameter as the user ID
-                _userId = (int)e.Parameter;
-                Debug.WriteLine($"Using user ID from navigation parameter: {_userId}");
-                
-                // Load the profile data
-                _ = ViewModel.LoadProfileAsync(_userId);
-            }
-            // If no parameter but we're returning to the page and ViewModel has a user ID
-            else if (ViewModel.UserId > 0)
-            {
-                // Use the user ID stored in the ViewModel
-                _userId = ViewModel.UserId;
-                Debug.WriteLine($"Using stored user ID from ViewModel: {_userId}");
+                userIdentifier = (int)e.Parameter;
+                Debug.WriteLine($"Using user ID from navigation parameter: {userIdentifier}");
 
                 // Load the profile data
-                _ = LoadAndUpdateProfile(_userId);  /// VERY IMPORTANT
+                _ = ViewModel.LoadProfileAsync(userIdentifier);
+            }
+            // If no parameter but we're returning to the page and ViewModel has a user ID
+            else if (ViewModel.UserIdentifier > 0)
+            {
+                // Use the user ID stored in the ViewModel
+                userIdentifier = ViewModel.UserIdentifier;
+                Debug.WriteLine($"Using stored user ID from ViewModel: {userIdentifier}");
+
+                // Load the profile data
+                _ = LoadAndUpdateProfile(userIdentifier);  /// VERY IMPORTANT
             }
             else
             {
@@ -167,7 +161,6 @@ namespace SteamProfile.Views
 
             UpdateProfileControl();
         }
-
 
         private async Task LoadAndUpdateProfile(int userId)
         {
@@ -182,7 +175,7 @@ namespace SteamProfile.Views
         {
             // Update the AdaptiveProfileControl when relevant properties change
             if (e.PropertyName == nameof(ViewModel.Username) ||
-                e.PropertyName == nameof(ViewModel.Bio) ||
+                e.PropertyName == nameof(ViewModel.Biography) ||
                 e.PropertyName == nameof(ViewModel.ProfilePicture) ||
                 e.PropertyName == nameof(ViewModel.EquippedHatSource) ||
                 e.PropertyName == nameof(ViewModel.EquippedPetSource) ||
@@ -202,7 +195,10 @@ namespace SteamProfile.Views
         private void UpdateProfileControl()
         {
             // Only update if the control exists
-            if (ProfileControl == null) return;
+            if (ProfileControl == null)
+            {
+                return;
+            }
 
             // Always pass the profile picture as long as it's not null or empty
             string profilePicture = !string.IsNullOrEmpty(ViewModel.ProfilePicture)
@@ -219,14 +215,13 @@ namespace SteamProfile.Views
             // Update the AdaptiveProfileControl
             ProfileControl.UpdateProfile(
                 ViewModel.Username,
-                "", // We're displaying bio separately in the ProfilePage
+                string.Empty,
                 profilePicture,
                 hatPath,
                 petPath,
                 emojiPath,
                 framePath,
-                backgroundPath
-            );
+                backgroundPath);
         }
 
         private async void ShowErrorDialog(string message)
@@ -270,9 +265,9 @@ namespace SteamProfile.Views
                 {
                     // Get the friendship ID for the current user and friend
                     var friendships = App.FriendsService.GetAllFriendships();
-                    var friendship = friendships.FirstOrDefault(f => 
-                        (f.UserId == App.UserService.GetCurrentUser().UserId && f.FriendId == _userId) ||
-                        (f.UserId == _userId && f.FriendId == App.UserService.GetCurrentUser().UserId));
+                    var friendship = friendships.FirstOrDefault(f =>
+                        (f.UserId == App.UserService.GetCurrentUser().UserId && f.FriendId == userIdentifier) ||
+                        (f.UserId == userIdentifier && f.FriendId == App.UserService.GetCurrentUser().UserId));
 
                     if (friendship != null)
                     {
@@ -303,11 +298,10 @@ namespace SteamProfile.Views
         private void Page_Loaded(object sender, RoutedEventArgs e)
         {
             // If we have a valid user ID, refresh the profile
-            if (_userId > 0)
+            if (userIdentifier > 0)
             {
-                _ = ViewModel.LoadProfileAsync(_userId);
+                _ = ViewModel.LoadProfileAsync(userIdentifier);
             }
-            
             // Initial update of the profile control
             UpdateProfileControl();
         }

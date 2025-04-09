@@ -10,19 +10,19 @@ namespace Tests.RepositoryTests
     [TestFixture]
     public class PointsOffersRepositoryTests
     {
-        private PointsOffersRepository _repository;
+        private PointsOffersRepository pointsOffersRepository;
 
         [SetUp]
         public void SetUp()
         {
-            _repository = new PointsOffersRepository();
+            pointsOffersRepository = new PointsOffersRepository();
         }
 
         [Test]
         public void Offers_ReturnsNonNullList()
         {
             // Act
-            var offers = _repository.Offers;
+            var offers = pointsOffersRepository.Offers;
 
             // Assert
             Assert.That(offers, Is.Not.Null);
@@ -32,7 +32,7 @@ namespace Tests.RepositoryTests
         public void Offers_ReturnsCorrectNumberOfOffers()
         {
             // Act
-            var offers = _repository.Offers;
+            var offers = pointsOffersRepository.Offers;
 
             // Assert
             Assert.That(offers.Count, Is.EqualTo(5));
@@ -42,7 +42,7 @@ namespace Tests.RepositoryTests
         public void Offers_FirstOffer_HasCorrectPrice()
         {
             // Act
-            var offers = _repository.Offers;
+            var offers = pointsOffersRepository.Offers;
 
             // Assert
             Assert.That(offers[0].Price, Is.EqualTo(2));
@@ -52,7 +52,7 @@ namespace Tests.RepositoryTests
         public void Offers_FirstOffer_HasCorrectPoints()
         {
             // Act
-            var offers = _repository.Offers;
+            var offers = pointsOffersRepository.Offers;
 
             // Assert
             Assert.That(offers[0].Points, Is.EqualTo(5));
@@ -62,7 +62,7 @@ namespace Tests.RepositoryTests
         public void Offers_SecondOffer_HasCorrectPrice()
         {
             // Act
-            var offers = _repository.Offers;
+            var offers = pointsOffersRepository.Offers;
 
             // Assert
             Assert.That(offers[1].Price, Is.EqualTo(8));
@@ -72,7 +72,7 @@ namespace Tests.RepositoryTests
         public void Offers_SecondOffer_HasCorrectPoints()
         {
             // Act
-            var offers = _repository.Offers;
+            var offers = pointsOffersRepository.Offers;
 
             // Assert
             Assert.That(offers[1].Points, Is.EqualTo(25));
@@ -82,7 +82,7 @@ namespace Tests.RepositoryTests
         public void Offers_ThirdOffer_HasCorrectPrice()
         {
             // Act
-            var offers = _repository.Offers;
+            var offers = pointsOffersRepository.Offers;
 
             // Assert
             Assert.That(offers[2].Price, Is.EqualTo(15));
@@ -92,7 +92,7 @@ namespace Tests.RepositoryTests
         public void Offers_ThirdOffer_HasCorrectPoints()
         {
             // Act
-            var offers = _repository.Offers;
+            var offers = pointsOffersRepository.Offers;
 
             // Assert
             Assert.That(offers[2].Points, Is.EqualTo(50));
@@ -102,7 +102,7 @@ namespace Tests.RepositoryTests
         public void Offers_FourthOffer_HasCorrectPrice()
         {
             // Act
-            var offers = _repository.Offers;
+            var offers = pointsOffersRepository.Offers;
 
             // Assert
             Assert.That(offers[3].Price, Is.EqualTo(20));
@@ -112,7 +112,7 @@ namespace Tests.RepositoryTests
         public void Offers_FourthOffer_HasCorrectPoints()
         {
             // Act
-            var offers = _repository.Offers;
+            var offers = pointsOffersRepository.Offers;
 
             // Assert
             Assert.That(offers[3].Points, Is.EqualTo(100));
@@ -122,7 +122,7 @@ namespace Tests.RepositoryTests
         public void Offers_FifthOffer_HasCorrectPrice()
         {
             // Act
-            var offers = _repository.Offers;
+            var offers = pointsOffersRepository.Offers;
 
             // Assert
             Assert.That(offers[4].Price, Is.EqualTo(50));
@@ -132,7 +132,7 @@ namespace Tests.RepositoryTests
         public void Offers_FifthOffer_HasCorrectPoints()
         {
             // Act
-            var offers = _repository.Offers;
+            var offers = pointsOffersRepository.Offers;
 
             // Assert
             Assert.That(offers[4].Points, Is.EqualTo(500));

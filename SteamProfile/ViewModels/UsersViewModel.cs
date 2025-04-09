@@ -1,56 +1,56 @@
+using System;
+using System.Collections.ObjectModel;
 using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
 using BusinessLayer.Models;
 using BusinessLayer.Services;
-using System;
-using System.Collections.ObjectModel;
 using BusinessLayer.Services.Interfaces;
 
-namespace SteamProfile.ViewModels { 
-
+namespace SteamProfile.ViewModels
+{
     public partial class UsersViewModel : ObservableObject
     {
         // Singleton instance to ensure only one ViewModel exists for the Users page
-        private static UsersViewModel _instance;
-        private readonly IUserService _userService;
-        private static Random _random = new Random();
+        private static UsersViewModel userViewModelInstance;
+        private readonly IUserService userService;
+        private static Random randomUserIdentifer = new Random();
 
         // ObservableCollection automatically notifies the UI when items are added/removed
         // The [ObservableProperty] attribute generates the property with INotifyPropertyChanged implementation
         [ObservableProperty]
-        private ObservableCollection<User> _users;
+        private ObservableCollection<User> usersList;
 
         // SelectedUser property for tracking the currently selected user in the DataGrid
         // The [ObservableProperty] attribute ensures UI updates when selection changes
         [ObservableProperty]
-        private User _selectedUser;
+        private User selectedUser;
 
         public static UsersViewModel Instance
         {
             get
             {
-                if (_instance == null)
+                if (userViewModelInstance == null)
                 {
-                    _instance = new UsersViewModel(App.UserService);
+                    userViewModelInstance = new UsersViewModel(App.UserService);
                 }
-                return _instance;
+                return userViewModelInstance;
             }
         }
 
         private UsersViewModel(IUserService userService)
         {
-            _userService = userService ?? throw new ArgumentNullException(nameof(userService));
-            _users = new ObservableCollection<User>();
+            userService = userService ?? throw new ArgumentNullException(nameof(userService));
+            usersList = new ObservableCollection<User>();
             LoadUsers();
         }
 
         public void LoadUsers()
         {
-            var users = _userService.GetAllUsers();
-            Users.Clear();
+            var users = userService.GetAllUsers();
+            usersList.Clear();
             foreach (var user in users)
             {
-                Users.Add(user);
+                usersList.Add(user);
             }
         }
 
@@ -60,27 +60,26 @@ namespace SteamProfile.ViewModels {
             // Create a new random user
             var randomUser = new User
             {
-                Username = $"RandomUser_{_random.Next(1000)}",
-                Email = $"random{_random.Next(1000)}@example.com",
+                Username = $"RandomUser_{randomUserIdentifer.Next(1000)}",
+                Email = $"random{randomUserIdentifer.Next(1000)}@example.com",
                 Password = "RandomPassword123",
                // Description = "This is a random test user",
-                IsDeveloper = _random.Next(2) == 1,
+                IsDeveloper = randomUserIdentifer.Next(2) == 1,
                 CreatedAt = DateTime.Now
             };
 
             // First save to database through the service
-            var createdUser = _userService.CreateUser(randomUser);
+            var createdUser = userService.CreateUser(randomUser);
             // Only update UI if database operation was successful
-
             if (createdUser != null)
             {
-                Users.Add(createdUser);
+                usersList.Add(createdUser);
             }
         }
 
         public User? GetCurrentUser()
         {
-            return _userService.GetCurrentUser();
+            return userService.GetCurrentUser();
         }
     }
-} 
+}

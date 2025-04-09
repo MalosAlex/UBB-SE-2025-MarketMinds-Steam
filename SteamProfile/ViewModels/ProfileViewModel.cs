@@ -1,169 +1,169 @@
-﻿using CommunityToolkit.Mvvm.ComponentModel;
+﻿using System;
+using System.Collections.ObjectModel;
+using System.Diagnostics;
+using System.Globalization;
+using System.Threading.Tasks;
+using System.Linq;
+using System.Collections.Generic;
+using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
 using Microsoft.UI.Dispatching;
 using BusinessLayer.Models;
 using BusinessLayer.Services;
 using SteamProfile.Views;
-using System;
-using System.Collections.ObjectModel;
-using System.Diagnostics;
-using System.Globalization;
-using System.Threading.Tasks;
 using Microsoft.UI.Xaml;
 using BusinessLayer.Repositories;
-using System.Linq;
-using System.Collections.Generic;
 using BusinessLayer.Services.Interfaces;
 
 namespace SteamProfile.ViewModels
 {
     public partial class ProfileViewModel : ObservableObject
     {
-        private static ProfileViewModel _instance;
-        private readonly IUserService _userService;
-        private readonly IFriendsService _friendsService;
-        private readonly DispatcherQueue _dispatcherQueue;
-        private readonly UserProfilesRepository _userProfileRepository;
-        private readonly FeaturesService _featuresService;
-        private readonly IAchievementsService _achievementsService;
+        private static ProfileViewModel profileViewModelInstance;
+        private readonly IUserService userService;
+        private readonly IFriendsService friendsService;
+        private readonly DispatcherQueue dispatcherQueue;
+        private readonly UserProfilesRepository userProfileRepository;
+        private readonly FeaturesService featuresService;
+        private readonly IAchievementsService achievementsService;
 
         [ObservableProperty]
-        private string _username = string.Empty;
+        private string username = string.Empty;
 
         [ObservableProperty]
-        private string _bio = string.Empty;
+        private string biography = string.Empty;
 
         [ObservableProperty]
-        private int _friendCount;
+        private int friendCount;
 
         [ObservableProperty]
-        private decimal _money;
+        private decimal moneyBalance;
 
         [ObservableProperty]
-        private int _points;
+        private int pointsBalance;
 
         [ObservableProperty]
-        private string _profilePicture = string.Empty;
+        private string profilePicture = string.Empty;
 
         [ObservableProperty]
-        private string _coverPhoto = string.Empty;
+        private string coverPhotography = string.Empty;
 
         [ObservableProperty]
-        private ObservableCollection<Collection> _collections = new();
+        private ObservableCollection<Collection> gameCollections = new();
 
         [ObservableProperty]
-        private bool _isLoading = false;
+        private bool isLoading = false;
 
         [ObservableProperty]
-        private string _errorMessage = string.Empty;
+        private string errorMessage = string.Empty;
 
         [ObservableProperty]
-        private bool _isOwner = true;
+        private bool isProfileOwner = true;
 
         [ObservableProperty]
-        private int _userId;
+        private int userIdentifier;
 
         [ObservableProperty]
-        private bool _hasGameplayAchievement;
+        private bool hasGameplayAchievement;
 
         [ObservableProperty]
-        private bool _hasCollectionAchievement;
+        private bool hasCollectionAchievement;
 
         [ObservableProperty]
-        private bool _hasSocialAchievement;
+        private bool hasSocialAchievement;
 
         [ObservableProperty]
-        private bool _hasMarketAchievement;
+        private bool hasMarketAchievement;
 
         [ObservableProperty]
-        private bool _hasCustomizationAchievement;
+        private bool hasCustomizationAchievement;
 
         [ObservableProperty]
-        private bool _hasCommunityAchievement;
+        private bool hasCommunityAchievement;
 
         [ObservableProperty]
-        private bool _hasEventAchievement;
+        private bool hasEventAchievement;
 
         [ObservableProperty]
-        private bool _hasSpecialAchievement;
+        private bool hasSpecialAchievement;
 
         [ObservableProperty]
-        private string _equippedFrameSource = string.Empty;
+        private string equippedFrameSource = string.Empty;
 
         [ObservableProperty]
-        private string _equippedHatSource = string.Empty;
+        private string equippedHatSource = string.Empty;
 
         [ObservableProperty]
-        private string _equippedPetSource = string.Empty;
+        private string equippedPetSource = string.Empty;
 
         [ObservableProperty]
-        private string _equippedEmojiSource = string.Empty;
+        private string equippedEmojiSource = string.Empty;
 
         [ObservableProperty]
-        private string _equippedBackgroundSource = string.Empty;
+        private string equippedBackgroundSource = string.Empty;
 
         [ObservableProperty]
-        private bool _hasEquippedFrame;
+        private bool hasEquippedFrame;
 
         [ObservableProperty]
-        private bool _hasEquippedHat;
+        private bool hasEquippedHat;
 
         [ObservableProperty]
-        private bool _hasEquippedPet;
+        private bool hasEquippedPet;
 
         [ObservableProperty]
-        private bool _hasEquippedEmoji;
+        private bool hasEquippedEmoji;
 
         [ObservableProperty]
-        private bool _hasEquippedBackground;
+        private bool hasEquippedBackground;
 
-        private static CollectionsRepository _collectionsRepository;
-
-        [ObservableProperty]
-        private bool _isFriend = false;
+        private static CollectionsRepository gameCollectionsRepository;
 
         [ObservableProperty]
-        private string _friendButtonText = "Add Friend";
+        private bool isFriend = false;
 
         [ObservableProperty]
-        private string _friendButtonStyle = "AccentButtonStyle";
-
-        public static bool IsInitialized => _instance != null;
+        private string friendButtonText = "Add Friend";
 
         [ObservableProperty]
-        private AchievementWithStatus _friendshipsAchievement;
+        private string friendButtonStyle = "AccentButtonStyle";
+
+        public static bool IsInitialized => profileViewModelInstance != null;
 
         [ObservableProperty]
-        private AchievementWithStatus _ownedGamesAchievement;
+        private AchievementWithStatus friendshipsAchievement;
 
         [ObservableProperty]
-        private AchievementWithStatus _soldGamesAchievement;
+        private AchievementWithStatus ownedGamesAchievement;
 
         [ObservableProperty]
-        private AchievementWithStatus _numberOfReviewsAchievement;
+        private AchievementWithStatus soldGamesAchievement;
 
         [ObservableProperty]
-        private bool _isDeveloper;
+        private AchievementWithStatus numberOfReviewsAchievement;
 
         [ObservableProperty]
-        private AchievementWithStatus _numberOfReviewsReceived;
-        [ObservableProperty]
-        private AchievementWithStatus _developerAchievement;
+        private bool isDeveloper;
 
         [ObservableProperty]
-        private AchievementWithStatus _yearsOfActivity;
+        private AchievementWithStatus numberOfReviewsReceived;
         [ObservableProperty]
-        private AchievementWithStatus _numberOfPostsGetTopAchievement;
+        private AchievementWithStatus developerAchievement;
+
+        [ObservableProperty]
+        private AchievementWithStatus yearsOfActivity;
+        [ObservableProperty]
+        private AchievementWithStatus numberOfPostsGetTopAchievement;
 
         public static ProfileViewModel Instance
         {
             get
             {
-                if (_instance == null)
+                if (profileViewModelInstance == null)
                 {
                     throw new InvalidOperationException("ProfileViewModel must be initialized with Initialize() first");
                 }
-                return _instance;
+                return profileViewModelInstance;
             }
         }
 
@@ -176,11 +176,11 @@ namespace SteamProfile.ViewModels
             FeaturesService featuresService,
             IAchievementsService achievementsService)
         {
-            if (_instance != null)
+            if (profileViewModelInstance != null)
             {
                 throw new InvalidOperationException("ProfileViewModel is already initialized");
             }
-            _instance = new ProfileViewModel(userService, friendsService, dispatcherQueue, userProfileRepository, collectionsRepository, featuresService, achievementsService);
+            profileViewModelInstance = new ProfileViewModel(userService, friendsService, dispatcherQueue, userProfileRepository, collectionsRepository, featuresService, achievementsService);
         }
 
         public ProfileViewModel(
@@ -192,19 +192,19 @@ namespace SteamProfile.ViewModels
             FeaturesService featuresService,
             IAchievementsService achievementsService)
         {
-            _userService = userService ?? throw new ArgumentNullException(nameof(userService));
-            _friendsService = friendsService ?? throw new ArgumentNullException(nameof(friendsService));
-            _dispatcherQueue = dispatcherQueue ?? throw new ArgumentNullException(nameof(dispatcherQueue));
-            _userProfileRepository = userProfileRepository ?? throw new ArgumentNullException(nameof(userProfileRepository));
-            _collectionsRepository = collectionsRepository ?? throw new ArgumentNullException(nameof(collectionsRepository));
-            _featuresService = featuresService ?? throw new ArgumentNullException(nameof(featuresService));
-            _achievementsService = achievementsService ?? throw new ArgumentNullException(nameof(achievementsService));
+            this.userService = userService ?? throw new ArgumentNullException(nameof(userService));
+            this.friendsService = friendsService ?? throw new ArgumentNullException(nameof(friendsService));
+            this.dispatcherQueue = dispatcherQueue ?? throw new ArgumentNullException(nameof(dispatcherQueue));
+            this.userProfileRepository = userProfileRepository ?? throw new ArgumentNullException(nameof(userProfileRepository));
+            gameCollectionsRepository = collectionsRepository ?? throw new ArgumentNullException(nameof(collectionsRepository));
+            this.featuresService = featuresService ?? throw new ArgumentNullException(nameof(featuresService));
+            this.achievementsService = achievementsService ?? throw new ArgumentNullException(nameof(achievementsService));
 
             // Register for feature equipped/unequipped events
-            FeaturesViewModel.FeatureEquipStatusChanged += async (sender, userId) => 
+            FeaturesViewModel.FeatureEquipStatusChanged += async (sender, userId) =>
             {
                 // Only refresh if it's the current user's profile being displayed
-                if (userId == UserId)
+                if (userId == userIdentifier)
                 {
                     await RefreshEquippedFeaturesAsync();
                 }
@@ -215,16 +215,13 @@ namespace SteamProfile.ViewModels
         {
             try
             {
-                await _dispatcherQueue.EnqueueAsync(() => IsLoading = true);
-                await _dispatcherQueue.EnqueueAsync(() => ErrorMessage = string.Empty);
-
+                await dispatcherQueue.EnqueueAsync(() => IsLoading = true);
+                await dispatcherQueue.EnqueueAsync(() => ErrorMessage = string.Empty);
                 Debug.WriteLine($"Loading profile for user {user_id}");
-
-
                 if (user_id <= 0)
                 {
                     Debug.WriteLine($"Invalid user ID: {user_id}");
-                    await _dispatcherQueue.EnqueueAsync(() =>
+                    await dispatcherQueue.EnqueueAsync(() =>
                     {
                         ErrorMessage = "Invalid user ID provided.";
                         IsLoading = false;
@@ -236,12 +233,12 @@ namespace SteamProfile.ViewModels
                 try
                 {
                    // Instead of using Task.Run, try direct call to reduce complexity
-                   currentUser = _userService.GetUserById(user_id);
+                   currentUser = userService.GetUserById(user_id);
 
                     if (currentUser == null)
                     {
                         Debug.WriteLine($"User with ID {user_id} not found");
-                        await _dispatcherQueue.EnqueueAsync(() =>
+                        await dispatcherQueue.EnqueueAsync(() =>
                         {
                             ErrorMessage = "User not found.";
                             IsLoading = false;
@@ -260,22 +257,22 @@ namespace SteamProfile.ViewModels
                     }
                     Debug.WriteLine($"Stack trace: {ex.StackTrace}");
 
-                    await _dispatcherQueue.EnqueueAsync(() =>
+                    await dispatcherQueue.EnqueueAsync(() =>
                     {
                         ErrorMessage = "Failed to load user data.";
                         IsLoading = false;
                     });
                     return;
                 }
-                // Continue with rest of the method only if we successfully got a user
 
+                // Continue with rest of the method only if we successfully got a user
                 try
                 {
                     UserProfile userProfile = null;
                     try
                     {
                         // Get user profile (optional - can proceed without)
-                        userProfile = _userProfileRepository.GetUserProfileByUserId(currentUser.UserId);
+                        userProfile = userProfileRepository.GetUserProfileByUserId(currentUser.UserId);
                         Debug.WriteLine($"Retrieved profile ID: {userProfile?.ProfileId.ToString() ?? "null"}");
                     }
                     catch (Exception ex)
@@ -284,14 +281,14 @@ namespace SteamProfile.ViewModels
                         // Continue without profile info
                     }
 
-                    var currentUserId = _userService.GetCurrentUser().UserId;
-                    var isFriend = await Task.Run(() => _friendsService.AreUsersFriends(currentUserId, user_id));
-                    // Get equipped features (safer direct call instead of Task.Run)
+                    var currentUserId = userService.GetCurrentUser().UserId;
+                    var isFriend = await Task.Run(() => friendsService.AreUsersFriends(currentUserId, user_id));
 
+                    // Get equipped features (safer direct call instead of Task.Run)
                     List<Feature> equippedFeatures = new List<Feature>();
                     try
                     {
-                        equippedFeatures = _featuresService.GetUserEquippedFeatures(currentUser.UserId);
+                        equippedFeatures = featuresService.GetUserEquippedFeatures(currentUser.UserId);
                         Debug.WriteLine($"Retrieved {equippedFeatures.Count} equipped features");
                     }
                     catch (Exception ex)
@@ -300,26 +297,26 @@ namespace SteamProfile.ViewModels
                         // Continue with empty features list
                     }
 
-                    await _dispatcherQueue.EnqueueAsync(() =>
+                    await dispatcherQueue.EnqueueAsync(() =>
                     {
                         if (currentUser != null)
                         {
-                            IsOwner = user_id == currentUserId;
+                            isProfileOwner = user_id == currentUserId;
                             // Basic user info from Users table
-                            UserId = currentUser.UserId;
+                            userIdentifier = currentUser.UserId;
                             Username = currentUser.Username ?? string.Empty;
-                            Debug.WriteLine($"Current user {Username}; isOwner = {IsOwner}");
+                            Debug.WriteLine($"Current user {Username}; isProfileOwner = {isProfileOwner}");
                             IsDeveloper = currentUser.IsDeveloper;
                             // Update friend status
                             IsFriend = isFriend;
                             FriendButtonText = isFriend ? "Unfriend" : "Add Friend";
                             FriendButtonStyle = "AccentButtonStyle";
-                            
-                            Debug.WriteLine($"Current user {Username} ; isOwner = {IsOwner} ; isFriend = {IsFriend}");
+
+                            Debug.WriteLine($"Current user {Username} ; isProfileOwner = {isProfileOwner} ; isFriend = {IsFriend}");
                             // Profile info from UserProfiles table
                             if (userProfile != null)
                             {
-                                Bio = userProfile.Bio ?? string.Empty;
+                                biography = userProfile.Bio ?? string.Empty;
                                 // Add ms-appx:/// prefix if it's not already there
                                 ProfilePicture = userProfile.ProfilePicture != null
                                     ? (userProfile.ProfilePicture.StartsWith("ms-appx:///")
@@ -332,7 +329,7 @@ namespace SteamProfile.ViewModels
                             // Load friend count
                             try
                             {
-                                FriendCount = _friendsService.GetFriendshipCount(currentUser.UserId);
+                                FriendCount = friendsService.GetFriendshipCount(currentUser.UserId);
                             }
                             catch (Exception ex)
                             {
@@ -341,7 +338,7 @@ namespace SteamProfile.ViewModels
                             }
                             // Set achievement values
                             // First unlock any achievements the user has earned
-                            _achievementsService.UnlockAchievementForUser(currentUser.UserId);
+                            achievementsService.UnlockAchievementForUser(currentUser.UserId);
 
                             // Then load achievements
                             FriendshipsAchievement = GetTopAchievement(currentUser.UserId, "Friendships");
@@ -359,17 +356,17 @@ namespace SteamProfile.ViewModels
                             Debug.WriteLine($"Sold Games: {SoldGamesAchievement?.Achievement?.AchievementName}, Unlocked: {SoldGamesAchievement?.IsUnlocked}");
                             Debug.WriteLine($"Reviews: {NumberOfReviewsAchievement?.Achievement?.AchievementName}, Unlocked: {NumberOfReviewsAchievement?.IsUnlocked}");
 
-                            Money = 0;
-                            Points = 0;
-                            CoverPhoto = "default_cover.png";
+                            moneyBalance = 0;
+                            pointsBalance = 0;
+                            coverPhotography = "default_cover.png";
 
                             try
                             {
-                                var lastThreeCollections = _collectionsRepository.GetLastThreeCollectionsForUser(user_id);
-                                Collections.Clear();
+                                var lastThreeCollections = gameCollectionsRepository.GetLastThreeCollectionsForUser(user_id);
+                                gameCollections.Clear();
                                 foreach (var collection in lastThreeCollections)
                                 {
-                                    Collections.Add(collection);
+                                    gameCollections.Add(collection);
                                 }
                             }
                             catch (Exception ex)
@@ -389,7 +386,7 @@ namespace SteamProfile.ViewModels
                     }
                     Debug.WriteLine($"Stack trace: {ex.StackTrace}");
 
-                    await _dispatcherQueue.EnqueueAsync(() =>
+                    await dispatcherQueue.EnqueueAsync(() =>
                     {
                         ErrorMessage = "Failed to load profile data. Please try again later.";
                         IsLoading = false;
@@ -412,14 +409,14 @@ namespace SteamProfile.ViewModels
             {
                 // Use a known-good image path that definitely exists in the project
                 const string DEFAULT_IMAGE = "ms-appx:///Assets/default-profile.png";
-                
+
                 // Reset all equipped features to a valid empty image
                 EquippedFrameSource = DEFAULT_IMAGE;
                 EquippedHatSource = DEFAULT_IMAGE;
                 EquippedPetSource = DEFAULT_IMAGE;
                 EquippedEmojiSource = DEFAULT_IMAGE;
                 EquippedBackgroundSource = DEFAULT_IMAGE;
-                
+
                 // Reset visibility flags
                 HasEquippedFrame = false;
                 HasEquippedHat = false;
@@ -439,9 +436,9 @@ namespace SteamProfile.ViewModels
                             Debug.WriteLine("Skipping null feature");
                             continue;
                         }
-                            
+
                         Debug.WriteLine($"Processing feature: ID={feature.FeatureId}, Type={feature.Type}, Source={feature.Source}, Equipped={feature.Equipped}");
-                        
+
                         if (feature.Equipped)
                         {
                             try
@@ -453,7 +450,7 @@ namespace SteamProfile.ViewModels
                                     Debug.WriteLine($"Skipping feature {feature.FeatureId} with empty source");
                                     continue;
                                 }
-                                    
+
                                 if (!source.StartsWith("ms-appx:///"))
                                 {
                                     source = $"ms-appx:///{source}";
@@ -504,7 +501,7 @@ namespace SteamProfile.ViewModels
                         }
                     }
                 }
-                
+
                 Debug.WriteLine($"Feature visibility - Frame: {HasEquippedFrame}, Hat: {HasEquippedHat}, Pet: {HasEquippedPet}, Emoji: {HasEquippedEmoji}, Background: {HasEquippedBackground}");
             }
             catch (Exception ex)
@@ -515,7 +512,7 @@ namespace SteamProfile.ViewModels
                     Debug.WriteLine($"Inner exception: {ex.InnerException.Message}");
                 }
                 Debug.WriteLine($"Stack trace: {ex.StackTrace}");
-                
+
                 // In case of error, ensure we have valid image sources
                 const string DEFAULT_IMAGE = "ms-appx:///Assets/default-profile.png";
                 EquippedFrameSource = DEFAULT_IMAGE;
@@ -533,22 +530,22 @@ namespace SteamProfile.ViewModels
                 if (IsFriend)
                 {
                     // Remove friend
-                    var friendshipId = await Task.Run(() => _friendsService.GetFriendshipId(_userService.GetCurrentUser().UserId, UserId));
+                    var friendshipId = await Task.Run(() => friendsService.GetFriendshipId(userService.GetCurrentUser().UserId, userIdentifier));
                     if (friendshipId.HasValue)
                     {
-                        await Task.Run(() => _friendsService.RemoveFriend(friendshipId.Value));
+                        await Task.Run(() => friendsService.RemoveFriend(friendshipId.Value));
                         IsFriend = false;
                         FriendButtonText = "Add Friend";
-                        FriendCount = _friendsService.GetFriendshipCount(UserId);
+                        FriendCount = friendsService.GetFriendshipCount(userIdentifier);
                     }
                 }
                 else
                 {
                     // Add friend
-                    await Task.Run(() => _friendsService.AddFriend(_userService.GetCurrentUser().UserId, UserId));
+                    await Task.Run(() => friendsService.AddFriend(userService.GetCurrentUser().UserId, userIdentifier));
                     IsFriend = true;
                     FriendButtonText = "Unfriend";
-                    FriendCount = _friendsService.GetFriendshipCount(UserId);
+                    FriendCount = friendsService.GetFriendshipCount(userIdentifier);
                 }
             }
             catch (Exception ex)
@@ -562,7 +559,7 @@ namespace SteamProfile.ViewModels
             try
             {
                 // Get all achievements for this category
-                var achievements = _achievementsService.GetAchievementsWithStatusForUser(userId)
+                var achievements = achievementsService.GetAchievementsWithStatusForUser(userId)
                     .Where(a => a.Achievement.AchievementType == category)
                     .ToList();
 
@@ -662,14 +659,14 @@ namespace SteamProfile.ViewModels
         [RelayCommand]
         private void ShowFriends()
         {
-            NavigationService.Instance.Navigate(typeof(Views.FriendsPage), UserId);
+            NavigationService.Instance.Navigate(typeof(Views.FriendsPage), userIdentifier);
         }
 
         [RelayCommand]
         private void BackToProfile()
         {
             // Get the current user's ID from the UserService
-            int currentUserId = _userService.GetCurrentUser().UserId;
+            int currentUserId = userService.GetCurrentUser().UserId;
 
             // Navigate back to the Profile page with the current user ID
             NavigationService.Instance.Navigate(typeof(ProfilePage), currentUserId);
@@ -679,22 +676,22 @@ namespace SteamProfile.ViewModels
         {
             try
             {
-                Debug.WriteLine($"Refreshing equipped features for user {UserId}");
-                
+                Debug.WriteLine($"Refreshing equipped features for user {userIdentifier}");
+
                 // Get the updated equipped features
-                var equippedFeatures = _featuresService.GetUserEquippedFeatures(UserId);
-                
+                var equippedFeatures = featuresService.GetUserEquippedFeatures(userIdentifier);
+
                 // Process and update the UI
-                await _dispatcherQueue.EnqueueAsync(() =>
+                await dispatcherQueue.EnqueueAsync(() =>
                 {
                     ProcessEquippedFeatures(equippedFeatures);
                 });
-                
+
                 Debug.WriteLine("Equipped features refreshed successfully");
             }
-            catch (Exception ex)
+            catch (Exception exception)
             {
-                Debug.WriteLine($"Error refreshing equipped features: {ex.Message}");
+                Debug.WriteLine($"Error refreshing equipped features: {exception.Message}");
             }
         }
     }
@@ -722,6 +719,4 @@ namespace SteamProfile.ViewModels
             return tcs.Task;
         }
     }
-
-
 }

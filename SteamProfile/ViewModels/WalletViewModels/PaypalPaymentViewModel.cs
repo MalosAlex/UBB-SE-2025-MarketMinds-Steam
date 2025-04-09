@@ -1,10 +1,10 @@
-﻿using CommunityToolkit.Mvvm.ComponentModel;
+﻿using System;
+using System.Collections.Generic;
+using System.Threading.Tasks;
+using CommunityToolkit.Mvvm.ComponentModel;
 using Microsoft.UI.Xaml;
 using BusinessLayer.Models;
 using BusinessLayer.Validators;
-using System;
-using System.Collections.Generic;
-using System.Threading.Tasks;
 
 namespace SteamProfile.ViewModels
 {

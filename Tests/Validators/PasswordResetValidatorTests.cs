@@ -29,7 +29,7 @@ namespace Tests.Validators
             // Assert
             Assert.That(result.isValid, Is.True);
         }
-        
+
         [Test]
         public void ValidateEmail_WithValidEmail_ReturnsEmptyMessage()
         {
@@ -47,7 +47,7 @@ namespace Tests.Validators
         public void ValidateEmail_WithEmptyEmail_ReturnsFalse()
         {
             // Arrange
-            string email = "";
+            string email = string.Empty;
 
             // Act
             var result = validator.ValidateEmail(email);
@@ -55,12 +55,13 @@ namespace Tests.Validators
             // Assert
             Assert.That(result.isValid, Is.False);
         }
-        
+
         [Test]
         public void ValidateEmail_WithEmptyEmail_ReturnsRequiredMessage()
         {
             // Arrange
             string email = "";
+
 
             // Act
             var result = validator.ValidateEmail(email);
@@ -81,7 +82,7 @@ namespace Tests.Validators
             // Assert
             Assert.That(result.isValid, Is.False);
         }
-        
+
         [Test]
         public void ValidateEmail_WithNullEmail_ReturnsRequiredMessage()
         {
@@ -107,7 +108,7 @@ namespace Tests.Validators
             // Assert
             Assert.That(result.isValid, Is.False);
         }
-        
+
         [Test]
         public void ValidateEmail_WithWhitespaceEmail_ReturnsRequiredMessage()
         {
@@ -135,7 +136,7 @@ namespace Tests.Validators
             // Assert
             Assert.That(result.isValid, Is.False);
         }
-        
+
         [TestCase("test")]
         [TestCase("test@")]
         [TestCase("@example")]
@@ -164,7 +165,7 @@ namespace Tests.Validators
             // Assert
             Assert.That(result.isValid, Is.True);
         }
-        
+
         [TestCase("test@example.com")]
         [TestCase("user.name@domain.co.uk")]
         [TestCase("firstname.lastname@example.org")]
@@ -195,7 +196,7 @@ namespace Tests.Validators
             // Assert
             Assert.That(result.isValid, Is.True);
         }
-        
+
         [Test]
         public void ValidateResetCode_WithValidCode_ReturnsEmptyMessage()
         {
@@ -213,7 +214,7 @@ namespace Tests.Validators
         public void ValidateResetCode_WithEmptyCode_ReturnsFalse()
         {
             // Arrange
-            string code = "";
+            string code = string.Empty;
 
             // Act
             var result = validator.ValidateResetCode(code);
@@ -221,12 +222,13 @@ namespace Tests.Validators
             // Assert
             Assert.That(result.isValid, Is.False);
         }
-        
+
         [Test]
         public void ValidateResetCode_WithEmptyCode_ReturnsRequiredMessage()
         {
             // Arrange
             string code = "";
+
 
             // Act
             var result = validator.ValidateResetCode(code);
@@ -247,7 +249,7 @@ namespace Tests.Validators
             // Assert
             Assert.That(result.isValid, Is.False);
         }
-        
+
         [Test]
         public void ValidateResetCode_WithNullCode_ReturnsRequiredMessage()
         {
@@ -273,7 +275,7 @@ namespace Tests.Validators
             // Assert
             Assert.That(result.isValid, Is.False);
         }
-        
+
         [Test]
         public void ValidateResetCode_WithWhitespaceCode_ReturnsRequiredMessage()
         {
@@ -300,7 +302,7 @@ namespace Tests.Validators
             // Assert
             Assert.That(result.isValid, Is.False);
         }
-        
+
         [TestCase("12345")]
         [TestCase("1234567")]
         [TestCase("abcdef")]
@@ -327,7 +329,7 @@ namespace Tests.Validators
             // Assert
             Assert.That(result.isValid, Is.True);
         }
-        
+
         [TestCase("123456")]
         [TestCase("654321")]
         [TestCase("000000")]
@@ -357,7 +359,7 @@ namespace Tests.Validators
             // Assert
             Assert.That(result.isValid, Is.True);
         }
-        
+
         [Test]
         public void ValidatePassword_WithValidPassword_ReturnsEmptyMessage()
         {
@@ -375,7 +377,7 @@ namespace Tests.Validators
         public void ValidatePassword_WithEmptyPassword_ReturnsFalse()
         {
             // Arrange
-            string password = "";
+            string password = string.Empty;
 
             // Act
             var result = validator.ValidatePassword(password);
@@ -383,12 +385,14 @@ namespace Tests.Validators
             // Assert
             Assert.That(result.isValid, Is.False);
         }
-        
+
         [Test]
         public void ValidatePassword_WithEmptyPassword_ReturnsRequiredMessage()
         {
             // Arrange
+
             string password = "";
+
 
             // Act
             var result = validator.ValidatePassword(password);
@@ -409,7 +413,7 @@ namespace Tests.Validators
             // Assert
             Assert.That(result.isValid, Is.False);
         }
-        
+
         [Test]
         public void ValidatePassword_WithNullPassword_ReturnsRequiredMessage()
         {
@@ -435,7 +439,7 @@ namespace Tests.Validators
             // Assert
             Assert.That(result.isValid, Is.False);
         }
-        
+
         [Test]
         public void ValidatePassword_WithWhitespacePassword_ReturnsRequiredMessage()
         {
@@ -609,4 +613,4 @@ namespace Tests.Validators
 
         #endregion
     }
-} 
+}

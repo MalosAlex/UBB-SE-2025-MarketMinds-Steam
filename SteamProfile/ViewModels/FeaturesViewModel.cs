@@ -1,4 +1,13 @@
-﻿using BusinessLayer.Models;
+﻿using System;
+using System.Collections.Generic;
+using System.Collections.ObjectModel;
+using System.ComponentModel;
+using System.Diagnostics;
+using System.IO;
+using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
+using BusinessLayer.Models;
 using BusinessLayer.Repositories;
 using BusinessLayer.Services;
 using BusinessLayer.Services.Interfaces;
@@ -10,15 +19,6 @@ using Microsoft.UI.Xaml.Controls;
 using Microsoft.UI.Xaml.Media;
 using Microsoft.UI.Xaml.Media.Imaging;
 using SteamProfile.Views;
-using System;
-using System.Collections.Generic;
-using System.Collections.ObjectModel;
-using System.ComponentModel;
-using System.Diagnostics;
-using System.IO;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace SteamProfile.ViewModels
 {
@@ -28,10 +28,10 @@ namespace SteamProfile.ViewModels
         private readonly IUserService userService;
         private XamlRoot xamlRoot;
         private string statusMessage = string.Empty;
-        private readonly UserProfilesRepository _userProfilesRepository;
+        private readonly UserProfilesRepository userProfilesRepository;
         private SolidColorBrush statusColor = new(Colors.Black);
         private FeatureDisplay selectedFeature;
-        private XamlRoot _xamlRoot;
+        private XamlRoot featuresXamlRoot;
 
         public string StatusMessage
         {
@@ -56,7 +56,7 @@ namespace SteamProfile.ViewModels
         public ObservableCollection<FeatureDisplay> Backgrounds { get; } = new();
         public ObservableCollection<FeatureDisplay> Pets { get; } = new();
         public ObservableCollection<FeatureDisplay> Hats { get; } = new();
-  
+
         public FeaturesViewModel(FeaturesService featuresService, IUserService userService)
         {
             this.featuresService = featuresService;
@@ -70,14 +70,14 @@ namespace SteamProfile.ViewModels
         }
         public void Initialize(XamlRoot xamlRoot)
         {
-            _xamlRoot = xamlRoot;
+            featuresXamlRoot = xamlRoot;
         }
         private void LoadFeatures()
         {
             try
             {
                 var features = featuresService.GetFeaturesByCategories();
-                
+
                 UpdateCollection(Frames, features.GetValueOrDefault("frame", new()));
                 UpdateCollection(Emojis, features.GetValueOrDefault("emoji", new()));
                 UpdateCollection(Backgrounds, features.GetValueOrDefault("background", new()));
@@ -107,11 +107,13 @@ namespace SteamProfile.ViewModels
         [RelayCommand]
         private async Task ShowOptionsAsync(FeatureDisplay feature)
         {
-            if (feature == null || xamlRoot == null) return;
+            if (feature == null || xamlRoot == null)
+            {
+                return;
+            }
 
             SelectedFeature = feature;
             var currentUser = userService.GetCurrentUser();
-            
             var dialog = new ContentDialog
             {
                 XamlRoot = xamlRoot,
@@ -165,7 +167,7 @@ namespace SteamProfile.ViewModels
                 if (success)
                 {
                     // Notify that a feature was equipped
-                    FeatureEquipStatusChanged ?.Invoke(this, userService.GetCurrentUser().UserId);
+                    FeatureEquipStatusChanged?.Invoke(this, userService.GetCurrentUser().UserId);
 
                     StatusMessage = "Feature equipped successfully";
                     StatusColor = new SolidColorBrush(Colors.Green);
@@ -194,7 +196,6 @@ namespace SteamProfile.ViewModels
             var result = featuresService.UnequipFeature(userId, feature.FeatureId);
             StatusMessage = result.Item2;
             StatusColor = new SolidColorBrush(result.Item1 ? Colors.Green : Colors.Red);
-            
             if (result.Item1)
             {
                 LoadFeatures();
@@ -221,7 +222,7 @@ namespace SteamProfile.ViewModels
             var userFeatures = featuresService.GetUserEquippedFeatures(user.UserId);
 
             // Get the user profile to access bio and profile picture
-            var userProfile = _userProfilesRepository.GetUserProfileByUserId(user.UserId);
+            var userProfile = userProfilesRepository.GetUserProfileByUserId(user.UserId);
 
             // Create adaptive profile control
             var profileControl = new AdaptiveProfileControl();
@@ -253,7 +254,10 @@ namespace SteamProfile.ViewModels
 
             foreach (var feature in userFeatures)
             {
-                if (!feature.Equipped) continue;
+                if (!feature.Equipped)
+                {
+                    continue;
+                }
 
                 string path = feature.Source;
                 if (!path.StartsWith("ms-appx:///"))
@@ -291,8 +295,7 @@ namespace SteamProfile.ViewModels
                 petPath,
                 emojiPath,
                 framePath,
-                backgroundPath
-            );
+                backgroundPath);
 
             // Adjust size for the dialog
             profileControl.Width = 350;
@@ -301,7 +304,7 @@ namespace SteamProfile.ViewModels
             // Create and show preview dialog
             var previewDialog = new ContentDialog
             {
-                XamlRoot = _xamlRoot,
+                XamlRoot = featuresXamlRoot,
                 Title = "Profile Preview",
                 Content = profileControl,
                 CloseButtonText = "Close"

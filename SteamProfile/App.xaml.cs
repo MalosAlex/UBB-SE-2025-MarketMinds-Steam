@@ -12,7 +12,6 @@ namespace SteamProfile
 {
     public partial class App : Application
     {
-
         // Services
         public static readonly IAchievementsService AchievementsService;
         public static readonly FeaturesService FeaturesService;
@@ -36,7 +35,7 @@ namespace SteamProfile
         public static UserProfilesRepository UserProfileRepository { get; private set; }
         public static CollectionsRepository CollectionsRepository { get;  }
 
-        public static PasswordResetRepository passwordResetRepository { get; private set; }
+        public static PasswordResetRepository PasswordResetRepository { get; private set; }
 
         public static UsersRepository UserRepository { get; private set; }
 
@@ -54,8 +53,7 @@ namespace SteamProfile
             var friendshipsRepository = new FriendshipsRepository(dataLink);
             var ownedGamesRepossitory = new OwnedGamesRepository(dataLink);
             var sessionRepository = new SessionRepository(dataLink);
-            passwordResetRepository = new PasswordResetRepository(dataLink);
-
+            PasswordResetRepository = new PasswordResetRepository(dataLink);
 
             // Initialize all services
             SessionService = new SessionService(sessionRepository, UserRepository);
@@ -65,7 +63,7 @@ namespace SteamProfile
             AuthenticationService = new AuthenticationService(UserRepository);
             FriendsService = new FriendsService(friendshipsRepository, UserService);
             OwnedGamesService = new OwnedGamesService(ownedGamesRepossitory);
-            PasswordResetService = new PasswordResetService(passwordResetRepository, UserService);
+            PasswordResetService = new PasswordResetService(PasswordResetRepository, UserService);
             FeaturesService = new FeaturesService(featuresRepository, UserService);
             WalletService = new WalletService(walletRepository, UserService);
 
@@ -85,34 +83,32 @@ namespace SteamProfile
             AchievementsService.InitializeAchievements();
         }
 
-        private Window m_window;
+        private Window mainWindow;
 
         public App()
         {
             this.InitializeComponent();
-
         }
 
         public Window MainWindow { get; set; }
 
         protected override void OnLaunched(Microsoft.UI.Xaml.LaunchActivatedEventArgs args)
         {
-            m_window = new MainWindow();
-            //NavigationService.Instance.Initialize(m_window.Content as Frame); // Ensure the frame is passed
-            m_window.Activate();
+            mainWindow = new MainWindow();
+            // NavigationService.Instance.Initialize(m_window.Content as Frame); // Ensure the frame is passed
+            mainWindow.Activate();
         }
 
         private void ConfigureServices(IServiceCollection services)
         {
             // Register services
             services.AddSingleton<IUserService, UserService>();
-            services.AddSingleton<IPasswordResetService>(sp => 
-                new PasswordResetService(passwordResetRepository, sp.GetRequiredService<IUserService>()));
+            services.AddSingleton<IPasswordResetService>(sp =>
+                new PasswordResetService(PasswordResetRepository, sp.GetRequiredService<IUserService>()));
             services.AddSingleton<IFeaturesService>(sp =>
                 new FeaturesService(
                     sp.GetRequiredService<IFeaturesRepository>(),
-                    sp.GetRequiredService<IUserService>()
-                ));
+                    sp.GetRequiredService<IUserService>()));
 
             // Register repositories
             services.AddSingleton<IUsersRepository, UsersRepository>();
@@ -122,12 +118,11 @@ namespace SteamProfile
             // Register ViewModels
             services.AddTransient<FeaturesViewModel>();
             services.AddTransient<ForgotPasswordViewModel>();
-            
+
             // Register pages
             services.AddTransient<MainWindow>();
             services.AddTransient<FeaturesPage>();
             services.AddTransient<ProfilePage>();
         }
-
     }
 }

@@ -1,4 +1,5 @@
-﻿using System;
+﻿using System.Runtime.Serialization;
+using System;
 using System.Data;
 using System.Linq;
 using System.Collections.Generic;
@@ -10,7 +11,6 @@ using BusinessLayer.Repositories;
 using BusinessLayer.Repositories.Interfaces;
 using BusinessLayer.Exceptions;
 using Microsoft.Data.SqlClient;
-using System.Runtime.Serialization;
 using BusinessLayer.Services;
 
 namespace Tests.RepositoryTests

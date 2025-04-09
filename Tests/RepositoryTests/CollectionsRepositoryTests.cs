@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Runtime.Serialization;
 using System.Data;
 using System.Linq;
 using System.Collections.Generic;
@@ -10,7 +11,6 @@ using BusinessLayer.Repositories;
 using BusinessLayer.Repositories.Interfaces;
 using BusinessLayer.Exceptions;
 using Microsoft.Data.SqlClient;
-using System.Runtime.Serialization;
 using BusinessLayer.Services;
 
 namespace Tests.RepositoryTests
@@ -843,13 +843,13 @@ namespace Tests.RepositoryTests
             emptyGamesTable.Columns.Add("description", typeof(string));
             emptyGamesTable.Columns.Add("cover_picture", typeof(string));
             emptyGamesTable.Columns.Add("game_id", typeof(int));
-    
+
             mockDataLink.Setup(dataLink => dataLink.ExecuteReader("GetGamesNotInCollection", It.IsAny<SqlParameter[]>()))
                         .Returns(emptyGamesTable);
-    
+
             // Act
             List<OwnedGame> gamesNotInCollectionList = collectionsRepository.GetGamesNotInCollection(1, 1);
-    
+
             // Assert: The returned list should be empty.
             Assert.That(gamesNotInCollectionList, Is.Empty);
         }

@@ -20,7 +20,9 @@ namespace BusinessLayer.Repositories
             try
             {
                 // First, delete any existing reset codes for this user
+
                 var deleteParameters = new SqlParameter[]
+
                 {
                     new SqlParameter("@userId", userId)
                 };
@@ -95,13 +97,17 @@ namespace BusinessLayer.Repositories
                 int userId = (int)userTable.Rows[0]["user_id"];
 
                 // Update the password and mark the reset code as used
+
                 var updateParameters = new SqlParameter[]
+
                 {
                     new SqlParameter("@userId", userId),
                     new SqlParameter("@newPassword", hashedPassword)
                 };
 
+
                 int rowsAffected = dataLink.ExecuteNonQuery("UpdatePasswordAndMarkResetCodeUsed", updateParameters);
+
                 return rowsAffected > 0;
             }
             catch (DatabaseOperationException ex)

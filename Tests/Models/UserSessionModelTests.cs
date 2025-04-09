@@ -86,7 +86,6 @@ namespace Tests.Models
             Assert.That(session.CurrentSessionId, Is.Null);
         }
 
-
         [Test]
         public void ClearSession_ShouldResetUserId()
         {

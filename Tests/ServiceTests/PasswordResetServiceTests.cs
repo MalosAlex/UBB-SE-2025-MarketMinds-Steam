@@ -1,6 +1,4 @@
-// Copyright (c) MarketMinds. All rights reserved.
-// Licensed under the MIT License.
-
+using System.Reflection;
 using System;
 using System.IO;
 using System.Threading.Tasks;
@@ -11,7 +9,6 @@ using BusinessLayer.Models;
 using BusinessLayer.Data;
 using Moq;
 using NUnit.Framework;
-using System.Reflection;
 
 namespace Tests.ServiceTests
 {
@@ -67,7 +64,9 @@ namespace Tests.ServiceTests
             // Arrange
             string email = "test@example.com";
             var user = new User { UserId = 1, Email = email, Username = "testuser" };
+
             this.mockUserService.Setup(mockService => mockService.GetUserByEmail(email)).Returns(user);
+
 
             // Act
             var (isValid, message) = await this.service.SendResetCode(email);
@@ -82,7 +81,9 @@ namespace Tests.ServiceTests
             // Arrange
             string email = "test@example.com";
             var user = new User { UserId = 1, Email = email, Username = "testuser" };
+
             this.mockUserService.Setup(mockService => mockService.GetUserByEmail(email)).Returns(user);
+
 
             // Act
             var (isValid, message) = await this.service.SendResetCode(email);
@@ -97,7 +98,9 @@ namespace Tests.ServiceTests
             // Arrange
             string email = "test@example.com";
             var user = new User { UserId = 1, Email = email, Username = "testuser" };
+
             this.mockUserService.Setup(mockService => mockService.GetUserByEmail(email)).Returns(user);
+
 
             // Act
             await this.service.SendResetCode(email);
@@ -113,7 +116,9 @@ namespace Tests.ServiceTests
             // Arrange
             string email = "test@example.com";
             var user = new User { UserId = 1, Email = email, Username = "testuser" };
+
             this.mockUserService.Setup(mockService => mockService.GetUserByEmail(email)).Returns(user);
+
 
             // Act
             await this.service.SendResetCode(email);
@@ -141,7 +146,9 @@ namespace Tests.ServiceTests
         {
             // Arrange
             string email = "nonexistent@example.com";
+
             this.mockUserService.Setup(mockService => mockService.GetUserByEmail(email)).Returns((User)null);
+
 
             // Act
             var result = await this.service.SendResetCode(email);
@@ -155,7 +162,9 @@ namespace Tests.ServiceTests
         {
             // Arrange
             string email = "nonexistent@example.com";
+
             this.mockUserService.Setup(mockService => mockService.GetUserByEmail(email)).Returns((User)null);
+
 
             // Act
             var result = await this.service.SendResetCode(email);
@@ -179,6 +188,7 @@ namespace Tests.ServiceTests
             // Assert
             Assert.That(result, Is.True);
         }
+
 
         [Test]
         public void VerifyResetCode_WithNonExistentCode_ReturnsFalse()
@@ -204,8 +214,10 @@ namespace Tests.ServiceTests
             string filePath = Path.Combine(this.testResetCodesPath, $"{email.ToLower()}_reset_code.txt");
             File.WriteAllText(filePath, $"{code}|{DateTime.UtcNow.AddMinutes(10):O}");
             var user = new User { UserId = 1, Email = email, Username = "testuser" };
+
             this.mockUserService.Setup(mockService => mockService.GetUserByEmail(email)).Returns(user);
             this.mockUserService.Setup(mockService => mockService.UpdateUserPassword(user.UserId, newPassword));
+
 
             // Act
             var (isValid, message) = this.service.ResetPassword(email, code, newPassword);
@@ -224,8 +236,10 @@ namespace Tests.ServiceTests
             string filePath = Path.Combine(this.testResetCodesPath, $"{email.ToLower()}_reset_code.txt");
             File.WriteAllText(filePath, $"{code}|{DateTime.UtcNow.AddMinutes(10):O}");
             var user = new User { UserId = 1, Email = email, Username = "testuser" };
+
             this.mockUserService.Setup(mockService => mockService.GetUserByEmail(email)).Returns(user);
             this.mockUserService.Setup(mockService => mockService.UpdateUserPassword(user.UserId, newPassword));
+
 
             // Act
             var (isValid, message) = this.service.ResetPassword(email, code, newPassword);
@@ -261,7 +275,9 @@ namespace Tests.ServiceTests
             string filePath = Path.Combine(this.testResetCodesPath, $"{email.ToLower()}_reset_code.txt");
             File.WriteAllText(filePath, $"{code}|{DateTime.UtcNow.AddMinutes(10):O}");
             var user = new User { UserId = 1, Email = email, Username = "testuser" };
+
             this.mockUserService.Setup(mockService => mockService.GetUserByEmail(email)).Returns(user);
+
 
             // Act
             var result = this.service.ResetPassword(email, code, invalidPassword);
@@ -279,7 +295,9 @@ namespace Tests.ServiceTests
             string newPassword = "NewPassword123!";
             string filePath = Path.Combine(this.testResetCodesPath, $"{email.ToLower()}_reset_code.txt");
             File.WriteAllText(filePath, $"{code}|{DateTime.UtcNow.AddMinutes(10):O}");
+
             this.mockUserService.Setup(mockService => mockService.GetUserByEmail(email)).Returns((User)null);
+
 
             // Act
             var result = this.service.ResetPassword(email, code, newPassword);
@@ -297,7 +315,9 @@ namespace Tests.ServiceTests
             string newPassword = "NewPassword123!";
             string filePath = Path.Combine(this.testResetCodesPath, $"{email.ToLower()}_reset_code.txt");
             File.WriteAllText(filePath, $"{code}|{DateTime.UtcNow.AddMinutes(10):O}");
+
             this.mockUserService.Setup(mockService => mockService.GetUserByEmail(email)).Returns((User)null);
+
 
             // Act
             var result = this.service.ResetPassword(email, code, newPassword);
