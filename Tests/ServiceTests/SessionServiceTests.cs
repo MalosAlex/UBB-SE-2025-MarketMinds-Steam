@@ -1,10 +1,6 @@
 ﻿using Moq;
 using BusinessLayer.Models;
-using BusinessLayer.Repositories;
 using BusinessLayer.Services;
-using NUnit.Framework;
-using System;
-using System.Collections.Generic;
 using BusinessLayer.Repositories.Interfaces;
 
 namespace Tests.ServiceTests
@@ -30,22 +26,28 @@ namespace Tests.ServiceTests
         [Test]
         public void Constructor_NullSessionRepository_ThrowsArgumentNullException()
         {
+            // Arrange
             var usersRepo = new Mock<IUsersRepository>().Object;
 
+            // Act
             var exception = Assert.Throws<ArgumentNullException>(() =>
                 new SessionService(null, usersRepo));
 
+            // Assert
             Assert.That(exception.ParamName, Is.EqualTo("sessionRepository"));
         }
 
         [Test]
         public void Constructor_NullUsersRepository_ThrowsArgumentNullException()
         {
+            // Arrange
             var sessionRepo = new Mock<ISessionRepository>().Object;
 
+            // Act
             var exception = Assert.Throws<ArgumentNullException>(() =>
                 new SessionService(sessionRepo, null));
 
+            // Assert
             Assert.That(exception.ParamName, Is.EqualTo("usersRepository"));
         }
 
@@ -166,6 +168,7 @@ namespace Tests.ServiceTests
         {
             // Arrange
             var sessionId = Guid.NewGuid();
+
             // Create sessionDetails with ExpiresAt in the past
             var sessionDetails = new SessionDetails
             {
@@ -219,6 +222,7 @@ namespace Tests.ServiceTests
             {
                 _mockSessionRepository.Setup(repo => repo.DeleteSession(sessionId));
             }
+
             // Setup a current session that is expired (thus invalid)
             var currentSessionId = Guid.NewGuid();
             UserSession.Instance.UpdateSession(currentSessionId, 1, DateTime.Now.AddHours(-2), DateTime.Now.AddHours(-1));

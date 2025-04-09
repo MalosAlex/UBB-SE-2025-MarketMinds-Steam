@@ -11,18 +11,20 @@ namespace Tests.RepositoryTests
     internal class SessionRepositoryTests
     {
         private Mock<IDataLink> _mockDataLink;
-        private SessionRepository _repository;
+        private SessionRepository _sessionRepository;
 
         [SetUp]
         public void Setup()
         {
             _mockDataLink = new Mock<IDataLink>();
-            _repository = new SessionRepository(_mockDataLink.Object);
+            _sessionRepository = new SessionRepository(_mockDataLink.Object);
         }
 
         [Test]
         public void Constructor_NullDataLink_ThrowsArgumentNullException()
         {
+            // Arrange
+
             // Act & Assert
             Assert.Throws<ArgumentNullException>(() => new SessionRepository(null));
         }
@@ -44,11 +46,11 @@ namespace Tests.RepositoryTests
             dataTable.Rows.Add(sessionId, userId, createdAt, expiresAt);
 
             _mockDataLink
-                .Setup(dl => dl.ExecuteReader("CreateSession", It.IsAny<SqlParameter[]>()))
+                .Setup(dataLink => dataLink.ExecuteReader("CreateSession", It.IsAny<SqlParameter[]>()))
                 .Returns(dataTable);
 
             // Act
-            var result = _repository.CreateSession(userId);
+            var result = _sessionRepository.CreateSession(userId);
 
             // Assert
             Assert.That(result, Is.Not.Null);
@@ -62,11 +64,11 @@ namespace Tests.RepositoryTests
             var dataTable = new DataTable();
 
             _mockDataLink
-                .Setup(dl => dl.ExecuteReader("CreateSession", It.IsAny<SqlParameter[]>()))
+                .Setup(dataLink => dataLink.ExecuteReader("CreateSession", It.IsAny<SqlParameter[]>()))
                 .Returns(dataTable);
 
             // Act & Assert
-            Assert.Throws<InvalidOperationException>(() => _repository.CreateSession(userId));
+            Assert.Throws<InvalidOperationException>(() => _sessionRepository.CreateSession(userId));
         }
 
         [Test]
@@ -76,10 +78,10 @@ namespace Tests.RepositoryTests
             var userId = 1;
 
             // Act
-            _repository.DeleteUserSessions(userId);
+            _sessionRepository.DeleteUserSessions(userId);
 
             // Assert
-            _mockDataLink.Verify(dl => dl.ExecuteNonQuery("DeleteUserSessions", It.IsAny<SqlParameter[]>()), Times.Once);
+            _mockDataLink.Verify(dataLink => dataLink.ExecuteNonQuery("DeleteUserSessions", It.IsAny<SqlParameter[]>()), Times.Once);
         }
 
         [Test]
@@ -89,10 +91,10 @@ namespace Tests.RepositoryTests
             var sessionId = Guid.NewGuid();
 
             // Act
-            _repository.DeleteSession(sessionId);
+            _sessionRepository.DeleteSession(sessionId);
 
             // Assert
-            _mockDataLink.Verify(dl => dl.ExecuteNonQuery("DeleteSession", It.IsAny<SqlParameter[]>()), Times.Once);
+            _mockDataLink.Verify(dataLink => dataLink.ExecuteNonQuery("DeleteSession", It.IsAny<SqlParameter[]>()), Times.Once);
         }
 
         [Test]
@@ -112,11 +114,11 @@ namespace Tests.RepositoryTests
             dataTable.Rows.Add(sessionId, userId, createdAt, expiresAt);
 
             _mockDataLink
-                .Setup(dl => dl.ExecuteReader("GetSessionById", It.IsAny<SqlParameter[]>()))
+                .Setup(dataLink => dataLink.ExecuteReader("GetSessionById", It.IsAny<SqlParameter[]>()))
                 .Returns(dataTable);
 
             // Act
-            var result = _repository.GetSessionById(sessionId);
+            var result = _sessionRepository.GetSessionById(sessionId);
 
             // Assert
             Assert.That(result, Is.Not.Null);
@@ -130,11 +132,11 @@ namespace Tests.RepositoryTests
             var dataTable = new DataTable();
 
             _mockDataLink
-                .Setup(dl => dl.ExecuteReader("GetSessionById", It.IsAny<SqlParameter[]>()))
+                .Setup(dataLink => dataLink.ExecuteReader("GetSessionById", It.IsAny<SqlParameter[]>()))
                 .Returns(dataTable);
 
             // Act
-            var result = _repository.GetSessionById(sessionId);
+            var result = _sessionRepository.GetSessionById(sessionId);
 
             // Assert
             Assert.That(result, Is.Null);
@@ -164,11 +166,11 @@ namespace Tests.RepositoryTests
             dataTable.Rows.Add(sessionId, userId, username, email, true, createdAt, expiresAt, lastLogin);
 
             _mockDataLink
-                .Setup(dl => dl.ExecuteReader("GetUserFromSession", It.IsAny<SqlParameter[]>()))
+                .Setup(dataLink => dataLink.ExecuteReader("GetUserFromSession", It.IsAny<SqlParameter[]>()))
                 .Returns(dataTable);
 
             // Act
-            var result = _repository.GetUserFromSession(sessionId);
+            var result = _sessionRepository.GetUserFromSession(sessionId);
 
             // Assert
             Assert.That(result, Is.Not.Null);
@@ -197,11 +199,11 @@ namespace Tests.RepositoryTests
             dataTable.Rows.Add(sessionId, userId, username, email, true, createdAt, expiresAt, DBNull.Value);
 
             _mockDataLink
-                .Setup(dl => dl.ExecuteReader("GetUserFromSession", It.IsAny<SqlParameter[]>()))
+                .Setup(dataLink => dataLink.ExecuteReader("GetUserFromSession", It.IsAny<SqlParameter[]>()))
                 .Returns(dataTable);
 
             // Act
-            var result = _repository.GetUserFromSession(sessionId);
+            var result = _sessionRepository.GetUserFromSession(sessionId);
 
             // Assert
             Assert.That(result.LastLogin, Is.Null);
@@ -215,11 +217,11 @@ namespace Tests.RepositoryTests
             var dataTable = new DataTable();
 
             _mockDataLink
-                .Setup(dl => dl.ExecuteReader("GetUserFromSession", It.IsAny<SqlParameter[]>()))
+                .Setup(dataLink => dataLink.ExecuteReader("GetUserFromSession", It.IsAny<SqlParameter[]>()))
                 .Returns(dataTable);
 
             // Act
-            var result = _repository.GetUserFromSession(sessionId);
+            var result = _sessionRepository.GetUserFromSession(sessionId);
 
             // Assert
             Assert.That(result, Is.Null);
@@ -232,11 +234,11 @@ namespace Tests.RepositoryTests
             var sessionId = Guid.NewGuid();
 
             _mockDataLink
-                .Setup(dl => dl.ExecuteReader("GetUserFromSession", It.IsAny<SqlParameter[]>()))
+                .Setup(dataLink => dataLink.ExecuteReader("GetUserFromSession", It.IsAny<SqlParameter[]>()))
                 .Throws(new DatabaseOperationException("Database error"));
 
             // Act & Assert
-            Assert.Throws<DatabaseOperationException>(() => _repository.GetUserFromSession(sessionId));
+            Assert.Throws<DatabaseOperationException>(() => _sessionRepository.GetUserFromSession(sessionId));
         }
 
         [Test]
@@ -252,11 +254,11 @@ namespace Tests.RepositoryTests
             dataTable.Rows.Add(sessionId2);
 
             _mockDataLink
-                .Setup(dl => dl.ExecuteReader("GetExpiredSessions", null))
+                .Setup(dataLink => dataLink.ExecuteReader("GetExpiredSessions", null))
                 .Returns(dataTable);
 
             // Act
-            var result = _repository.GetExpiredSessions();
+            var result = _sessionRepository.GetExpiredSessions();
 
             // Assert
             Assert.That(result, Is.Not.Empty);
@@ -270,11 +272,11 @@ namespace Tests.RepositoryTests
             var dataTable = new DataTable();
 
             _mockDataLink
-                .Setup(dl => dl.ExecuteReader("GetExpiredSessions", null))
+                .Setup(dataLink => dataLink.ExecuteReader("GetExpiredSessions", null))
                 .Returns(dataTable);
 
             // Act
-            var result = _repository.GetExpiredSessions();
+            var result = _sessionRepository.GetExpiredSessions();
 
             // Assert
             Assert.That(result, Is.Empty);
