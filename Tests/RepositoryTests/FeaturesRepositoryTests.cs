@@ -41,10 +41,9 @@ namespace Tests.RepositoryTests
             dataTable.Rows.Add(1, "Feature1", "Type1", 10, "Description1", "Source1", true);
             dataTable.Rows.Add(2, "Feature2", "Type2", 20, "Description2", "Source2", false);
 
-            this.mockDataLink.Setup(dl => dl.ExecuteReader(
+            this.mockDataLink.Setup(dataLink => dataLink.ExecuteReader(
                 "GetAllFeatures",
-                It.Is<SqlParameter[]>(p => p.Length == 1 && (int)p[0].Value == userId)
-            )).Returns(dataTable);
+                It.Is<SqlParameter[]>(sqlParameter => sqlParameter.Length == 1 && (int)sqlParameter[0].Value == userId))).Returns(dataTable);
 
             // Act
             var result = this.repository.GetAllFeatures(userId);
@@ -61,10 +60,9 @@ namespace Tests.RepositoryTests
             var dataTable = CreateFeaturesDataTable();
             dataTable.Rows.Add(1, "Feature1", "Type1", 10, "Description1", "Source1", true);
 
-            this.mockDataLink.Setup(dl => dl.ExecuteReader(
+            this.mockDataLink.Setup(dataLink => dataLink.ExecuteReader(
                 "GetAllFeatures",
-                It.Is<SqlParameter[]>(p => p.Length == 1 && (int)p[0].Value == userId)
-            )).Returns(dataTable);
+                It.Is<SqlParameter[]>(sqlParameter => sqlParameter.Length == 1 && (int)sqlParameter[0].Value == userId))).Returns(dataTable);
 
             // Act
             var result = this.repository.GetAllFeatures(userId);
@@ -81,10 +79,9 @@ namespace Tests.RepositoryTests
             var dataTable = CreateFeaturesDataTable();
             dataTable.Rows.Add(1, "Feature1", "Type1", 10, "Description1", "Source1", true);
 
-            this.mockDataLink.Setup(dl => dl.ExecuteReader(
+            this.mockDataLink.Setup(dataLink => dataLink.ExecuteReader(
                 "GetAllFeatures",
-                It.Is<SqlParameter[]>(p => p.Length == 1 && (int)p[0].Value == userId)
-            )).Returns(dataTable);
+                It.Is<SqlParameter[]>(sqlParameter => sqlParameter.Length == 1 && (int)sqlParameter[0].Value == userId))).Returns(dataTable);
 
             // Act
             var result = this.repository.GetAllFeatures(userId);
@@ -101,10 +98,9 @@ namespace Tests.RepositoryTests
             var dataTable = CreateFeaturesDataTable();
             dataTable.Rows.Add(1, "Feature1", "Type1", 10, "Description1", "Source1", true);
 
-            this.mockDataLink.Setup(dl => dl.ExecuteReader(
+            this.mockDataLink.Setup(dataLink => dataLink.ExecuteReader(
                 "GetAllFeatures",
-                It.Is<SqlParameter[]>(p => p.Length == 1 && (int)p[0].Value == userId)
-            )).Returns(dataTable);
+                It.Is<SqlParameter[]>(sqlParameter => sqlParameter.Length == 1 && (int)sqlParameter[0].Value == userId))).Returns(dataTable);
 
             // Act
             var result = this.repository.GetAllFeatures(userId);
@@ -121,10 +117,9 @@ namespace Tests.RepositoryTests
             var dataTable = CreateFeaturesDataTable();
             dataTable.Rows.Add(1, "Feature1", "Type1", 10, "Description1", "Source1", true);
 
-            this.mockDataLink.Setup(dl => dl.ExecuteReader(
+            this.mockDataLink.Setup(dataLink => dataLink.ExecuteReader(
                 "GetAllFeatures",
-                It.Is<SqlParameter[]>(p => p.Length == 1 && (int)p[0].Value == userId)
-            )).Returns(dataTable);
+                It.Is<SqlParameter[]>(sqlParameter => sqlParameter.Length == 1 && (int)sqlParameter[0].Value == userId))).Returns(dataTable);
 
             // Act
             var result = this.repository.GetAllFeatures(userId);
@@ -141,10 +136,9 @@ namespace Tests.RepositoryTests
             var dataTable = CreateFeaturesDataTable();
             dataTable.Rows.Add(1, "Feature1", "Type1", 10, "Description1", "Source1", true);
 
-            this.mockDataLink.Setup(dl => dl.ExecuteReader(
+            this.mockDataLink.Setup(dataLink => dataLink.ExecuteReader(
                 "GetAllFeatures",
-                It.Is<SqlParameter[]>(p => p.Length == 1 && (int)p[0].Value == userId)
-            )).Returns(dataTable);
+                It.Is<SqlParameter[]>(sqlParameter => sqlParameter.Length == 1 && (int)sqlParameter[0].Value == userId))).Returns(dataTable);
 
             // Act
             var result = this.repository.GetAllFeatures(userId);
@@ -161,10 +155,9 @@ namespace Tests.RepositoryTests
             var dataTable = CreateFeaturesDataTable();
             dataTable.Rows.Add(1, "Feature1", "Type1", 10, "Description1", "Source1", true);
 
-            this.mockDataLink.Setup(dl => dl.ExecuteReader(
+            this.mockDataLink.Setup(dataLink => dataLink.ExecuteReader(
                 "GetAllFeatures",
-                It.Is<SqlParameter[]>(p => p.Length == 1 && (int)p[0].Value == userId)
-            )).Returns(dataTable);
+                It.Is<SqlParameter[]>(sqlParameter => sqlParameter.Length == 1 && (int)sqlParameter[0].Value == userId))).Returns(dataTable);
 
             // Act
             var result = this.repository.GetAllFeatures(userId);
@@ -182,9 +175,9 @@ namespace Tests.RepositoryTests
             dataTable.Rows.Add(1, "Feature1", "Type1", 10, "Description1", "Source1", true);
             dataTable.Rows.Add(2, "Feature2", "Type1", 20, "Description2", "Source2", false);
 
-            this.mockDataLink.Setup(dl => dl.ExecuteReader(
+            this.mockDataLink.Setup(dataLink => dataLink.ExecuteReader(
                 "GetFeaturesByType",
-                It.Is<SqlParameter[]>(p => p.Length == 1 && (string)p[0].Value == type)
+                It.Is<SqlParameter[]>(sqlParameter => sqlParameter.Length == 1 && (string)sqlParameter[0].Value == type)
             )).Returns(dataTable);
 
             // Act
@@ -202,10 +195,9 @@ namespace Tests.RepositoryTests
             var dataTable = CreateFeaturesDataTable();
             dataTable.Rows.Add(1, "Feature1", "Type1", 10, "Description1", "Source1", true);
 
-            this.mockDataLink.Setup(dl => dl.ExecuteReader(
+            this.mockDataLink.Setup(dataLink => dataLink.ExecuteReader(
                 "GetFeaturesByType",
-                It.Is<SqlParameter[]>(p => p.Length == 1 && (string)p[0].Value == type)
-            )).Returns(dataTable);
+                It.Is<SqlParameter[]>(sqlParameter => sqlParameter.Length == 1 && (string)sqlParameter[0].Value == type))).Returns(dataTable);
 
             // Act
             var result = this.repository.GetFeaturesByType(type);
@@ -223,10 +215,9 @@ namespace Tests.RepositoryTests
             dataTable.Rows.Add(1, "Feature1", "Type1", 10, "Description1", "Source1", true);
             dataTable.Rows.Add(2, "Feature2", "Type2", 20, "Description2", "Source2", false);
 
-            this.mockDataLink.Setup(dl => dl.ExecuteReader(
+            this.mockDataLink.Setup(dataLink => dataLink.ExecuteReader(
                 "GetUserFeatures",
-                It.Is<SqlParameter[]>(p => p.Length == 1 && (int)p[0].Value == userId)
-            )).Returns(dataTable);
+                It.Is<SqlParameter[]>(sqlParameter => sqlParameter.Length == 1 && (int)sqlParameter[0].Value == userId))).Returns(dataTable);
 
             // Act
             var result = this.repository.GetUserFeatures(userId);
@@ -245,14 +236,13 @@ namespace Tests.RepositoryTests
             dataTable.Columns.Add("feature_id", typeof(int));
             dataTable.Rows.Add(featureId);
 
-            this.mockDataLink.Setup(dl => dl.ExecuteReader(
+            this.mockDataLink.Setup(dataLink => dataLink.ExecuteReader(
                 "GetFeatureUserRelationship",
-                It.Is<SqlParameter[]>(p => 
-                    p.Length == 2 && 
-                    (int)p[0].Value == userId && 
-                    (int)p[1].Value == featureId
-                )
-            )).Returns(dataTable);
+                It.Is<SqlParameter[]>(sqlParameter =>
+                    sqlParameter.Length == 2 &&
+                    (int)sqlParameter[0].Value == userId &&
+                    (int)sqlParameter[1].Value == featureId
+                ))).Returns(dataTable);
 
             // Act
             var result = this.repository.IsFeaturePurchased(userId, featureId);
@@ -270,11 +260,11 @@ namespace Tests.RepositoryTests
             var dataTable = new DataTable();
             dataTable.Columns.Add("feature_id", typeof(int));
 
-            this.mockDataLink.Setup(dl => dl.ExecuteReader(
+            this.mockDataLink.Setup(dataLink => dataLink.ExecuteReader(
                 "GetFeatureUserRelationship",
-                It.Is<SqlParameter[]>(p => 
-                    p.Length == 2 && 
-                    (int)p[0].Value == userId && 
+                It.Is<SqlParameter[]>(p =>
+                    p.Length == 2 &&
+                    (int)p[0].Value == userId &&
                     (int)p[1].Value == featureId
                 )
             )).Returns(dataTable);
@@ -296,24 +286,20 @@ namespace Tests.RepositoryTests
             relationshipTable.Columns.Add("feature_id", typeof(int));
             relationshipTable.Rows.Add(featureId);
 
-            this.mockDataLink.Setup(dl => dl.ExecuteReader(
+            this.mockDataLink.Setup(dataLink => dataLink.ExecuteReader(
                 "GetFeatureUserRelationship",
-                It.Is<SqlParameter[]>(p => 
-                    p.Length == 2 && 
-                    (int)p[0].Value == userId && 
-                    (int)p[1].Value == featureId
-                )
-            )).Returns(relationshipTable);
+                It.Is<SqlParameter[]>(sqlParameter =>
+                    sqlParameter.Length == 2 &&
+                    (int)sqlParameter[0].Value == userId &&
+                    (int)sqlParameter[1].Value == featureId))).Returns(relationshipTable);
 
-            this.mockDataLink.Setup(dl => dl.ExecuteNonQuery(
+            this.mockDataLink.Setup(dataLink => dataLink.ExecuteNonQuery(
                 "UpdateFeatureUserEquipStatus",
-                It.Is<SqlParameter[]>(p => 
-                    p.Length == 3 && 
-                    (int)p[0].Value == userId && 
-                    (int)p[1].Value == featureId && 
-                    (int)p[2].Value == 1
-                )
-            ));
+                It.Is<SqlParameter[]>(sqlParameter =>
+                    sqlParameter.Length == 3 &&
+                    (int)sqlParameter[0].Value == userId &&
+                    (int)sqlParameter[1].Value == featureId &&
+                    (int)sqlParameter[2].Value == 1)));
 
             // Act
             var result = this.repository.EquipFeature(userId, featureId);
@@ -331,14 +317,12 @@ namespace Tests.RepositoryTests
             var relationshipTable = new DataTable();
             relationshipTable.Columns.Add("feature_id", typeof(int));
 
-            this.mockDataLink.Setup(dl => dl.ExecuteReader(
+            this.mockDataLink.Setup(dataLink => dataLink.ExecuteReader(
                 "GetFeatureUserRelationship",
-                It.Is<SqlParameter[]>(p => 
-                    p.Length == 2 && 
-                    (int)p[0].Value == userId && 
-                    (int)p[1].Value == featureId
-                )
-            )).Returns(relationshipTable);
+                It.Is<SqlParameter[]>(sqlParameter =>
+                    sqlParameter.Length == 2 &&
+                    (int)sqlParameter[0].Value == userId &&
+                    (int)sqlParameter[1].Value == featureId))).Returns(relationshipTable);
 
             // Act
             var result = this.repository.EquipFeature(userId, featureId);
@@ -356,14 +340,12 @@ namespace Tests.RepositoryTests
             var relationshipTable = new DataTable();
             relationshipTable.Columns.Add("feature_id", typeof(int));
 
-            this.mockDataLink.Setup(dl => dl.ExecuteReader(
+            this.mockDataLink.Setup(dataLink => dataLink.ExecuteReader(
                 "GetFeatureUserRelationship",
-                It.Is<SqlParameter[]>(p => 
-                    p.Length == 2 && 
-                    (int)p[0].Value == userId && 
-                    (int)p[1].Value == featureId
-                )
-            )).Returns(relationshipTable);
+                It.Is<SqlParameter[]>(sqlParameter =>
+                    sqlParameter.Length == 2 &&
+                    (int)sqlParameter[0].Value == userId &&
+                    (int)sqlParameter[1].Value == featureId))).Returns(relationshipTable);
 
             // Act
             var result = this.repository.UnequipFeature(userId, featureId);
@@ -379,14 +361,12 @@ namespace Tests.RepositoryTests
             int userId = 1;
             string featureType = "Type1";
 
-            this.mockDataLink.Setup(dl => dl.ExecuteNonQuery(
+            this.mockDataLink.Setup(dataLink => dataLink.ExecuteNonQuery(
                 "UnequipFeaturesByType",
-                It.Is<SqlParameter[]>(p => 
-                    p.Length == 2 && 
-                    (int)p[0].Value == userId && 
-                    (string)p[1].Value == featureType
-                )
-            ));
+                It.Is<SqlParameter[]>(sqlParameter =>
+                    sqlParameter.Length == 2 &&
+                    (int)sqlParameter[0].Value == userId &&
+                    (string)sqlParameter[1].Value == featureType)));
 
             // Act
             var result = this.repository.UnequipFeaturesByType(userId, featureType);
