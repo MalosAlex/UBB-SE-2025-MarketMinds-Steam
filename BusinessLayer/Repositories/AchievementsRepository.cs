@@ -1,10 +1,11 @@
-﻿using System.Data;
+﻿using System;
+using System.Data;
 using System.Diagnostics;
 using BusinessLayer.Data;
+using BusinessLayer.Exceptions;
 using BusinessLayer.Models;
 using BusinessLayer.Repositories.Interfaces;
 using Microsoft.Data.SqlClient;
-using BusinessLayer.Exceptions;
 
 namespace BusinessLayer.Repositories
 {
@@ -12,9 +13,14 @@ namespace BusinessLayer.Repositories
     {
         private readonly IDataLink dataLink;
 
-        public AchievementsRepository(IDataLink datalink)
+        public AchievementsRepository(IDataLink dataLink)
         {
-            dataLink = datalink ?? throw new ArgumentNullException(nameof(datalink));
+            if (dataLink == null)
+            {
+                throw new ArgumentNullException(nameof(dataLink));
+            }
+
+            this.dataLink = dataLink;
         }
 
         public void InsertAchievements()
@@ -24,9 +30,9 @@ namespace BusinessLayer.Repositories
                 dataLink.ExecuteNonQuery("InsertAchievements");
                 System.Diagnostics.Debug.WriteLine("InsertAchievements stored procedure executed successfully.");
             }
-            catch (Exception ex)
+            catch (Exception exception)
             {
-                throw new RepositoryException("An unexpected error occurred while inserting achievements.", ex);
+                throw new RepositoryException("An unexpected error occurred while inserting achievements.", exception);
             }
         }
 
@@ -39,10 +45,10 @@ namespace BusinessLayer.Repositories
                 System.Diagnostics.Debug.WriteLine($"Number of achievements in table: {result}");
                 return result == 0;
             }
-            catch (Exception ex)
+            catch (Exception exception)
             {
-                System.Diagnostics.Debug.WriteLine($"Unexpected error while checking if achievements table is empty: {ex.Message}");
-                throw new RepositoryException("An unexpected error occurred while checking if achievements table is empty.", ex);
+                System.Diagnostics.Debug.WriteLine($"Unexpected error while checking if achievements table is empty: {exception.Message}");
+                throw new RepositoryException("An unexpected error occurred while checking if achievements table is empty.", exception);
             }
         }
 
@@ -57,10 +63,10 @@ namespace BusinessLayer.Repositories
                 };
                 dataLink.ExecuteNonQuery("UpdateAchievementIcon", parameters);
             }
-            catch (Exception ex)
+            catch (Exception exception)
             {
-                System.Diagnostics.Debug.WriteLine($"Unexpected error while updating achievement icon URL: {ex.Message}");
-                throw new RepositoryException("An unexpected error occurred while updating achievement icon URL.", ex);
+                System.Diagnostics.Debug.WriteLine($"Unexpected error while updating achievement icon URL: {exception.Message}");
+                throw new RepositoryException("An unexpected error occurred while updating achievement icon URL.", exception);
             }
         }
 
@@ -71,9 +77,9 @@ namespace BusinessLayer.Repositories
                 var dataTable = dataLink.ExecuteReader("GetAllAchievements");
                 return MapDataTableToAchievements(dataTable);
             }
-            catch (Exception ex)
+            catch (Exception exception)
             {
-                throw new RepositoryException("An unexpected error occurred while retrieving achievements.", ex);
+                throw new RepositoryException("An unexpected error occurred while retrieving achievements.", exception);
             }
         }
 
@@ -88,9 +94,9 @@ namespace BusinessLayer.Repositories
                 var dataTable = dataLink.ExecuteReader("GetUnlockedAchievements", parameters);
                 return MapDataTableToAchievements(dataTable);
             }
-            catch (Exception ex)
+            catch (Exception exception)
             {
-                throw new RepositoryException("An unexpected error occurred while retrieving unlocked achievements.", ex);
+                throw new RepositoryException("An unexpected error occurred while retrieving unlocked achievements.", exception);
             }
         }
 
@@ -105,9 +111,9 @@ namespace BusinessLayer.Repositories
                 };
                 dataLink.ExecuteNonQuery("UnlockAchievement", parameters);
             }
-            catch (Exception ex)
+            catch (Exception exception)
             {
-                throw new RepositoryException("An unexpected error occurred while unlocking achievement.", ex);
+                throw new RepositoryException("An unexpected error occurred while unlocking achievement.", exception);
             }
         }
 
@@ -122,9 +128,9 @@ namespace BusinessLayer.Repositories
                 };
                 dataLink.ExecuteNonQuery("RemoveAchievement", parameters);
             }
-            catch (Exception ex)
+            catch (Exception exception)
             {
-                throw new RepositoryException("An unexpected error occurred while removing achievement.", ex);
+                throw new RepositoryException("An unexpected error occurred while removing achievement.", exception);
             }
         }
 
@@ -140,11 +146,11 @@ namespace BusinessLayer.Repositories
                 var dataTable = dataLink.ExecuteReader("GetUnlockedDataForAchievement", parameters);
                 return dataTable.Rows.Count > 0 ? MapDataRowToAchievementUnlockedData(dataTable.Rows[0]) : null;
             }
-            catch (Exception ex)
+            catch (Exception exception)
             {
-                System.Diagnostics.Debug.WriteLine($"Exception: {ex.Message}");
-                System.Diagnostics.Debug.WriteLine($"Stack Trace: {ex.StackTrace}");
-                throw new RepositoryException("An unexpected error occurred while retrieving achievement data.", ex);
+                System.Diagnostics.Debug.WriteLine($"Exception: {exception.Message}");
+                System.Diagnostics.Debug.WriteLine($"Stack Trace: {exception.StackTrace}");
+                throw new RepositoryException("An unexpected error occurred while retrieving achievement data.", exception);
             }
         }
 
@@ -161,10 +167,10 @@ namespace BusinessLayer.Repositories
                 int? result = dataLink.ExecuteScalar<int>("IsAchievementUnlocked", parameters);
                 return result > 0;
             }
-            catch (Exception ex)
+            catch (Exception exception)
             {
-                System.Diagnostics.Debug.WriteLine($"Unexpected error during ExecuteScalar operation: {ex.Message}");
-                throw new RepositoryException("Error checking if achievement is unlocked.", ex);
+                System.Diagnostics.Debug.WriteLine($"Unexpected error during ExecuteScalar operation: {exception.Message}");
+                throw new RepositoryException("Error checking if achievement is unlocked.", exception);
             }
         }
 
@@ -189,15 +195,15 @@ namespace BusinessLayer.Repositories
 
                 return achievementsWithStatus;
             }
-            catch (Exception ex)
+            catch (Exception exception)
             {
-                System.Diagnostics.Debug.WriteLine($"Error: {ex.Message}");
-                System.Diagnostics.Debug.WriteLine($"StackTrace: {ex.StackTrace}");
-                if (ex.InnerException != null)
+                System.Diagnostics.Debug.WriteLine($"Error: {exception.Message}");
+                System.Diagnostics.Debug.WriteLine($"StackTrace: {exception.StackTrace}");
+                if (exception.InnerException != null)
                 {
-                    System.Diagnostics.Debug.WriteLine($"Inner Exception: {ex.InnerException.Message}");
+                    System.Diagnostics.Debug.WriteLine($"Inner Exception: {exception.InnerException.Message}");
                 }
-                throw new RepositoryException("Error retrieving achievements with status for user.", ex);
+                throw new RepositoryException("Error retrieving achievements with status for user.", exception);
             }
         }
 
@@ -213,9 +219,9 @@ namespace BusinessLayer.Repositories
                 var result = dataLink.ExecuteScalar<int>("GetNumberOfSoldGames", parameters);
                 return result;
             }
-            catch (Exception ex)
+            catch (Exception exception)
             {
-                throw new RepositoryException("An unexpected error occurred while retrieving number of sold games.", ex);
+                throw new RepositoryException("An unexpected error occurred while retrieving number of sold games.", exception);
             }
         }
 
@@ -229,10 +235,10 @@ namespace BusinessLayer.Repositories
                 };
                 return dataLink.ExecuteScalar<int>("GetFriendshipCountForUser", parameters);
             }
-            catch (Exception ex)
+            catch (Exception exception)
             {
-                Debug.WriteLine($"Unexpected Error: {ex.Message}");
-                throw new RepositoryException("An unexpected error occurred while retrieving friendship count.", ex);
+                Debug.WriteLine($"Unexpected Error: {exception.Message}");
+                throw new RepositoryException("An unexpected error occurred while retrieving friendship count.", exception);
             }
         }
 
@@ -248,9 +254,9 @@ namespace BusinessLayer.Repositories
                 var result = dataLink.ExecuteScalar<int>("GetNumberOfOwnedGames", parameters);
                 return result;
             }
-            catch (Exception ex)
+            catch (Exception exception)
             {
-                throw new RepositoryException("An unexpected error occurred while retrieving number of owned games.", ex);
+                throw new RepositoryException("An unexpected error occurred while retrieving number of owned games.", exception);
             }
         }
 
@@ -266,9 +272,9 @@ namespace BusinessLayer.Repositories
                 var result = dataLink.ExecuteScalar<int>("GetNumberOfReviewsGiven", parameters);
                 return result;
             }
-            catch (Exception ex)
+            catch (Exception exception)
             {
-                throw new RepositoryException("An unexpected error occurred while retrieving number of reviews given.", ex);
+                throw new RepositoryException("An unexpected error occurred while retrieving number of reviews given.", exception);
             }
         }
 
@@ -284,9 +290,9 @@ namespace BusinessLayer.Repositories
                 var result = dataLink.ExecuteScalar<int>("GetNumberOfReviewsReceived", parameters);
                 return result;
             }
-            catch (Exception ex)
+            catch (Exception exception)
             {
-                throw new RepositoryException("An unexpected error occurred while retrieving number of reviews received.", ex);
+                throw new RepositoryException("An unexpected error occurred while retrieving number of reviews received.", exception);
             }
         }
 
@@ -302,9 +308,9 @@ namespace BusinessLayer.Repositories
                 var result = dataLink.ExecuteScalar<int>("GetNumberOfPosts", parameters);
                 return result;
             }
-            catch (Exception ex)
+            catch (Exception exception)
             {
-                throw new RepositoryException("An unexpected error occurred while retrieving number of posts.", ex);
+                throw new RepositoryException("An unexpected error occurred while retrieving number of posts.", exception);
             }
         }
 
@@ -328,9 +334,9 @@ namespace BusinessLayer.Repositories
 
                 return yearsOfActivity;
             }
-            catch (Exception ex)
+            catch (Exception exception)
             {
-                throw new RepositoryException("An unexpected error occurred while retrieving years of activity.", ex);
+                throw new RepositoryException("An unexpected error occurred while retrieving years of activity.", exception);
             }
         }
 
@@ -347,10 +353,10 @@ namespace BusinessLayer.Repositories
                 System.Diagnostics.Debug.WriteLine($"Achievement ID for name {achievementName}: {result}");
                 return result;
             }
-            catch (Exception ex)
+            catch (Exception exception)
             {
-                System.Diagnostics.Debug.WriteLine($"Unexpected error while retrieving achievement ID: {ex.Message}");
-                throw new RepositoryException("An unexpected error occurred while retrieving achievement ID.", ex);
+                System.Diagnostics.Debug.WriteLine($"Unexpected error while retrieving achievement ID: {exception.Message}");
+                throw new RepositoryException("An unexpected error occurred while retrieving achievement ID.", exception);
             }
         }
 
@@ -366,36 +372,84 @@ namespace BusinessLayer.Repositories
                 var result = dataLink.ExecuteScalar<bool>("IsUserDeveloper", parameters);
                 return result;
             }
-            catch (Exception ex)
+            catch (Exception exception)
             {
-                throw new RepositoryException("An unexpected error occurred while retrieving developer status.", ex);
+                throw new RepositoryException("An unexpected error occurred while retrieving developer status.", exception);
             }
         }
         private static List<Achievement> MapDataTableToAchievements(DataTable dataTable)
         {
-            return dataTable.AsEnumerable().Select(MapDataRowToAchievement).ToList();
+            var achievements = new List<Achievement>();
+            foreach (DataRow row in dataTable.Rows)
+            {
+                achievements.Add(MapDataRowToAchievement(row));
+            }
+            return achievements;
         }
-
         private static Achievement MapDataRowToAchievement(DataRow row)
         {
+            string achievementName = string.Empty;
+            string description = string.Empty;
+            string achievementType = string.Empty;
+            string iconUrl = string.Empty;
+
+            if (row["achievement_name"] != DBNull.Value)
+            {
+                achievementName = row["achievement_name"].ToString();
+            }
+
+            if (row["description"] != DBNull.Value)
+            {
+                description = row["description"].ToString();
+            }
+
+            if (row["achievement_type"] != DBNull.Value)
+            {
+                achievementType = row["achievement_type"].ToString();
+            }
+
+            if (row["icon_url"] != DBNull.Value)
+            {
+                iconUrl = row["icon_url"].ToString();
+            }
+
             return new Achievement
             {
                 AchievementId = Convert.ToInt32(row["achievement_id"]),
-                AchievementName = row["achievement_name"].ToString() ?? string.Empty,
-                Description = row["description"].ToString() ?? string.Empty,
-                AchievementType = row["achievement_type"].ToString() ?? string.Empty,
+                AchievementName = achievementName,
+                Description = description,
+                AchievementType = achievementType,
                 Points = Convert.ToInt32(row["points"]),
-                Icon = row["icon_url"].ToString()
+                Icon = iconUrl
             };
         }
 
         private static AchievementUnlockedData MapDataRowToAchievementUnlockedData(DataRow row)
         {
+            string achievementName = string.Empty;
+            string achievementDescription = string.Empty;
+            DateTime? unlockDate = null;
+
+            if (row["AchievementName"] != DBNull.Value)
+            {
+                achievementName = row["AchievementName"].ToString();
+            }
+
+            if (row["AchievementDescription"] != DBNull.Value)
+            {
+                achievementDescription = row["AchievementDescription"].ToString();
+            }
+
+            if (row["UnlockDate"] != DBNull.Value)
+            {
+                unlockDate = Convert.ToDateTime(row["UnlockDate"]);
+            }
+
             return new AchievementUnlockedData
             {
-                AchievementName = row["AchievementName"].ToString() ?? string.Empty,
-                AchievementDescription = row["AchievementDescription"].ToString() ?? string.Empty,
-                UnlockDate = row["UnlockDate"] != DBNull.Value ? Convert.ToDateTime(row["UnlockDate"]) : (DateTime?)null
+                AchievementName = achievementName,
+                AchievementDescription = achievementDescription,
+                UnlockDate = unlockDate
             };
         }
     }
