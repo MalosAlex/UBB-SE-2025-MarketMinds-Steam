@@ -21,6 +21,8 @@ namespace Tests.RepositoryTests
         [Test]
         public void Offers_ReturnsNonNullList()
         {
+            // Arrange
+
             // Act
             var offers = pointsOffersRepository.Offers;
 
@@ -31,6 +33,8 @@ namespace Tests.RepositoryTests
         [Test]
         public void Offers_ReturnsCorrectNumberOfOffers()
         {
+            // Arrange
+
             // Act
             var offers = pointsOffersRepository.Offers;
 
@@ -41,6 +45,8 @@ namespace Tests.RepositoryTests
         [Test]
         public void Offers_FirstOffer_HasCorrectPrice()
         {
+            // Arrange
+
             // Act
             var offers = pointsOffersRepository.Offers;
 
@@ -51,6 +57,8 @@ namespace Tests.RepositoryTests
         [Test]
         public void Offers_FirstOffer_HasCorrectPoints()
         {
+            // Arrange
+
             // Act
             var offers = pointsOffersRepository.Offers;
 
@@ -61,6 +69,8 @@ namespace Tests.RepositoryTests
         [Test]
         public void Offers_SecondOffer_HasCorrectPrice()
         {
+            // Arrange
+
             // Act
             var offers = pointsOffersRepository.Offers;
 
@@ -71,6 +81,8 @@ namespace Tests.RepositoryTests
         [Test]
         public void Offers_SecondOffer_HasCorrectPoints()
         {
+            // Arrange
+
             // Act
             var offers = pointsOffersRepository.Offers;
 
@@ -81,6 +93,8 @@ namespace Tests.RepositoryTests
         [Test]
         public void Offers_ThirdOffer_HasCorrectPrice()
         {
+            // Arrange
+
             // Act
             var offers = pointsOffersRepository.Offers;
 
@@ -91,6 +105,8 @@ namespace Tests.RepositoryTests
         [Test]
         public void Offers_ThirdOffer_HasCorrectPoints()
         {
+            // Arrange
+
             // Act
             var offers = pointsOffersRepository.Offers;
 
@@ -101,6 +117,8 @@ namespace Tests.RepositoryTests
         [Test]
         public void Offers_FourthOffer_HasCorrectPrice()
         {
+            // Arrange
+
             // Act
             var offers = pointsOffersRepository.Offers;
 
@@ -111,6 +129,8 @@ namespace Tests.RepositoryTests
         [Test]
         public void Offers_FourthOffer_HasCorrectPoints()
         {
+            // Arrange
+
             // Act
             var offers = pointsOffersRepository.Offers;
 
@@ -121,6 +141,8 @@ namespace Tests.RepositoryTests
         [Test]
         public void Offers_FifthOffer_HasCorrectPrice()
         {
+            // Arrange
+
             // Act
             var offers = pointsOffersRepository.Offers;
 
@@ -131,6 +153,8 @@ namespace Tests.RepositoryTests
         [Test]
         public void Offers_FifthOffer_HasCorrectPoints()
         {
+            // Arrange
+
             // Act
             var offers = pointsOffersRepository.Offers;
 

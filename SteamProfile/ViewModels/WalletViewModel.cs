@@ -34,7 +34,7 @@ namespace SteamProfile.ViewModels
 
         public string PointsText
         {
-            get { return $"{Points} pts"; }
+            get { return $"{Points} points"; }
         }
 
         public WalletViewModel(IWalletService walletService, IPointsOffersRepository pointsOffersRepository)
@@ -70,7 +70,7 @@ namespace SteamProfile.ViewModels
         }
 
         [RelayCommand]
-        public async Task<bool> AddPoints(PointsOffer pointsOffer)
+        public async Task<bool> PurchasePoints(PointsOffer pointsOffer)
         {
             // Business logic moved to WalletService
             bool success = walletService.TryPurchasePoints(pointsOffer);

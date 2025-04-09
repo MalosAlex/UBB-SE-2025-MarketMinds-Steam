@@ -15,11 +15,11 @@ namespace SteamProfile.Views.WalletViews
             this.InitializeComponent();
         }
 
-        protected override void OnNavigatedTo(NavigationEventArgs e)
+        protected override void OnNavigatedTo(NavigationEventArgs eventArgs)
         {
-            base.OnNavigatedTo(e);
+            base.OnNavigatedTo(eventArgs);
 
-            if (e.Parameter is Dictionary<string, object> parameters)
+            if (eventArgs.Parameter is Dictionary<string, object> parameters)
             {
                 // Create and initialize the ViewModel
                 ViewModel = new CardPaymentViewModel();
@@ -30,27 +30,27 @@ namespace SteamProfile.Views.WalletViews
             }
         }
 
-        private void ValidName(object sender, TextChangedEventArgs e)
+        private void ValidName(object sender, TextChangedEventArgs eventArgs)
         {
             ViewModel.ValidateName(OwnerNameTextBox.Text);
         }
 
-        private void ValidNumber(object sender, TextChangedEventArgs e)
+        private void ValidNumber(object sender, TextChangedEventArgs eventArgs)
         {
             ViewModel.ValidateCardNumber(CardNumberTextBox.Text);
         }
 
-        private void ValidCardVerificationValue(object sender, TextChangedEventArgs e)
+        private void ValidCardVerificationValue(object sender, TextChangedEventArgs eventArgs)
         {
             ViewModel.ValidateCardVerificationValue(CardVerificationValueTextBox.Text);
         }
 
-        private void ValidDate(object sender, TextChangedEventArgs e)
+        private void ValidDate(object sender, TextChangedEventArgs eventArgs)
         {
             ViewModel.ValidateExpirationDate(ExpirationDateTextBox.Text);
         }
 
-        private async void AddMoneyToAccount(object sender, RoutedEventArgs e)
+        private async void AddMoneyToAccount(object sender, RoutedEventArgs eventArgs)
         {
             if (await ViewModel.ProcessPaymentAsync())
             {
@@ -58,7 +58,7 @@ namespace SteamProfile.Views.WalletViews
             }
         }
 
-        private void CancelPayment(object sender, RoutedEventArgs e)
+        private void CancelPayment(object sender, RoutedEventArgs eventArgs)
         {
             Frame.GoBack();
         }

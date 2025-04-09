@@ -7,9 +7,6 @@ using SteamProfile.ViewModels;
 
 namespace SteamProfile.Views.WalletViews
 {
-    /// <summary>
-    /// Payment page for PayPal transactions
-    /// </summary>
     public sealed partial class PaypalPaymentPage : Page
     {
         public PaypalPaymentViewModel ViewModel { get; } = new PaypalPaymentViewModel();
@@ -20,27 +17,27 @@ namespace SteamProfile.Views.WalletViews
             DataContext = ViewModel;
         }
 
-        protected override void OnNavigatedTo(NavigationEventArgs e)
+        protected override void OnNavigatedTo(NavigationEventArgs eventArgs)
         {
-            base.OnNavigatedTo(e);
+            base.OnNavigatedTo(eventArgs);
 
-            if (e.Parameter is Dictionary<string, object> parameters)
+            if (eventArgs.Parameter is Dictionary<string, object> parameters)
             {
                 ViewModel.Initialize(parameters);
             }
         }
 
-        private void EmailTextBox_TextChanged(object sender, TextChangedEventArgs e)
+        private void EmailTextBox_TextChanged(object sender, TextChangedEventArgs eventArgs)
         {
             ViewModel.ValidateEmail(EmailTextBox.Text);
         }
 
-        private void PasswordText_PasswordChanged(object sender, RoutedEventArgs e)
+        private void PasswordText_PasswordChanged(object sender, RoutedEventArgs eventArgs)
         {
             ViewModel.ValidatePassword(PasswordText.Password);
         }
 
-        private async void AddMoneyButton_Click(object sender, RoutedEventArgs e)
+        private async void AddMoneyButton_Click(object sender, RoutedEventArgs eventArgs)
         {
             bool success = await ViewModel.ProcessPaymentAsync();
             if (success)
@@ -49,7 +46,7 @@ namespace SteamProfile.Views.WalletViews
             }
         }
 
-        private void CancelButton_Click(object sender, RoutedEventArgs e)
+        private void CancelButton_Click(object sender, RoutedEventArgs eventArgs)
         {
             Frame.GoBack();
         }
