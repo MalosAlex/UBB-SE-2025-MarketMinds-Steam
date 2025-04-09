@@ -13,6 +13,10 @@ namespace SteamProfile.ViewModels
 {
     public class AddGameToCollectionViewModel : ObservableObject
     {
+        // Constants to replace magic string literals
+        private const string FailedToLoadAvailableGamesErrorMessage = "Failed to load available games. Please try again.";
+        private const string FailedToAddGameErrorMessage = "Failed to add game to collection. Please try again.";
+
         private readonly ICollectionsService collectionsService;
         private readonly IUserService userService;
         private int userId;
@@ -56,12 +60,11 @@ namespace SteamProfile.ViewModels
         {
             try
             {
-                isLoading = true;
-                errorMessage = null;
+                IsLoading = true;
+                ErrorMessage = null;
 
-                Debug.WriteLine($"Loading available games for collection {collectionId}");
-                var gamesNotInCollection = collectionsService.GetGamesNotInCollection(collectionId, userService.GetCurrentUser().UserId);
-                Debug.WriteLine($"Retrieved {gamesNotInCollection.Count} available games");
+                var currentUser = userService.GetCurrentUser();
+                var gamesNotInCollection = collectionsService.GetGamesNotInCollection(collectionId, currentUser.UserId);
 
                 AvailableGames.Clear();
                 foreach (var availableGame in gamesNotInCollection)
@@ -71,12 +74,11 @@ namespace SteamProfile.ViewModels
             }
             catch (Exception ex)
             {
-                Debug.WriteLine($"Error loading available games: {ex.Message}");
-                errorMessage = "Failed to load available games. Please try again.";
+                ErrorMessage = FailedToLoadAvailableGamesErrorMessage;
             }
             finally
             {
-                isLoading = false;
+                IsLoading = false;
             }
         }
 
@@ -84,13 +86,13 @@ namespace SteamProfile.ViewModels
         {
             try
             {
-                collectionsService.AddGameToCollection(collectionId, game.GameId, userService.GetCurrentUser().UserId);
+                var currentUser = userService.GetCurrentUser();
+                collectionsService.AddGameToCollection(collectionId, game.GameId, currentUser.UserId);
                 AvailableGames.Remove(game);
             }
             catch (Exception ex)
             {
-                Debug.WriteLine($"Error adding game to collection: {ex.Message}");
-                errorMessage = "Failed to add game to collection. Please try again.";
+                ErrorMessage = FailedToAddGameErrorMessage;
             }
         }
 

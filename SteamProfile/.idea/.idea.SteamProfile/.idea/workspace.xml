@@ -11,7 +11,9 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="0161f655-4b51-48b1-8da8-59f3015ae934" name="Changes" comment="" />
+    <list default="true" id="0161f655-4b51-48b1-8da8-59f3015ae934" name="Changes" comment="">
+      <change beforePath="$PROJECT_DIR$/Views/CollectionGamesPage.xaml.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Views/CollectionGamesPage.xaml.cs" afterDir="false" />
+    </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
     <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
@@ -123,7 +125,7 @@
       <workItem from="1744020076817" duration="320000" />
       <workItem from="1744117365832" duration="270000" />
       <workItem from="1744117647693" duration="5826000" />
-      <workItem from="1744182616870" duration="811000" />
+      <workItem from="1744182616870" duration="3350000" />
     </task>
     <servers />
   </component>
