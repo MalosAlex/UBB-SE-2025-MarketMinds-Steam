@@ -122,25 +122,25 @@ namespace BusinessLayer.Repositories
             try
             {
                 // Check if the relationship exists
-                var checkParams = new SqlParameter[]
+                var checkParameters = new SqlParameter[]
                 {
                     new SqlParameter("@userId", userId),
                     new SqlParameter("@featureId", featureId)
                 };
 
-                var relationshipTable = dataLink.ExecuteReader("GetFeatureUserRelationship", checkParams);
+                var relationshipTable = dataLink.ExecuteReader("GetFeatureUserRelationship", checkParameters);
 
                 if (relationshipTable.Rows.Count > 0)
                 {
                     // Update existing relationship
-                    var updateParams = new SqlParameter[]
+                    var updateParameters = new SqlParameter[]
                     {
                         new SqlParameter("@userId", userId),
                         new SqlParameter("@featureId", featureId),
                         new SqlParameter("@equipped", 1)
                     };
 
-                    dataLink.ExecuteNonQuery("UpdateFeatureUserEquipStatus", updateParams);
+                    dataLink.ExecuteNonQuery("UpdateFeatureUserEquipStatus", updateParameters);
                     return true;
                 }
 
@@ -158,13 +158,13 @@ namespace BusinessLayer.Repositories
             try
             {
                 // Check if the relationship exists
-                var checkParams = new SqlParameter[]
+                var checkParameters = new SqlParameter[]
                 {
                     new SqlParameter("@userId", userId),
                     new SqlParameter("@featureId", featureId)
                 };
 
-                var relationshipTable = dataLink.ExecuteReader("GetFeatureUserRelationship", checkParams);
+                var relationshipTable = dataLink.ExecuteReader("GetFeatureUserRelationship", checkParameters);
 
                 if (relationshipTable.Rows.Count > 0)
                 {
