@@ -1,8 +1,8 @@
-﻿using NUnit.Framework;
+﻿using System;
+using System.Linq;
+using NUnit.Framework;
 using BusinessLayer.Models;
 using BusinessLayer.Repositories.Fakes;
-using System;
-using System.Linq;
 
 namespace Tests.RepositoryTests
 {

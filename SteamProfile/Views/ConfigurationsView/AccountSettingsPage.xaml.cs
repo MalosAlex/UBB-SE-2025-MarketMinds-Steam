@@ -1,8 +1,8 @@
+using System;
 using Microsoft.UI.Xaml;
 using Microsoft.UI.Xaml.Controls;
 using Microsoft.UI.Xaml.Media;
 using SteamProfile.ViewModels.ConfigurationsViewModels;
-using System;
 
 namespace SteamProfile.Views.ConfigurationsView
 {
@@ -10,7 +10,7 @@ namespace SteamProfile.Views.ConfigurationsView
     {
         private AccountSettingsViewModel ViewModel { get; set; }
         private ContentDialog passwordConfirmationDialog;
-        
+
         public AccountSettingsPage()
         {
             this.InitializeComponent();

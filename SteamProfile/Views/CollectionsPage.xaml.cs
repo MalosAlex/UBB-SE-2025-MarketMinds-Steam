@@ -1,9 +1,9 @@
+using System;
 using Microsoft.UI.Xaml;
 using Microsoft.UI.Xaml.Controls;
 using Microsoft.UI.Xaml.Navigation;
 using SteamProfile.ViewModels;
 using BusinessLayer.Models;
-using System;
 
 namespace SteamProfile.Views
 {
@@ -27,16 +27,16 @@ namespace SteamProfile.Views
         private const string CoverPicturePlaceholderCreate = "Enter cover picture URL";
         private const string PublicCollectionHeader = "Public Collection";
 
-        private CollectionsViewModel _collectionsViewModel;
-        private UsersViewModel _usersViewModel;
+        private CollectionsViewModel collectionsViewModel;
+        private UsersViewModel usersViewModel;
 
         public CollectionsPage()
         {
             this.InitializeComponent();
-            _collectionsViewModel = App.CollectionsViewModel;
-            _collectionsViewModel.LoadCollections();
-            _usersViewModel = App.UsersViewModel;
-            this.DataContext = _collectionsViewModel;
+            collectionsViewModel = App.CollectionsViewModel;
+            collectionsViewModel.LoadCollections();
+            usersViewModel = App.UsersViewModel;
+            this.DataContext = collectionsViewModel;
         }
 
         protected override void OnNavigatedTo(NavigationEventArgs eventArgs)
@@ -47,7 +47,7 @@ namespace SteamProfile.Views
 
         private void LoadCollections()
         {
-            _collectionsViewModel.LoadCollectionsCommand.Execute(null);
+            collectionsViewModel.LoadCollectionsCommand.Execute(null);
         }
 
         private void ViewCollection_Click(object sender, RoutedEventArgs eventArgs)
@@ -62,7 +62,7 @@ namespace SteamProfile.Views
         {
             if (sender is Button button && button.CommandParameter is int collectionId)
             {
-                _collectionsViewModel.DeleteCollectionCommand.Execute(collectionId);
+                collectionsViewModel.DeleteCollectionCommand.Execute(collectionId);
             }
         }
 
@@ -113,7 +113,7 @@ namespace SteamProfile.Views
                 {
                     try
                     {
-                        _collectionsViewModel.UpdateCollectionCommand.Execute(new UpdateCollectionParams
+                        collectionsViewModel.UpdateCollectionCommand.Execute(new UpdateCollectionParams
                         {
                             CollectionId = collection.CollectionId,
                             Name = nameTextBox.Text,
@@ -179,7 +179,7 @@ namespace SteamProfile.Views
             {
                 try
                 {
-                    _collectionsViewModel.CreateCollectionCommand.Execute(new CreateCollectionParams
+                    collectionsViewModel.CreateCollectionCommand.Execute(new CreateCollectionParams
                     {
                         Name = nameTextBox.Text,
                         CoverPicture = coverPictureTextBox.Text,
@@ -203,7 +203,7 @@ namespace SteamProfile.Views
 
         private void BackToProfileButton_Click(object sender, RoutedEventArgs eventArgs)
         {
-            Frame.Navigate(typeof(ProfilePage), _usersViewModel.GetCurrentUser().UserId);
+            Frame.Navigate(typeof(ProfilePage), usersViewModel.GetCurrentUser().UserId);
         }
     }
 }

@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Runtime.Serialization;
 using System.Data;
 using System.Linq;
 using System.Collections.Generic;
@@ -10,7 +11,6 @@ using BusinessLayer.Repositories;
 using BusinessLayer.Repositories.Interfaces;
 using BusinessLayer.Exceptions;
 using Microsoft.Data.SqlClient;
-using System.Runtime.Serialization;
 using BusinessLayer.Services;
 
 namespace Tests.RepositoryTests
@@ -94,17 +94,17 @@ namespace Tests.RepositoryTests
             mockDataLink.Setup(dataLink => dataLink.ExecuteReader("GetFriendsForUser", It.IsAny<SqlParameter[]>()))
                         .Returns(friendshipsTable);
             // Setup friend lookup for user IDs.
-            mockDataLink.Setup(dataLink => dataLink.ExecuteReader("GetUserById", 
+            mockDataLink.Setup(dataLink => dataLink.ExecuteReader("GetUserById",
                 It.Is<SqlParameter[]>(p => Convert.ToInt32(p[0].Value) == 2)))
                         .Returns(CreateUserDataTable("Alice"));
-            mockDataLink.Setup(dataLink => dataLink.ExecuteReader("GetUserById", 
+            mockDataLink.Setup(dataLink => dataLink.ExecuteReader("GetUserById",
                 It.Is<SqlParameter[]>(p => Convert.ToInt32(p[0].Value) == 3)))
                         .Returns(CreateUserDataTable("Bob"));
             // Setup profile lookup for friend IDs.
-            mockDataLink.Setup(dataLink => dataLink.ExecuteReader("GetUserProfileByUserId", 
+            mockDataLink.Setup(dataLink => dataLink.ExecuteReader("GetUserProfileByUserId",
                 It.Is<SqlParameter[]>(p => Convert.ToInt32(p[0].Value) == 2)))
                         .Returns(CreateUserProfileDataTable("alice.jpg"));
-            mockDataLink.Setup(dataLink => dataLink.ExecuteReader("GetUserProfileByUserId", 
+            mockDataLink.Setup(dataLink => dataLink.ExecuteReader("GetUserProfileByUserId",
                 It.Is<SqlParameter[]>(p => Convert.ToInt32(p[0].Value) == 3)))
                         .Returns(CreateUserProfileDataTable("bob.jpg"));
             // Act
@@ -156,10 +156,10 @@ namespace Tests.RepositoryTests
             // Setup friend data: friendId 2 -> "Zoe", friendId 3 -> "Anna"
             mockDataLink.Setup(dataLink => dataLink.ExecuteReader("GetFriendsForUser", It.IsAny<SqlParameter[]>()))
                         .Returns(friendshipsTable);
-            mockDataLink.Setup(dataLink => dataLink.ExecuteReader("GetUserById", 
+            mockDataLink.Setup(dataLink => dataLink.ExecuteReader("GetUserById",
                 It.Is<SqlParameter[]>(p => Convert.ToInt32(p[0].Value) == 2)))
                         .Returns(CreateUserDataTable("Zoe"));
-            mockDataLink.Setup(dataLink => dataLink.ExecuteReader("GetUserById", 
+            mockDataLink.Setup(dataLink => dataLink.ExecuteReader("GetUserById",
                 It.Is<SqlParameter[]>(p => Convert.ToInt32(p[0].Value) == 3)))
                         .Returns(CreateUserDataTable("Anna"));
             // Setup profile lookup (dummy).
