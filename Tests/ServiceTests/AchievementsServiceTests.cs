@@ -12,14 +12,14 @@ namespace Tests.ServiceTests
     [TestFixture]
     public class AchievementsServiceTests
     {
-        private Mock<IAchievementsRepository> mockRepository;
+        private Mock<IAchievementsRepository> mockAchievementsRepository;
         private AchievementsService achievementsService;
 
         [SetUp]
         public void SetUp()
         {
-            mockRepository = new Mock<IAchievementsRepository>();
-            achievementsService = new AchievementsService(mockRepository.Object);
+            mockAchievementsRepository = new Mock<IAchievementsRepository>();
+            achievementsService = new AchievementsService(mockAchievementsRepository.Object);
         }
 
         [Test]
@@ -47,10 +47,10 @@ namespace Tests.ServiceTests
         new AchievementWithStatus { Achievement = new Achievement { AchievementType = "Developer" } },
     };
             // Arrange
-            mockRepository.Setup(repository => repository.GetAchievementsWithStatusForUser(It.IsAny<int>()))
+            mockAchievementsRepository.Setup(repository => repository.GetAchievementsWithStatusForUser(It.IsAny<int>()))
                      .Returns(achievements);
 
-            var service = new AchievementsService(mockRepository.Object);
+            var service = new AchievementsService(mockAchievementsRepository.Object);
 
             // Act
             var result = service.GetGroupedAchievementsForUser(1);
@@ -69,10 +69,10 @@ namespace Tests.ServiceTests
         new AchievementWithStatus { Achievement = new Achievement { AchievementType = "Friendships" } },
     };
             // Arrange
-            mockRepository.Setup(repository => repository.GetAchievementsWithStatusForUser(It.IsAny<int>()))
+            mockAchievementsRepository.Setup(repository => repository.GetAchievementsWithStatusForUser(It.IsAny<int>()))
                      .Returns(achievements);
 
-            var service = new AchievementsService(mockRepository.Object);
+            var service = new AchievementsService(mockAchievementsRepository.Object);
 
             // Act
             var result = service.GetGroupedAchievementsForUser(1);
@@ -90,10 +90,10 @@ namespace Tests.ServiceTests
         new AchievementWithStatus { Achievement = new Achievement { AchievementType = "Owned Games" } },
     };
 
-            mockRepository.Setup(repository => repository.GetAchievementsWithStatusForUser(It.IsAny<int>()))
+            mockAchievementsRepository.Setup(repository => repository.GetAchievementsWithStatusForUser(It.IsAny<int>()))
                      .Returns(achievements);
 
-            var service = new AchievementsService(mockRepository.Object);
+            var service = new AchievementsService(mockAchievementsRepository.Object);
 
             // Act
             var result = service.GetGroupedAchievementsForUser(1);
@@ -111,10 +111,10 @@ namespace Tests.ServiceTests
         new AchievementWithStatus { Achievement = new Achievement { AchievementType = "Developer" } },
     };
 
-            mockRepository.Setup(repository => repository.GetAchievementsWithStatusForUser(It.IsAny<int>()))
+            mockAchievementsRepository.Setup(repository => repository.GetAchievementsWithStatusForUser(It.IsAny<int>()))
                      .Returns(achievements);
 
-            var service = new AchievementsService(mockRepository.Object);
+            var service = new AchievementsService(mockAchievementsRepository.Object);
 
             // Act
             var result = service.GetGroupedAchievementsForUser(1);
@@ -132,10 +132,10 @@ namespace Tests.ServiceTests
         new AchievementWithStatus { Achievement = new Achievement { AchievementType = "Friendships" } },
     };
 
-            mockRepository.Setup(repository => repository.GetAchievementsWithStatusForUser(It.IsAny<int>()))
+            mockAchievementsRepository.Setup(repository => repository.GetAchievementsWithStatusForUser(It.IsAny<int>()))
                      .Returns(achievements);
 
-            var service = new AchievementsService(mockRepository.Object);
+            var service = new AchievementsService(mockAchievementsRepository.Object);
 
             // Act
             var result = service.GetGroupedAchievementsForUser(1);
@@ -148,10 +148,10 @@ namespace Tests.ServiceTests
         public void GetGroupedAchievementsForUser_WhenRepoThrows_ThrowsServiceException_WithCorrectMessage()
         {
             // Arrange
-            mockRepository.Setup(repository => repository.GetAchievementsWithStatusForUser(It.IsAny<int>()))
+            mockAchievementsRepository.Setup(repository => repository.GetAchievementsWithStatusForUser(It.IsAny<int>()))
                      .Throws(new RepositoryException("DB error"));
 
-            var service = new AchievementsService(mockRepository.Object);
+            var service = new AchievementsService(mockAchievementsRepository.Object);
 
             // Act & Assert
             var exception = Assert.Throws<ServiceException>(() => service.GetGroupedAchievementsForUser(42));
@@ -162,10 +162,10 @@ namespace Tests.ServiceTests
         public void GetGroupedAchievementsForUser_WhenRepoThrows_ThrowsServiceException_WithInnerException()
         {
             // Arrange
-            mockRepository.Setup(repository => repository.GetAchievementsWithStatusForUser(It.IsAny<int>()))
+            mockAchievementsRepository.Setup(repository => repository.GetAchievementsWithStatusForUser(It.IsAny<int>()))
                      .Throws(new RepositoryException("DB error"));
 
-            var service = new AchievementsService(mockRepository.Object);
+            var service = new AchievementsService(mockAchievementsRepository.Object);
 
             // Act
             var exception = Assert.Throws<ServiceException>(() => service.GetGroupedAchievementsForUser(42));

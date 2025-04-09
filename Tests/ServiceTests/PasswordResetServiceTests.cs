@@ -19,16 +19,16 @@ namespace Tests.ServiceTests
     public class PasswordResetServiceTests
     {
         private PasswordResetService passwordResetService;
-        private Mock<PasswordResetRepository> mockPasswordRepository;
+        private Mock<PasswordResetRepository> mockPasswordResetRepository;
         private Mock<IUserService> mockUserService;
         private string testResetCodesPath;
 
         [SetUp]
         public void Setup()
         {
-            this.mockPasswordRepository = new Mock<PasswordResetRepository>(new Mock<IDataLink>().Object);
+            this.mockPasswordResetRepository = new Mock<PasswordResetRepository>(new Mock<IDataLink>().Object);
             this.mockUserService = new Mock<IUserService>();
-            this.passwordResetService = new PasswordResetService(this.mockPasswordRepository.Object, this.mockUserService.Object);
+            this.passwordResetService = new PasswordResetService(this.mockPasswordResetRepository.Object, this.mockUserService.Object);
 
             // Set up test directory for reset codes
             this.testResetCodesPath = Path.Combine(Path.GetTempPath(), "TestResetCodes");
