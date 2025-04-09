@@ -29,12 +29,12 @@ namespace SteamProfile.Views
             this.Loaded += FeaturesPage_Loaded;
         }
 
-        private void FeaturesPage_Loaded(object sender, RoutedEventArgs e)
+        private void FeaturesPage_Loaded(object sender, RoutedEventArgs routedEventArguments)
         {
             featuresViewModel.Initialize(this.XamlRoot);
         }
 
-        private void Grid_Tapped(object sender, TappedRoutedEventArgs e)
+        private void Grid_Tapped(object sender, TappedRoutedEventArgs tappedRoutedEventArguments)
         {
             if (sender is FrameworkElement element && element.DataContext is FeatureDisplay feature)
             {
@@ -42,16 +42,16 @@ namespace SteamProfile.Views
             }
         }
 
-        private void Image_ImageFailed(object sender, ExceptionRoutedEventArgs e)
+        private void Image_ImageFailed(object sender, ExceptionRoutedEventArgs exceptionRoutedEventArguments)
         {
             var image = sender as Image;
             if (image != null)
             {
-                System.Diagnostics.Debug.WriteLine($"Failed to load image. Error: {e.ErrorMessage}");
+                System.Diagnostics.Debug.WriteLine($"Failed to load image. Error: {exceptionRoutedEventArguments.ErrorMessage}");
             }
         }
 
-        private void BackToProfileButton_Click(object sender, RoutedEventArgs e)
+        private void BackToProfileButton_Click(object sender, RoutedEventArgs routedEventArguments)
         {
             // Get the current user ID from the service or ViewModel
             int userId = App.UserService.GetCurrentUser().UserId;
