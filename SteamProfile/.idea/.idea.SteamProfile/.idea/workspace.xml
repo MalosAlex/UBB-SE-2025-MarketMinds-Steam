@@ -12,7 +12,9 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="0161f655-4b51-48b1-8da8-59f3015ae934" name="Changes" comment="">
-      <change beforePath="$PROJECT_DIR$/Views/CollectionGamesPage.xaml.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Views/CollectionGamesPage.xaml.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/.idea.SteamProfile/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/.idea.SteamProfile/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/SteamProfile.csproj" beforeDir="false" afterPath="$PROJECT_DIR$/SteamProfile.csproj" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../Tests/Tests.csproj" beforeDir="false" afterPath="$PROJECT_DIR$/../Tests/Tests.csproj" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -46,7 +48,7 @@
     <setting file="file://$PROJECT_DIR$/Converters/StringToVisibilityConverter.cs" root0="FORCE_HIGHLIGHTING" />
   </component>
   <component name="ProblemsViewState">
-    <option name="selectedTabId" value="CurrentFile" />
+    <option name="selectedTabId" value="SWEA" />
   </component>
   <component name="ProjectColorInfo">{
   &quot;associatedIndex&quot;: 0
@@ -125,7 +127,8 @@
       <workItem from="1744020076817" duration="320000" />
       <workItem from="1744117365832" duration="270000" />
       <workItem from="1744117647693" duration="5826000" />
-      <workItem from="1744182616870" duration="3350000" />
+      <workItem from="1744182616870" duration="3578000" />
+      <workItem from="1744219186188" duration="143000" />
     </task>
     <servers />
   </component>
@@ -136,32 +139,9 @@
     <option name="coveragePercentColumnWidth" value="150" />
     <option name="sortOrder" value="DESCENDING" />
     <option name="sortedColumn" value="1" />
-    <option name="symbolColumnWidth" value="1217" />
+    <option name="symbolColumnWidth" value="1223" />
     <coverage-tree-state>
-      <expand>
-        <path>
-          <item name="rootNode" type="c53c71d1:RiderDotCoverCoverageTreeModel$RootNode" />
-          <item name="Total 61% 5066/12962" type="8b8fad3a:RiderDotCoverCoverageTreeNode" />
-        </path>
-        <path>
-          <item name="rootNode" type="c53c71d1:RiderDotCoverCoverageTreeModel$RootNode" />
-          <item name="Total 61% 5066/12962" type="8b8fad3a:RiderDotCoverCoverageTreeNode" />
-          <item name="BusinessLayer 78% 856/3935" type="8b8fad3a:RiderDotCoverCoverageTreeNode" />
-        </path>
-        <path>
-          <item name="rootNode" type="c53c71d1:RiderDotCoverCoverageTreeModel$RootNode" />
-          <item name="Total 61% 5066/12962" type="8b8fad3a:RiderDotCoverCoverageTreeNode" />
-          <item name="BusinessLayer 78% 856/3935" type="8b8fad3a:RiderDotCoverCoverageTreeNode" />
-          <item name="(1.0.0.0, net8.0) 78% 856/3935" type="8b8fad3a:RiderDotCoverCoverageTreeNode" />
-        </path>
-        <path>
-          <item name="rootNode" type="c53c71d1:RiderDotCoverCoverageTreeModel$RootNode" />
-          <item name="Total 61% 5066/12962" type="8b8fad3a:RiderDotCoverCoverageTreeNode" />
-          <item name="BusinessLayer 78% 856/3935" type="8b8fad3a:RiderDotCoverCoverageTreeNode" />
-          <item name="(1.0.0.0, net8.0) 78% 856/3935" type="8b8fad3a:RiderDotCoverCoverageTreeNode" />
-          <item name="BusinessLayer 78% 848/3769" type="8b8fad3a:RiderDotCoverCoverageTreeNode" />
-        </path>
-      </expand>
+      <expand />
       <select />
     </coverage-tree-state>
   </component>
