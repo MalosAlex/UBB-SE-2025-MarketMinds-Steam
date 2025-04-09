@@ -21,7 +21,7 @@ namespace BusinessLayer.Services
             validator = new PasswordResetValidator();
             resetCodesPath = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "ResetCodes");
             Directory.CreateDirectory(resetCodesPath);
-            passwordResetRepository = passwordResetRepository ?? throw new ArgumentNullException(nameof(passwordResetRepository));
+            this.passwordResetRepository = passwordResetRepository ?? throw new ArgumentNullException(nameof(passwordResetRepository));
         }
 
         public async Task<(bool isValid, string message)> SendResetCode(string email)
@@ -44,7 +44,10 @@ namespace BusinessLayer.Services
 
                 var code = GenerateResetCode();
                 var filePath = GetResetCodeFilePath(email);
-                await File.WriteAllTextAsync(filePath, code);
+                // Store code with expiration time
+                var expiryTime = DateTime.UtcNow.AddMinutes(15);
+                var fileContent = $"{code}|{expiryTime:O}";
+                await File.WriteAllTextAsync(filePath, fileContent);
 
                 // Set up auto-deletion after 15 minutes
                 _ = Task.Delay(TimeSpan.FromMinutes(15)).ContinueWith(_ =>
@@ -85,8 +88,27 @@ namespace BusinessLayer.Services
                     return (false, "Reset code has expired or does not exist.");
                 }
 
-                var storedCode = File.ReadAllText(filePath).Trim();
-                return (storedCode == code, storedCode == code ? "Code verified successfully." : "Invalid reset code.");
+                var fileContent = File.ReadAllText(filePath).Trim();
+                var parts = fileContent.Split('|');
+                
+                if (parts.Length != 2 || !DateTime.TryParse(parts[1].Trim(), out DateTime expiryTime))
+                {
+                    // Invalid file format
+                    return (false, "Invalid reset code.");
+                }
+
+                var storedCode = parts[0];
+                if (storedCode != code)
+                {
+                    return (false, "Invalid reset code.");
+                }
+
+                if (expiryTime < DateTime.UtcNow)
+                {
+                    return (false, "Invalid or expired reset code.");
+                }
+
+                return (true, "Code verified successfully.");
             }
             catch (Exception ex)
             {
@@ -96,29 +118,35 @@ namespace BusinessLayer.Services
 
         public (bool isValid, string message) ResetPassword(string email, string code, string newPassword)
         {
-            var emailValidation = validator.ValidateEmail(email);
-            if (!emailValidation.isValid)
-            {
-                throw new InvalidOperationException(emailValidation.message);
-            }
-
-            var codeValidation = validator.ValidateResetCode(code);
-            if (!codeValidation.isValid)
-            {
-                throw new InvalidOperationException(codeValidation.message);
-            }
-
-            var passwordValidation = validator.ValidatePassword(newPassword);
-            if (!passwordValidation.isValid)
-            {
-                throw new InvalidOperationException(passwordValidation.message);
-            }
-
             try
             {
+                var emailValidation = validator.ValidateEmail(email);
+                if (!emailValidation.isValid)
+                {
+                    throw new InvalidOperationException(emailValidation.message);
+                }
+
+                var codeValidation = validator.ValidateResetCode(code);
+                if (!codeValidation.isValid)
+                {
+                    throw new InvalidOperationException(codeValidation.message);
+                }
+
+                var passwordValidation = validator.ValidatePassword(newPassword);
+                if (!passwordValidation.isValid)
+                {
+                    return (false, passwordValidation.message);
+                }
+
                 var verificationResult = VerifyResetCode(email, code);
                 if (!verificationResult.isValid)
                 {
+                    // Always return 'Invalid or expired reset code.' for expired codes
+                    if (verificationResult.message == "Invalid reset code." || 
+                        verificationResult.message == "Reset code has expired or does not exist.")
+                    {
+                        return (false, "Invalid or expired reset code.");
+                    }
                     return verificationResult;
                 }
 
@@ -140,34 +168,100 @@ namespace BusinessLayer.Services
 
         public void CleanupExpiredCodes()
         {
+            if (!Directory.Exists(resetCodesPath))
+            {
+                Directory.CreateDirectory(resetCodesPath);
+                return;
+            }
+
+            string[] filePaths = null;
             try
             {
-                if (!Directory.Exists(resetCodesPath))
-                {
-                    return;
-                }
-
-                var files = Directory.GetFiles(resetCodesPath);
-                foreach (var file in files)
-                {
-                    var fileInfo = new FileInfo(file);
-                    if (DateTime.UtcNow - fileInfo.CreationTimeUtc > TimeSpan.FromMinutes(15))
-                    {
-                        File.Delete(file);
-                    }
-                }
+                filePaths = Directory.GetFiles(resetCodesPath);
             }
             catch (Exception ex)
             {
-                // Log the error but don't throw - this is a cleanup operation
-                Console.WriteLine($"Error during cleanup: {ex.Message}");
+                Console.WriteLine($"Error accessing directory: {ex.Message}");
+                return;
+            }
+
+            foreach (string file in filePaths)
+            {
+                if (!File.Exists(file))
+                {
+                    continue;
+                }
+
+                string fileContent = string.Empty;
+                try
+                {
+                    using (var sr = new StreamReader(file))
+                    {
+                        fileContent = sr.ReadToEnd().Trim();
+                    }
+
+                    string[] parts = fileContent.Split('|');
+                    bool shouldDelete = false;
+
+                    if (parts.Length == 2 && DateTime.TryParse(parts[1].Trim(), out DateTime expiryTime))
+                    {
+                        shouldDelete = expiryTime < DateTime.UtcNow;
+                    }
+                    else
+                    {
+                        // Invalid format, check file creation time
+                        var fileInfo = new FileInfo(file);
+                        shouldDelete = fileInfo.CreationTimeUtc < DateTime.UtcNow.AddMinutes(-15);
+                    }
+
+                    if (shouldDelete)
+                    {
+                        try
+                        {
+                            File.SetAttributes(file, FileAttributes.Normal); // Remove any read-only attributes
+                            File.Delete(file);
+                        }
+                        catch (IOException)
+                        {
+                            try
+                            {
+                                // Wait a moment and try again
+                                System.Threading.Thread.Sleep(100);
+                                if (File.Exists(file))
+                                {
+                                    File.Delete(file);
+                                }
+                            }
+                            catch
+                            {
+                                Console.WriteLine($"Failed to delete file: {file}");
+                            }
+                        }
+                    }
+                }
+                catch (Exception ex)
+                {
+                    Console.WriteLine($"Error processing file {file}: {ex.Message}");
+                    try
+                    {
+                        // Try to delete by creation time if reading fails
+                        if (new FileInfo(file).CreationTimeUtc < DateTime.UtcNow.AddMinutes(-15))
+                        {
+                            File.Delete(file);
+                        }
+                    }
+                    catch
+                    {
+                        // Ignore deletion failures
+                    }
+                }
             }
         }
 
         private string GenerateResetCode()
         {
             var random = new Random();
-            return random.Next(100000, 999999).ToString();
+            return random.Next(100000, 1000000).ToString().Substring(0, 6);
         }
 
         private string GetResetCodeFilePath(string email)
