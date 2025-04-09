@@ -24,9 +24,9 @@ namespace BusinessLayer.Repositories
                 var dataTable = dataLink.ExecuteReader("GetAllUsers");
                 return MapDataTableToUsers(dataTable);
             }
-            catch (DatabaseOperationException ex)
+            catch (DatabaseOperationException exception)
             {
-                throw new RepositoryException("Failed to retrieve users from the database.", ex);
+                throw new RepositoryException("Failed to retrieve users from the database.", exception);
             }
         }
 
@@ -42,9 +42,9 @@ namespace BusinessLayer.Repositories
                 var dataTable = dataLink.ExecuteReader("GetUserById", parameters);
                 return dataTable.Rows.Count > 0 ? MapDataRowToUser(dataTable.Rows[0]) : null;
             }
-            catch (DatabaseOperationException ex)
+            catch (DatabaseOperationException exception)
             {
-                throw new RepositoryException($"Failed to retrieve user with ID {userId} from the database.", ex);
+                throw new RepositoryException($"Failed to retrieve user with ID {userId} from the database.", exception);
             }
         }
 
@@ -68,9 +68,9 @@ namespace BusinessLayer.Repositories
 
                 return MapDataRowToUser(dataTable.Rows[0]);
             }
-            catch (DatabaseOperationException ex)
+            catch (DatabaseOperationException exception)
             {
-                throw new RepositoryException($"Failed to update user with ID {user.UserId}.", ex);
+                throw new RepositoryException($"Failed to update user with ID {user.UserId}.", exception);
             }
         }
 
@@ -93,10 +93,10 @@ namespace BusinessLayer.Repositories
                 }
                 return MapDataRowToUser(dataTable.Rows[0]);
             }
-            catch (DatabaseOperationException ex)
+            catch (DatabaseOperationException exception)
             {
-                Console.WriteLine($"Error creating user: {ex.Message}");
-                throw new RepositoryException("Failed to create user.", ex);
+                Console.WriteLine($"Error creating user: {exception.Message}");
+                throw new RepositoryException("Failed to create user.", exception);
             }
         }
 
@@ -136,9 +136,9 @@ namespace BusinessLayer.Repositories
 
                 return null;
             }
-            catch (DatabaseOperationException ex)
+            catch (DatabaseOperationException exception)
             {
-                throw new RepositoryException("Failed to verify user credentials.", ex);
+                throw new RepositoryException("Failed to verify user credentials.", exception);
             }
         }
 
@@ -154,9 +154,9 @@ namespace BusinessLayer.Repositories
                 var dataTable = dataLink.ExecuteReader("GetUserByEmail", parameters);
                 return dataTable.Rows.Count > 0 ? MapDataRowToUser(dataTable.Rows[0]) : null;
             }
-            catch (DatabaseOperationException ex)
+            catch (DatabaseOperationException exception)
             {
-                throw new RepositoryException($"Failed to retrieve user with email {email}.", ex);
+                throw new RepositoryException($"Failed to retrieve user with email {email}.", exception);
             }
         }
 
@@ -172,9 +172,9 @@ namespace BusinessLayer.Repositories
                 var dataTable = dataLink.ExecuteReader("GetUserByUsername", parameters);
                 return dataTable.Rows.Count > 0 ? MapDataRowToUser(dataTable.Rows[0]) : null;
             }
-            catch (DatabaseOperationException ex)
+            catch (DatabaseOperationException exception)
             {
-                throw new RepositoryException($"Failed to retrieve user with username {username}.", ex);
+                throw new RepositoryException($"Failed to retrieve user with username {username}.", exception);
             }
         }
 
@@ -196,9 +196,9 @@ namespace BusinessLayer.Repositories
                 }
                 return null;
             }
-            catch (DatabaseOperationException ex)
+            catch (DatabaseOperationException exception)
             {
-                throw new RepositoryException("Failed to check if user exists.", ex);
+                throw new RepositoryException("Failed to check if user exists.", exception);
             }
         }
 
@@ -213,9 +213,9 @@ namespace BusinessLayer.Repositories
                 };
                 dataLink.ExecuteNonQuery("ChangeEmailForUserId", parameters);
             }
-            catch (DatabaseOperationException ex)
+            catch (DatabaseOperationException exception)
             {
-                throw new RepositoryException($"Failed to change email for user ID {userId}.", ex);
+                throw new RepositoryException($"Failed to change email for user ID {userId}.", exception);
             }
         }
         public void ChangePassword(int userId, string newPassword)
@@ -229,9 +229,9 @@ namespace BusinessLayer.Repositories
                 };
                 dataLink.ExecuteNonQuery("ChangePassword", parameters);
             }
-            catch (DatabaseOperationException ex)
+            catch (DatabaseOperationException exception)
             {
-                throw new RepositoryException($"Failed to change password for user ID {userId}.", ex);
+                throw new RepositoryException($"Failed to change password for user ID {userId}.", exception);
             }
         }
         public void ChangeUsername(int userId, string newUsername)
@@ -245,9 +245,9 @@ namespace BusinessLayer.Repositories
                 };
                 dataLink.ExecuteNonQuery("ChangeUsername", parameters);
             }
-            catch (DatabaseOperationException ex)
+            catch (DatabaseOperationException exception)
             {
-                throw new RepositoryException($"Failed to change username for user ID {userId}.", ex);
+                throw new RepositoryException($"Failed to change username for user ID {userId}.", exception);
             }
         }
 
@@ -262,9 +262,9 @@ namespace BusinessLayer.Repositories
 
                 dataLink.ExecuteNonQuery("UpdateLastLogin", parameters);
             }
-            catch (DatabaseOperationException ex)
+            catch (DatabaseOperationException exception)
             {
-                throw new RepositoryException($"Failed to update last login for user ID {userId}.", ex);
+                throw new RepositoryException($"Failed to update last login for user ID {userId}.", exception);
             }
         }
 

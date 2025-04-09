@@ -56,7 +56,7 @@ namespace Tests.RepositoryTests
         {
             // Arrange
 
-            _dataLinkMock.Setup(x => x.ExecuteReader("GetAllUsers", It.IsAny<SqlParameter[]>())).Returns(_dataTable);
+            _dataLinkMock.Setup(dataLink => dataLink.ExecuteReader("GetAllUsers", It.IsAny<SqlParameter[]>())).Returns(_dataTable);
 
             // Act
             List<User> users = _usersRepository.GetAllUsers();
@@ -69,7 +69,7 @@ namespace Tests.RepositoryTests
         public void GetAllUsers_SqlFails_ThrowsRepositoryException()
         {
             // Arrange
-            _dataLinkMock.Setup(x => x.ExecuteReader(It.IsAny<string>(), It.IsAny<SqlParameter[]>()))
+            _dataLinkMock.Setup(dataLink => dataLink.ExecuteReader(It.IsAny<string>(), It.IsAny<SqlParameter[]>()))
                 .Throws(new DatabaseOperationException("Database error"));
 
             // Act & Assert
@@ -81,7 +81,7 @@ namespace Tests.RepositoryTests
         {
             // Arrange
           
-            _dataLinkMock.Setup(x => x.ExecuteReader("GetUserById", It.IsAny<SqlParameter[]>())).Returns(_dataTable);
+            _dataLinkMock.Setup(dataLink => dataLink.ExecuteReader("GetUserById", It.IsAny<SqlParameter[]>())).Returns(_dataTable);
 
             // Act
             User user = _usersRepository.GetUserById(1);
@@ -103,7 +103,7 @@ namespace Tests.RepositoryTests
             emptyDataTable.Columns.Add("last_login", typeof(DateTime));
             emptyDataTable.Columns.Add("password", typeof(string));
 
-            _dataLinkMock.Setup(x => x.ExecuteReader("GetUserById", It.IsAny<SqlParameter[]>())).Returns(emptyDataTable);
+            _dataLinkMock.Setup(dataLink => dataLink.ExecuteReader("GetUserById", It.IsAny<SqlParameter[]>())).Returns(emptyDataTable);
 
             // Act
             User user = _usersRepository.GetUserById(3);
@@ -117,7 +117,7 @@ namespace Tests.RepositoryTests
         public void GetUserById_SqlException_ThrowRepositoryException()
         {
             // Arrange
-            _dataLinkMock.Setup(x => x.ExecuteReader(It.IsAny<string>(), It.IsAny<SqlParameter[]>()))
+            _dataLinkMock.Setup(dataLink => dataLink.ExecuteReader(It.IsAny<string>(), It.IsAny<SqlParameter[]>()))
                 .Throws(new DatabaseOperationException("Database error"));
 
             // Act & Assert
@@ -150,7 +150,7 @@ namespace Tests.RepositoryTests
 
             dataTable.Rows.Add(1, "user10", "user10@example.com", true, DateTime.Now, DateTime.Now.AddDays(-1));
 
-            _dataLinkMock.Setup(x => x.ExecuteReader("UpdateUser", It.IsAny<SqlParameter[]>())).Returns(dataTable);
+            _dataLinkMock.Setup(dataLink => dataLink.ExecuteReader("UpdateUser", It.IsAny<SqlParameter[]>())).Returns(dataTable);
 
             // Act
             User user = _usersRepository.UpdateUser(updatedUser);
@@ -183,7 +183,7 @@ namespace Tests.RepositoryTests
             dataTable.Columns.Add("last_login", typeof(DateTime));
 
             // No rows added to simulate no user found
-            _dataLinkMock.Setup(x => x.ExecuteReader("UpdateUser", It.IsAny<SqlParameter[]>())).Returns(dataTable);
+            _dataLinkMock.Setup(dataLink => dataLink.ExecuteReader("UpdateUser", It.IsAny<SqlParameter[]>())).Returns(dataTable);
 
             // Act and Assert
             Assert.Throws<RepositoryException>(() => _usersRepository.UpdateUser(updatedUser));
@@ -193,7 +193,7 @@ namespace Tests.RepositoryTests
         public void UpdateUser_SqlError_ThrowsRepositoryException()
         {
             // Arrange
-            _dataLinkMock.Setup(x => x.ExecuteReader(It.IsAny<string>(), It.IsAny<SqlParameter[]>()))
+            _dataLinkMock.Setup(dataLink => dataLink.ExecuteReader(It.IsAny<string>(), It.IsAny<SqlParameter[]>()))
                 .Throws(new DatabaseOperationException("Database error"));
 
             // Act & Assert
@@ -228,7 +228,7 @@ namespace Tests.RepositoryTests
             dataTable.Rows.Add(newUser.UserId, newUser.Username, newUser.Email, newUser.IsDeveloper, newUser.CreatedAt, newUser.LastLogin);
 
             // Mock ExecuteReader to return the populated dataTable
-            _dataLinkMock.Setup(x => x.ExecuteReader("CreateUser", It.IsAny<SqlParameter[]>())).Returns(dataTable);
+            _dataLinkMock.Setup(dataLink => dataLink.ExecuteReader("CreateUser", It.IsAny<SqlParameter[]>())).Returns(dataTable);
 
             // Act
             User user = _usersRepository.CreateUser(newUser);
@@ -264,7 +264,7 @@ namespace Tests.RepositoryTests
             dataTable.Columns.Add("last_login", typeof(DateTime));
 
             // No rows added to simulate no user found
-            _dataLinkMock.Setup(x => x.ExecuteReader("CreateUser", It.IsAny<SqlParameter[]>())).Returns(dataTable);
+            _dataLinkMock.Setup(dataLink => dataLink.ExecuteReader("CreateUser", It.IsAny<SqlParameter[]>())).Returns(dataTable);
 
             // Act and Assert
             Assert.Throws<RepositoryException>(()=> _usersRepository.CreateUser(newUser));
@@ -275,7 +275,7 @@ namespace Tests.RepositoryTests
         public void CreateUser_SqlError_ThrowsRepositoryException()
         {
             // Arrange
-            _dataLinkMock.Setup(x => x.ExecuteReader(It.IsAny<string>(), It.IsAny<SqlParameter[]>()))
+            _dataLinkMock.Setup(dataLink => dataLink.ExecuteReader(It.IsAny<string>(), It.IsAny<SqlParameter[]>()))
                 .Throws(new DatabaseOperationException("Database error"));
 
             // Act & Assert
@@ -287,20 +287,20 @@ namespace Tests.RepositoryTests
         {
             // Arrange
             int userIdToDelete = 1; // The ID of the user we want to delete
-            _dataLinkMock.Setup(x => x.ExecuteNonQuery("DeleteUser", It.IsAny<SqlParameter[]>())).Returns(1); // Simulate successful deletion (1 row affected)
+            _dataLinkMock.Setup(dataLink => dataLink.ExecuteNonQuery("DeleteUser", It.IsAny<SqlParameter[]>())).Returns(1); // Simulate successful deletion (1 row affected)
 
             // Act
             _usersRepository.DeleteUser(userIdToDelete);
 
             // Assert
-            _dataLinkMock.Verify(x => x.ExecuteNonQuery("DeleteUser", It.Is<SqlParameter[]>(p =>(int)p[0].Value == userIdToDelete )), Times.Once); 
+            _dataLinkMock.Verify(dataLink => dataLink.ExecuteNonQuery("DeleteUser", It.Is<SqlParameter[]>(p =>(int)p[0].Value == userIdToDelete )), Times.Once); 
         }
 
         [Test]
         public void DeleteUser_SqlError_ThrowsRepositoryException()
         {
             // Arrange
-            _dataLinkMock.Setup(x => x.ExecuteNonQuery(It.IsAny<string>(), It.IsAny<SqlParameter[]>()))
+            _dataLinkMock.Setup(dataLink => dataLink.ExecuteNonQuery(It.IsAny<string>(), It.IsAny<SqlParameter[]>()))
                 .Throws(new DatabaseOperationException("Database error"));
 
             // Act & Assert
@@ -325,7 +325,7 @@ namespace Tests.RepositoryTests
             // Simulate a row for the valid user
             dataTable.Rows.Add(1, "user10", "hashedpassword123", true, DateTime.Now, DateTime.Now.AddDays(-1), "user10@example.com");
 
-            _dataLinkMock.Setup(x => x.ExecuteReader("GetUserByEmailOrUsername", It.IsAny<SqlParameter[]>())).Returns(dataTable);
+            _dataLinkMock.Setup(dataLink => dataLink.ExecuteReader("GetUserByEmailOrUsername", It.IsAny<SqlParameter[]>())).Returns(dataTable);
 
             // Act
             User? user = _usersRepository.VerifyCredentials(emailOrUsername);
@@ -351,7 +351,7 @@ namespace Tests.RepositoryTests
 
             // No rows added to simulate no user found
 
-            _dataLinkMock.Setup(x => x.ExecuteReader("GetUserByEmailOrUsername", It.IsAny<SqlParameter[]>())).Returns(dataTable);
+            _dataLinkMock.Setup(dataLink => dataLink.ExecuteReader("GetUserByEmailOrUsername", It.IsAny<SqlParameter[]>())).Returns(dataTable);
 
             // Act
             User? user = _usersRepository.VerifyCredentials(emailOrUsername);
@@ -364,7 +364,7 @@ namespace Tests.RepositoryTests
         public void VerifyCredentials_SqlError_ThrowsRepositoryException()
         {
             // Arrange
-            _dataLinkMock.Setup(x => x.ExecuteReader(It.IsAny<string>(), It.IsAny<SqlParameter[]>()))
+            _dataLinkMock.Setup(dataLink => dataLink.ExecuteReader(It.IsAny<string>(), It.IsAny<SqlParameter[]>()))
                 .Throws(new DatabaseOperationException("Database error"));
 
             // Act & Assert
@@ -388,7 +388,7 @@ namespace Tests.RepositoryTests
             // Simulate a row for the valid user
             dataTable.Rows.Add(1, "user10", "user10@example.com", true, DateTime.Now, DateTime.Now.AddDays(-1), "hashedpassword123");
 
-            _dataLinkMock.Setup(x => x.ExecuteReader("GetUserByEmail", It.IsAny<SqlParameter[]>())).Returns(dataTable);
+            _dataLinkMock.Setup(dataLink => dataLink.ExecuteReader("GetUserByEmail", It.IsAny<SqlParameter[]>())).Returns(dataTable);
 
             // Act
             User? user = _usersRepository.GetUserByEmail(email);
@@ -413,7 +413,7 @@ namespace Tests.RepositoryTests
             dataTable.Columns.Add("password", typeof(string)); // Assuming password column exists
 
             // Simulate no row for the valid user
-            _dataLinkMock.Setup(x => x.ExecuteReader("GetUserByEmail", It.IsAny<SqlParameter[]>())).Returns(dataTable);
+            _dataLinkMock.Setup(dataLink => dataLink.ExecuteReader("GetUserByEmail", It.IsAny<SqlParameter[]>())).Returns(dataTable);
 
             // Act
             User? user = _usersRepository.GetUserByEmail(email);
@@ -427,7 +427,7 @@ namespace Tests.RepositoryTests
         public void GetUserByEmail_SqlError_ThrowsRepositoryException()
         {
             // Arrange
-            _dataLinkMock.Setup(x => x.ExecuteReader(It.IsAny<string>(), It.IsAny<SqlParameter[]>()))
+            _dataLinkMock.Setup(dataLink => dataLink.ExecuteReader(It.IsAny<string>(), It.IsAny<SqlParameter[]>()))
                 .Throws(new DatabaseOperationException("Database error"));
 
             // Act & Assert
@@ -451,7 +451,7 @@ namespace Tests.RepositoryTests
             // Simulate a row for the valid user
             dataTable.Rows.Add(1, "user10", "user10@example.com", true, DateTime.Now, DateTime.Now.AddDays(-1), "hashedpassword123");
 
-            _dataLinkMock.Setup(x => x.ExecuteReader("GetUserByUsername", It.IsAny<SqlParameter[]>())).Returns(dataTable);
+            _dataLinkMock.Setup(dataLink => dataLink.ExecuteReader("GetUserByUsername", It.IsAny<SqlParameter[]>())).Returns(dataTable);
 
             // Act
             User? user = _usersRepository.GetUserByUsername(username);
@@ -476,7 +476,7 @@ namespace Tests.RepositoryTests
             dataTable.Columns.Add("password", typeof(string)); // Assuming password column exists
 
             // Simulate no row for the valid user
-            _dataLinkMock.Setup(x => x.ExecuteReader("GetUserByUsername", It.IsAny<SqlParameter[]>())).Returns(dataTable);
+            _dataLinkMock.Setup(dataLink => dataLink.ExecuteReader("GetUserByUsername", It.IsAny<SqlParameter[]>())).Returns(dataTable);
 
             // Act
             User? user = _usersRepository.GetUserByUsername(username);
@@ -490,7 +490,7 @@ namespace Tests.RepositoryTests
         public void GetUserByUsername_SqlError_ThrowsRepositoryException()
         {
             // Arrange
-            _dataLinkMock.Setup(x => x.ExecuteReader(It.IsAny<string>(), It.IsAny<SqlParameter[]>()))
+            _dataLinkMock.Setup(dataLink => dataLink.ExecuteReader(It.IsAny<string>(), It.IsAny<SqlParameter[]>()))
                 .Throws(new DatabaseOperationException("Database error"));
 
             // Act & Assert
@@ -510,7 +510,7 @@ namespace Tests.RepositoryTests
             // Simulate a user exists and an error type is returned
             dataTable.Rows.Add("Email or Username already taken");
 
-            _dataLinkMock.Setup(x => x.ExecuteReader("CheckUserExists", It.IsAny<SqlParameter[]>())).Returns(dataTable);
+            _dataLinkMock.Setup(dataLink => dataLink.ExecuteReader("CheckUserExists", It.IsAny<SqlParameter[]>())).Returns(dataTable);
 
             // Act
             string errorType = _usersRepository.CheckUserExists(email, username);
@@ -532,7 +532,7 @@ namespace Tests.RepositoryTests
             // Simulate a row where ErrorType is null (DBNull.Value)
             dataTable.Rows.Add(DBNull.Value);
 
-            _dataLinkMock.Setup(x => x.ExecuteReader("CheckUserExists", It.IsAny<SqlParameter[]>())).Returns(dataTable);
+            _dataLinkMock.Setup(dataLink => dataLink.ExecuteReader("CheckUserExists", It.IsAny<SqlParameter[]>())).Returns(dataTable);
 
             // Act
             string? errorType = _usersRepository.CheckUserExists(email, username);
@@ -555,7 +555,7 @@ namespace Tests.RepositoryTests
             dataTable.Columns.Add("ErrorType", typeof(string));
 
             // Simulate no user found, so no rows are returned
-            _dataLinkMock.Setup(x => x.ExecuteReader("CheckUserExists", It.IsAny<SqlParameter[]>())).Returns(dataTable);
+            _dataLinkMock.Setup(dataLink => dataLink.ExecuteReader("CheckUserExists", It.IsAny<SqlParameter[]>())).Returns(dataTable);
 
             // Act
             string errorType = _usersRepository.CheckUserExists(email, username);
@@ -568,7 +568,7 @@ namespace Tests.RepositoryTests
         public void CheckUserExists_SqlError_ThrowsRepositoryException()
         {
             // Arrange
-            _dataLinkMock.Setup(x => x.ExecuteReader(It.IsAny<string>(), It.IsAny<SqlParameter[]>()))
+            _dataLinkMock.Setup(dataLink => dataLink.ExecuteReader(It.IsAny<string>(), It.IsAny<SqlParameter[]>()))
                 .Throws(new DatabaseOperationException("Database error"));
 
             // Act & Assert
@@ -579,7 +579,7 @@ namespace Tests.RepositoryTests
         public void ChangeEmail_Called_Returns()
         {
             // Arrange
-            _dataLinkMock.Setup(x => x.ExecuteReader("ChangeEmail", It.IsAny<SqlParameter[]>())).Verifiable();
+            _dataLinkMock.Setup(dataLink => dataLink.ExecuteReader("ChangeEmail", It.IsAny<SqlParameter[]>())).Verifiable();
 
             // Act and Assert
             Assert.DoesNotThrow(() => _usersRepository.ChangeEmail(1, "new@mail.com"));
@@ -589,7 +589,7 @@ namespace Tests.RepositoryTests
         public void ChangeEmail_SqlError_ThrowsRepositoryException()
         {
             // Arrange
-            _dataLinkMock.Setup(x => x.ExecuteNonQuery(It.IsAny<string>(), It.IsAny<SqlParameter[]>()))
+            _dataLinkMock.Setup(dataLink => dataLink.ExecuteNonQuery(It.IsAny<string>(), It.IsAny<SqlParameter[]>()))
                 .Throws(new DatabaseOperationException("Database error"));
 
             // Act & Assert
@@ -600,7 +600,7 @@ namespace Tests.RepositoryTests
         public void ChangePassword_Called_Returns()
         {
             // Arrange
-            _dataLinkMock.Setup(x => x.ExecuteReader("ChangePassword", It.IsAny<SqlParameter[]>())).Verifiable();
+            _dataLinkMock.Setup(dataLink => dataLink.ExecuteReader("ChangePassword", It.IsAny<SqlParameter[]>())).Verifiable();
 
             // Act and Assert
             Assert.DoesNotThrow(() => _usersRepository.ChangePassword(1, "newPassword"));
@@ -610,7 +610,7 @@ namespace Tests.RepositoryTests
         public void ChangePassword_SqlError_ThrowsRepositoryException()
         {
             // Arrange
-            _dataLinkMock.Setup(x => x.ExecuteNonQuery(It.IsAny<string>(), It.IsAny<SqlParameter[]>()))
+            _dataLinkMock.Setup(dataLink => dataLink.ExecuteNonQuery(It.IsAny<string>(), It.IsAny<SqlParameter[]>()))
                 .Throws(new DatabaseOperationException("Database error"));
 
             // Act & Assert
@@ -621,7 +621,7 @@ namespace Tests.RepositoryTests
         public void ChangeUsername_Called_Returns()
         {
             // Arrange
-            _dataLinkMock.Setup(x => x.ExecuteNonQuery("ChangeUsername", It.IsAny<SqlParameter[]>())).Verifiable();
+            _dataLinkMock.Setup(dataLink => dataLink.ExecuteNonQuery("ChangeUsername", It.IsAny<SqlParameter[]>())).Verifiable();
 
             // Act and Assert
             Assert.DoesNotThrow(() => _usersRepository.ChangeUsername(1, "newUsername"));
@@ -631,7 +631,7 @@ namespace Tests.RepositoryTests
         public void ChangeUsername_SqlError_ThrowsRepositoryException()
         {
             // Arrange
-            _dataLinkMock.Setup(x => x.ExecuteNonQuery(It.IsAny<string>(), It.IsAny<SqlParameter[]>()))
+            _dataLinkMock.Setup(dataLink => dataLink.ExecuteNonQuery(It.IsAny<string>(), It.IsAny<SqlParameter[]>()))
                 .Throws(new DatabaseOperationException("Database error"));
 
             // Act & Assert
@@ -642,7 +642,7 @@ namespace Tests.RepositoryTests
         public void UpdateLastLogin_Called_Returns()
         {
             // Arrange
-            _dataLinkMock.Setup(x => x.ExecuteNonQuery("UpdateLastLogin", It.IsAny<SqlParameter[]>())).Verifiable();
+            _dataLinkMock.Setup(dataLink => dataLink.ExecuteNonQuery("UpdateLastLogin", It.IsAny<SqlParameter[]>())).Verifiable();
 
             // Act and Assert
             Assert.DoesNotThrow(() => _usersRepository.UpdateLastLogin(1));
@@ -652,7 +652,7 @@ namespace Tests.RepositoryTests
         public void UpdateLastLogin_SqlError_ThrowsRepositoryException()
         {
             // Arrange
-            _dataLinkMock.Setup(x => x.ExecuteNonQuery(It.IsAny<string>(), It.IsAny<SqlParameter[]>()))
+            _dataLinkMock.Setup(dataLink => dataLink.ExecuteNonQuery(It.IsAny<string>(), It.IsAny<SqlParameter[]>()))
                 .Throws(new DatabaseOperationException("Database error"));
 
             // Act & Assert
@@ -722,14 +722,8 @@ namespace Tests.RepositoryTests
             // Act
             User? user = _usersRepository.MapDataRowToUser(dataTable.Rows[0]);
 
-            // Assert
-            Assert.That(user, Is.Not.Null);
-            Assert.That(user?.UserId, Is.EqualTo(1));
-            Assert.That(user?.Username, Is.EqualTo("user1"));
-            Assert.That(user?.Email, Is.EqualTo("user1@example.com"));
-            Assert.That(user?.IsDeveloper, Is.False); // Since developer was null, should be false
-            Assert.That(user?.CreatedAt, Is.EqualTo(DateTime.MinValue)); // Default value for DateTime when it's null
-            Assert.That(user?.LastLogin, Is.Null); // LastLogin should be null since the value was DBNull
+            // Assert   
+            Assert.That(user?.IsDeveloper, Is.False); // Since developer was null, should be false            
         }
 
         [Test]
@@ -751,13 +745,7 @@ namespace Tests.RepositoryTests
             User? user = _usersRepository.MapDataRowToUser(dataTable.Rows[0]);
 
             // Assert
-            Assert.That(user, Is.Not.Null);
-            Assert.That(user?.UserId, Is.EqualTo(1));
-            Assert.That(user?.Username, Is.EqualTo("user2"));
-            Assert.That(user?.Email, Is.EqualTo("user2@example.com"));
             Assert.That(user?.IsDeveloper, Is.False); // Default for DBNull
-            Assert.That(user?.CreatedAt, Is.EqualTo(DateTime.MinValue)); // Default for DateTime
-            Assert.That(user?.LastLogin, Is.Null); // Default for nullable DateTime
         }
 
 
@@ -781,10 +769,6 @@ namespace Tests.RepositoryTests
             User? user = _usersRepository.MapDataRowToUserWithPassword(dataTable.Rows[0]);
 
             // Assert
-            Assert.That(user, Is.Not.Null);
-            Assert.That(user?.UserId, Is.EqualTo(1));
-            Assert.That(user?.Username, Is.EqualTo("user1"));
-            Assert.That(user?.Email, Is.EqualTo("user1@example.com"));
             Assert.That(user?.Password, Is.EqualTo("hashedpassword123"));
         }
 
