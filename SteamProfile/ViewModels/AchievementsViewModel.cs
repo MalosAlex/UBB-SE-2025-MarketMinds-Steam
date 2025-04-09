@@ -69,18 +69,18 @@ namespace SteamProfile.ViewModels
             var userId = userService.GetCurrentUser().UserId;
 
             // Get grouped achievements (no logic in ViewModel)
-            var grouped = await Task.Run(() => achievementsService.GetGroupedAchievementsForUser(userId));
+            var groupedAchievements = await Task.Run(() => achievementsService.GetGroupedAchievementsForUser(userId));
 
             // Assign to ObservableCollections
-            AllAchievements = new ObservableCollection<AchievementWithStatus>(grouped.AllAchievements);
-            FriendshipsAchievements = new ObservableCollection<AchievementWithStatus>(grouped.Friendships);
-            OwnedGamesAchievements = new ObservableCollection<AchievementWithStatus>(grouped.OwnedGames);
-            SoldGamesAchievements = new ObservableCollection<AchievementWithStatus>(grouped.SoldGames);
-            YearsOfActivityAchievements = new ObservableCollection<AchievementWithStatus>(grouped.YearsOfActivity);
-            NumberOfPostsAchievements = new ObservableCollection<AchievementWithStatus>(grouped.NumberOfPosts);
-            NumberOfReviewsGivenAchievements = new ObservableCollection<AchievementWithStatus>(grouped.NumberOfReviewsGiven);
-            NumberOfReviewsReceivedAchievements = new ObservableCollection<AchievementWithStatus>(grouped.NumberOfReviewsReceived);
-            DeveloperAchievements = new ObservableCollection<AchievementWithStatus>(grouped.Developer);
+            AllAchievements = new ObservableCollection<AchievementWithStatus>(groupedAchievements.AllAchievements);
+            FriendshipsAchievements = new ObservableCollection<AchievementWithStatus>(groupedAchievements.Friendships);
+            OwnedGamesAchievements = new ObservableCollection<AchievementWithStatus>(groupedAchievements.OwnedGames);
+            SoldGamesAchievements = new ObservableCollection<AchievementWithStatus>(groupedAchievements.SoldGames);
+            YearsOfActivityAchievements = new ObservableCollection<AchievementWithStatus>(groupedAchievements.YearsOfActivity);
+            NumberOfPostsAchievements = new ObservableCollection<AchievementWithStatus>(groupedAchievements.NumberOfPosts);
+            NumberOfReviewsGivenAchievements = new ObservableCollection<AchievementWithStatus>(groupedAchievements.NumberOfReviewsGiven);
+            NumberOfReviewsReceivedAchievements = new ObservableCollection<AchievementWithStatus>(groupedAchievements.NumberOfReviewsReceived);
+            DeveloperAchievements = new ObservableCollection<AchievementWithStatus>(groupedAchievements.Developer);
         }
         public IRelayCommand BackToProfileCommand { get; }
 

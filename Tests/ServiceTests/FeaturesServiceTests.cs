@@ -15,16 +15,16 @@ namespace Tests.ServiceTests
     [TestFixture]
     public class FeaturesServiceTests
     {
-        private FeaturesService featuresService;
-        private Mock<IFeaturesRepository> mockUserRepository;
+        private FeaturesService service;
+        private Mock<IFeaturesRepository> mockFeaturesRepository;
         private Mock<IUserService> mockUserService;
 
         [SetUp]
         public void Setup()
         {
-            this.mockUserRepository = new Mock<IFeaturesRepository>();
+            this.mockFeaturesRepository = new Mock<IFeaturesRepository>();
             this.mockUserService = new Mock<IUserService>();
-            this.featuresService = new FeaturesService(this.mockUserRepository.Object, this.mockUserService.Object);
+            this.service = new FeaturesService(this.mockFeaturesRepository.Object, this.mockUserService.Object);
         }
 
         [Test]
@@ -42,10 +42,10 @@ namespace Tests.ServiceTests
                 new Feature { FeatureId = 4, Name = "Sad Emoji", Type = "emoji", Value = 20 }
             };
 
-            this.mockUserRepository.Setup(mockRepository => mockRepository.GetAllFeatures(user.UserId)).Returns(features);
+            this.mockFeaturesRepository.Setup(mockRepository => mockRepository.GetAllFeatures(user.UserId)).Returns(features);
 
             // Act
-            var categories = this.featuresService.GetFeaturesByCategories();
+            var categories = this.service.GetFeaturesByCategories();
 
             // Assert
             Assert.That(categories.Count, Is.EqualTo(2));
@@ -64,10 +64,10 @@ namespace Tests.ServiceTests
                 new Feature { FeatureId = 2, Name = "Silver Frame", Type = "frame", Value = 50 }
             };
 
-            this.mockUserRepository.Setup(mockRepository => mockRepository.GetAllFeatures(user.UserId)).Returns(features);
+            this.mockFeaturesRepository.Setup(mockRepository => mockRepository.GetAllFeatures(user.UserId)).Returns(features);
 
             // Act
-            var categories = this.featuresService.GetFeaturesByCategories();
+            var categories = this.service.GetFeaturesByCategories();
 
             // Assert
             Assert.That(categories.ContainsKey("frame"), Is.True);
@@ -86,10 +86,10 @@ namespace Tests.ServiceTests
                 new Feature { FeatureId = 4, Name = "Sad Emoji", Type = "emoji", Value = 20 }
             };
 
-            this.mockUserRepository.Setup(mockRepository => mockRepository.GetAllFeatures(user.UserId)).Returns(features);
+            this.mockFeaturesRepository.Setup(mockRepository => mockRepository.GetAllFeatures(user.UserId)).Returns(features);
 
             // Act
-            var categories = this.featuresService.GetFeaturesByCategories();
+            var categories = this.service.GetFeaturesByCategories();
 
             // Assert
             Assert.That(categories.ContainsKey("emoji"), Is.True);
@@ -108,10 +108,10 @@ namespace Tests.ServiceTests
                 new Feature { FeatureId = 2, Name = "Silver Frame", Type = "frame", Value = 50 }
             };
 
-            this.mockUserRepository.Setup(mockRepository => mockRepository.GetAllFeatures(user.UserId)).Returns(features);
+            this.mockFeaturesRepository.Setup(mockRepository => mockRepository.GetAllFeatures(user.UserId)).Returns(features);
 
             // Act
-            var categories = this.featuresService.GetFeaturesByCategories();
+            var categories = this.service.GetFeaturesByCategories();
 
             // Assert
             Assert.That(categories["frame"].Count, Is.EqualTo(2));
@@ -130,10 +130,10 @@ namespace Tests.ServiceTests
                 new Feature { FeatureId = 4, Name = "Sad Emoji", Type = "emoji", Value = 20 }
             };
 
-            this.mockUserRepository.Setup(mockRepository => mockRepository.GetAllFeatures(user.UserId)).Returns(features);
+            this.mockFeaturesRepository.Setup(mockRepository => mockRepository.GetAllFeatures(user.UserId)).Returns(features);
 
             // Act
-            var categories = this.featuresService.GetFeaturesByCategories();
+            var categories = this.service.GetFeaturesByCategories();
 
             // Assert
             Assert.That(categories["emoji"].Count, Is.EqualTo(2));
@@ -145,10 +145,10 @@ namespace Tests.ServiceTests
             // Arrange
             int userId = 1;
             int featureId = 2;
-            this.mockUserRepository.Setup(mockRepository => mockRepository.IsFeaturePurchased(userId, featureId)).Returns(false);
+            this.mockFeaturesRepository.Setup(mockRepository => mockRepository.IsFeaturePurchased(userId, featureId)).Returns(false);
 
             // Act
-            bool result = this.featuresService.EquipFeature(userId, featureId);
+            bool result = this.service.EquipFeature(userId, featureId);
 
             // Assert
             Assert.That(result, Is.False);
@@ -160,13 +160,13 @@ namespace Tests.ServiceTests
             // Arrange
             int userId = 1;
             int featureId = 2;
-            this.mockUserRepository.Setup(mockRepository => mockRepository.IsFeaturePurchased(userId, featureId)).Returns(false);
+            this.mockFeaturesRepository.Setup(mockRepository => mockRepository.IsFeaturePurchased(userId, featureId)).Returns(false);
 
             // Act
-            this.featuresService.EquipFeature(userId, featureId);
+            this.service.EquipFeature(userId, featureId);
 
             // Assert
-            this.mockUserRepository.Verify(mockRepository => mockRepository.IsFeaturePurchased(userId, featureId), Times.Once);
+            this.mockFeaturesRepository.Verify(mockRepository => mockRepository.IsFeaturePurchased(userId, featureId), Times.Once);
         }
 
         [Test]
@@ -175,13 +175,13 @@ namespace Tests.ServiceTests
             // Arrange
             int userId = 1;
             int featureId = 2;
-            this.mockUserRepository.Setup(mockRepository => mockRepository.IsFeaturePurchased(userId, featureId)).Returns(false);
+            this.mockFeaturesRepository.Setup(mockRepository => mockRepository.IsFeaturePurchased(userId, featureId)).Returns(false);
 
             // Act
-            this.featuresService.EquipFeature(userId, featureId);
+            this.service.EquipFeature(userId, featureId);
 
             // Assert
-            this.mockUserRepository.Verify(mockRepository => mockRepository.EquipFeature(It.IsAny<int>(), It.IsAny<int>()), Times.Never);
+            this.mockFeaturesRepository.Verify(mockRepository => mockRepository.EquipFeature(It.IsAny<int>(), It.IsAny<int>()), Times.Never);
         }
 
         [Test]
@@ -190,12 +190,12 @@ namespace Tests.ServiceTests
             // Arrange
             int userId = 1;
             int featureId = 3; // Non-frame feature
-            this.mockUserRepository.Setup(mockRepository => mockRepository.IsFeaturePurchased(userId, featureId)).Returns(true);
-            this.mockUserRepository.Setup(mockRepository => mockRepository.GetFeaturesByType("frame")).Returns(new List<Feature>());
-            this.mockUserRepository.Setup(mockRepository => mockRepository.EquipFeature(userId, featureId)).Returns(true);
+            this.mockFeaturesRepository.Setup(mockRepository => mockRepository.IsFeaturePurchased(userId, featureId)).Returns(true);
+            this.mockFeaturesRepository.Setup(mockRepository => mockRepository.GetFeaturesByType("frame")).Returns(new List<Feature>());
+            this.mockFeaturesRepository.Setup(mockRepository => mockRepository.EquipFeature(userId, featureId)).Returns(true);
 
             // Act
-            bool result = this.featuresService.EquipFeature(userId, featureId);
+            bool result = this.service.EquipFeature(userId, featureId);
 
             // Assert
             Assert.That(result, Is.True);
@@ -207,15 +207,15 @@ namespace Tests.ServiceTests
             // Arrange
             int userId = 1;
             int featureId = 3; // Non-frame feature
-            this.mockUserRepository.Setup(mockRepository => mockRepository.IsFeaturePurchased(userId, featureId)).Returns(true);
-            this.mockUserRepository.Setup(mockRepository => mockRepository.GetFeaturesByType("frame")).Returns(new List<Feature>());
-            this.mockUserRepository.Setup(mockRepository => mockRepository.EquipFeature(userId, featureId)).Returns(true);
+            this.mockFeaturesRepository.Setup(mockRepository => mockRepository.IsFeaturePurchased(userId, featureId)).Returns(true);
+            this.mockFeaturesRepository.Setup(mockRepository => mockRepository.GetFeaturesByType("frame")).Returns(new List<Feature>());
+            this.mockFeaturesRepository.Setup(mockRepository => mockRepository.EquipFeature(userId, featureId)).Returns(true);
 
             // Act
-            this.featuresService.EquipFeature(userId, featureId);
+            this.service.EquipFeature(userId, featureId);
 
             // Assert
-            this.mockUserRepository.Verify(mockRepository => mockRepository.IsFeaturePurchased(userId, featureId), Times.Once);
+            this.mockFeaturesRepository.Verify(mockRepository => mockRepository.IsFeaturePurchased(userId, featureId), Times.Once);
         }
 
         [Test]
@@ -224,15 +224,15 @@ namespace Tests.ServiceTests
             // Arrange
             int userId = 1;
             int featureId = 3; // Non-frame feature
-            this.mockUserRepository.Setup(mockRepository => mockRepository.IsFeaturePurchased(userId, featureId)).Returns(true);
-            this.mockUserRepository.Setup(mockRepository => mockRepository.GetFeaturesByType("frame")).Returns(new List<Feature>());
-            this.mockUserRepository.Setup(mockRepository => mockRepository.EquipFeature(userId, featureId)).Returns(true);
+            this.mockFeaturesRepository.Setup(mockRepository => mockRepository.IsFeaturePurchased(userId, featureId)).Returns(true);
+            this.mockFeaturesRepository.Setup(mockRepository => mockRepository.GetFeaturesByType("frame")).Returns(new List<Feature>());
+            this.mockFeaturesRepository.Setup(mockRepository => mockRepository.EquipFeature(userId, featureId)).Returns(true);
 
             // Act
-            this.featuresService.EquipFeature(userId, featureId);
+            this.service.EquipFeature(userId, featureId);
 
             // Assert
-            this.mockUserRepository.Verify(mockRepository => mockRepository.UnequipFeaturesByType(It.IsAny<int>(), It.IsAny<string>()), Times.Never);
+            this.mockFeaturesRepository.Verify(mockRepository => mockRepository.UnequipFeaturesByType(It.IsAny<int>(), It.IsAny<string>()), Times.Never);
         }
 
         [Test]
@@ -241,15 +241,15 @@ namespace Tests.ServiceTests
             // Arrange
             int userId = 1;
             int featureId = 3; // Non-frame feature
-            this.mockUserRepository.Setup(mockRepository => mockRepository.IsFeaturePurchased(userId, featureId)).Returns(true);
-            this.mockUserRepository.Setup(mockRepository => mockRepository.GetFeaturesByType("frame")).Returns(new List<Feature>());
-            this.mockUserRepository.Setup(mockRepository => mockRepository.EquipFeature(userId, featureId)).Returns(true);
+            this.mockFeaturesRepository.Setup(mockRepository => mockRepository.IsFeaturePurchased(userId, featureId)).Returns(true);
+            this.mockFeaturesRepository.Setup(mockRepository => mockRepository.GetFeaturesByType("frame")).Returns(new List<Feature>());
+            this.mockFeaturesRepository.Setup(mockRepository => mockRepository.EquipFeature(userId, featureId)).Returns(true);
 
             // Act
-            this.featuresService.EquipFeature(userId, featureId);
+            this.service.EquipFeature(userId, featureId);
 
             // Assert
-            this.mockUserRepository.Verify(mockRepository => mockRepository.EquipFeature(userId, featureId), Times.Once);
+            this.mockFeaturesRepository.Verify(mockRepository => mockRepository.EquipFeature(userId, featureId), Times.Once);
         }
 
         [Test]
@@ -264,13 +264,13 @@ namespace Tests.ServiceTests
                 new Feature { FeatureId = 2, Name = "Silver Frame", Type = "frame" }
             };
 
-            this.mockUserRepository.Setup(mockRepository => mockRepository.IsFeaturePurchased(userId, featureId)).Returns(true);
-            this.mockUserRepository.Setup(mockRepository => mockRepository.GetFeaturesByType("frame")).Returns(frameFeatures);
-            this.mockUserRepository.Setup(mockRepository => mockRepository.UnequipFeaturesByType(userId, "frame")).Returns(true);
-            this.mockUserRepository.Setup(mockRepository => mockRepository.EquipFeature(userId, featureId)).Returns(true);
+            this.mockFeaturesRepository.Setup(mockRepository => mockRepository.IsFeaturePurchased(userId, featureId)).Returns(true);
+            this.mockFeaturesRepository.Setup(mockRepository => mockRepository.GetFeaturesByType("frame")).Returns(frameFeatures);
+            this.mockFeaturesRepository.Setup(mockRepository => mockRepository.UnequipFeaturesByType(userId, "frame")).Returns(true);
+            this.mockFeaturesRepository.Setup(mockRepository => mockRepository.EquipFeature(userId, featureId)).Returns(true);
 
             // Act
-            bool result = this.featuresService.EquipFeature(userId, featureId);
+            bool result = this.service.EquipFeature(userId, featureId);
 
             // Assert
             Assert.That(result, Is.True);
@@ -288,16 +288,16 @@ namespace Tests.ServiceTests
                 new Feature { FeatureId = 2, Name = "Silver Frame", Type = "frame" }
             };
 
-            this.mockUserRepository.Setup(mockRepository => mockRepository.IsFeaturePurchased(userId, featureId)).Returns(true);
-            this.mockUserRepository.Setup(mockRepository => mockRepository.GetFeaturesByType("frame")).Returns(frameFeatures);
-            this.mockUserRepository.Setup(mockRepository => mockRepository.UnequipFeaturesByType(userId, "frame")).Returns(true);
-            this.mockUserRepository.Setup(mockRepository => mockRepository.EquipFeature(userId, featureId)).Returns(true);
+            this.mockFeaturesRepository.Setup(mockRepository => mockRepository.IsFeaturePurchased(userId, featureId)).Returns(true);
+            this.mockFeaturesRepository.Setup(mockRepository => mockRepository.GetFeaturesByType("frame")).Returns(frameFeatures);
+            this.mockFeaturesRepository.Setup(mockRepository => mockRepository.UnequipFeaturesByType(userId, "frame")).Returns(true);
+            this.mockFeaturesRepository.Setup(mockRepository => mockRepository.EquipFeature(userId, featureId)).Returns(true);
 
             // Act
-            this.featuresService.EquipFeature(userId, featureId);
+            this.service.EquipFeature(userId, featureId);
 
             // Assert
-            this.mockUserRepository.Verify(mockRepository => mockRepository.IsFeaturePurchased(userId, featureId), Times.Once);
+            this.mockFeaturesRepository.Verify(mockRepository => mockRepository.IsFeaturePurchased(userId, featureId), Times.Once);
         }
 
         [Test]
@@ -312,16 +312,16 @@ namespace Tests.ServiceTests
                 new Feature { FeatureId = 2, Name = "Silver Frame", Type = "frame" }
             };
 
-            this.mockUserRepository.Setup(mockRepository => mockRepository.IsFeaturePurchased(userId, featureId)).Returns(true);
-            this.mockUserRepository.Setup(mockRepository => mockRepository.GetFeaturesByType("frame")).Returns(frameFeatures);
-            this.mockUserRepository.Setup(mockRepository => mockRepository.UnequipFeaturesByType(userId, "frame")).Returns(true);
-            this.mockUserRepository.Setup(mockRepository => mockRepository.EquipFeature(userId, featureId)).Returns(true);
+            this.mockFeaturesRepository.Setup(mockRepository => mockRepository.IsFeaturePurchased(userId, featureId)).Returns(true);
+            this.mockFeaturesRepository.Setup(mockRepository => mockRepository.GetFeaturesByType("frame")).Returns(frameFeatures);
+            this.mockFeaturesRepository.Setup(mockRepository => mockRepository.UnequipFeaturesByType(userId, "frame")).Returns(true);
+            this.mockFeaturesRepository.Setup(mockRepository => mockRepository.EquipFeature(userId, featureId)).Returns(true);
 
             // Act
-            this.featuresService.EquipFeature(userId, featureId);
+            this.service.EquipFeature(userId, featureId);
 
             // Assert
-            this.mockUserRepository.Verify(mockRepository => mockRepository.UnequipFeaturesByType(userId, "frame"), Times.Once);
+            this.mockFeaturesRepository.Verify(mockRepository => mockRepository.UnequipFeaturesByType(userId, "frame"), Times.Once);
         }
 
         [Test]
@@ -336,16 +336,16 @@ namespace Tests.ServiceTests
                 new Feature { FeatureId = 2, Name = "Silver Frame", Type = "frame" }
             };
 
-            this.mockUserRepository.Setup(mockRepository => mockRepository.IsFeaturePurchased(userId, featureId)).Returns(true);
-            this.mockUserRepository.Setup(mockRepository => mockRepository.GetFeaturesByType("frame")).Returns(frameFeatures);
-            this.mockUserRepository.Setup(mockRepository => mockRepository.UnequipFeaturesByType(userId, "frame")).Returns(true);
-            this.mockUserRepository.Setup(mockRepository => mockRepository.EquipFeature(userId, featureId)).Returns(true);
+            this.mockFeaturesRepository.Setup(mockRepository => mockRepository.IsFeaturePurchased(userId, featureId)).Returns(true);
+            this.mockFeaturesRepository.Setup(mockRepository => mockRepository.GetFeaturesByType("frame")).Returns(frameFeatures);
+            this.mockFeaturesRepository.Setup(mockRepository => mockRepository.UnequipFeaturesByType(userId, "frame")).Returns(true);
+            this.mockFeaturesRepository.Setup(mockRepository => mockRepository.EquipFeature(userId, featureId)).Returns(true);
 
             // Act
-            this.featuresService.EquipFeature(userId, featureId);
+            this.service.EquipFeature(userId, featureId);
 
             // Assert
-            this.mockUserRepository.Verify(mockRepository => mockRepository.EquipFeature(userId, featureId), Times.Once);
+            this.mockFeaturesRepository.Verify(mockRepository => mockRepository.EquipFeature(userId, featureId), Times.Once);
         }
 
         [Test]
@@ -354,10 +354,10 @@ namespace Tests.ServiceTests
             // Arrange
             int userId = 1;
             int featureId = 2;
-            this.mockUserRepository.Setup(mockRepository => mockRepository.IsFeaturePurchased(userId, featureId)).Returns(false);
+            this.mockFeaturesRepository.Setup(mockRepository => mockRepository.IsFeaturePurchased(userId, featureId)).Returns(false);
 
             // Act
-            var result = this.featuresService.UnequipFeature(userId, featureId);
+            var result = this.service.UnequipFeature(userId, featureId);
 
             // Assert
             Assert.That(result.Item1, Is.False);
@@ -369,10 +369,10 @@ namespace Tests.ServiceTests
             // Arrange
             int userId = 1;
             int featureId = 2;
-            this.mockUserRepository.Setup(mockRepository => mockRepository.IsFeaturePurchased(userId, featureId)).Returns(false);
+            this.mockFeaturesRepository.Setup(mockRepository => mockRepository.IsFeaturePurchased(userId, featureId)).Returns(false);
 
             // Act
-            var result = this.featuresService.UnequipFeature(userId, featureId);
+            var result = this.service.UnequipFeature(userId, featureId);
 
             // Assert
             Assert.That(result.Item2, Is.EqualTo("Feature not purchased"));
@@ -384,13 +384,13 @@ namespace Tests.ServiceTests
             // Arrange
             int userId = 1;
             int featureId = 2;
-            this.mockUserRepository.Setup(mockRepository => mockRepository.IsFeaturePurchased(userId, featureId)).Returns(false);
+            this.mockFeaturesRepository.Setup(mockRepository => mockRepository.IsFeaturePurchased(userId, featureId)).Returns(false);
 
             // Act
-            this.featuresService.UnequipFeature(userId, featureId);
+            this.service.UnequipFeature(userId, featureId);
 
             // Assert
-            this.mockUserRepository.Verify(mockRepository => mockRepository.IsFeaturePurchased(userId, featureId), Times.Once);
+            this.mockFeaturesRepository.Verify(mockRepository => mockRepository.IsFeaturePurchased(userId, featureId), Times.Once);
         }
 
         [Test]
@@ -399,13 +399,13 @@ namespace Tests.ServiceTests
             // Arrange
             int userId = 1;
             int featureId = 2;
-            this.mockUserRepository.Setup(mockRepository => mockRepository.IsFeaturePurchased(userId, featureId)).Returns(false);
+            this.mockFeaturesRepository.Setup(mockRepository => mockRepository.IsFeaturePurchased(userId, featureId)).Returns(false);
 
             // Act
-            this.featuresService.UnequipFeature(userId, featureId);
+            this.service.UnequipFeature(userId, featureId);
 
             // Assert
-            this.mockUserRepository.Verify(mockRepository => mockRepository.UnequipFeature(It.IsAny<int>(), It.IsAny<int>()), Times.Never);
+            this.mockFeaturesRepository.Verify(mockRepository => mockRepository.UnequipFeature(It.IsAny<int>(), It.IsAny<int>()), Times.Never);
         }
 
         [Test]
@@ -414,11 +414,11 @@ namespace Tests.ServiceTests
             // Arrange
             int userId = 1;
             int featureId = 1;
-            this.mockUserRepository.Setup(mockRepository => mockRepository.IsFeaturePurchased(userId, featureId)).Returns(true);
-            this.mockUserRepository.Setup(mockRepository => mockRepository.UnequipFeature(userId, featureId)).Returns(true);
+            this.mockFeaturesRepository.Setup(mockRepository => mockRepository.IsFeaturePurchased(userId, featureId)).Returns(true);
+            this.mockFeaturesRepository.Setup(mockRepository => mockRepository.UnequipFeature(userId, featureId)).Returns(true);
 
             // Act
-            var result = this.featuresService.UnequipFeature(userId, featureId);
+            var result = this.service.UnequipFeature(userId, featureId);
 
             // Assert
             Assert.That(result.Item1, Is.True);
@@ -430,11 +430,11 @@ namespace Tests.ServiceTests
             // Arrange
             int userId = 1;
             int featureId = 1;
-            this.mockUserRepository.Setup(mockRepository => mockRepository.IsFeaturePurchased(userId, featureId)).Returns(true);
-            this.mockUserRepository.Setup(mockRepository => mockRepository.UnequipFeature(userId, featureId)).Returns(true);
+            this.mockFeaturesRepository.Setup(mockRepository => mockRepository.IsFeaturePurchased(userId, featureId)).Returns(true);
+            this.mockFeaturesRepository.Setup(mockRepository => mockRepository.UnequipFeature(userId, featureId)).Returns(true);
 
             // Act
-            var result = this.featuresService.UnequipFeature(userId, featureId);
+            var result = this.service.UnequipFeature(userId, featureId);
 
             // Assert
             Assert.That(result.Item2, Is.EqualTo("Feature unequipped successfully"));
@@ -446,14 +446,14 @@ namespace Tests.ServiceTests
             // Arrange
             int userId = 1;
             int featureId = 1;
-            this.mockUserRepository.Setup(mockRepository => mockRepository.IsFeaturePurchased(userId, featureId)).Returns(true);
-            this.mockUserRepository.Setup(mockRepository => mockRepository.UnequipFeature(userId, featureId)).Returns(true);
+            this.mockFeaturesRepository.Setup(mockRepository => mockRepository.IsFeaturePurchased(userId, featureId)).Returns(true);
+            this.mockFeaturesRepository.Setup(mockRepository => mockRepository.UnequipFeature(userId, featureId)).Returns(true);
 
             // Act
-            this.featuresService.UnequipFeature(userId, featureId);
+            this.service.UnequipFeature(userId, featureId);
 
             // Assert
-            this.mockUserRepository.Verify(mockRepository => mockRepository.IsFeaturePurchased(userId, featureId), Times.Once);
+            this.mockFeaturesRepository.Verify(mockRepository => mockRepository.IsFeaturePurchased(userId, featureId), Times.Once);
         }
 
         [Test]
@@ -462,14 +462,14 @@ namespace Tests.ServiceTests
             // Arrange
             int userId = 1;
             int featureId = 1;
-            this.mockUserRepository.Setup(mockRepository => mockRepository.IsFeaturePurchased(userId, featureId)).Returns(true);
-            this.mockUserRepository.Setup(mockRepository => mockRepository.UnequipFeature(userId, featureId)).Returns(true);
+            this.mockFeaturesRepository.Setup(mockRepository => mockRepository.IsFeaturePurchased(userId, featureId)).Returns(true);
+            this.mockFeaturesRepository.Setup(mockRepository => mockRepository.UnequipFeature(userId, featureId)).Returns(true);
 
             // Act
-            this.featuresService.UnequipFeature(userId, featureId);
+            this.service.UnequipFeature(userId, featureId);
 
             // Assert
-            this.mockUserRepository.Verify(mockRepository => mockRepository.UnequipFeature(userId, featureId), Times.Once);
+            this.mockFeaturesRepository.Verify(mockRepository => mockRepository.UnequipFeature(userId, featureId), Times.Once);
         }
 
         [Test]
@@ -478,11 +478,11 @@ namespace Tests.ServiceTests
             // Arrange
             int userId = 1;
             int featureId = 1;
-            this.mockUserRepository.Setup(mockRepository => mockRepository.IsFeaturePurchased(userId, featureId)).Returns(true);
-            this.mockUserRepository.Setup(mockRepository => mockRepository.UnequipFeature(userId, featureId)).Returns(false);
+            this.mockFeaturesRepository.Setup(mockRepository => mockRepository.IsFeaturePurchased(userId, featureId)).Returns(true);
+            this.mockFeaturesRepository.Setup(mockRepository => mockRepository.UnequipFeature(userId, featureId)).Returns(false);
 
             // Act
-            var result = this.featuresService.UnequipFeature(userId, featureId);
+            var result = this.service.UnequipFeature(userId, featureId);
 
             // Assert
             Assert.That(result.Item1, Is.False);
@@ -494,11 +494,11 @@ namespace Tests.ServiceTests
             // Arrange
             int userId = 1;
             int featureId = 1;
-            this.mockUserRepository.Setup(mockRepository => mockRepository.IsFeaturePurchased(userId, featureId)).Returns(true);
-            this.mockUserRepository.Setup(mockRepository => mockRepository.UnequipFeature(userId, featureId)).Returns(false);
+            this.mockFeaturesRepository.Setup(mockRepository => mockRepository.IsFeaturePurchased(userId, featureId)).Returns(true);
+            this.mockFeaturesRepository.Setup(mockRepository => mockRepository.UnequipFeature(userId, featureId)).Returns(false);
 
             // Act
-            var result = this.featuresService.UnequipFeature(userId, featureId);
+            var result = this.service.UnequipFeature(userId, featureId);
 
             // Assert
             Assert.That(result.Item2, Is.EqualTo("Failed to unequip feature"));
@@ -510,14 +510,14 @@ namespace Tests.ServiceTests
             // Arrange
             int userId = 1;
             int featureId = 1;
-            this.mockUserRepository.Setup(mockRepository => mockRepository.IsFeaturePurchased(userId, featureId)).Returns(true);
-            this.mockUserRepository.Setup(mockRepository => mockRepository.UnequipFeature(userId, featureId)).Returns(false);
+            this.mockFeaturesRepository.Setup(mockRepository => mockRepository.IsFeaturePurchased(userId, featureId)).Returns(true);
+            this.mockFeaturesRepository.Setup(mockRepository => mockRepository.UnequipFeature(userId, featureId)).Returns(false);
 
             // Act
-            this.featuresService.UnequipFeature(userId, featureId);
+            this.service.UnequipFeature(userId, featureId);
 
             // Assert
-            this.mockUserRepository.Verify(mockRepository => mockRepository.IsFeaturePurchased(userId, featureId), Times.Once);
+            this.mockFeaturesRepository.Verify(mockRepository => mockRepository.IsFeaturePurchased(userId, featureId), Times.Once);
         }
 
         [Test]
@@ -526,14 +526,14 @@ namespace Tests.ServiceTests
             // Arrange
             int userId = 1;
             int featureId = 1;
-            this.mockUserRepository.Setup(mockRepository => mockRepository.IsFeaturePurchased(userId, featureId)).Returns(true);
-            this.mockUserRepository.Setup(mockRepository => mockRepository.UnequipFeature(userId, featureId)).Returns(false);
+            this.mockFeaturesRepository.Setup(mockRepository => mockRepository.IsFeaturePurchased(userId, featureId)).Returns(true);
+            this.mockFeaturesRepository.Setup(mockRepository => mockRepository.UnequipFeature(userId, featureId)).Returns(false);
 
             // Act
-            this.featuresService.UnequipFeature(userId, featureId);
+            this.service.UnequipFeature(userId, featureId);
 
             // Assert
-            this.mockUserRepository.Verify(mockRepository => mockRepository.UnequipFeature(userId, featureId), Times.Once);
+            this.mockFeaturesRepository.Verify(mockRepository => mockRepository.UnequipFeature(userId, featureId), Times.Once);
         }
 
         [Test]
@@ -548,10 +548,10 @@ namespace Tests.ServiceTests
                 new Feature { FeatureId = 3, Name = "Happy Emoji", Type = "emoji", Equipped = true }
             };
 
-            this.mockUserRepository.Setup(mockRepository => mockRepository.GetUserFeatures(userId)).Returns(userFeatures);
+            this.mockFeaturesRepository.Setup(mockRepository => mockRepository.GetUserFeatures(userId)).Returns(userFeatures);
 
             // Act
-            var equippedFeatures = this.featuresService.GetUserEquippedFeatures(userId);
+            var equippedFeatures = this.service.GetUserEquippedFeatures(userId);
 
             // Assert
             Assert.That(equippedFeatures.Count, Is.EqualTo(2));
@@ -569,10 +569,10 @@ namespace Tests.ServiceTests
                 new Feature { FeatureId = 3, Name = "Happy Emoji", Type = "emoji", Equipped = true }
             };
 
-            this.mockUserRepository.Setup(mockRepository => mockRepository.GetUserFeatures(userId)).Returns(userFeatures);
+            this.mockFeaturesRepository.Setup(mockRepository => mockRepository.GetUserFeatures(userId)).Returns(userFeatures);
 
             // Act
-            var equippedFeatures = this.featuresService.GetUserEquippedFeatures(userId);
+            var equippedFeatures = this.service.GetUserEquippedFeatures(userId);
 
             // Assert
             Assert.That(equippedFeatures.All(equippedFeature => equippedFeature.Equipped), Is.True);
@@ -590,10 +590,10 @@ namespace Tests.ServiceTests
                 new Feature { FeatureId = 3, Name = "Happy Emoji", Type = "emoji", Equipped = true }
             };
 
-            this.mockUserRepository.Setup(mockRepository => mockRepository.GetUserFeatures(userId)).Returns(userFeatures);
+            this.mockFeaturesRepository.Setup(mockRepository => mockRepository.GetUserFeatures(userId)).Returns(userFeatures);
 
             // Act
-            var equippedFeatures = this.featuresService.GetUserEquippedFeatures(userId);
+            var equippedFeatures = this.service.GetUserEquippedFeatures(userId);
 
             // Assert
             Assert.That(equippedFeatures.Any(equippedFeature => equippedFeature.FeatureId == 1), Is.True);
@@ -611,10 +611,10 @@ namespace Tests.ServiceTests
                 new Feature { FeatureId = 3, Name = "Happy Emoji", Type = "emoji", Equipped = true }
             };
 
-            this.mockUserRepository.Setup(mockRepository => mockRepository.GetUserFeatures(userId)).Returns(userFeatures);
+            this.mockFeaturesRepository.Setup(mockRepository => mockRepository.GetUserFeatures(userId)).Returns(userFeatures);
 
             // Act
-            var equippedFeatures = this.featuresService.GetUserEquippedFeatures(userId);
+            var equippedFeatures = this.service.GetUserEquippedFeatures(userId);
 
             // Assert
             Assert.That(equippedFeatures.Any(equippedFeature => equippedFeature.FeatureId == 3), Is.True);
@@ -632,10 +632,10 @@ namespace Tests.ServiceTests
                 new Feature { FeatureId = 3, Name = "Happy Emoji", Type = "emoji", Equipped = true }
             };
 
-            this.mockUserRepository.Setup(mockRepository => mockRepository.GetUserFeatures(userId)).Returns(userFeatures);
+            this.mockFeaturesRepository.Setup(mockRepository => mockRepository.GetUserFeatures(userId)).Returns(userFeatures);
 
             // Act
-            var equippedFeatures = this.featuresService.GetUserEquippedFeatures(userId);
+            var equippedFeatures = this.service.GetUserEquippedFeatures(userId);
 
             // Assert
             Assert.That(equippedFeatures.Any(equippedFeature => equippedFeature.FeatureId == 2), Is.False);
@@ -647,10 +647,10 @@ namespace Tests.ServiceTests
             // Arrange
             int userId = 1;
             int featureId = 1;
-            this.mockUserRepository.Setup(mockRepository => mockRepository.IsFeaturePurchased(userId, featureId)).Returns(true);
+            this.mockFeaturesRepository.Setup(mockRepository => mockRepository.IsFeaturePurchased(userId, featureId)).Returns(true);
 
             // Act
-            bool result = this.featuresService.IsFeaturePurchased(userId, featureId);
+            bool result = this.service.IsFeaturePurchased(userId, featureId);
 
             // Assert
             Assert.That(result, Is.True);
@@ -667,10 +667,10 @@ namespace Tests.ServiceTests
                 new Feature { FeatureId = 2, Name = "Silver Frame", Type = "frame", Value = 50 }
             };
 
-            this.mockUserRepository.Setup(mockRepository => mockRepository.GetUserFeatures(userId)).Returns(features);
+            this.mockFeaturesRepository.Setup(mockRepository => mockRepository.GetUserFeatures(userId)).Returns(features);
 
             // Act
-            var result = this.featuresService.GetUserFeatures(userId);
+            var result = this.service.GetUserFeatures(userId);
 
             // Assert
             Assert.That(result.Count, Is.EqualTo(2));
@@ -686,10 +686,10 @@ namespace Tests.ServiceTests
                 new Feature { FeatureId = 1, Name = string.Empty, Type = "frame", Value = 100 } // Invalid feature
             };
 
-            this.mockUserRepository.Setup(mockRepository => mockRepository.GetUserFeatures(userId)).Returns(features);
+            this.mockFeaturesRepository.Setup(mockRepository => mockRepository.GetUserFeatures(userId)).Returns(features);
 
             // Act & Assert
-            Assert.That(() => this.featuresService.GetUserFeatures(userId), Throws.TypeOf<ValidationException>());
+            Assert.That(() => this.service.GetUserFeatures(userId), Throws.TypeOf<ValidationException>());
         }
     }
 }
