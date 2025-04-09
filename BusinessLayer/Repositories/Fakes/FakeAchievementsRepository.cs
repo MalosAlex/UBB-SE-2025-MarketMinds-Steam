@@ -29,13 +29,13 @@ public class FakeAchievementsRepository : IAchievementsRepository
     public Dictionary<string, Dictionary<int, int?>> AchievementIds { get; set; } = new();
     public List<(int userId, int achievementId)> UnlockedAchievements { get; } = new();
     public List<Achievement> UnlockedAchievementsToReturn { get; set; } = new();
-    public void SetAchievementId(string category, int count, int? id)
+    public void SetAchievementId(string category, int count, int? identifier)
     {
         if (!AchievementIds.ContainsKey(category))
         {
             AchievementIds[category] = new Dictionary<int, int?>();
         }
-        AchievementIds[category][count] = id;
+        AchievementIds[category][count] = identifier;
     }
     public void InsertAchievements()
     {
@@ -68,7 +68,7 @@ public class FakeAchievementsRepository : IAchievementsRepository
         return AllAchievementsToReturn;
     }
 
-    public List<Achievement> GetUnlockedAchievementsForUser(int userId)
+    public List<Achievement> GetUnlockedAchievementsForUser(int userIdentifier)
     {
         if (ThrowOnGetUnlockedAchievements)
         {
@@ -78,9 +78,9 @@ public class FakeAchievementsRepository : IAchievementsRepository
         return UnlockedAchievementsToReturn;
     }
 
-    public void UnlockAchievement(int userId, int achievementId)
+    public void UnlockAchievement(int userIdentifier, int achievementIdentifier)
     {
-        UnlockedAchievements.Add((userId, achievementId));
+        UnlockedAchievements.Add((userIdentifier, achievementIdentifier));
     }
 
     public void RemoveAchievement(int userId, int achievementId)
@@ -90,7 +90,7 @@ public class FakeAchievementsRepository : IAchievementsRepository
             throw new RepositoryException("Fake remove fail");
         }
     }
-    public AchievementUnlockedData GetUnlockedDataForAchievement(int userId, int achievementId)
+    public AchievementUnlockedData GetUnlockedDataForAchievement(int userId, int achievementIdentifier)
     {
         if (ThrowOnGetUnlockedData)
         {
@@ -99,17 +99,17 @@ public class FakeAchievementsRepository : IAchievementsRepository
 
         return UnlockedDataToReturn;
     }
-    public bool IsAchievementUnlocked(int userId, int achievementId)
+    public bool IsAchievementUnlocked(int userIdentifier, int achievementIdentifier)
     {
         if (ThrowOnIsUnlocked)
         {
             throw new RepositoryException("Simulated DB error");
         }
 
-        return UnlockedAchievements.Any(a => a.userId == userId && a.achievementId == achievementId);
+        return UnlockedAchievements.Any(achievement => achievement.userId == userIdentifier && achievement.achievementId == achievementIdentifier);
     }
 
-    public List<AchievementWithStatus> GetAchievementsWithStatusForUser(int userId)
+    public List<AchievementWithStatus> GetAchievementsWithStatusForUser(int userIdentifier)
     {
         if (ThrowOnGetAchievementsWithStatus)
         {
@@ -119,7 +119,7 @@ public class FakeAchievementsRepository : IAchievementsRepository
         return AchievementsWithStatusToReturn;
     }
 
-    public int GetNumberOfSoldGames(int userId)
+    public int GetNumberOfSoldGames(int userIdentifier)
     {
         if (ThrowOnGetNumberOfSoldGames)
         {
@@ -128,42 +128,62 @@ public class FakeAchievementsRepository : IAchievementsRepository
 
         return NumberOfSoldGames;
     }
-    public int GetFriendshipCount(int userId) => NumberOfFriends;
-    public int GetNumberOfOwnedGames(int userId) => NumberOfOwnedGames;
-    public int GetNumberOfReviewsGiven(int userId) => NumberOfReviewsGiven;
-    public int GetNumberOfReviewsReceived(int userId) => NumberOfReviewsReceived;
-    public int GetNumberOfPosts(int userId) => NumberOfPosts;
-    // public int GetYearsOfAcftivity(int userId) => YearsOfAcftivity;
+    public int GetFriendshipCount(int userIdentifier) => NumberOfFriends;
+    public int GetNumberOfOwnedGames(int userIdentifier) => NumberOfOwnedGames;
+    public int GetNumberOfReviewsGiven(int userIdentifier) => NumberOfReviewsGiven;
+    public int GetNumberOfReviewsReceived(int userIdentifier) => NumberOfReviewsReceived;
+    public int GetNumberOfPosts(int userIdentifier) => NumberOfPosts;
     public Func<int, int> GetYearsOfAcftivity { get; set; } = _ => 0;
-    int IAchievementsRepository.GetYearsOfAcftivity(int userId) => GetYearsOfAcftivity(userId);
+    int IAchievementsRepository.GetYearsOfAcftivity(int userIdentifier) => GetYearsOfAcftivity(userIdentifier);
     public Func<int, bool> IsUserDeveloper { get; set; } = _ => false;
-    bool IAchievementsRepository.IsUserDeveloper(int userId) => IsUserDeveloper(userId);
+    bool IAchievementsRepository.IsUserDeveloper(int userIdentifier) => IsUserDeveloper(userIdentifier);
 
-    public int? GetAchievementIdByName(string name)
+    public int? GetAchievementIdByName(string achievementName)
     {
-        foreach (var category in AchievementIds)
+        foreach (var achievementCategory in AchievementIds)
         {
-            foreach (var pair in category.Value)
+            foreach (var achievementCategoryPair in achievementCategory.Value)
             {
-                var expectedName = category.Key switch
+                var expectedName = achievementCategory.Key switch
                 {
-                    "Friendships" => $"FRIENDSHIP{pair.Key}",
-                    "Owned Games" => $"OWNEDGAMES{pair.Key}",
-                    "Sold Games" => $"SOLDGAMES{pair.Key}",
-                    "Number of Reviews Given" => $"REVIEW{pair.Key}",
-                    "Number of Reviews Received" => $"REVIEWR{pair.Key}",
-                    "Years of Activity" => $"ACTIVITY{pair.Key}",
-                    "Number of Posts" => $"POSTS{pair.Key}",
-                    "Developer" => "DEVELOPER",
+                    AchievementTypes.Friendships => string.Format(AchievementTypes.FriendshipFormat, achievementCategoryPair.Key),
+                    AchievementTypes.OwnedGames => string.Format(AchievementTypes.OwnedGamesFormat, achievementCategoryPair.Key),
+                    AchievementTypes.SoldGames => string.Format(AchievementTypes.SoldGamesFormat, achievementCategoryPair.Key),
+                    AchievementTypes.ReviewsGiven => string.Format(AchievementTypes.ReviewsGivenFormat, achievementCategoryPair.Key),
+                    AchievementTypes.ReviewsReceived => string.Format(AchievementTypes.ReviewsReceivedFormat, achievementCategoryPair.Key),
+                    AchievementTypes.YearsOfActivity => string.Format(AchievementTypes.YearsOfActivityFormat, achievementCategoryPair.Key),
+                    AchievementTypes.NumberOfPosts => string.Format(AchievementTypes.NumberOfPostsFormat, achievementCategoryPair.Key),
+                    AchievementTypes.Developer => AchievementTypes.DeveloperFormat,
                     _ => string.Empty
                 };
 
-                if (expectedName == name)
+                if (expectedName == achievementName)
                 {
-                    return pair.Value;
+                    return achievementCategoryPair.Value;
                 }
             }
         }
         return null;
+    }
+
+    public static class AchievementTypes
+    {
+        public const string Friendships = "Friendships";
+        public const string OwnedGames = "Owned Games";
+        public const string SoldGames = "Sold Games";
+        public const string ReviewsGiven = "Number of Reviews Given";
+        public const string ReviewsReceived = "Number of Reviews Received";
+        public const string YearsOfActivity = "Years of Activity";
+        public const string NumberOfPosts = "Number of Posts";
+        public const string Developer = "Developer";
+
+        public const string FriendshipFormat = "FRIENDSHIP{0}";
+        public const string OwnedGamesFormat = "OWNEDGAMES{0}";
+        public const string SoldGamesFormat = "SOLDGAMES{0}";
+        public const string ReviewsGivenFormat = "REVIEW{0}";
+        public const string ReviewsReceivedFormat = "REVIEWR{0}";
+        public const string YearsOfActivityFormat = "ACTIVITY{0}";
+        public const string NumberOfPostsFormat = "POSTS{0}";
+        public const string DeveloperFormat = "DEVELOPER";
     }
 }
