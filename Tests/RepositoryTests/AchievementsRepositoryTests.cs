@@ -34,7 +34,7 @@ namespace Tests.RepositoryTests
             var exception = Assert.Throws<ArgumentNullException>(() => new AchievementsRepository(null));
 
             // Assert
-            Assert.That(exception.ParamName, Is.EqualTo("datalink"));
+            Assert.That(exception.ParamName, Is.EqualTo("dataLink"));
         }
 
         [Test]
