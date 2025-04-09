@@ -1,13 +1,12 @@
 ﻿using System;
 using NUnit.Framework;
-using BusinessLayer.Validators; // Assuming this namespace contains PaymentValidator
+using BusinessLayer.Validators;
 
 namespace Tests.Validators
 {
     [TestFixture]
     public class PaymentValidatorTests
     {
-        // Changed MAX_MONEY_AMOUNT to MAXIMUM_MONEY_AMOUNT for clarity
         private const int MAXIMUM_MONEY_AMOUNT = 500;
 
         #region IsMonetaryAmountValid Tests
@@ -16,11 +15,9 @@ namespace Tests.Validators
         public void IsMonetaryAmountValid_ValidAmount_ReturnsTrue()
         {
             // Arrange
-            // Changed 'amount' to 'amountString' for clarity (input is string)
             string amountString = "250";
 
             // Act
-            // Updated second argument to use the renamed constant
             bool result = PaymentValidator.IsMonetaryAmountValid(amountString, MAXIMUM_MONEY_AMOUNT);
 
             // Assert
@@ -31,12 +28,9 @@ namespace Tests.Validators
         public void IsMonetaryAmountValid_MaximumAmount_ReturnsTrue()
         {
             // Arrange
-            // Changed 'amount' to 'amountString'
-            // Updated constant name
             string amountString = MAXIMUM_MONEY_AMOUNT.ToString();
 
             // Act
-            // Updated constant name
             bool result = PaymentValidator.IsMonetaryAmountValid(amountString, MAXIMUM_MONEY_AMOUNT);
 
             // Assert
@@ -47,12 +41,9 @@ namespace Tests.Validators
         public void IsMonetaryAmountValid_ExceedsMaximum_ReturnsFalse()
         {
             // Arrange
-            // Changed 'amount' to 'amountString'
-            // Updated constant name
             string amountString = (MAXIMUM_MONEY_AMOUNT + 1).ToString();
 
             // Act
-            // Updated constant name
             bool result = PaymentValidator.IsMonetaryAmountValid(amountString, MAXIMUM_MONEY_AMOUNT);
 
             // Assert
@@ -63,11 +54,9 @@ namespace Tests.Validators
         public void IsMonetaryAmountValid_ZeroAmount_ReturnsFalse()
         {
             // Arrange
-            // Changed 'amount' to 'amountString'
             string amountString = "0";
 
             // Act
-            // Updated constant name
             bool result = PaymentValidator.IsMonetaryAmountValid(amountString, MAXIMUM_MONEY_AMOUNT);
 
             // Assert
@@ -78,11 +67,9 @@ namespace Tests.Validators
         public void IsMonetaryAmountValid_NegativeAmount_ReturnsFalse()
         {
             // Arrange
-            // Changed 'amount' to 'amountString'
             string amountString = "-10";
 
             // Act
-            // Updated constant name
             bool result = PaymentValidator.IsMonetaryAmountValid(amountString, MAXIMUM_MONEY_AMOUNT);
 
             // Assert
@@ -93,11 +80,9 @@ namespace Tests.Validators
         public void IsMonetaryAmountValid_NonNumericString_ReturnsFalse()
         {
             // Arrange
-            // Changed 'amount' to 'amountString'
             string amountString = "abc";
 
             // Act
-            // Updated constant name
             bool result = PaymentValidator.IsMonetaryAmountValid(amountString, MAXIMUM_MONEY_AMOUNT);
 
             // Assert
@@ -108,11 +93,9 @@ namespace Tests.Validators
         public void IsMonetaryAmountValid_EmptyString_ReturnsFalse()
         {
             // Arrange
-            // Changed 'amount' to 'amountString'
             string amountString = string.Empty;
 
             // Act
-            // Updated constant name
             bool result = PaymentValidator.IsMonetaryAmountValid(amountString, MAXIMUM_MONEY_AMOUNT);
 
             // Assert
@@ -123,11 +106,9 @@ namespace Tests.Validators
         public void IsMonetaryAmountValid_NullString_ReturnsFalse()
         {
             // Arrange
-            // Changed 'amount' to 'amountString'
             string amountString = null;
 
             // Act
-            // Updated constant name
             bool result = PaymentValidator.IsMonetaryAmountValid(amountString, MAXIMUM_MONEY_AMOUNT);
 
             // Assert
@@ -138,12 +119,10 @@ namespace Tests.Validators
         public void IsMonetaryAmountValid_ValidDigitsButCannotParse_ReturnsFalse()
         {
             // Arrange
-            // Changed 'amount' to 'amountString'
             // A number that's too large to be parsed as an int but contains only digits
-            string amountString = "9999999999999999999"; // Exceeds int.MaxValue
+            string amountString = "9999999999999999999";
 
             // Act
-            // Updated constant name
             bool result = PaymentValidator.IsMonetaryAmountValid(amountString, MAXIMUM_MONEY_AMOUNT);
 
             // Assert
@@ -158,7 +137,6 @@ namespace Tests.Validators
         public void IsCardNameValid_ValidName_ReturnsTrue()
         {
             // Arrange
-            // Changed 'name' to 'cardholderName' for specificity
             string cardholderName = "John Smith";
 
             // Act
@@ -172,7 +150,6 @@ namespace Tests.Validators
         public void IsCardNameValid_EmptyName_ReturnsFalse()
         {
             // Arrange
-            // Changed 'name' to 'cardholderName'
             string cardholderName = string.Empty;
 
             // Act
@@ -186,7 +163,6 @@ namespace Tests.Validators
         public void IsCardNameValid_NullName_ReturnsFalse()
         {
             // Arrange
-            // Changed 'name' to 'cardholderName'
             string cardholderName = null;
 
             // Act
@@ -200,7 +176,6 @@ namespace Tests.Validators
         public void IsCardNameValid_SingleName_ReturnsFalse()
         {
             // Arrange
-            // Changed 'name' to 'cardholderName'
             string cardholderName = "John";
 
             // Act
@@ -218,7 +193,6 @@ namespace Tests.Validators
         public void IsCardNumberValid_VisaNumber_ReturnsTrue()
         {
             // Arrange
-            // 'cardNumber' is already quite clear
             string cardNumber = "4111111111111111";
 
             // Act
@@ -245,7 +219,6 @@ namespace Tests.Validators
         public void IsCardNumberValid_AmexNumber_ReturnsTrue()
         {
             // Arrange
-            // Changed 'cardNumber' to 'americanExpressCardNumber' for this specific test case clarity
             string americanExpressCardNumber = "3782822463100051";
 
             // Act
@@ -259,7 +232,6 @@ namespace Tests.Validators
         public void IsCardNumberValid_TooLongNumber_ReturnsFalse()
         {
             // Arrange
-            // 'invalidNumber' changed to 'tooLongCardNumber' for consistency
             string tooLongCardNumber = "12345678901234562";
 
             // Act
@@ -273,7 +245,6 @@ namespace Tests.Validators
         public void IsCardNumberValid_TooShortNumber_ReturnsFalse()
         {
             // Arrange
-            // 'tooShortNumber' changed to 'tooShortCardNumber'
             string tooShortCardNumber = "1234";
 
             // Act
@@ -287,7 +258,6 @@ namespace Tests.Validators
         public void IsCardNumberValid_EmptyNumber_ReturnsFalse()
         {
             // Arrange
-            // 'emptyNumber' changed to 'emptyCardNumber'
             string emptyCardNumber = string.Empty;
 
             // Act
@@ -301,7 +271,6 @@ namespace Tests.Validators
         public void IsCardNumberValid_NullNumber_ReturnsFalse()
         {
             // Arrange
-            // 'nullNumber' changed to 'nullCardNumber'
             string nullCardNumber = null;
 
             // Act
@@ -315,7 +284,6 @@ namespace Tests.Validators
         public void IsCardNumberValid_NonNumericInput_ReturnsFalse()
         {
             // Arrange
-            // 'nonNumericInput' changed to 'nonNumericCardNumber'
             string nonNumericCardNumber = "123abc456def";
 
             // Act
@@ -327,14 +295,12 @@ namespace Tests.Validators
 
         #endregion
 
-        // Renamed region and test methods from Cvv to CardVerificationValue
         #region IsCardVerificationValueValid Tests
 
         [Test]
         public void IsCardVerificationValueValid_ThreeDigitCVV_ReturnsTrue()
         {
             // Arrange
-            // Changed 'cvv' to 'cardVerificationValueString'
             string cardVerificationValueString = "123";
 
             // Act
@@ -348,7 +314,6 @@ namespace Tests.Validators
         public void IsCardVerificationValueValid_AllNinesCVV_ReturnsTrue()
         {
             // Arrange
-            // Changed 'cvv' to 'cardVerificationValueString'
             string cardVerificationValueString = "999";
 
             // Act
@@ -362,7 +327,6 @@ namespace Tests.Validators
         public void IsCardVerificationValueValid_AllZerosCVV_ReturnsTrue()
         {
             // Arrange
-            // Changed 'cvv' to 'cardVerificationValueString'
             string cardVerificationValueString = "000";
 
             // Act
@@ -376,7 +340,6 @@ namespace Tests.Validators
         public void IsCardVerificationValueValid_TooShortCVV_ReturnsFalse()
         {
             // Arrange
-            // Renamed 'tooShortCVV'
             string tooShortCardVerificationValue = "12";
 
             // Act
@@ -390,7 +353,6 @@ namespace Tests.Validators
         public void IsCardVerificationValueValid_TooLongCVV_ReturnsFalse()
         {
             // Arrange
-            // Renamed 'tooLongCVV'
             string tooLongCardVerificationValue = "12345";
 
             // Act
@@ -404,7 +366,6 @@ namespace Tests.Validators
         public void IsCardVerificationValueValid_EmptyCVV_ReturnsFalse()
         {
             // Arrange
-            // Renamed 'emptyCVV'
             string emptyCardVerificationValue = string.Empty;
 
             // Act
@@ -418,7 +379,6 @@ namespace Tests.Validators
         public void IsCardVerificationValueValid_NullCVV_ReturnsFalse()
         {
             // Arrange
-            // Renamed 'nullCVV'
             string nullCardVerificationValue = null;
 
             // Act
@@ -432,7 +392,6 @@ namespace Tests.Validators
         public void IsCardVerificationValueValid_NonNumericCVV_ReturnsFalse()
         {
             // Arrange
-            // Renamed 'nonNumericCVV'
             string nonNumericCardVerificationValue = "12A";
 
             // Act
@@ -450,8 +409,7 @@ namespace Tests.Validators
         public void IsExpirationDateValid_FutureDate_ReturnsTrue()
         {
             // Arrange
-            // Changed 'validDate' to 'futureExpirationDateString'
-            string futureExpirationDateString = "12/28"; // Assuming test runs before Dec 2028
+            string futureExpirationDateString = "12/28";
 
             // Act
             bool result = PaymentValidator.IsExpirationDateValid(futureExpirationDateString);
@@ -466,7 +424,6 @@ namespace Tests.Validators
             // Arrange
             int currentMonth = DateTime.Now.Month;
             int currentYearTwoDigits = DateTime.Now.Year % 100;
-            // Changed 'currentDate' to 'currentExpirationDateString'
             string currentExpirationDateString = $"{currentMonth:D2}/{currentYearTwoDigits:D2}";
 
             // Act
@@ -481,7 +438,6 @@ namespace Tests.Validators
         {
             // Arrange
             int lastYearTwoDigits = (DateTime.Now.Year - 1) % 100;
-            // Changed 'pastDate' to 'pastExpirationDateString'
             string pastExpirationDateString = $"12/{lastYearTwoDigits:D2}";
 
             // Act
@@ -495,7 +451,6 @@ namespace Tests.Validators
         public void IsExpirationDateValid_InvalidMonth_ReturnsFalse()
         {
             // Arrange
-            // Changed 'invalidMonth' to 'expirationDateWithInvalidMonth'
             string expirationDateWithInvalidMonth = "13/30";
 
             // Act
@@ -509,7 +464,6 @@ namespace Tests.Validators
         public void IsExpirationDateValid_SingleDigitMonthFormat_ReturnsFalse()
         {
             // Arrange
-            // Changed 'invalidFormat' to 'expirationDateWithSingleDigitMonth'
             string expirationDateWithSingleDigitMonth = "1/23";
 
             // Act
@@ -523,7 +477,6 @@ namespace Tests.Validators
         public void IsExpirationDateValid_NoSlashFormat_ReturnsFalse()
         {
             // Arrange
-            // Changed 'invalidFormat' to 'expirationDateWithoutSlash'
             string expirationDateWithoutSlash = "1234";
 
             // Act
@@ -537,7 +490,6 @@ namespace Tests.Validators
         public void IsExpirationDateValid_DashSeparatorFormat_ReturnsFalse()
         {
             // Arrange
-            // Changed 'invalidFormat' to 'expirationDateWithDashSeparator'
             string expirationDateWithDashSeparator = "12-23";
 
             // Act
@@ -551,7 +503,6 @@ namespace Tests.Validators
         public void IsExpirationDateValid_DotSeparatorFormat_ReturnsFalse()
         {
             // Arrange
-            // Changed 'invalidFormat' to 'expirationDateWithDotSeparator'
             string expirationDateWithDotSeparator = "12.23";
 
             // Act
@@ -565,7 +516,6 @@ namespace Tests.Validators
         public void IsExpirationDateValid_EmptyDate_ReturnsFalse()
         {
             // Arrange
-            // Changed 'emptyDate' to 'emptyExpirationDateString'
             string emptyExpirationDateString = string.Empty;
 
             // Act
@@ -579,7 +529,6 @@ namespace Tests.Validators
         public void IsExpirationDateValid_NullDate_ReturnsFalse()
         {
             // Arrange
-            // Changed 'nullDate' to 'nullExpirationDateString'
             string nullExpirationDateString = null;
 
             // Act
@@ -597,7 +546,6 @@ namespace Tests.Validators
         public void IsEmailValid_SimpleValidEmail_ReturnsTrue()
         {
             // Arrange
-            // 'email' is generally clear in this context
             string email = "user@example.com";
 
             // Act
@@ -741,7 +689,6 @@ namespace Tests.Validators
         public void IsEmailValid_EmptyEmail_ReturnsFalse()
         {
             // Arrange
-            // 'emptyEmail' is clear
             string emptyEmail = string.Empty;
 
             // Act
@@ -755,7 +702,6 @@ namespace Tests.Validators
         public void IsEmailValid_NullEmail_ReturnsFalse()
         {
             // Arrange
-            // 'nullEmail' is clear
             string nullEmail = null;
 
             // Act
@@ -773,7 +719,6 @@ namespace Tests.Validators
         public void IsPasswordValid_ValidPassword_ReturnsTrue()
         {
             // Arrange
-            // 'validPassword' is clear
             string validPassword = "Pass123!";
 
             // Act
@@ -787,7 +732,6 @@ namespace Tests.Validators
         public void IsPasswordValid_EmptyPassword_ReturnsFalse()
         {
             // Arrange
-            // 'emptyPassword' is clear
             string emptyPassword = string.Empty;
 
             // Act
@@ -801,7 +745,6 @@ namespace Tests.Validators
         public void IsPasswordValid_NullPassword_ReturnsFalse()
         {
             // Arrange
-            // 'nullPassword' is clear
             string nullPassword = null;
 
             // Act
@@ -815,7 +758,6 @@ namespace Tests.Validators
         public void IsPasswordValid_NoUppercase_ReturnsFalse()
         {
             // Arrange
-            // 'password' is generally clear in this context
             string password = "pass123!";
 
             // Act
