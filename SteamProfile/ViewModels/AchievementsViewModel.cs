@@ -63,31 +63,6 @@ namespace SteamProfile.ViewModels
             _userService = userService ?? throw new ArgumentNullException(nameof(userService));
             BackToProfileCommand = new RelayCommand(BackToProfile);
         }
-
-        //[RelayCommand]
-        //public async Task LoadAchievementsAsync()
-        //{
-        //    var userId = _userService.GetCurrentUser().UserId;
-        //    _achievementsService.UnlockAchievementForUser(userId);
-
-        //    var allAchievements = await Task.Run(() => _achievementsService.GetAchievementsWithStatusForUser(userId));
-
-        //    AllAchievements.Clear();
-        //    foreach (var achievement in allAchievements)
-        //    {
-        //        AllAchievements.Add(achievement);
-        //    }
-
-        //    LoadCategoryAchievements(FriendshipsAchievements, "Friendships");
-        //    LoadCategoryAchievements(OwnedGamesAchievements, "Owned Games");
-        //    LoadCategoryAchievements(SoldGamesAchievements, "Sold Games");
-        //    LoadCategoryAchievements(NumberOfPostsAchievements, "Number of Posts");
-        //    LoadCategoryAchievements(NumberOfReviewsGivenAchievements, "Number of Reviews Given");
-        //    LoadCategoryAchievements(NumberOfReviewsReceivedAchievements, "Number of Reviews Received");
-        //    LoadCategoryAchievements(YearsOfActivityAchievements, "Years of Activity");
-        //    LoadCategoryAchievements(DeveloperAchievements, "Developer");
-        //}
-
         [RelayCommand]
         public async Task LoadAchievementsAsync()
         {
@@ -107,17 +82,6 @@ namespace SteamProfile.ViewModels
             NumberOfReviewsReceivedAchievements = new ObservableCollection<AchievementWithStatus>(grouped.NumberOfReviewsReceived);
             DeveloperAchievements = new ObservableCollection<AchievementWithStatus>(grouped.Developer);
         }
-
-        //private void LoadCategoryAchievements(ObservableCollection<AchievementWithStatus> collection, string category)
-        //{
-        //    var achievements = AllAchievements.Where(a => a.Achievement.AchievementType == category).ToList();
-        //    collection.Clear();
-        //    foreach (var achievement in achievements)
-        //    {
-        //        collection.Add(achievement);
-        //    }
-        //}
-
         public IRelayCommand BackToProfileCommand { get; }
 
         private void BackToProfile()
