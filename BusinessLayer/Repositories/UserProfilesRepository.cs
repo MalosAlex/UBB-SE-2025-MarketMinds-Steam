@@ -20,9 +20,10 @@ namespace BusinessLayer.Repositories
         {
             try
             {
+                string parameterName = "@user_id";
                 var parameters = new SqlParameter[]
                 {
-                    new SqlParameter("@user_id", userId)
+                    new SqlParameter(parameterName, userId)
                 };
 
                 var dataTable = dataLink.ExecuteReader("GetUserProfileByUserId", parameters);
@@ -38,12 +39,17 @@ namespace BusinessLayer.Repositories
         {
             try
             {
+                string profileIdParam = "@profile_id";
+                string userIdParam = "@user_id";
+                string profilePictureParam = "@profile_picture";
+                string bioParam = "@bio";
+
                 var parameters = new SqlParameter[]
                 {
-                    new SqlParameter("@profile_id", profile.ProfileId),
-                    new SqlParameter("@user_id", profile.UserId),
-                    new SqlParameter("@profile_picture", (object?)profile.ProfilePicture ?? DBNull.Value),
-                    new SqlParameter("@bio", (object?)profile.Bio ?? DBNull.Value)
+                    new SqlParameter(profileIdParam, profile.ProfileId),
+                    new SqlParameter(userIdParam, profile.UserId),
+                    new SqlParameter(profilePictureParam, (object?)profile.ProfilePicture ?? DBNull.Value),
+                    new SqlParameter(bioParam, (object?)profile.Bio ?? DBNull.Value)
                 };
 
                 var dataTable = dataLink.ExecuteReader("UpdateUserProfile", parameters);
@@ -59,9 +65,10 @@ namespace BusinessLayer.Repositories
         {
             try
             {
+                string parameterName = "@user_id";
                 var parameters = new SqlParameter[]
                 {
-                    new SqlParameter("@user_id", userId)
+                    new SqlParameter(parameterName, userId)
                 };
 
                 var dataTable = dataLink.ExecuteReader("CreateUserProfile", parameters);
@@ -77,10 +84,13 @@ namespace BusinessLayer.Repositories
         {
             try
             {
+                string userIdParam = "@user_id";
+                string bioParam = "@bio";
+
                 var parameters = new SqlParameter[]
                 {
-                    new SqlParameter("@user_id", user_id),
-                    new SqlParameter("@bio", bio)
+                    new SqlParameter(userIdParam, user_id),
+                    new SqlParameter(bioParam, bio)
                 };
                 var dataTable = dataLink.ExecuteReader("UpdateUserProfileBio", parameters);
             }
@@ -94,10 +104,13 @@ namespace BusinessLayer.Repositories
         {
             try
             {
+                string userIdParam = "@user_id";
+                string profilePictureParam = "@profile_picture";
+
                 var parameters = new SqlParameter[]
                 {
-                    new SqlParameter("@user_id", user_id),
-                    new SqlParameter("@profile_picture", picture)
+                    new SqlParameter(userIdParam, user_id),
+                    new SqlParameter(profilePictureParam, picture)
                 };
 
                 var dataTable = dataLink.ExecuteReader("UpdateUserProfilePicture", parameters);
@@ -110,13 +123,19 @@ namespace BusinessLayer.Repositories
 
         private static UserProfile MapDataRowToUserProfile(DataRow row)
         {
+            int profileId = Convert.ToInt32(row["profile_id"]);
+            int userId = Convert.ToInt32(row["user_id"]);
+            string? profilePicture = row["profile_picture"] as string;
+            string? bio = row["bio"] as string;
+            DateTime lastModified = Convert.ToDateTime(row["last_modified"]);
+
             return new UserProfile
             {
-                ProfileId = Convert.ToInt32(row["profile_id"]),
-                UserId = Convert.ToInt32(row["user_id"]),
-                ProfilePicture = row["profile_picture"] as string,
-                Bio = row["bio"] as string,
-                LastModified = Convert.ToDateTime(row["last_modified"])
+                ProfileId = profileId,
+                UserId = userId,
+                ProfilePicture = profilePicture,
+                Bio = bio,
+                LastModified = lastModified
             };
         }
     }

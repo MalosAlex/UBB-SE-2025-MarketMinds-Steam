@@ -25,7 +25,6 @@ using System.Data.SqlClient;
 
 // To learn more about WinUI, the WinUI project structure,
 // and more about our project templates, see: http://aka.ms/winui-project-info.
-
 namespace SteamProfile.Views
 {
     /// <summary>
@@ -34,7 +33,8 @@ namespace SteamProfile.Views
     public sealed partial class ProfilePage : Page
     {
         public ProfileViewModel ViewModel { get; private set; }
-        //private bool _isOwnProfile;
+
+        // private bool _isOwnProfile;
         private int _userId;
         private bool _isNavigatingAway = false;
 
@@ -70,11 +70,11 @@ namespace SteamProfile.Views
                         App.FeaturesService,
                         App.AchievementsService
                     );
+
                     Debug.WriteLine("ProfileViewModel initialized with services.");
-                    
                     ViewModel = ProfileViewModel.Instance;
                 }
-                
+
                 DataContext = ViewModel; // Ensure this is set correctly
                 Debug.WriteLine("Profile data loading initiated.");
             }
@@ -146,10 +146,11 @@ namespace SteamProfile.Views
                 // Use the parameter as the user ID
                 _userId = (int)e.Parameter;
                 Debug.WriteLine($"Using user ID from navigation parameter: {_userId}");
-                
+
                 // Load the profile data
                 _ = ViewModel.LoadProfileAsync(_userId);
             }
+
             // If no parameter but we're returning to the page and ViewModel has a user ID
             else if (ViewModel.UserId > 0)
             {
@@ -167,7 +168,6 @@ namespace SteamProfile.Views
 
             UpdateProfileControl();
         }
-
 
         private async Task LoadAndUpdateProfile(int userId)
         {
@@ -239,7 +239,7 @@ namespace SteamProfile.Views
                     Title = "Error",
                     Content = message,
                     CloseButtonText = "OK",
-                    XamlRoot = this.XamlRoot
+                    XamlRoot = this.XamlRoot,
                 };
 
                 await errorDialog.ShowAsync();
@@ -262,7 +262,7 @@ namespace SteamProfile.Views
                     PrimaryButtonText = "Yes",
                     CloseButtonText = "No",
                     DefaultButton = ContentDialogButton.Close,
-                    XamlRoot = this.XamlRoot
+                    XamlRoot = this.XamlRoot,
                 };
 
                 var result = await confirmDialog.ShowAsync();
