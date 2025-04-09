@@ -86,7 +86,7 @@ namespace SteamProfile.ViewModels
 
                 StatusMessage = string.Empty;
             }
-            catch (Exception ex)
+            catch (Exception exception)
             {
                 StatusMessage = "Failed to load features. Please try again later.";
                 StatusColor = new SolidColorBrush(Colors.Red);
@@ -183,9 +183,9 @@ namespace SteamProfile.ViewModels
 
                 return success;
             }
-            catch (Exception ex)
+            catch (Exception exception)
             {
-                StatusMessage = $"Error: {ex.Message}";
+                StatusMessage = $"Error: {exception.Message}";
                 StatusColor = new SolidColorBrush(Colors.Red);
                 return false;
             }

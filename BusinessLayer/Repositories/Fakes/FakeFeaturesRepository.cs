@@ -35,22 +35,22 @@ namespace BusinessLayer.Repositories.Fakes
 
         public List<Feature> GetFeaturesByType(string type)
         {
-            return features.Where(f => f.Type == type).ToList();
+            return features.Where(feature => feature.Type == type).ToList();
         }
 
         public List<Feature> GetUserFeatures(int userId)
         {
-            return userFeatures.Where(f => f.UserId == userId).ToList();
+            return userFeatures.Where(feature => feature.UserId == userId).ToList();
         }
 
         public bool IsFeaturePurchased(int userId, int featureId)
         {
-            return userFeatures.Any(f => f.UserId == userId && f.FeatureId == featureId);
+            return userFeatures.Any(feature => feature.UserId == userId && feature.FeatureId == featureId);
         }
 
         public bool EquipFeature(int userId, int featureId)
         {
-            var feature = userFeatures.FirstOrDefault(f => f.UserId == userId && f.FeatureId == featureId);
+            var feature = userFeatures.FirstOrDefault(feature => feature.UserId == userId && feature.FeatureId == featureId);
             if (feature == null)
             {
                 return false;
@@ -61,7 +61,7 @@ namespace BusinessLayer.Repositories.Fakes
 
         public bool UnequipFeature(int userId, int featureId)
         {
-            var feature = userFeatures.FirstOrDefault(f => f.UserId == userId && f.FeatureId == featureId);
+            var feature = userFeatures.FirstOrDefault(feature => feature.UserId == userId && feature.FeatureId == featureId);
             if (feature == null)
             {
                 return false;
@@ -73,7 +73,7 @@ namespace BusinessLayer.Repositories.Fakes
         public bool UnequipFeaturesByType(int userId, string featureType)
         {
             var featuresToUnequip = userFeatures
-                .Where(f => f.UserId == userId && f.Type == featureType)
+                .Where(feature => feature.UserId == userId && feature.Type == featureType)
                 .ToList();
             foreach (var feature in featuresToUnequip)
             {
@@ -91,7 +91,7 @@ namespace BusinessLayer.Repositories.Fakes
         {
             if (!IsFeaturePurchased(userId, featureId))
             {
-                var featureToPurchase = features.FirstOrDefault(f => f.FeatureId == featureId);
+                var featureToPurchase = features.FirstOrDefault(feature => feature.FeatureId == featureId);
                 if (featureToPurchase != null)
                 {
                     userFeatures.Add(new Feature

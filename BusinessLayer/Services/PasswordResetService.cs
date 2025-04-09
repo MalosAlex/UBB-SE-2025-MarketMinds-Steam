@@ -60,9 +60,9 @@ namespace BusinessLayer.Services
 
                 return (true, "Reset code sent successfully.");
             }
-            catch (Exception ex)
+            catch (Exception exception)
             {
-                return (false, $"Failed to send reset code: {ex.Message}");
+                return (false, $"Failed to send reset code: {exception.Message}");
             }
         }
 
@@ -110,9 +110,9 @@ namespace BusinessLayer.Services
 
                 return (true, "Code verified successfully.");
             }
-            catch (Exception ex)
+            catch (Exception exception)
             {
-                return (false, $"Failed to verify reset code: {ex.Message}");
+                return (false, $"Failed to verify reset code: {exception.Message}");
             }
         }
 
@@ -160,9 +160,9 @@ namespace BusinessLayer.Services
                 File.Delete(GetResetCodeFilePath(email));
                 return (true, "Password reset successfully.");
             }
-            catch (Exception ex)
+            catch (Exception exception)
             {
-                return (false, $"Failed to reset password: {ex.Message}");
+                return (false, $"Failed to reset password: {exception.Message}");
             }
         }
 
@@ -179,9 +179,9 @@ namespace BusinessLayer.Services
             {
                 filePaths = Directory.GetFiles(resetCodesPath);
             }
-            catch (Exception ex)
+            catch (Exception exception)
             {
-                Console.WriteLine($"Error accessing directory: {ex.Message}");
+                Console.WriteLine($"Error accessing directory: {exception.Message}");
                 return;
             }
 
@@ -239,9 +239,9 @@ namespace BusinessLayer.Services
                         }
                     }
                 }
-                catch (Exception ex)
+                catch (Exception exception)
                 {
-                    Console.WriteLine($"Error processing file {file}: {ex.Message}");
+                    Console.WriteLine($"Error processing file {file}: {exception.Message}");
                     try
                     {
                         // Try to delete by creation time if reading fails

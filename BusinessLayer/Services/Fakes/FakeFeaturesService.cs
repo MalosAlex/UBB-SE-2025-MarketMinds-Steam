@@ -44,7 +44,7 @@ namespace BusinessLayer.Services.Fakes
                 return false;
             }
 
-            var feature = featuresRepository.GetFeaturesByType("frame").FirstOrDefault(f => f.FeatureId == featureId);
+            var feature = featuresRepository.GetFeaturesByType("frame").FirstOrDefault(feature => feature.FeatureId == featureId);
             if (feature != null)
             {
                 featuresRepository.UnequipFeaturesByType(userId, "frame");
@@ -67,7 +67,7 @@ namespace BusinessLayer.Services.Fakes
         public List<Feature> GetUserEquippedFeatures(int userId)
         {
             return featuresRepository.GetUserFeatures(userId)
-                .Where(f => f.Equipped)
+                .Where(feature => feature.Equipped)
                 .ToList();
         }
 
