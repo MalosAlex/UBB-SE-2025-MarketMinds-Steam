@@ -83,7 +83,7 @@ namespace SteamProfile
             AchievementsService.InitializeAchievements();
         }
 
-        private Window m_window;
+        private Window mainWindow;
 
         public App()
         {
@@ -94,9 +94,9 @@ namespace SteamProfile
 
         protected override void OnLaunched(Microsoft.UI.Xaml.LaunchActivatedEventArgs args)
         {
-            m_window = new MainWindow();
+            mainWindow = new MainWindow();
             // NavigationService.Instance.Initialize(m_window.Content as Frame); // Ensure the frame is passed
-            m_window.Activate();
+            mainWindow.Activate();
         }
 
         private void ConfigureServices(IServiceCollection services)
