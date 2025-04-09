@@ -926,6 +926,7 @@ namespace Tests.ServiceTests
             var result = achievementsService.GetAchievementIdByTypeAndCount("Unknown Type", 1);
             Assert.That(result, Is.Null);
         }
+
     }
 
     [TestFixture]

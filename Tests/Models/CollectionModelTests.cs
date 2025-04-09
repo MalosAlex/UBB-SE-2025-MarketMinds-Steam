@@ -1,6 +1,6 @@
-﻿using System;
-using BusinessLayer.Models;
+﻿using BusinessLayer.Models;
 using NUnit.Framework;
+using System;
 
 namespace Tests.Models
 {

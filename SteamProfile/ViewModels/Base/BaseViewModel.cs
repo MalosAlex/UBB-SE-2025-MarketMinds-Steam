@@ -10,6 +10,7 @@ namespace SteamProfile.ViewModels.Base
 {
     public abstract class BaseViewModel : INotifyPropertyChanged
     {
+
         public event PropertyChangedEventHandler? PropertyChanged;
 
         protected virtual void OnPropertyChanged([CallerMemberName] string? propertyName = null)
@@ -20,9 +21,7 @@ namespace SteamProfile.ViewModels.Base
         protected virtual bool SetProperty<T>(ref T storage, T value, [CallerMemberName] string? propertyName = null)
         {
             if (EqualityComparer<T>.Default.Equals(storage, value))
-            {
                 return false;
-            }
 
             storage = value;
             OnPropertyChanged(propertyName);
@@ -32,9 +31,7 @@ namespace SteamProfile.ViewModels.Base
         protected virtual bool SetProperty<T>(ref T storage, T value, Action onChanged, [CallerMemberName] string? propertyName = null)
         {
             if (EqualityComparer<T>.Default.Equals(storage, value))
-            {
                 return false;
-            }
 
             storage = value;
             onChanged?.Invoke();

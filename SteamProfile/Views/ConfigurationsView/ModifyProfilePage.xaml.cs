@@ -1,7 +1,7 @@
-using System;
 using Microsoft.UI.Xaml;
 using Microsoft.UI.Xaml.Controls;
 using SteamProfile.ViewModels.ConfigurationsViewModels;
+using System;
 using Windows.Storage;
 using Windows.Storage.Pickers;
 

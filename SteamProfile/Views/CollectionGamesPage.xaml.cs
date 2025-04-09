@@ -1,10 +1,10 @@
-using System;
-using System.Diagnostics;
 using Microsoft.UI.Xaml;
 using Microsoft.UI.Xaml.Controls;
 using Microsoft.UI.Xaml.Navigation;
 using BusinessLayer.Models;
 using SteamProfile.ViewModels;
+using System;
+using System.Diagnostics;
 
 namespace SteamProfile.Views
 {
@@ -15,21 +15,21 @@ namespace SteamProfile.Views
         private const string RemoveGameErrorMessage = "Failed to remove game from collection. Please try again.";
         private const string CloseButtonTextValue = "OK";
 
-        private CollectionGamesViewModel collectionGamesViewModel;
-        private CollectionsViewModel collectionsViewModel;
-        private UsersViewModel userViewModel;
-        private int collectionIdentifier;
-        private string collectionName = string.Empty;
+        private CollectionGamesViewModel _collectionGamesViewModel;
+        private CollectionsViewModel _collectionsViewModel;
+        private UsersViewModel _userViewModel;
+        private int _collectionId;
+        private string _collectionName = string.Empty;
 
         public CollectionGamesPage()
         {
             this.InitializeComponent();
-            collectionGamesViewModel = App.CollectionGamesViewModel;
-            collectionsViewModel = App.CollectionsViewModel;
-            collectionsViewModel.LoadCollections();
+            _collectionGamesViewModel = App.CollectionGamesViewModel;
+            _collectionsViewModel = App.CollectionsViewModel;
+            _collectionsViewModel.LoadCollections();
 
-            userViewModel = App.UsersViewModel;
-            this.DataContext = collectionGamesViewModel;
+            _userViewModel = App.UsersViewModel;
+            this.DataContext = _collectionGamesViewModel;
         }
 
         protected override void OnNavigatedTo(NavigationEventArgs eventArgs)
@@ -37,19 +37,19 @@ namespace SteamProfile.Views
             base.OnNavigatedTo(eventArgs);
             if (eventArgs.Parameter is (int collectionId, string collectionName))
             {
-                collectionIdentifier = collectionId;
-                collectionName = collectionName;
+                _collectionId = collectionId;
+                _collectionName = collectionName;
                 LoadCollectionGames();
             }
             else if (eventArgs.Parameter is int backCollectionId)
             {
                 // Handle back navigation from AddGameToCollectionPage
-                collectionIdentifier = backCollectionId;
-                var userId = userViewModel.GetCurrentUser().UserId;
-                var collection = collectionsViewModel.GetCollectionById(collectionIdentifier, userId);
+                _collectionId = backCollectionId;
+                var userId = _userViewModel.GetCurrentUser().UserId;
+                var collection = _collectionsViewModel.GetCollectionById(_collectionId, userId);
                 if (collection != null)
                 {
-                    collectionName = collection.Name;
+                    _collectionName = collection.Name;
                     LoadCollectionGames();
                 }
             }
@@ -57,8 +57,8 @@ namespace SteamProfile.Views
 
         private void LoadCollectionGames()
         {
-            collectionGamesViewModel.CollectionName = collectionName;
-            collectionGamesViewModel.LoadGames(collectionIdentifier);
+            _collectionGamesViewModel.CollectionName = _collectionName; 
+            _collectionGamesViewModel.LoadGames(_collectionId);
         }
 
         private void BackButton_Click(object sender, RoutedEventArgs eventArgs)
@@ -68,7 +68,7 @@ namespace SteamProfile.Views
 
         private void AddGameToCollection_Click(object sender, RoutedEventArgs eventArgs)
         {
-            Frame.Navigate(typeof(AddGameToCollectionPage), collectionIdentifier);
+            Frame.Navigate(typeof(AddGameToCollectionPage), _collectionId);
         }
 
         private void RemoveGame_Click(object sender, RoutedEventArgs eventArgs)
@@ -83,8 +83,8 @@ namespace SteamProfile.Views
 
                 int gameId = Convert.ToInt32(button.Tag);
 
-                collectionsViewModel.RemoveGameFromCollection(collectionIdentifier, gameId);
-                collectionGamesViewModel.LoadGames(collectionIdentifier);
+                _collectionsViewModel.RemoveGameFromCollection(_collectionId, gameId);
+                _collectionGamesViewModel.LoadGames(_collectionId);
             }
             catch (Exception exception)
             {

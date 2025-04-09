@@ -19,4 +19,4 @@ namespace SteamProfile.Converters
             throw new System.NotImplementedException();
         }
     }
-}
+} 

@@ -1,9 +1,9 @@
-using System;
-using System.Collections.ObjectModel;
 using Microsoft.UI.Xaml;
 using Microsoft.UI.Xaml.Controls;
 using SteamProfile.ViewModels;
+using System;
 using Microsoft.UI.Xaml.Navigation;
+using System.Collections.ObjectModel;
 using BusinessLayer.Models;
 
 namespace SteamProfile.Views
@@ -12,15 +12,15 @@ namespace SteamProfile.Views
     {
         private const string FailedToLoadCollectionsErrorMessage = "Failed to load collections. Please try again later.";
 
-        private CollectionsViewModel collectionsViewModel;
-        private int userIdentifier;
+        private CollectionsViewModel _collectionsViewModel;
+        private int _userId;
 
         public CollectionsForVisitorsPage()
         {
             this.InitializeComponent();
-            collectionsViewModel = App.CollectionsViewModel;
-            collectionsViewModel.LoadCollections();
-            this.DataContext = collectionsViewModel;
+            _collectionsViewModel = App.CollectionsViewModel;
+            _collectionsViewModel.LoadCollections();
+            this.DataContext = _collectionsViewModel;
         }
 
         protected override void OnNavigatedTo(NavigationEventArgs eventArgs)
@@ -28,7 +28,7 @@ namespace SteamProfile.Views
             base.OnNavigatedTo(eventArgs);
             if (eventArgs.Parameter is int userId)
             {
-                userIdentifier = userId;
+                _userId = userId;
                 LoadCollections();
             }
         }
@@ -37,19 +37,19 @@ namespace SteamProfile.Views
         {
             try
             {
-                collectionsViewModel.IsLoading = true;
-                collectionsViewModel.ErrorMessage = string.Empty;
-
-                var collections = collectionsViewModel.GetPublicCollectionsForUser(userIdentifier);
-                collectionsViewModel.Collections = new ObservableCollection<Collection>(collections);
+                _collectionsViewModel.IsLoading = true;
+                _collectionsViewModel.ErrorMessage = string.Empty;
+                
+                var collections = _collectionsViewModel.GetPublicCollectionsForUser(_userId);
+                _collectionsViewModel.Collections = new ObservableCollection<Collection>(collections);
             }
             catch (Exception)
             {
-                collectionsViewModel.ErrorMessage = FailedToLoadCollectionsErrorMessage;
+                _collectionsViewModel.ErrorMessage = FailedToLoadCollectionsErrorMessage;
             }
             finally
             {
-                collectionsViewModel.IsLoading = false;
+                _collectionsViewModel.IsLoading = false;
             }
         }
 

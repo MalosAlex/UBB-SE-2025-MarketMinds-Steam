@@ -1,6 +1,6 @@
-using System;
 using Microsoft.UI.Xaml;
 using Microsoft.UI.Xaml.Data;
+using System;
 
 namespace SteamProfile.Converters
 {
@@ -29,4 +29,4 @@ namespace SteamProfile.Converters
             return (value is Visibility visibility && visibility == Visibility.Collapsed);
         }
     }
-}
+} 

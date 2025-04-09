@@ -13,63 +13,43 @@
   <component name="ChangeListManager">
     <list default="true" id="0161f655-4b51-48b1-8da8-59f3015ae934" name="Changes" comment="">
       <change beforePath="$PROJECT_DIR$/.idea/.idea.SteamProfile/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/.idea.SteamProfile/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/App.xaml.cs" beforeDir="false" afterPath="$PROJECT_DIR$/App.xaml.cs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Converters/BoolToInverseVisibilityConverter.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Converters/BoolToInverseVisibilityConverter.cs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Converters/BoolToOpacityConverter.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Converters/BoolToOpacityConverter.cs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Converters/BoolToVisibilityConverters.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Converters/BoolToVisibilityConverters.cs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Converters/DateOnlyToStringConverter.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Converters/DateOnlyToStringConverter.cs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Converters/GameCountToStringConverter.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Converters/GameCountToStringConverter.cs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Converters/ImagePathToImageSourceConverter.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Converters/ImagePathToImageSourceConverter.cs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Converters/InverseBooleanToVisibilityConverter.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Converters/InverseBooleanToVisibilityConverter.cs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Converters/NullToCollapsedConverter.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Converters/NullToCollapsedConverter.cs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Converters/NullToVisibilityConverter.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Converters/NullToVisibilityConverter.cs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Converters/StringFormatConverter.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Converters/StringFormatConverter.cs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Converters/StringToImageSourceConverter.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Converters/StringToImageSourceConverter.cs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Converters/StringToVisibilityConverter.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Converters/StringToVisibilityConverter.cs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/ViewModels/Base/BaseViewModel.cs" beforeDir="false" afterPath="$PROJECT_DIR$/ViewModels/Base/BaseViewModel.cs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/ViewModels/NavigationService.cs" beforeDir="false" afterPath="$PROJECT_DIR$/ViewModels/NavigationService.cs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/ViewModels/WalletViewModels/CardPaymentViewModel.cs" beforeDir="false" afterPath="$PROJECT_DIR$/ViewModels/WalletViewModels/CardPaymentViewModel.cs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/ViewModels/WalletViewModels/PaypalPaymentViewModel.cs" beforeDir="false" afterPath="$PROJECT_DIR$/ViewModels/WalletViewModels/PaypalPaymentViewModel.cs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Views/AchievementsPage.xaml.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Views/AchievementsPage.xaml.cs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Views/AdaptiveProfileControl.xaml.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Views/AdaptiveProfileControl.xaml.cs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Views/AddGameToCollectionPage.xaml.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Views/AddGameToCollectionPage.xaml.cs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Views/CollectionGamesPage.xaml.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Views/CollectionGamesPage.xaml.cs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Views/CollectionsForVisitorsPage.xaml.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Views/CollectionsForVisitorsPage.xaml.cs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Views/CollectionsPage.xaml.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Views/CollectionsPage.xaml.cs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Views/ConfigurationsPage.xaml.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Views/ConfigurationsPage.xaml.cs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Views/ConfigurationsView/AccountSettingsPage.xaml.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Views/ConfigurationsView/AccountSettingsPage.xaml.cs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Views/ConfigurationsView/ModifyProfilePage.xaml.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Views/ConfigurationsView/ModifyProfilePage.xaml.cs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Views/FeaturesPage.xaml" beforeDir="false" afterPath="$PROJECT_DIR$/Views/FeaturesPage.xaml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Views/FeaturesPage.xaml.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Views/FeaturesPage.xaml.cs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Views/ForgotPasswordPage.xaml" beforeDir="false" afterPath="$PROJECT_DIR$/Views/ForgotPasswordPage.xaml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Views/ForgotPasswordPage.xaml.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Views/ForgotPasswordPage.xaml.cs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Views/FriendsPage.xaml.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Views/FriendsPage.xaml.cs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Views/GamePage.xaml.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Views/GamePage.xaml.cs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Views/LoginPage.xaml.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Views/LoginPage.xaml.cs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Views/ProfileInfoControl.xaml.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Views/ProfileInfoControl.xaml.cs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Views/ProfilePage.xaml" beforeDir="false" afterPath="$PROJECT_DIR$/Views/ProfilePage.xaml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Views/RegisterPage.xaml.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Views/RegisterPage.xaml.cs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Views/ShopPage.xaml.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Views/ShopPage.xaml.cs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Views/UsersPage.xaml.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Views/UsersPage.xaml.cs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Views/WalletPage.xaml.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Views/WalletPage.xaml.cs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Views/WalletViews/AddMoneyPage.xaml" beforeDir="false" afterPath="$PROJECT_DIR$/Views/WalletViews/AddMoneyPage.xaml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Views/WalletViews/AddMoneyPage.xaml.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Views/WalletViews/AddMoneyPage.xaml.cs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Views/WalletViews/AddPointsPage.xaml.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Views/WalletViews/AddPointsPage.xaml.cs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Views/WalletViews/CardPaymentPage.xaml.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Views/WalletViews/CardPaymentPage.xaml.cs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Views/WalletViews/PaypalPaymentPage.xaml.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Views/WalletViews/PaypalPaymentPage.xaml.cs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../Tests/ConvertersTests.cs" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/../Tests/DataLinkTests.cs" beforeDir="false" afterPath="$PROJECT_DIR$/../Tests/DataLinkTests.cs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../Tests/ExceptionTests.cs" beforeDir="false" afterPath="$PROJECT_DIR$/../Tests/ExceptionTests.cs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../Tests/Models/CollectionModelTests.cs" beforeDir="false" afterPath="$PROJECT_DIR$/../Tests/Models/CollectionModelTests.cs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../Tests/Models/UserSessionModelTests.cs" beforeDir="false" afterPath="$PROJECT_DIR$/../Tests/Models/UserSessionModelTests.cs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../Tests/Models/UserWithSessionDetailsTests.cs" beforeDir="false" afterPath="$PROJECT_DIR$/../Tests/Models/UserWithSessionDetailsTests.cs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../Tests/PasswordHasherTests.cs" beforeDir="false" afterPath="$PROJECT_DIR$/../Tests/PasswordHasherTests.cs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../Tests/RepositoryTests/CollectionsRepositoryTests.cs" beforeDir="false" afterPath="$PROJECT_DIR$/../Tests/RepositoryTests/CollectionsRepositoryTests.cs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../Tests/RepositoryTests/FakeCollectionsRepositoryTests.cs" beforeDir="false" afterPath="$PROJECT_DIR$/../Tests/RepositoryTests/FakeCollectionsRepositoryTests.cs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../Tests/RepositoryTests/FakeFriendshipsRepositoryTests.cs" beforeDir="false" afterPath="$PROJECT_DIR$/../Tests/RepositoryTests/FakeFriendshipsRepositoryTests.cs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../Tests/RepositoryTests/FriendshipsRepositoryTests.cs" beforeDir="false" afterPath="$PROJECT_DIR$/../Tests/RepositoryTests/FriendshipsRepositoryTests.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Converters/StringLengthToVisibilityConverter.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Converters/StringLengthToVisibilityConverter.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/ViewModels/AchievementsViewModel.cs" beforeDir="false" afterPath="$PROJECT_DIR$/ViewModels/AchievementsViewModel.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/ViewModels/CollectionGamesViewModel.cs" beforeDir="false" afterPath="$PROJECT_DIR$/ViewModels/CollectionGamesViewModel.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/ViewModels/CollectionsViewModel.cs" beforeDir="false" afterPath="$PROJECT_DIR$/ViewModels/CollectionsViewModel.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/ViewModels/ConfigurationsViewModel.cs" beforeDir="false" afterPath="$PROJECT_DIR$/ViewModels/ConfigurationsViewModel.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/ViewModels/ConfigurationsViewModels/AccountSettingsViewModel.cs" beforeDir="false" afterPath="$PROJECT_DIR$/ViewModels/ConfigurationsViewModels/AccountSettingsViewModel.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/ViewModels/ConfigurationsViewModels/ModifyProfileViewModel.cs" beforeDir="false" afterPath="$PROJECT_DIR$/ViewModels/ConfigurationsViewModels/ModifyProfileViewModel.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/ViewModels/FeaturesViewModel.cs" beforeDir="false" afterPath="$PROJECT_DIR$/ViewModels/FeaturesViewModel.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/ViewModels/ForgotPasswordViewModel.cs" beforeDir="false" afterPath="$PROJECT_DIR$/ViewModels/ForgotPasswordViewModel.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/ViewModels/FriendsViewModel.cs" beforeDir="false" afterPath="$PROJECT_DIR$/ViewModels/FriendsViewModel.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/ViewModels/LoginViewModel.cs" beforeDir="false" afterPath="$PROJECT_DIR$/ViewModels/LoginViewModel.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/ViewModels/ProfileViewModel.cs" beforeDir="false" afterPath="$PROJECT_DIR$/ViewModels/ProfileViewModel.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/ViewModels/RegisterViewModel.cs" beforeDir="false" afterPath="$PROJECT_DIR$/ViewModels/RegisterViewModel.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/ViewModels/ShopViewModel.cs" beforeDir="false" afterPath="$PROJECT_DIR$/ViewModels/ShopViewModel.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/ViewModels/UsersViewModel.cs" beforeDir="false" afterPath="$PROJECT_DIR$/ViewModels/UsersViewModel.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/ViewModels/WalletViewModel.cs" beforeDir="false" afterPath="$PROJECT_DIR$/ViewModels/WalletViewModel.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/ViewModels/WalletViewModels/AddMoneyViewModel.cs" beforeDir="false" afterPath="$PROJECT_DIR$/ViewModels/WalletViewModels/AddMoneyViewModel.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/ViewModels/WalletViewModels/AddPointsViewModel.cs" beforeDir="false" afterPath="$PROJECT_DIR$/ViewModels/WalletViewModels/AddPointsViewModel.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../Tests/RepositoryTests/AchievementsRepositoryTests.cs" beforeDir="false" afterPath="$PROJECT_DIR$/../Tests/RepositoryTests/AchievementsRepositoryTests.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../Tests/RepositoryTests/FeaturesRepositoryTests.cs" beforeDir="false" afterPath="$PROJECT_DIR$/../Tests/RepositoryTests/FeaturesRepositoryTests.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../Tests/RepositoryTests/PasswordResetRepositoryTests.cs" beforeDir="false" afterPath="$PROJECT_DIR$/../Tests/RepositoryTests/PasswordResetRepositoryTests.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../Tests/RepositoryTests/PointsOffersRepositoryTests.cs" beforeDir="false" afterPath="$PROJECT_DIR$/../Tests/RepositoryTests/PointsOffersRepositoryTests.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../Tests/RepositoryTests/SessionRepositoryTests.cs" beforeDir="false" afterPath="$PROJECT_DIR$/../Tests/RepositoryTests/SessionRepositoryTests.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../Tests/RepositoryTests/UserProfileRepositoryTests.cs" beforeDir="false" afterPath="$PROJECT_DIR$/../Tests/RepositoryTests/UserProfileRepositoryTests.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../Tests/RepositoryTests/UserRepositoryTests.cs" beforeDir="false" afterPath="$PROJECT_DIR$/../Tests/RepositoryTests/UserRepositoryTests.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../Tests/RepositoryTests/WalletRepositoryTests.cs" beforeDir="false" afterPath="$PROJECT_DIR$/../Tests/RepositoryTests/WalletRepositoryTests.cs" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/../Tests/ServiceTests/AchievementsServiceTests.cs" beforeDir="false" afterPath="$PROJECT_DIR$/../Tests/ServiceTests/AchievementsServiceTests.cs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../Tests/UnitTest1.cs" beforeDir="false" afterPath="$PROJECT_DIR$/../Tests/UnitTest1.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../Tests/ServiceTests/FakeCollectionsServiceTests.cs" beforeDir="false" afterPath="$PROJECT_DIR$/../Tests/ServiceTests/FakeCollectionsServiceTests.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../Tests/ServiceTests/FakeFriendsServiceTests.cs" beforeDir="false" afterPath="$PROJECT_DIR$/../Tests/ServiceTests/FakeFriendsServiceTests.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../Tests/ServiceTests/FakeOwnedGamesServiceTests.cs" beforeDir="false" afterPath="$PROJECT_DIR$/../Tests/ServiceTests/FakeOwnedGamesServiceTests.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../Tests/ServiceTests/FeaturesServiceTests.cs" beforeDir="false" afterPath="$PROJECT_DIR$/../Tests/ServiceTests/FeaturesServiceTests.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../Tests/ServiceTests/FriendsServiceTests.cs" beforeDir="false" afterPath="$PROJECT_DIR$/../Tests/ServiceTests/FriendsServiceTests.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../Tests/ServiceTests/OwnedGamesServiceTests.cs" beforeDir="false" afterPath="$PROJECT_DIR$/../Tests/ServiceTests/OwnedGamesServiceTests.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../Tests/ServiceTests/PasswordResetServiceTests.cs" beforeDir="false" afterPath="$PROJECT_DIR$/../Tests/ServiceTests/PasswordResetServiceTests.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../Tests/ServiceTests/SessionServiceTests.cs" beforeDir="false" afterPath="$PROJECT_DIR$/../Tests/ServiceTests/SessionServiceTests.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../Tests/ServiceTests/UserServiceTests.cs" beforeDir="false" afterPath="$PROJECT_DIR$/../Tests/ServiceTests/UserServiceTests.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../Tests/ServiceTests/WalletServiceTests.cs" beforeDir="false" afterPath="$PROJECT_DIR$/../Tests/ServiceTests/WalletServiceTests.cs" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -113,22 +93,22 @@
     <option name="hideEmptyMiddlePackages" value="true" />
     <option name="showLibraryContents" value="true" />
   </component>
-  <component name="PropertiesComponent"><![CDATA[{
-  "keyToString": {
-    "RunOnceActivity.ShowReadmeOnStart": "true",
-    "RunOnceActivity.git.unshallow": "true",
-    "UWP.SteamProfile.executor": "Debug",
-    "git-widget-placeholder": "main",
-    "last_opened_file_path": "C:/Users/anton/OneDrive/Documents/GitHub/UBB-SE-2025-MarketMinds-Steam",
-    "node.js.detected.package.eslint": "true",
-    "node.js.detected.package.tslint": "true",
-    "node.js.selected.package.eslint": "(autodetect)",
-    "node.js.selected.package.tslint": "(autodetect)",
-    "nodejs_package_manager_path": "npm",
-    "settings.editor.selected.configurable": "editor.preferences.smartKeys_rider",
-    "vue.rearranger.settings.migration": "true"
+  <component name="PropertiesComponent">{
+  &quot;keyToString&quot;: {
+    &quot;RunOnceActivity.ShowReadmeOnStart&quot;: &quot;true&quot;,
+    &quot;RunOnceActivity.git.unshallow&quot;: &quot;true&quot;,
+    &quot;UWP.SteamProfile.executor&quot;: &quot;Run&quot;,
+    &quot;git-widget-placeholder&quot;: &quot;main&quot;,
+    &quot;last_opened_file_path&quot;: &quot;C:/Users/anton/OneDrive/Documents/GitHub/UBB-SE-2025-MarketMinds-Steam&quot;,
+    &quot;node.js.detected.package.eslint&quot;: &quot;true&quot;,
+    &quot;node.js.detected.package.tslint&quot;: &quot;true&quot;,
+    &quot;node.js.selected.package.eslint&quot;: &quot;(autodetect)&quot;,
+    &quot;node.js.selected.package.tslint&quot;: &quot;(autodetect)&quot;,
+    &quot;nodejs_package_manager_path&quot;: &quot;npm&quot;,
+    &quot;settings.editor.selected.configurable&quot;: &quot;editor.preferences.smartKeys_rider&quot;,
+    &quot;vue.rearranger.settings.migration&quot;: &quot;true&quot;
   }
-}]]></component>
+}</component>
   <component name="RunManager" selected="UWP.SteamProfile">
     <configuration name="SteamProfile: win-arm64" type="DotNetMsBuildPublish" factoryName="Publish to IIS">
       <riderPublish publish_profile="win-arm64.pubxml" pubxml_path="$PROJECT_DIR$/Properties/PublishProfiles/win-arm64.pubxml" uuid_high="700698563452619973" uuid_low="-5814607699951800266" />
@@ -183,7 +163,7 @@
       <workItem from="1744117365832" duration="270000" />
       <workItem from="1744117647693" duration="5826000" />
       <workItem from="1744182616870" duration="3578000" />
-      <workItem from="1744219186188" duration="4764000" />
+      <workItem from="1744219186188" duration="3665000" />
     </task>
     <servers />
   </component>
@@ -199,7 +179,7 @@
       <expand>
         <path>
           <item name="rootNode" type="c53c71d1:RiderDotCoverCoverageTreeModel$RootNode" />
-          <item name="Total 0% 13285/13285" type="8b8fad3a:RiderDotCoverCoverageTreeNode" />
+          <item name="Total 0% 13511/13511" type="8b8fad3a:RiderDotCoverCoverageTreeNode" />
         </path>
       </expand>
       <select />

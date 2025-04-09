@@ -1,14 +1,14 @@
-using System;
-using System.Diagnostics;
 using Microsoft.UI.Xaml;
 using Microsoft.UI.Xaml.Controls;
 using Microsoft.UI.Xaml.Navigation;
+using System;
+using System.Diagnostics;
 
 namespace SteamProfile.Views
 {
     public sealed partial class GamePage : Page
     {
-        private int gameIdentifier;
+        private int _gameId;
 
         public GamePage()
         {
@@ -20,7 +20,7 @@ namespace SteamProfile.Views
             base.OnNavigatedTo(e);
             if (e.Parameter is int gameId)
             {
-                gameIdentifier = gameId;
+                _gameId = gameId;
                 GameIdText.Text = gameId.ToString();
                 Debug.WriteLine($"GamePage: Loaded game with ID {gameId}");
             }
@@ -31,4 +31,4 @@ namespace SteamProfile.Views
             Frame.GoBack();
         }
     }
-}
+} 

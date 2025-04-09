@@ -1,16 +1,16 @@
-using System;
 using Microsoft.UI.Xaml;
 using Microsoft.UI.Xaml.Controls;
 using Microsoft.UI.Xaml.Navigation;
 using BusinessLayer.Repositories;
 using SteamProfile.ViewModels;
+using System;
 using BusinessLayer.Repositories.Interfaces;
 
 namespace SteamProfile.Views.WalletViews
 {
     public sealed partial class AddPointsPage : Page
     {
-        private AddPointsViewModel addPointsViewModel;
+        private AddPointsViewModel _viewModel;
 
         public AddPointsPage()
         {
@@ -24,8 +24,8 @@ namespace SteamProfile.Views.WalletViews
             if (e.Parameter is WalletViewModel walletViewModel)
             {
                 var repository = new PointsOffersRepository();
-                addPointsViewModel = new AddPointsViewModel(walletViewModel, repository, this.Frame);
-                this.DataContext = addPointsViewModel;
+                _viewModel = new AddPointsViewModel(walletViewModel, repository, this.Frame);
+                this.DataContext = _viewModel;
             }
             else
             {

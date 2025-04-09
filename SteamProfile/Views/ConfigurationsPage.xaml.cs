@@ -1,8 +1,3 @@
-using System;
-using System.Collections.Generic;
-using System.IO;
-using System.Linq;
-using System.Runtime.InteropServices.WindowsRuntime;
 using Microsoft.UI.Xaml;
 using Microsoft.UI.Xaml.Controls;
 using Microsoft.UI.Xaml.Controls.Primitives;
@@ -13,6 +8,11 @@ using Microsoft.UI.Xaml.Navigation;
 using BusinessLayer.Services;
 using SteamProfile.ViewModels;
 using SteamProfile.Views.ConfigurationsView;
+using System;
+using System.Collections.Generic;
+using System.IO;
+using System.Linq;
+using System.Runtime.InteropServices.WindowsRuntime;
 using Windows.Foundation;
 using Windows.Foundation.Collections;
 
@@ -20,6 +20,7 @@ namespace SteamProfile.Views
 {
     public sealed partial class ConfigurationsPage : Page
     {
+
         public ConfigurationsViewModel ViewModel { get; private set; }
         public ConfigurationsPage()
         {
@@ -32,5 +33,6 @@ namespace SteamProfile.Views
             ViewModel = new ConfigurationsViewModel(this.Frame, App.UserService);
             this.DataContext = ViewModel;
         }
+      
     }
 }

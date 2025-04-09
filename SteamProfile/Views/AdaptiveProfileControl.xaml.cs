@@ -86,4 +86,4 @@ namespace SteamProfile.Views
             }
         }
     }
-}
+} 

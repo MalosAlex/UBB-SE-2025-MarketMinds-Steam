@@ -1,5 +1,5 @@
-using System;
 using Microsoft.UI.Xaml.Data;
+using System;
 
 namespace SteamProfile.Converters
 {
@@ -19,4 +19,4 @@ namespace SteamProfile.Converters
             throw new NotImplementedException();
         }
     }
-}
+} 

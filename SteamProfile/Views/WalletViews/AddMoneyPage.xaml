@@ -15,7 +15,7 @@
                      Header="Amount to add (max 500):" 
                      PlaceholderText="Enter amount" 
                      Text="{x:Bind ViewModel.AmountToAdd, Mode=TwoWay}"
-                     TextChanged="SumToBeAddedTextBox_TextChanged"/>
+                     TextChanged="sumToBeAddedTextBox_TextChanged"/>
 
             <TextBlock x:Name="InvalidInput_ErrorMessage" 
                        Text="Invalid input! Please enter a valid amount (1-500)." 

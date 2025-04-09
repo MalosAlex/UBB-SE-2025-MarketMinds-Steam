@@ -67,8 +67,8 @@ namespace Tests
         public void VerifyPassword_EmptyPasswordAndHash_ReturnsFalse()
         {
             // Arrange
-            string emptyPassword = string.Empty;
-            string emptyHash = string.Empty;
+            string emptyPassword = "";
+            string emptyHash = "";
 
             // Act
             bool result = PasswordHasher.VerifyPassword(emptyPassword, emptyHash);
@@ -83,7 +83,7 @@ namespace Tests
             // Arrange
             string validPassword = "NotEmpty";
             string validHash = PasswordHasher.HashPassword(validPassword);
-            string emptyPassword = string.Empty;
+            string emptyPassword = "";
 
             // Act
             bool result = PasswordHasher.VerifyPassword(emptyPassword, validHash);

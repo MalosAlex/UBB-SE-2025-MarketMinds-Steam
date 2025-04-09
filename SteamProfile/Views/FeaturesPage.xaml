@@ -53,7 +53,7 @@
             <!-- Frames Section -->
             <TextBlock Text="Frames" 
                       Style="{StaticResource CategoryHeaderStyle}"/>
-            <ItemsControl ItemsSource="{x:Bind featuresViewModel.Frames, Mode=OneWay}">
+            <ItemsControl ItemsSource="{x:Bind _viewModel.Frames, Mode=OneWay}">
                 <ItemsControl.ItemsPanel>
                     <ItemsPanelTemplate>
                         <controls:WrapPanel Orientation="Horizontal"/>
@@ -96,7 +96,7 @@
             <!-- Emojis Section -->
             <TextBlock Text="Emojis" 
                       Style="{StaticResource CategoryHeaderStyle}"/>
-            <ItemsControl ItemsSource="{x:Bind featuresViewModel.Emojis, Mode=OneWay}">
+            <ItemsControl ItemsSource="{x:Bind _viewModel.Emojis, Mode=OneWay}">
                 <ItemsControl.ItemsPanel>
                     <ItemsPanelTemplate>
                         <controls:WrapPanel Orientation="Horizontal"/>
@@ -139,7 +139,7 @@
             <!-- Backgrounds Section -->
             <TextBlock Text="Backgrounds" 
                       Style="{StaticResource CategoryHeaderStyle}"/>
-            <ItemsControl ItemsSource="{x:Bind featuresViewModel.Backgrounds, Mode=OneWay}">
+            <ItemsControl ItemsSource="{x:Bind _viewModel.Backgrounds, Mode=OneWay}">
                 <ItemsControl.ItemsPanel>
                     <ItemsPanelTemplate>
                         <controls:WrapPanel Orientation="Horizontal"/>
@@ -182,7 +182,7 @@
             <!-- Pets Section -->
             <TextBlock Text="Pets" 
                       Style="{StaticResource CategoryHeaderStyle}"/>
-            <ItemsControl ItemsSource="{x:Bind featuresViewModel.Pets, Mode=OneWay}">
+            <ItemsControl ItemsSource="{x:Bind _viewModel.Pets, Mode=OneWay}">
                 <ItemsControl.ItemsPanel>
                     <ItemsPanelTemplate>
                         <controls:WrapPanel Orientation="Horizontal"/>
@@ -225,7 +225,7 @@
             <!-- Hats Section -->
             <TextBlock Text="Hats" 
                       Style="{StaticResource CategoryHeaderStyle}"/>
-            <ItemsControl ItemsSource="{x:Bind featuresViewModel.Hats, Mode=OneWay}">
+            <ItemsControl ItemsSource="{x:Bind _viewModel.Hats, Mode=OneWay}">
                 <ItemsControl.ItemsPanel>
                     <ItemsPanelTemplate>
                         <controls:WrapPanel Orientation="Horizontal"/>
@@ -265,8 +265,8 @@
                 </ItemsControl.ItemTemplate>
             </ItemsControl>
 
-            <TextBlock Text="{x:Bind featuresViewModel.StatusMessage, Mode=OneWay}"
-                      Foreground="{x:Bind featuresViewModel.StatusColor, Mode=OneWay}"
+            <TextBlock Text="{x:Bind _viewModel.StatusMessage, Mode=OneWay}"
+                      Foreground="{x:Bind _viewModel.StatusColor, Mode=OneWay}"
                       TextWrapping="Wrap"
                       Margin="0,10,0,0"
                       HorizontalAlignment="Center"/>

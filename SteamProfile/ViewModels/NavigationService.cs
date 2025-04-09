@@ -1,65 +1,63 @@
-﻿using System;
-using Microsoft.UI.Xaml.Controls;
+﻿using Microsoft.UI.Xaml.Controls;
+using System;
 
 namespace SteamProfile.ViewModels
 {
     public class NavigationService
     {
-        private Frame navigationServiceFrame;
-        private static NavigationService navigationServiceInstance;
+        private Frame _frame;
+        private static NavigationService _instance;
 
         public static NavigationService Instance
         {
             get
             {
-                if (navigationServiceInstance == null)
+                if (_instance == null)
                 {
-                    navigationServiceInstance = new NavigationService();
+                    _instance = new NavigationService();
                 }
-                return navigationServiceInstance;
+                return _instance;
             }
         }
 
         public void Initialize(Frame frame)
         {
-            navigationServiceFrame = frame;
+            _frame = frame;
         }
 
         public bool Navigate(Type pageType)
         {
-            if (navigationServiceFrame != null)
+            if (_frame != null)
             {
-                return navigationServiceFrame.Navigate(pageType);
+                return _frame.Navigate(pageType);
             }
                 return false;
 
-            return navigationServiceFrame.Navigate(pageType);
+            return _frame.Navigate(pageType);
         }
 
         public bool Navigate(Type pageType, object parameter)
         {
-            if (navigationServiceFrame != null)
+            if (_frame != null)
         {
-                return navigationServiceFrame.Navigate(pageType, parameter);
+                return _frame.Navigate(pageType, parameter);
             }
                 return false;
 
-            return navigationServiceFrame.Navigate(pageType, parameter);
+            return _frame.Navigate(pageType, parameter);
         }
 
         public bool GoBack()
         {
-            if (navigationServiceFrame != null && navigationServiceFrame.CanGoBack)
+            if (_frame != null && _frame.CanGoBack)
         {
-            if (navigationServiceFrame == null || !navigationServiceFrame.CanGoBack)
-            {
+            if (_frame == null || !_frame.CanGoBack)
                 return false;
-            }
 
-            navigationServiceFrame.GoBack();
+            _frame.GoBack();
             return true;
         }
             return false;
         }
     }
-}
+} 
