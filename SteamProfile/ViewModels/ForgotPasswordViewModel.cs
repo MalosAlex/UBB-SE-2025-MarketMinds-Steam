@@ -121,7 +121,7 @@ namespace SteamProfile.ViewModels
                     ShowCodeSection = true;
                 }
             }
-            catch (Exception ex)
+            catch
             {
                 StatusMessage = "An error occurred while sending the reset code.";
                 StatusColor = new SolidColorBrush(Colors.Red);
@@ -173,7 +173,7 @@ namespace SteamProfile.ViewModels
                     PasswordResetSuccess?.Invoke(this, EventArgs.Empty);
                 }
             }
-            catch (Exception ex)
+            catch
             {
                 StatusMessage = "An error occurred while resetting the password.";
                 StatusColor = new SolidColorBrush(Colors.Red);
