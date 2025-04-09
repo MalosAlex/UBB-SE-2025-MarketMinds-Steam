@@ -44,9 +44,9 @@ namespace BusinessLayer.Repositories
 
                 return features;
             }
-            catch (DatabaseOperationException ex)
+            catch (DatabaseOperationException exception)
             {
-                throw new DatabaseOperationException("Failed to retrieve features.", ex);
+                throw new DatabaseOperationException("Failed to retrieve features.", exception);
             }
         }
 
@@ -77,9 +77,9 @@ namespace BusinessLayer.Repositories
 
                 return features;
             }
-            catch (DatabaseOperationException ex)
+            catch (DatabaseOperationException exception)
             {
-                throw new DatabaseOperationException($"Failed to retrieve features of type {type}.", ex);
+                throw new DatabaseOperationException($"Failed to retrieve features of type {type}.", exception);
             }
         }
 
@@ -111,9 +111,9 @@ namespace BusinessLayer.Repositories
 
                 return features;
             }
-            catch (DatabaseOperationException ex)
+            catch (DatabaseOperationException exception)
             {
-                throw new DatabaseOperationException($"Failed to retrieve features for user {userId}.", ex);
+                throw new DatabaseOperationException($"Failed to retrieve features for user {userId}.", exception);
             }
         }
 
@@ -146,9 +146,9 @@ namespace BusinessLayer.Repositories
 
                 return false; // Feature is not purchased
             }
-            catch (DatabaseOperationException ex)
+            catch (DatabaseOperationException exception)
             {
-                System.Diagnostics.Debug.WriteLine($"Failed to equip feature {featureId} for user {userId}: {ex.Message}");
+                System.Diagnostics.Debug.WriteLine($"Failed to equip feature {featureId} for user {userId}: {exception.Message}");
                 return false;
             }
         }
@@ -181,9 +181,9 @@ namespace BusinessLayer.Repositories
 
                 return false; // Feature is not purchased
             }
-            catch (DatabaseOperationException ex)
+            catch (DatabaseOperationException exception)
             {
-                System.Diagnostics.Debug.WriteLine($"Failed to unequip feature {featureId} for user {userId}: {ex.Message}");
+                System.Diagnostics.Debug.WriteLine($"Failed to unequip feature {featureId} for user {userId}: {exception.Message}");
                 return false;
             }
         }
@@ -201,9 +201,9 @@ namespace BusinessLayer.Repositories
                 dataLink.ExecuteNonQuery("UnequipFeaturesByType", parameters);
                 return true;  // If no exception, consider it successful
             }
-            catch (DatabaseOperationException ex)
+            catch (DatabaseOperationException exception)
             {
-                System.Diagnostics.Debug.WriteLine($"Failed to unequip features of type {featureType} for user {userId}: {ex.Message}");
+                System.Diagnostics.Debug.WriteLine($"Failed to unequip features of type {featureType} for user {userId}: {exception.Message}");
                 return false;
             }
         }
@@ -221,9 +221,9 @@ namespace BusinessLayer.Repositories
                 var relationshipTable = dataLink.ExecuteReader("GetFeatureUserRelationship", parameters);
                 return relationshipTable.Rows.Count > 0;
             }
-            catch (DatabaseOperationException ex)
+            catch (DatabaseOperationException exception)
             {
-                throw new DatabaseOperationException($"Failed to check feature purchase status.", ex);
+                throw new DatabaseOperationException($"Failed to check feature purchase status.", exception);
             }
         }
     }

@@ -37,9 +37,9 @@ namespace BusinessLayer.Repositories
 
                 dataLink.ExecuteNonQuery("StorePasswordResetCode", parameters);
             }
-            catch (DatabaseOperationException ex)
+            catch (DatabaseOperationException exception)
             {
-                throw new RepositoryException($"Failed to store reset code for user {userId}.", ex);
+                throw new RepositoryException($"Failed to store reset code for user {userId}.", exception);
             }
         }
 
@@ -69,9 +69,9 @@ namespace BusinessLayer.Repositories
 
                 return false;
             }
-            catch (DatabaseOperationException ex)
+            catch (DatabaseOperationException exception)
             {
-                throw new RepositoryException("Failed to verify reset code.", ex);
+                throw new RepositoryException("Failed to verify reset code.", exception);
             }
         }
 
@@ -104,9 +104,9 @@ namespace BusinessLayer.Repositories
                 int rowsAffected = dataLink.ExecuteNonQuery("UpdatePasswordAndMarkResetCodeUsed", updateParameters);
                 return rowsAffected > 0;
             }
-            catch (DatabaseOperationException ex)
+            catch (DatabaseOperationException exception)
             {
-                throw new RepositoryException("Failed to reset password.", ex);
+                throw new RepositoryException("Failed to reset password.", exception);
             }
         }
 
@@ -116,9 +116,9 @@ namespace BusinessLayer.Repositories
             {
                 dataLink.ExecuteNonQuery("CleanupExpiredResetCodes", new SqlParameter[0]);
             }
-            catch (DatabaseOperationException ex)
+            catch (DatabaseOperationException exception)
             {
-                throw new RepositoryException("Failed to cleanup expired reset codes.", ex);
+                throw new RepositoryException("Failed to cleanup expired reset codes.", exception);
             }
         }
     }

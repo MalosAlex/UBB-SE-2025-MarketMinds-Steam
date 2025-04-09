@@ -97,9 +97,9 @@ namespace BusinessLayer.Services
 
                 return features;
             }
-            catch (DatabaseOperationException ex)
+            catch (DatabaseOperationException exception)
             {
-                throw new DatabaseOperationException($"Failed to retrieve features for user {userId}.", ex);
+                throw new DatabaseOperationException($"Failed to retrieve features for user {userId}.", exception);
             }
         }
 

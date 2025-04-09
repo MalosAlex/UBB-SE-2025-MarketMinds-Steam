@@ -143,7 +143,7 @@ namespace SteamProfile.ViewModels
                     ShowPasswordSection = true;
                 }
             }
-            catch (Exception ex)
+            catch (Exception)
             {
                 StatusMessage = "An error occurred while verifying the code.";
                 StatusColor = new SolidColorBrush(Colors.Red);
