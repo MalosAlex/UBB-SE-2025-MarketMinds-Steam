@@ -10,19 +10,24 @@ namespace SteamProfile.Views
 {
     public sealed partial class CollectionGamesPage : Page
     {
+        // Constants to replace magic strings
+        private const string ErrorDialogTitle = "Error";
+        private const string RemoveGameErrorMessage = "Failed to remove game from collection. Please try again.";
+        private const string CloseButtonTextValue = "OK";
+
         private CollectionGamesViewModel _collectionGamesViewModel;
         private CollectionsViewModel _collectionsViewModel;
         private UsersViewModel _userViewModel;
         private int _collectionId;
-        private string _collectionName = String.Empty;
-        
+        private string _collectionName = string.Empty;
+
         public CollectionGamesPage()
         {
             this.InitializeComponent();
             _collectionGamesViewModel = App.CollectionGamesViewModel;
             _collectionsViewModel = App.CollectionsViewModel;
             _collectionsViewModel.LoadCollections();
-            
+
             _userViewModel = App.UsersViewModel;
             this.DataContext = _collectionGamesViewModel;
         }
@@ -52,15 +57,8 @@ namespace SteamProfile.Views
 
         private void LoadCollectionGames()
         {
-            try
-            {
-                _collectionGamesViewModel.CollectionName = _collectionName;
-                _collectionGamesViewModel.LoadGames(_collectionId);
-            }
-            catch (Exception exception)
-            {
-                Debug.WriteLine($"Error loading collection games: {exception.Message}");
-            }
+            _collectionGamesViewModel.CollectionName = _collectionName; 
+            _collectionGamesViewModel.LoadGames(_collectionId);
         }
 
         private void BackButton_Click(object sender, RoutedEventArgs eventArgs)
@@ -78,22 +76,23 @@ namespace SteamProfile.Views
             try
             {
                 var button = sender as Button;
-                if (button?.Tag == null) return;
+                if (button?.Tag == null)
+                {
+                    return;
+                }
 
                 int gameId = Convert.ToInt32(button.Tag);
-                Debug.WriteLine($"Removing game {gameId} from collection {_collectionId}");
-                    
+
                 _collectionsViewModel.RemoveGameFromCollection(_collectionId, gameId);
                 _collectionGamesViewModel.LoadGames(_collectionId);
             }
             catch (Exception exception)
             {
-                Debug.WriteLine($"Error removing game from collection: {exception.Message}");
                 var dialog = new ContentDialog
                 {
-                    Title = "Error",
-                    Content = "Failed to remove game from collection. Please try again.",
-                    CloseButtonText = "OK",
+                    Title = ErrorDialogTitle,
+                    Content = RemoveGameErrorMessage,
+                    CloseButtonText = CloseButtonTextValue,
                     XamlRoot = this.XamlRoot
                 };
                 dialog.ShowAsync();
@@ -112,4 +111,4 @@ namespace SteamProfile.Views
             Frame.Navigate(typeof(GamePage), gameId);
         }
     }
-} 
+}

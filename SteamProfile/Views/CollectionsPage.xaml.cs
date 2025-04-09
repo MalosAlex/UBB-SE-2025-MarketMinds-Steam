@@ -9,6 +9,24 @@ namespace SteamProfile.Views
 {
     public sealed partial class CollectionsPage : Page
     {
+        // Constants for dialog titles and button text
+        private const string EditCollectionDialogTitle = "Edit Collection";
+        private const string CreateCollectionDialogTitle = "Create New Collection";
+        private const string PrimaryButtonTextSave = "Save";
+        private const string PrimaryButtonTextCreate = "Create";
+        private const string CloseButtonTextCancel = "Cancel";
+        private const string ErrorDialogTitle = "Error";
+        private const string UpdateCollectionErrorMessage = "Failed to update collection. Please try again.";
+        private const string CreateCollectionErrorMessage = "Failed to create collection. Please try again.";
+
+        // Constants for TextBox headers and placeholder texts
+        private const string CollectionNameHeader = "Collection Name";
+        private const string CollectionNamePlaceholder = "Enter collection name";
+        private const string CoverPictureHeader = "Cover Picture URL";
+        private const string CoverPicturePlaceholderEdit = "Enter cover picture URL (picture.(jpg/png/svg))";
+        private const string CoverPicturePlaceholderCreate = "Enter cover picture URL";
+        private const string PublicCollectionHeader = "Public Collection";
+
         private CollectionsViewModel _collectionsViewModel;
         private UsersViewModel _usersViewModel;
 
@@ -54,32 +72,32 @@ namespace SteamProfile.Views
             {
                 var dialog = new ContentDialog
                 {
-                    Title = "Edit Collection",
-                    PrimaryButtonText = "Save",
-                    CloseButtonText = "Cancel",
+                    Title = EditCollectionDialogTitle,
+                    PrimaryButtonText = PrimaryButtonTextSave,
+                    CloseButtonText = CloseButtonTextCancel,
                     DefaultButton = ContentDialogButton.Primary,
                     XamlRoot = this.XamlRoot
                 };
 
                 var panel = new StackPanel { Spacing = 10 };
-                
+
                 var nameTextBox = new TextBox
                 {
-                    Header = "Collection Name",
+                    Header = CollectionNameHeader,
                     Text = collection.Name,
-                    PlaceholderText = "Enter collection name"
+                    PlaceholderText = CollectionNamePlaceholder
                 };
 
                 var coverPictureTextBox = new TextBox
                 {
-                    Header = "Cover Picture URL",
+                    Header = CoverPictureHeader,
                     Text = collection.CoverPicture,
-                    PlaceholderText = "Enter cover picture URL (picture.(jpg/png/svg))"
+                    PlaceholderText = CoverPicturePlaceholderEdit
                 };
 
                 var isPublicToggle = new ToggleSwitch
                 {
-                    Header = "Public Collection",
+                    Header = PublicCollectionHeader,
                     IsOn = collection.IsPublic
                 };
 
@@ -103,13 +121,13 @@ namespace SteamProfile.Views
                             IsPublic = isPublicToggle.IsOn
                         });
                     }
-                    catch (Exception exception)
+                    catch (Exception)
                     {
                         var errorDialog = new ContentDialog
                         {
-                            Title = "Error",
-                            Content = "Failed to update collection. Please try again.",
-                            CloseButtonText = "OK",
+                            Title = ErrorDialogTitle,
+                            Content = UpdateCollectionErrorMessage,
+                            CloseButtonText = CloseButtonTextCancel,
                             XamlRoot = this.XamlRoot
                         };
                         await errorDialog.ShowAsync();
@@ -122,30 +140,30 @@ namespace SteamProfile.Views
         {
             var dialog = new ContentDialog
             {
-                Title = "Create New Collection",
-                PrimaryButtonText = "Create",
-                CloseButtonText = "Cancel",
+                Title = CreateCollectionDialogTitle,
+                PrimaryButtonText = PrimaryButtonTextCreate,
+                CloseButtonText = CloseButtonTextCancel,
                 DefaultButton = ContentDialogButton.Primary,
                 XamlRoot = this.XamlRoot
             };
 
             var panel = new StackPanel { Spacing = 10 };
-            
+
             var nameTextBox = new TextBox
             {
-                Header = "Collection Name",
-                PlaceholderText = "Enter collection name"
+                Header = CollectionNameHeader,
+                PlaceholderText = CollectionNamePlaceholder
             };
 
             var coverPictureTextBox = new TextBox
             {
-                Header = "Cover Picture URL",
-                PlaceholderText = "Enter cover picture URL"
+                Header = CoverPictureHeader,
+                PlaceholderText = CoverPicturePlaceholderCreate
             };
 
             var isPublicToggle = new ToggleSwitch
             {
-                Header = "Public Collection",
+                Header = PublicCollectionHeader,
                 IsOn = true
             };
 
@@ -169,13 +187,13 @@ namespace SteamProfile.Views
                         CreatedAt = DateOnly.FromDateTime(DateTime.Now)
                     });
                 }
-                catch (Exception exception)
+                catch (Exception)
                 {
                     var errorDialog = new ContentDialog
                     {
-                        Title = "Error",
-                        Content = "Failed to create collection. Please try again.",
-                        CloseButtonText = "OK",
+                        Title = ErrorDialogTitle,
+                        Content = CreateCollectionErrorMessage,
+                        CloseButtonText = CloseButtonTextCancel,
                         XamlRoot = this.XamlRoot
                     };
                     await errorDialog.ShowAsync();

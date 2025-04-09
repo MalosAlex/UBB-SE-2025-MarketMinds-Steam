@@ -2,13 +2,16 @@ using Microsoft.UI.Xaml;
 using Microsoft.UI.Xaml.Controls;
 using SteamProfile.ViewModels;
 using System;
-using System.Diagnostics;
 using Microsoft.UI.Xaml.Navigation;
+using System.Collections.ObjectModel;
+using BusinessLayer.Models;
 
 namespace SteamProfile.Views
 {
     public sealed partial class CollectionsForVisitorsPage : Page
     {
+        private const string FailedToLoadCollectionsErrorMessage = "Failed to load collections. Please try again later.";
+
         private CollectionsViewModel _collectionsViewModel;
         private int _userId;
 
@@ -38,12 +41,11 @@ namespace SteamProfile.Views
                 _collectionsViewModel.ErrorMessage = string.Empty;
                 
                 var collections = _collectionsViewModel.GetPublicCollectionsForUser(_userId);
-                _collectionsViewModel.Collections = new System.Collections.ObjectModel.ObservableCollection<BusinessLayer.Models.Collection>(collections);
+                _collectionsViewModel.Collections = new ObservableCollection<Collection>(collections);
             }
-            catch (Exception exception)
+            catch (Exception)
             {
-                _collectionsViewModel.ErrorMessage = "Failed to load collections. Please try again later.";
-                Debug.WriteLine($"Error loading collections: {exception.Message}");
+                _collectionsViewModel.ErrorMessage = FailedToLoadCollectionsErrorMessage;
             }
             finally
             {
@@ -59,4 +61,4 @@ namespace SteamProfile.Views
             }
         }
     }
-} 
+}

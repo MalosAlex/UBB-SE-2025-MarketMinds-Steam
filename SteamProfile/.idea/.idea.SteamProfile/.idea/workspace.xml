@@ -12,18 +12,6 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="0161f655-4b51-48b1-8da8-59f3015ae934" name="Changes" comment="">
-      <change beforePath="$PROJECT_DIR$/../BusinessLayer/Repositories/CollectionsRepository.cs" beforeDir="false" afterPath="$PROJECT_DIR$/../BusinessLayer/Repositories/CollectionsRepository.cs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../BusinessLayer/Repositories/FriendshipsRepository.cs" beforeDir="false" afterPath="$PROJECT_DIR$/../BusinessLayer/Repositories/FriendshipsRepository.cs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../BusinessLayer/Repositories/OwnedGamesRepository.cs" beforeDir="false" afterPath="$PROJECT_DIR$/../BusinessLayer/Repositories/OwnedGamesRepository.cs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../BusinessLayer/Services/CollectionsService.cs" beforeDir="false" afterPath="$PROJECT_DIR$/../BusinessLayer/Services/CollectionsService.cs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../BusinessLayer/Services/FriendsService.cs" beforeDir="false" afterPath="$PROJECT_DIR$/../BusinessLayer/Services/FriendsService.cs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../BusinessLayer/Services/OwnedGamesService.cs" beforeDir="false" afterPath="$PROJECT_DIR$/../BusinessLayer/Services/OwnedGamesService.cs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../BusinessLayer/Validators/CollectionValidator.cs" beforeDir="false" afterPath="$PROJECT_DIR$/../BusinessLayer/Validators/CollectionValidator.cs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../BusinessLayer/Validators/FriendshipValidator.cs" beforeDir="false" afterPath="$PROJECT_DIR$/../BusinessLayer/Validators/FriendshipValidator.cs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../BusinessLayer/Validators/OwnedGamesValidator.cs" beforeDir="false" afterPath="$PROJECT_DIR$/../BusinessLayer/Validators/OwnedGamesValidator.cs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/.idea.SteamProfile/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/.idea.SteamProfile/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/ViewModels/CollectionsViewModel.cs" beforeDir="false" afterPath="$PROJECT_DIR$/ViewModels/CollectionsViewModel.cs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/ViewModels/FriendsViewModel.cs" beforeDir="false" afterPath="$PROJECT_DIR$/ViewModels/FriendsViewModel.cs" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/Views/CollectionGamesPage.xaml.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Views/CollectionGamesPage.xaml.cs" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
@@ -137,7 +125,7 @@
       <workItem from="1744020076817" duration="320000" />
       <workItem from="1744117365832" duration="270000" />
       <workItem from="1744117647693" duration="5826000" />
-      <workItem from="1744182616870" duration="2993000" />
+      <workItem from="1744182616870" duration="3350000" />
     </task>
     <servers />
   </component>
