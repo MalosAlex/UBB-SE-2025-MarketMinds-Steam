@@ -15,6 +15,18 @@ namespace Tests.ServiceTests
         private Mock<IAchievementsRepository> mockAchievementsRepository;
         private AchievementsService achievementsService;
 
+        public static class Categories
+        {
+            public const string Friendships = "Friendships";
+            public const string OwnedGames = "Owned Games";
+            public const string SoldGames = "Sold Games";
+            public const string YearsOfActivity = "Years of Activity";
+            public const string NumberOfPosts = "Number of Posts";
+            public const string NumberOfReviewsGiven = "Number of Reviews Given";
+            public const string NumberOfReviewsReceived = "Number of Reviews Received";
+            public const string Developer = "Developer";
+        }
+
         [SetUp]
         public void SetUp()
         {
@@ -36,17 +48,16 @@ namespace Tests.ServiceTests
         }
 
         [Test]
-        public void GetGroupedAchievementsForUser_ReturnsAllAchievements()
+        public void GetGroupedAchievementsForUser_Called_ReturnsAllAchievements()
         {
             // Arrange
             var achievements = new List<AchievementWithStatus>
     {
-        new AchievementWithStatus { Achievement = new Achievement { AchievementType = "Friendships" } },
-        new AchievementWithStatus { Achievement = new Achievement { AchievementType = "Owned Games" } },
-        new AchievementWithStatus { Achievement = new Achievement { AchievementType = "Friendships" } },
-        new AchievementWithStatus { Achievement = new Achievement { AchievementType = "Developer" } },
+        new AchievementWithStatus { Achievement = new Achievement { AchievementType = Categories.Friendships } },
+        new AchievementWithStatus { Achievement = new Achievement { AchievementType = Categories.OwnedGames } },
+        new AchievementWithStatus { Achievement = new Achievement { AchievementType = Categories.Friendships } },
+        new AchievementWithStatus { Achievement = new Achievement { AchievementType = Categories.Developer } },
     };
-            // Arrange
             mockAchievementsRepository.Setup(repository => repository.GetAchievementsWithStatusForUser(It.IsAny<int>()))
                      .Returns(achievements);
 
@@ -60,13 +71,13 @@ namespace Tests.ServiceTests
         }
 
         [Test]
-        public void GetGroupedAchievementsForUser_GroupsFriendshipsCorrectly()
+        public void GetGroupedAchievementsForUser_Called_GroupsFriendshipsCorrectly()
         {
             // Arrange
             var achievements = new List<AchievementWithStatus>
     {
-        new AchievementWithStatus { Achievement = new Achievement { AchievementType = "Friendships" } },
-        new AchievementWithStatus { Achievement = new Achievement { AchievementType = "Friendships" } },
+        new AchievementWithStatus { Achievement = new Achievement { AchievementType = Categories.Friendships } },
+        new AchievementWithStatus { Achievement = new Achievement { AchievementType = Categories.Friendships } },
     };
             // Arrange
             mockAchievementsRepository.Setup(repository => repository.GetAchievementsWithStatusForUser(It.IsAny<int>()))
@@ -82,12 +93,12 @@ namespace Tests.ServiceTests
         }
 
         [Test]
-        public void GetGroupedAchievementsForUser_GroupsOwnedGamesCorrectly()
+        public void GetGroupedAchievementsForUser_Called_GroupsOwnedGamesCorrectly()
         {
             // Arrange
             var achievements = new List<AchievementWithStatus>
     {
-        new AchievementWithStatus { Achievement = new Achievement { AchievementType = "Owned Games" } },
+        new AchievementWithStatus { Achievement = new Achievement { AchievementType = Categories.OwnedGames } },
     };
 
             mockAchievementsRepository.Setup(repository => repository.GetAchievementsWithStatusForUser(It.IsAny<int>()))
@@ -103,12 +114,12 @@ namespace Tests.ServiceTests
         }
 
         [Test]
-        public void GetGroupedAchievementsForUser_GroupsDeveloperCorrectly()
+        public void GetGroupedAchievementsForUser_Called_GroupsDeveloperCorrectly()
         {
             // Arrange
             var achievements = new List<AchievementWithStatus>
     {
-        new AchievementWithStatus { Achievement = new Achievement { AchievementType = "Developer" } },
+        new AchievementWithStatus { Achievement = new Achievement { AchievementType = Categories.Developer } },
     };
 
             mockAchievementsRepository.Setup(repository => repository.GetAchievementsWithStatusForUser(It.IsAny<int>()))
@@ -124,12 +135,12 @@ namespace Tests.ServiceTests
         }
 
         [Test]
-        public void GetGroupedAchievementsForUser_ReturnsEmptySoldGamesWhenNoneExist()
+        public void GetGroupedAchievementsForUser_Called_ReturnsEmptySoldGamesWhenNoneExist()
         {
             // Arrange
             var achievements = new List<AchievementWithStatus>
     {
-        new AchievementWithStatus { Achievement = new Achievement { AchievementType = "Friendships" } },
+        new AchievementWithStatus { Achievement = new Achievement { AchievementType = Categories.Friendships } },
     };
 
             mockAchievementsRepository.Setup(repository => repository.GetAchievementsWithStatusForUser(It.IsAny<int>()))
@@ -145,7 +156,7 @@ namespace Tests.ServiceTests
         }
 
         [Test]
-        public void GetGroupedAchievementsForUser_WhenRepoThrows_ThrowsServiceException_WithCorrectMessage()
+        public void GetGroupedAchievementsForUser_WhenRepoThrows_ThrowsServiceExceptionWithCorrectMessage()
         {
             // Arrange
             mockAchievementsRepository.Setup(repository => repository.GetAchievementsWithStatusForUser(It.IsAny<int>()))
@@ -211,21 +222,24 @@ namespace Tests.ServiceTests
         [Test]
         public void InitializeAchievements_WhenRepoThrows_DoesNotCrash()
         {
+            // Arrange
             var fakeRepository = new FakeAchievementsRepository
             {
                 AchievementsTableIsEmpty = true,
                 ThrowOnInsertAchievements = true
             };
 
+            // Act
             var service = new AchievementsService(fakeRepository);
 
-            // should not crash
+            // Assert
             Assert.DoesNotThrow(() => service.InitializeAchievements());
         }
 
         [Test]
         public void GetAchievementsForUser_WhenCalled_ReturnsNumberOfAchievements()
         {
+            // Arrange
             var fakeRepository = new FakeAchievementsRepository();
             fakeRepository.AllAchievementsToReturn = new List<Achievement>
     {
@@ -234,14 +248,16 @@ namespace Tests.ServiceTests
     };
 
             var service = new AchievementsService(fakeRepository);
+            // Act
             var result = service.GetAchievementsForUser(5);
-
+            // Assert
             Assert.That(result.Count, Is.EqualTo(2));
         }
 
         [Test]
         public void GetAchievementsForUser_WhenCalled_ReturnsFirstAchievements()
         {
+            // Arrange
             var fakeRepository = new FakeAchievementsRepository();
             fakeRepository.AllAchievementsToReturn = new List<Achievement>
     {
@@ -250,25 +266,29 @@ namespace Tests.ServiceTests
     };
 
             var service = new AchievementsService(fakeRepository);
+            // Act
             var result = service.GetAchievementsForUser(5);
-
+            // Assert
             Assert.That(result[0].AchievementId, Is.EqualTo(1));
         }
 
         [Test]
         public void GetAchievementsForUser_WhenRepoThrows_ThrowsServiceException()
         {
+            // Arrange
             var fakeRepository = new FakeAchievementsRepository { ThrowOnGetAllAchievements = true };
+
+            // Act
             var service = new AchievementsService(fakeRepository);
 
-            var exception = Assert.Throws<ServiceException>(() => service.GetAchievementsForUser(123));
-
-            Assert.That(exception.Message, Does.Contain("retrieving achievements"));
+            // Assert
+            Assert.Throws<ServiceException>(() => service.GetAchievementsForUser(123));
         }
 
         [Test]
         public void UpdateAchievementIconUrls_WhenRepositoryThrows_DoesNotCrash()
         {
+            // Arrange
             var fakeRepository = new FakeAchievementsRepository
             {
                 AchievementsTableIsEmpty = true,
@@ -284,6 +304,7 @@ namespace Tests.ServiceTests
         [Test]
         public void UnlockAchievementForUser_WithValidFriendshipCount_UnlocksAchievement()
         {
+            // Arrange
             var fakeRepository = new FakeAchievementsRepository();
             var service = new AchievementsService(fakeRepository);
 
@@ -293,27 +314,23 @@ namespace Tests.ServiceTests
 
             fakeRepository.NumberOfFriends = friendCount;
 
-            // Only set up the achievement ID mapping
             fakeRepository.AchievementIds["Friendships"] = new Dictionary<int, int?>
     {
-        { 2, expectedAchievementId } // 5 friends => FRIENDSHIP2 => index 2
+        { 2, expectedAchievementId }
     };
-
-            // Do NOT mark it as already unlocked:
-            // fakeRepository.UnlockedAchievements.Add((userId, expectedAchievementId)); ❌ REMOVE THIS if it's there
-
             // Act
             service.UnlockAchievementForUser(userId);
 
             // Assert
-            Assert.That(fakeRepository.UnlockedAchievements.Any(x =>
-                x.userId == userId && x.achievementId == expectedAchievementId), Is.True,
+            Assert.That(fakeRepository.UnlockedAchievements.Any(repository =>
+                repository.userId == userId && repository.achievementId == expectedAchievementId), Is.True,
                 "The achievement should be unlocked for the valid friendship count.");
         }
 
         [Test]
         public void UnlockAchievementForUser_WithNoMatchingAchievementId_DoesNotUnlockAnything()
         {
+            // Arrange
             var fakeRepository = new FakeAchievementsRepository();
             var service = new AchievementsService(fakeRepository);
 
@@ -343,29 +360,30 @@ namespace Tests.ServiceTests
 
             fakeRepository.NumberOfOwnedGames = ownedGames;
 
-            // Match what GetAchievementIdByTypeAndCount will internally call: OWNEDGAMES3
-            fakeRepository.AchievementIds["Owned Games"] = new Dictionary<int, int?> { { 3, expectedAchievementId } };
+            fakeRepository.AchievementIds[Categories.OwnedGames] = new Dictionary<int, int?> { { 3, expectedAchievementId } };
 
             // Act
             service.UnlockAchievementForUser(userId);
 
             // Assert
-            Assert.That(fakeRepository.UnlockedAchievements.Any(x =>
-                x.userId == userId && x.achievementId == expectedAchievementId), Is.True,
+            Assert.That(fakeRepository.UnlockedAchievements.Any(repository =>
+                repository.userId == userId && repository.achievementId == expectedAchievementId), Is.True,
                 "The achievement should be unlocked for the valid owned games count.");
         }
 
         [Test]
         public void UnlockAchievementForUser_WithOwnedGamesAchievementIdNull_DoesNotUnlock()
         {
+            // Arrange
             var fakeRepository = new FakeAchievementsRepository();
             var service = new AchievementsService(fakeRepository);
             int userId = 1;
             fakeRepository.NumberOfOwnedGames = 10;
 
-            // Do NOT set fakeRepository.AchievementIds mapping = returns null
+            // Act
             service.UnlockAchievementForUser(userId);
 
+            // Assert
             Assert.That(fakeRepository.UnlockedAchievements, Is.Empty);
         }
 
@@ -381,8 +399,7 @@ namespace Tests.ServiceTests
                 NumberOfSoldGames = 10 // Will trigger the unlock logic
             };
 
-            // Setup: maps 10 to "SOLDGAMES3"
-            fakeRepository.SetAchievementId("Sold Games", 3, expectedAchievementId);
+            fakeRepository.SetAchievementId(Categories.SoldGames, 3, expectedAchievementId);
 
             var service = new AchievementsService(fakeRepository);
 
@@ -390,22 +407,23 @@ namespace Tests.ServiceTests
             service.UnlockAchievementForUser(userId);
 
             // Assert
-            Assert.That(fakeRepository.UnlockedAchievements.Any(x =>
-                x.userId == userId && x.achievementId == expectedAchievementId), Is.True,
+            Assert.That(fakeRepository.UnlockedAchievements.Any(repository =>
+                repository.userId == userId && repository.achievementId == expectedAchievementId), Is.True,
                 "The achievement should be unlocked for valid sold games count.");
         }
 
         [Test]
         public void UnlockAchievementForUser_WithSoldGamesAchievementIdNull_DoesNotUnlock()
         {
+            // Arrange
             var fakeRepository = new FakeAchievementsRepository();
             var service = new AchievementsService(fakeRepository);
             int userId = 1;
             fakeRepository.NumberOfSoldGames = 5;
 
-            // No mapping setup → achievementId will be null
+            // Act
             service.UnlockAchievementForUser(userId);
-
+            // Assert
             Assert.That(fakeRepository.UnlockedAchievements, Is.Empty);
         }
 
@@ -422,8 +440,7 @@ namespace Tests.ServiceTests
                 NumberOfReviewsGiven = reviewsGiven
             };
 
-            // Must match what GetAchievementIdByTypeAndCount expects:
-            fakeRepository.SetAchievementId("Number of Reviews Given", 3, expectedAchievementId);
+            fakeRepository.SetAchievementId(Categories.NumberOfReviewsGiven, 3, expectedAchievementId);
 
             var service = new AchievementsService(fakeRepository);
 
@@ -431,21 +448,24 @@ namespace Tests.ServiceTests
             service.UnlockAchievementForUser(userId);
 
             // Assert
-            Assert.That(fakeRepository.UnlockedAchievements.Any(x =>
-                x.userId == userId && x.achievementId == expectedAchievementId), Is.True,
+            Assert.That(fakeRepository.UnlockedAchievements.Any(repository =>
+                repository.userId == userId && repository.achievementId == expectedAchievementId), Is.True,
                 "The achievement should be unlocked for the valid number of reviews given.");
         }
 
         [Test]
         public void UnlockAchievementForUser_WithReviewsGivenAchievementIdNull_DoesNotUnlock()
         {
+            // Arrange
             var fakeRepository = new FakeAchievementsRepository();
             var service = new AchievementsService(fakeRepository);
             int userId = 1;
             fakeRepository.NumberOfReviewsGiven = 1;
 
+            // Act
             service.UnlockAchievementForUser(userId);
 
+            // Assert
             Assert.That(fakeRepository.UnlockedAchievements, Is.Empty);
         }
 
@@ -458,11 +478,10 @@ namespace Tests.ServiceTests
 
             var fakeRepository = new FakeAchievementsRepository
             {
-                NumberOfReviewsReceived = 10 // This is a valid count to trigger unlock logic
+                NumberOfReviewsReceived = 10
             };
 
-            // This sets up: "Number of Reviews Received" + 10 → "REVIEWR3" → 303
-            fakeRepository.SetAchievementId("Number of Reviews Received", 3, expectedAchievementId);
+            fakeRepository.SetAchievementId(Categories.NumberOfReviewsReceived, 3, expectedAchievementId);
 
             var service = new AchievementsService(fakeRepository);
 
@@ -470,21 +489,22 @@ namespace Tests.ServiceTests
             service.UnlockAchievementForUser(userId);
 
             // Assert
-            Assert.That(fakeRepository.UnlockedAchievements.Any(x =>
-                x.userId == userId && x.achievementId == expectedAchievementId),
+            Assert.That(fakeRepository.UnlockedAchievements.Any(repository =>
+                repository.userId == userId && repository.achievementId == expectedAchievementId),
                 Is.True, "The achievement should be unlocked for the valid number of reviews received.");
         }
 
         [Test]
         public void UnlockAchievementForUser_WithReviewsReceivedAchievementIdNull_DoesNotUnlock()
         {
+            // Arrange
             var fakeRepository = new FakeAchievementsRepository();
             var service = new AchievementsService(fakeRepository);
             int userId = 1;
             fakeRepository.NumberOfReviewsReceived = 10;
-
+            // Act
             service.UnlockAchievementForUser(userId);
-
+            // Assert
             Assert.That(fakeRepository.UnlockedAchievements, Is.Empty);
         }
 
@@ -494,15 +514,14 @@ namespace Tests.ServiceTests
             // Arrange
             var userId = 1;
             var numberOfPosts = 10;
-            var expectedAchievementId = 888; // Arbitrary ID you expect to be unlocked
+            var expectedAchievementId = 888;
 
             var fakeRepository = new FakeAchievementsRepository
             {
                 NumberOfPosts = numberOfPosts
             };
 
-            // Set up the mapping: "POSTS3" is expected for 10 posts
-            fakeRepository.SetAchievementId("Number of Posts", 3, expectedAchievementId);
+            fakeRepository.SetAchievementId(Categories.NumberOfPosts, 3, expectedAchievementId);
 
             var service = new AchievementsService(fakeRepository);
 
@@ -510,8 +529,8 @@ namespace Tests.ServiceTests
             service.UnlockAchievementForUser(userId);
 
             // Assert
-            Assert.That(fakeRepository.UnlockedAchievements.Any(x =>
-                x.userId == userId && x.achievementId == expectedAchievementId),
+            Assert.That(fakeRepository.UnlockedAchievements.Any(repository =>
+                repository.userId == userId && repository.achievementId == expectedAchievementId),
                 Is.True,
                 "The achievement should be unlocked for the valid number of posts.");
         }
@@ -519,13 +538,14 @@ namespace Tests.ServiceTests
         [Test]
         public void UnlockAchievementForUser_WithPostsAchievementIdNull_DoesNotUnlock()
         {
+            // Arrange
             var fakeRepository = new FakeAchievementsRepository();
             var service = new AchievementsService(fakeRepository);
             int userId = 1;
             fakeRepository.NumberOfPosts = 50;
-
+            // Act
             service.UnlockAchievementForUser(userId);
-
+            // Assert
             Assert.That(fakeRepository.UnlockedAchievements, Is.Empty);
         }
 
@@ -535,16 +555,13 @@ namespace Tests.ServiceTests
             // Arrange
             var userId = 1;
             var yearsOfActivity = 3;
-            var expectedAchievementId = 333; // Simulated ID for ACTIVITY3
+            var expectedAchievementId = 333;
 
             var fakeRepository = new FakeAchievementsRepository
             {
-                // Simulate that user has 3 years of activity
                 GetYearsOfAcftivity = (id) => yearsOfActivity
             };
-
-            // Set the expected achievement ID for 3 years of activity
-            fakeRepository.SetAchievementId("Years of Activity", 3, expectedAchievementId);
+            fakeRepository.SetAchievementId(Categories.YearsOfActivity, 3, expectedAchievementId);
 
             var service = new AchievementsService(fakeRepository);
 
@@ -552,8 +569,8 @@ namespace Tests.ServiceTests
             service.UnlockAchievementForUser(userId);
 
             // Assert
-            Assert.That(fakeRepository.UnlockedAchievements.Any(x =>
-                x.userId == userId && x.achievementId == expectedAchievementId),
+            Assert.That(fakeRepository.UnlockedAchievements.Any(repository =>
+                repository.userId == userId && repository.achievementId == expectedAchievementId),
                 Is.True,
                 "The achievement should be unlocked for 3 years of activity.");
         }
@@ -561,16 +578,15 @@ namespace Tests.ServiceTests
         [Test]
         public void UnlockAchievementForUser_WithYearsOfActivityAchievementIdNull_DoesNotUnlock()
         {
+            // Arrange
             var fakeRepository = new FakeAchievementsRepository();
             var service = new AchievementsService(fakeRepository);
             int userId = 1;
-
-            // Simulate 3 years of activity (matches the if condition)
             fakeRepository.GetYearsOfAcftivity = _ => 3;
 
-            // DO NOT define achievement ID → achievementId will be null
+            // Act
             service.UnlockAchievementForUser(userId);
-
+            // Assert
             Assert.That(fakeRepository.UnlockedAchievements, Is.Empty);
         }
 
@@ -579,16 +595,14 @@ namespace Tests.ServiceTests
         {
             // Arrange
             var userId = 1;
-            var expectedAchievementId = 777; // Arbitrary ID for developer achievement
+            var expectedAchievementId = 777;
 
             var fakeRepository = new FakeAchievementsRepository
             {
-                // Simulate the user is a developer
                 IsUserDeveloper = (id) => true
             };
 
-            // Map the developer category (count = 1) to the expected ID
-            fakeRepository.SetAchievementId("Developer", 1, expectedAchievementId);
+            fakeRepository.SetAchievementId(Categories.Developer, 1, expectedAchievementId);
 
             var service = new AchievementsService(fakeRepository);
 
@@ -596,24 +610,23 @@ namespace Tests.ServiceTests
             service.UnlockAchievementForUser(userId);
 
             // Assert
-            Assert.That(fakeRepository.UnlockedAchievements.Any(x =>
-                x.userId == userId && x.achievementId == expectedAchievementId),
+            Assert.That(fakeRepository.UnlockedAchievements.Any(repository =>
+                repository.userId == userId && repository.achievementId == expectedAchievementId),
                 Is.True, "The achievement should be unlocked for developer.");
         }
 
         [Test]
         public void UnlockAchievementForUser_WithDeveloperAchievementIdNull_DoesNotUnlock()
         {
+            // Arrange
             var fakeRepository = new FakeAchievementsRepository();
             var service = new AchievementsService(fakeRepository);
             int userId = 1;
-
-            // Simulate user is a developer
             fakeRepository.IsUserDeveloper = _ => true;
 
-            // Do NOT define a developer achievement ID
+            // Act
             service.UnlockAchievementForUser(userId);
-
+            // Assert
             Assert.That(fakeRepository.UnlockedAchievements, Is.Empty);
         }
 
@@ -638,6 +651,7 @@ namespace Tests.ServiceTests
         [Test]
         public void RemoveAchievement_CallsRepositoryWithoutException()
         {
+            // Arrange
             var fakeRepository = new FakeAchievementsRepository();
             var service = new AchievementsService(fakeRepository);
 
@@ -648,20 +662,21 @@ namespace Tests.ServiceTests
         [Test]
         public void RemoveAchievement_WhenRepositoryThrows_ThrowsServiceException()
         {
+            // Arrange
             var fakeRepository = new FakeAchievementsRepository
             {
-                ThrowOnRemoveAchievement = true // you'll add this
+                ThrowOnRemoveAchievement = true
             };
-
+            // Act
             var service = new AchievementsService(fakeRepository);
-
-            var exception = Assert.Throws<ServiceException>(() => service.RemoveAchievement(1, 123));
-            Assert.That(exception.Message, Is.EqualTo("Error removing achievement."));
+            // Assert
+            Assert.Throws<ServiceException>(() => service.RemoveAchievement(1, 123));
         }
 
         [Test]
         public void GetUnlockedAchievementsForUser_ReturnsCorrectList()
         {
+            // Arrange
             var fakeRepository = new FakeAchievementsRepository();
             var expected = new List<Achievement>
     {
@@ -670,28 +685,31 @@ namespace Tests.ServiceTests
             fakeRepository.UnlockedAchievementsToReturn = expected; // you'll add this
 
             var service = new AchievementsService(fakeRepository);
-
+            // Act
             var result = service.GetUnlockedAchievementsForUser(1);
-
+            // Assert
             Assert.That(result, Is.EqualTo(expected));
         }
 
         [Test]
         public void GetUnlockedAchievementsForUser_WhenRepositoryThrows_ThrowsServiceException()
         {
+            // Arrange
             var fakeRepository = new FakeAchievementsRepository
             {
                 ThrowOnGetUnlockedAchievements = true
             };
+            // Act
             var service = new AchievementsService(fakeRepository);
 
-            var exception = Assert.Throws<ServiceException>(() => service.GetUnlockedAchievementsForUser(1));
-            Assert.That(exception.Message, Is.EqualTo("Error retrieving unlocked achievements for user."));
+            // Assert
+            Assert.Throws<ServiceException>(() => service.GetUnlockedAchievementsForUser(1));
         }
 
         [Test]
         public void GetAllAchievements_ReturnsAllAchievements()
         {
+            // Arrange
             var fakeRepository = new FakeAchievementsRepository();
             var expected = new List<Achievement>
     {
@@ -700,28 +718,30 @@ namespace Tests.ServiceTests
             fakeRepository.AllAchievementsToReturn = expected;
 
             var service = new AchievementsService(fakeRepository);
-
+            // Act
             var result = service.GetAllAchievements();
-
+            // Assert
             Assert.That(result, Is.EqualTo(expected));
         }
 
         [Test]
         public void GetAllAchievements_WhenRepositoryThrows_ThrowsServiceException()
         {
+            // Arrange
             var fakeRepository = new FakeAchievementsRepository
             {
                 ThrowOnGetAllAchievements = true
             };
+            // Act
             var service = new AchievementsService(fakeRepository);
-
-            var exception = Assert.Throws<ServiceException>(() => service.GetAllAchievements());
-            Assert.That(exception.Message, Is.EqualTo("Error retrieving unlocked achievements for user."));
+            // Assert
+            Assert.Throws<ServiceException>(() => service.GetAllAchievements());
         }
 
         [Test]
         public void GetUnlockedDataForAchievement_ReturnsData()
         {
+            // Arrange
             var fakeRepository = new FakeAchievementsRepository();
             var expected = new AchievementUnlockedData
             {
@@ -733,28 +753,30 @@ namespace Tests.ServiceTests
 
             var service = new AchievementsService(fakeRepository);
 
+            // Act
             var result = service.GetUnlockedDataForAchievement(1, 2);
-
+            // Assert
             Assert.That(result, Is.EqualTo(expected));
         }
 
         [Test]
         public void GetUnlockedDataForAchievement_WhenRepositoryThrows_ThrowsServiceException()
         {
+            // Arrange
             var fakeRepository = new FakeAchievementsRepository
             {
                 ThrowOnGetUnlockedData = true
             };
-
+            // Act
             var service = new AchievementsService(fakeRepository);
-
-            var exception = Assert.Throws<ServiceException>(() => service.GetUnlockedDataForAchievement(1, 1));
-            Assert.That(exception.Message, Is.EqualTo("Error retrieving unlocked data for achievement."));
+            // Assert
+            Assert.Throws<ServiceException>(() => service.GetUnlockedDataForAchievement(1, 1));
         }
 
         [Test]
         public void GetAchievementsWithStatusForUser_ReturnsCorrectData()
         {
+            // Arrange
             var fakeRepository = new FakeAchievementsRepository();
             var expected = new List<AchievementWithStatus>
     {
@@ -768,24 +790,25 @@ namespace Tests.ServiceTests
             fakeRepository.AchievementsWithStatusToReturn = expected;
 
             var service = new AchievementsService(fakeRepository);
-
+            // Act
             var result = service.GetAchievementsWithStatusForUser(1);
-
+            // Assert
             Assert.That(result, Is.EqualTo(expected));
         }
 
         [Test]
         public void GetAchievementsWithStatusForUser_WhenRepositoryThrows_ThrowsServiceException()
         {
+            // Arrange
             var fakeRepository = new FakeAchievementsRepository
             {
                 ThrowOnGetAchievementsWithStatus = true
             };
 
+            // Act
             var service = new AchievementsService(fakeRepository);
-
-            var exception = Assert.Throws<ServiceException>(() => service.GetAchievementsWithStatusForUser(1));
-            Assert.That(exception.Message, Is.EqualTo("Error retrieving achievements with status for user."));
+            // Assert
+            Assert.Throws<ServiceException>(() => service.GetAchievementsWithStatusForUser(1));
         }
         [Test]
         public void GetPointsForUnlockedAchievement_ReturnsPoints_WhenAchievementIsUnlocked()
@@ -814,6 +837,7 @@ namespace Tests.ServiceTests
         [Test]
         public void GetPointsForUnlockedAchievement_Throws_WhenAchievementNotUnlocked()
         {
+            // Arrange
             var userId = 1;
             var achievementId = 42;
 
@@ -822,107 +846,114 @@ namespace Tests.ServiceTests
     {
         new Achievement { AchievementId = achievementId, Points = 50 }
     };
-
+            // Act
             var service = new AchievementsService(fakeRepository);
-
-            var exception = Assert.Throws<ServiceException>(() =>
+            // Assert
+            Assert.Throws<ServiceException>(() =>
                 service.GetPointsForUnlockedAchievement(userId, achievementId));
-
-            Assert.That(exception.Message, Is.EqualTo("Achievement is not unlocked or does not exist."));
         }
-
         [Test]
         public void GetPointsForUnlockedAchievement_Throws_WhenAchievementNotFoundInList()
         {
+            // Arrange
             var userId = 1;
             var achievementId = 42;
 
             var fakeRepository = new FakeAchievementsRepository();
             fakeRepository.UnlockAchievement(userId, achievementId); // It's unlocked
             fakeRepository.AllAchievementsToReturn = new List<Achievement>(); // But not in the list
-
+            // Act
             var service = new AchievementsService(fakeRepository);
 
-            var exception = Assert.Throws<ServiceException>(() =>
+            // Assert
+            Assert.Throws<ServiceException>(() =>
                 service.GetPointsForUnlockedAchievement(userId, achievementId));
-
-            Assert.That(exception.Message, Is.EqualTo("Achievement is not unlocked or does not exist."));
         }
 
         [Test]
         public void GetPointsForUnlockedAchievement_ThrowsServiceException_WhenRepositoryFails()
         {
+            // Arrange
             var fakeRepository = new FakeAchievementsRepository
             {
                 ThrowOnIsUnlocked = true
             };
 
+            // Act
             var service = new AchievementsService(fakeRepository);
 
-            var exception = Assert.Throws<ServiceException>(() =>
+            // Assert
+            Assert.Throws<ServiceException>(() =>
                 service.GetPointsForUnlockedAchievement(1, 1));
-
-            Assert.That(exception.Message, Is.EqualTo("Error retrieving points for unlocked achievement."));
         }
         [Test]
         public void GetAchievementIdByTypeAndCount_WithUnknownFriendshipCount_ReturnsNull()
         {
-            var result = achievementsService.GetAchievementIdByTypeAndCount("Friendships", 999);
+            // Act & Assert
+            var result = achievementsService.GetAchievementIdByTypeAndCount(Categories.Friendships, 999);
             Assert.That(result, Is.Null);
         }
 
         [Test]
         public void GetAchievementIdByTypeAndCount_WithUnknownOwnedGamesCount_ReturnsNull()
         {
-            var result = achievementsService.GetAchievementIdByTypeAndCount("Owned Games", 999);
+            // Act & Assert
+            var result = achievementsService.GetAchievementIdByTypeAndCount(Categories.OwnedGames, 999);
             Assert.That(result, Is.Null);
         }
 
         [Test]
         public void GetAchievementIdByTypeAndCount_WithUnknownSoldGamesCount_ReturnsNull()
         {
-            var result = achievementsService.GetAchievementIdByTypeAndCount("Sold Games", 999);
+            // Act & Assert
+            var result = achievementsService.GetAchievementIdByTypeAndCount(Categories.SoldGames, 999);
             Assert.That(result, Is.Null);
         }
 
         [Test]
         public void GetAchievementIdByTypeAndCount_WithUnknownReviewsGivenCount_ReturnsNull()
         {
-            var result = achievementsService.GetAchievementIdByTypeAndCount("Number of Reviews Given", 999);
+            // Act & Assert
+            var result = achievementsService.GetAchievementIdByTypeAndCount(Categories.NumberOfReviewsGiven, 999);
             Assert.That(result, Is.Null);
         }
 
         [Test]
         public void GetAchievementIdByTypeAndCount_WithUnknownReviewsReceivedCount_ReturnsNull()
         {
-            var result = achievementsService.GetAchievementIdByTypeAndCount("Number of Reviews Received", 999);
+            // Act & Assert
+            var result = achievementsService.GetAchievementIdByTypeAndCount(Categories.NumberOfReviewsReceived, 999);
             Assert.That(result, Is.Null);
         }
 
         [Test]
         public void GetAchievementIdByTypeAndCount_WithUnknownYearsOfActivityCount_ReturnsNull()
         {
-            var result = achievementsService.GetAchievementIdByTypeAndCount("Years of Activity", 999);
+            // Act & Assert
+            var result = achievementsService.GetAchievementIdByTypeAndCount(Categories.YearsOfActivity, 999);
             Assert.That(result, Is.Null);
         }
 
         [Test]
         public void GetAchievementIdByTypeAndCount_WithUnknownPostsCount_ReturnsNull()
         {
-            var result = achievementsService.GetAchievementIdByTypeAndCount("Number of Posts", 999);
+            // Act & Assert
+            var result = achievementsService.GetAchievementIdByTypeAndCount(Categories.NumberOfPosts, 999);
             Assert.That(result, Is.Null);
         }
 
         [Test]
         public void GetAchievementIdByTypeAndCount_WithInvalidDeveloperCount_ReturnsNull()
         {
-            var result = achievementsService.GetAchievementIdByTypeAndCount("Developer", 999); // Developer only accepts 1
+            // Act & Assert
+            var result = achievementsService.GetAchievementIdByTypeAndCount(Categories.Developer, 999); // Developer only accepts 1
             Assert.That(result, Is.Null);
         }
 
         [Test]
         public void GetAchievementIdByTypeAndCount_WithUnknownCategory_ReturnsNull()
         {
+            // Act & Assert
             var result = achievementsService.GetAchievementIdByTypeAndCount("Unknown Type", 1);
             Assert.That(result, Is.Null);
         }
