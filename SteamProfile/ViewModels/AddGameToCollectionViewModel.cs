@@ -1,12 +1,12 @@
-using CommunityToolkit.Mvvm.ComponentModel;
-using Microsoft.UI.Xaml.Controls;
-using BusinessLayer.Models;
 using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.ComponentModel;
 using System.Diagnostics;
 using System.Runtime.CompilerServices;
+using CommunityToolkit.Mvvm.ComponentModel;
+using Microsoft.UI.Xaml.Controls;
+using BusinessLayer.Models;
 using BusinessLayer.Services.Interfaces;
 
 namespace SteamProfile.ViewModels
@@ -98,7 +98,10 @@ namespace SteamProfile.ViewModels
 
         protected bool SetProperty<T>(ref T field, T value, [CallerMemberName] string propertyName = null)
         {
-            if (EqualityComparer<T>.Default.Equals(field, value)) return false;
+            if (EqualityComparer<T>.Default.Equals(field, value))
+            {
+                return false;
+            }
             field = value;
             OnPropertyChanged(propertyName);
             return true;

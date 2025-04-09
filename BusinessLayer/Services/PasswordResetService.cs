@@ -90,7 +90,7 @@ namespace BusinessLayer.Services
 
                 var fileContent = File.ReadAllText(filePath).Trim();
                 var parts = fileContent.Split('|');
-                
+
                 if (parts.Length != 2 || !DateTime.TryParse(parts[1].Trim(), out DateTime expiryTime))
                 {
                     // Invalid file format
@@ -142,7 +142,7 @@ namespace BusinessLayer.Services
                 if (!verificationResult.isValid)
                 {
                     // Always return 'Invalid or expired reset code.' for expired codes
-                    if (verificationResult.message == "Invalid reset code." || 
+                    if (verificationResult.message == "Invalid reset code." ||
                         verificationResult.message == "Reset code has expired or does not exist.")
                     {
                         return (false, "Invalid or expired reset code.");

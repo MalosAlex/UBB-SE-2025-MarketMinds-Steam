@@ -1,9 +1,9 @@
+using System;
 using Microsoft.UI.Xaml;
 using Microsoft.UI.Xaml.Controls;
 using SteamProfile.Views;
 using Microsoft.UI.Windowing;
 using Microsoft.UI;
-using System;
 using BusinessLayer.Services;
 using SteamProfile.ViewModels;
 
@@ -14,7 +14,7 @@ namespace SteamProfile
         public MainWindow()
         {
             this.InitializeComponent();
-            NavigationService.Instance.Initialize(ContentFrame); 
+            NavigationService.Instance.Initialize(ContentFrame);
 
             IntPtr hWnd = WinRT.Interop.WindowNative.GetWindowHandle(this);
             WindowId windowId = Win32Interop.GetWindowIdFromWindow(hWnd);

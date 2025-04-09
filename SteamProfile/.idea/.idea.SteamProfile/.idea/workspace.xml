@@ -12,9 +12,16 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="0161f655-4b51-48b1-8da8-59f3015ae934" name="Changes" comment="">
+      <change beforePath="$PROJECT_DIR$/../BusinessLayer/Services/PasswordResetService.cs" beforeDir="false" afterPath="$PROJECT_DIR$/../BusinessLayer/Services/PasswordResetService.cs" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/.idea.SteamProfile/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/.idea.SteamProfile/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/SteamProfile.csproj" beforeDir="false" afterPath="$PROJECT_DIR$/SteamProfile.csproj" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../Tests/Tests.csproj" beforeDir="false" afterPath="$PROJECT_DIR$/../Tests/Tests.csproj" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/App.xaml.cs" beforeDir="false" afterPath="$PROJECT_DIR$/App.xaml.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Converters/BoolToGridColumnConverter.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Converters/BoolToGridColumnConverter.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Converters/NumberToVisibilityConverter.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Converters/NumberToVisibilityConverter.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/MainWindow.xaml.cs" beforeDir="false" afterPath="$PROJECT_DIR$/MainWindow.xaml.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/ViewModels/AchievementsViewModel.cs" beforeDir="false" afterPath="$PROJECT_DIR$/ViewModels/AchievementsViewModel.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/ViewModels/AddGameToCollectionViewModel.cs" beforeDir="false" afterPath="$PROJECT_DIR$/ViewModels/AddGameToCollectionViewModel.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../Tests/Validators/ValidatorTests.cs" beforeDir="false" afterPath="$PROJECT_DIR$/../Tests/Validators/ValidatorTests.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../Tests/WalletIntegrationTests.cs" beforeDir="false" afterPath="$PROJECT_DIR$/../Tests/WalletIntegrationTests.cs" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -128,7 +135,7 @@
       <workItem from="1744117365832" duration="270000" />
       <workItem from="1744117647693" duration="5826000" />
       <workItem from="1744182616870" duration="3578000" />
-      <workItem from="1744219186188" duration="143000" />
+      <workItem from="1744219186188" duration="925000" />
     </task>
     <servers />
   </component>
@@ -141,7 +148,12 @@
     <option name="sortedColumn" value="1" />
     <option name="symbolColumnWidth" value="1223" />
     <coverage-tree-state>
-      <expand />
+      <expand>
+        <path>
+          <item name="rootNode" type="c53c71d1:RiderDotCoverCoverageTreeModel$RootNode" />
+          <item name="Total 0% 13511/13511" type="8b8fad3a:RiderDotCoverCoverageTreeNode" />
+        </path>
+      </expand>
       <select />
     </coverage-tree-state>
   </component>
