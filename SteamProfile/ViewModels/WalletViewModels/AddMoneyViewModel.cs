@@ -1,10 +1,10 @@
-﻿using Microsoft.UI.Xaml;
+﻿using System;
+using System.Collections.Generic;
+using System.Windows.Input;
+using CommunityToolkit.Mvvm.Input;
+using Microsoft.UI.Xaml;
 using BusinessLayer.Models;
 using BusinessLayer.Validators;
-using System;
-using System.Collections.Generic;
-using CommunityToolkit.Mvvm.Input;
-using System.Windows.Input;
 using CommunityToolkit.Mvvm.ComponentModel;
 
 namespace SteamProfile.ViewModels
@@ -83,7 +83,9 @@ namespace SteamProfile.ViewModels
         private void ProcessAddFunds()
         {
             if (!IsInputValid || string.IsNullOrEmpty(AmountToAdd))
+            {
                 return;
+            }
 
             if (int.TryParse(AmountToAdd, out int amount))
             {

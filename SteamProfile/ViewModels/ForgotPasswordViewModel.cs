@@ -1,5 +1,4 @@
-﻿using BusinessLayer.Services;
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -7,6 +6,8 @@ using System.Threading.Tasks;
 using System.ComponentModel;
 using System.Windows.Input;
 using System.IO;
+using System.ComponentModel.DataAnnotations;
+using BusinessLayer.Services;
 using Microsoft.UI.Xaml.Media;
 using Microsoft.UI;
 using CommunityToolkit.Mvvm.Input;
@@ -14,7 +15,6 @@ using SteamProfile.ViewModels.Base;
 using Microsoft.UI.Xaml.Controls;
 using SteamProfile.Views;
 using BusinessLayer.Services;
-using System.ComponentModel.DataAnnotations;
 using BusinessLayer.Validators;
 using CommunityToolkit.WinUI.UI.Controls.TextToolbarSymbols;
 using Microsoft.UI.Xaml.Media.Animation;
@@ -114,7 +114,7 @@ namespace SteamProfile.ViewModels
                 var result = await passwordResetService.SendResetCode(Email);
                 StatusMessage = result.message;
                 StatusColor = new SolidColorBrush(result.isValid ? Colors.Green : Colors.Red);
-                
+
                 if (result.isValid)
                 {
                     ShowEmailSection = false;

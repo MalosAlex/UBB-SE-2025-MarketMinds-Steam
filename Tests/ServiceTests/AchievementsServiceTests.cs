@@ -1,9 +1,9 @@
-﻿using NUnit.Framework;
+﻿using System.Collections.Generic;
+using System.Reflection;
+using NUnit.Framework;
 using BusinessLayer.Services;
 using BusinessLayer.Models;
-using System.Collections.Generic;
 using BusinessLayer.Exceptions;
-using System.Reflection;
 using BusinessLayer.Repositories.Interfaces;
 using Moq;
 
@@ -12,14 +12,14 @@ namespace Tests.ServiceTests
     [TestFixture]
     public class AchievementsServiceTests
     {
-        private Mock<IAchievementsRepository> _mockRepository;
-        private AchievementsService _service;
+        private Mock<IAchievementsRepository> mockRepository;
+        private AchievementsService achievementsService;
 
         [SetUp]
         public void SetUp()
         {
-            _mockRepository = new Mock<IAchievementsRepository>();
-            _service = new AchievementsService(_mockRepository.Object);
+            mockRepository = new Mock<IAchievementsRepository>();
+            achievementsService = new AchievementsService(mockRepository.Object);
         }
 
         [Test]
@@ -47,11 +47,10 @@ namespace Tests.ServiceTests
         new AchievementWithStatus { Achievement = new Achievement { AchievementType = "Developer" } },
     };
             // Arrange
-
-            _mockRepository.Setup(repository => repository.GetAchievementsWithStatusForUser(It.IsAny<int>()))
+            mockRepository.Setup(repository => repository.GetAchievementsWithStatusForUser(It.IsAny<int>()))
                      .Returns(achievements);
 
-            var service = new AchievementsService(_mockRepository.Object);
+            var service = new AchievementsService(mockRepository.Object);
 
             // Act
             var result = service.GetGroupedAchievementsForUser(1);
@@ -70,11 +69,10 @@ namespace Tests.ServiceTests
         new AchievementWithStatus { Achievement = new Achievement { AchievementType = "Friendships" } },
     };
             // Arrange
-
-            _mockRepository.Setup(repository => repository.GetAchievementsWithStatusForUser(It.IsAny<int>()))
+            mockRepository.Setup(repository => repository.GetAchievementsWithStatusForUser(It.IsAny<int>()))
                      .Returns(achievements);
 
-            var service = new AchievementsService(_mockRepository.Object);
+            var service = new AchievementsService(mockRepository.Object);
 
             // Act
             var result = service.GetGroupedAchievementsForUser(1);
@@ -87,16 +85,15 @@ namespace Tests.ServiceTests
         public void GetGroupedAchievementsForUser_GroupsOwnedGamesCorrectly()
         {
             // Arrange
-
             var achievements = new List<AchievementWithStatus>
     {
         new AchievementWithStatus { Achievement = new Achievement { AchievementType = "Owned Games" } },
     };
 
-            _mockRepository.Setup(repository => repository.GetAchievementsWithStatusForUser(It.IsAny<int>()))
+            mockRepository.Setup(repository => repository.GetAchievementsWithStatusForUser(It.IsAny<int>()))
                      .Returns(achievements);
 
-            var service = new AchievementsService(_mockRepository.Object);
+            var service = new AchievementsService(mockRepository.Object);
 
             // Act
             var result = service.GetGroupedAchievementsForUser(1);
@@ -109,16 +106,15 @@ namespace Tests.ServiceTests
         public void GetGroupedAchievementsForUser_GroupsDeveloperCorrectly()
         {
             // Arrange
-
             var achievements = new List<AchievementWithStatus>
     {
         new AchievementWithStatus { Achievement = new Achievement { AchievementType = "Developer" } },
     };
 
-            _mockRepository.Setup(repository => repository.GetAchievementsWithStatusForUser(It.IsAny<int>()))
+            mockRepository.Setup(repository => repository.GetAchievementsWithStatusForUser(It.IsAny<int>()))
                      .Returns(achievements);
 
-            var service = new AchievementsService(_mockRepository.Object);
+            var service = new AchievementsService(mockRepository.Object);
 
             // Act
             var result = service.GetGroupedAchievementsForUser(1);
@@ -131,34 +127,31 @@ namespace Tests.ServiceTests
         public void GetGroupedAchievementsForUser_ReturnsEmptySoldGamesWhenNoneExist()
         {
             // Arrange
-
             var achievements = new List<AchievementWithStatus>
     {
         new AchievementWithStatus { Achievement = new Achievement { AchievementType = "Friendships" } },
     };
 
-            _mockRepository.Setup(repository => repository.GetAchievementsWithStatusForUser(It.IsAny<int>()))
+            mockRepository.Setup(repository => repository.GetAchievementsWithStatusForUser(It.IsAny<int>()))
                      .Returns(achievements);
 
-            var service = new AchievementsService(_mockRepository.Object);
+            var service = new AchievementsService(mockRepository.Object);
 
             // Act
             var result = service.GetGroupedAchievementsForUser(1);
-            
-            // Assert
 
+            // Assert
             Assert.That(result.SoldGames, Is.Empty);
         }
-
 
         [Test]
         public void GetGroupedAchievementsForUser_WhenRepoThrows_ThrowsServiceException_WithCorrectMessage()
         {
             // Arrange
-            _mockRepository.Setup(repository => repository.GetAchievementsWithStatusForUser(It.IsAny<int>()))
+            mockRepository.Setup(repository => repository.GetAchievementsWithStatusForUser(It.IsAny<int>()))
                      .Throws(new RepositoryException("DB error"));
 
-            var service = new AchievementsService(_mockRepository.Object);
+            var service = new AchievementsService(mockRepository.Object);
 
             // Act & Assert
             var exception = Assert.Throws<ServiceException>(() => service.GetGroupedAchievementsForUser(42));
@@ -169,10 +162,10 @@ namespace Tests.ServiceTests
         public void GetGroupedAchievementsForUser_WhenRepoThrows_ThrowsServiceException_WithInnerException()
         {
             // Arrange
-            _mockRepository.Setup(repository => repository.GetAchievementsWithStatusForUser(It.IsAny<int>()))
+            mockRepository.Setup(repository => repository.GetAchievementsWithStatusForUser(It.IsAny<int>()))
                      .Throws(new RepositoryException("DB error"));
 
-            var service = new AchievementsService(_mockRepository.Object);
+            var service = new AchievementsService(mockRepository.Object);
 
             // Act
             var exception = Assert.Throws<ServiceException>(() => service.GetGroupedAchievementsForUser(42));
@@ -184,34 +177,34 @@ namespace Tests.ServiceTests
         [Test]
         public void InitializeAchievements_WhenTableIsEmpty_CallsInsertAchievements()
         {
-            //Arrange
+            // Arrange
             var fakeRepository = new FakeAchievementsRepository
             {
                 AchievementsTableIsEmpty = true
             };
 
             var service = new AchievementsService(fakeRepository);
-            //Act
+            // Act
             service.InitializeAchievements();
 
-            //Assert
+            // Assert
             Assert.That(fakeRepository.InsertAchievementsCalled, Is.True);
         }
 
         [Test]
         public void InitializeAchievements_WhenTableIsEmpty_CallsUpdatesIcons()
         {
-            //Arrange
+            // Arrange
             var fakeRepository = new FakeAchievementsRepository
             {
                 AchievementsTableIsEmpty = true
             };
 
             var service = new AchievementsService(fakeRepository);
-            //Act
+            // Act
             service.InitializeAchievements();
 
-            //Assert
+            // Assert
             Assert.That(fakeRepository.UpdatedIcons.Count, Is.EqualTo(5));
         }
 
@@ -259,7 +252,6 @@ namespace Tests.ServiceTests
             var service = new AchievementsService(fakeRepository);
             var result = service.GetAchievementsForUser(5);
 
-            
             Assert.That(result[0].AchievementId, Is.EqualTo(1));
         }
 
@@ -338,8 +330,6 @@ namespace Tests.ServiceTests
                 "No achievements should be unlocked if the achievement ID is null.");
         }
 
-
-
         [Test]
         public void UnlockAchievementForUser_WithValidOwnedGamesCount_UnlocksAchievement()
         {
@@ -374,12 +364,10 @@ namespace Tests.ServiceTests
             fakeRepository.NumberOfOwnedGames = 10;
 
             // Do NOT set fakeRepository.AchievementIds mapping = returns null
-
             service.UnlockAchievementForUser(userId);
 
             Assert.That(fakeRepository.UnlockedAchievements, Is.Empty);
         }
-
 
         [Test]
         public void UnlockAchievementForUser_UnlocksAchievement_ForValidSoldGames()
@@ -401,7 +389,6 @@ namespace Tests.ServiceTests
             // Act
             service.UnlockAchievementForUser(userId);
 
-
             // Assert
             Assert.That(fakeRepository.UnlockedAchievements.Any(x =>
                 x.userId == userId && x.achievementId == expectedAchievementId), Is.True,
@@ -417,12 +404,10 @@ namespace Tests.ServiceTests
             fakeRepository.NumberOfSoldGames = 5;
 
             // No mapping setup → achievementId will be null
-
             service.UnlockAchievementForUser(userId);
 
             Assert.That(fakeRepository.UnlockedAchievements, Is.Empty);
         }
-
 
         [Test]
         public void UnlockAchievementForUser_WithValidReviewsGivenCount_UnlocksAchievement()
@@ -464,7 +449,6 @@ namespace Tests.ServiceTests
             Assert.That(fakeRepository.UnlockedAchievements, Is.Empty);
         }
 
-
         [Test]
         public void UnlockAchievementForUser_WithValidReviewsReceivedCount_UnlocksAchievement()
         {
@@ -503,7 +487,6 @@ namespace Tests.ServiceTests
 
             Assert.That(fakeRepository.UnlockedAchievements, Is.Empty);
         }
-
 
         [Test]
         public void UnlockAchievementForUser_UnlocksAchievement_ForValidNumberOfPosts()
@@ -545,7 +528,6 @@ namespace Tests.ServiceTests
 
             Assert.That(fakeRepository.UnlockedAchievements, Is.Empty);
         }
-
 
         [Test]
         public void UnlockAchievementForUser_UnlocksAchievement_ForValidYearsOfActivity()
@@ -592,8 +574,6 @@ namespace Tests.ServiceTests
             Assert.That(fakeRepository.UnlockedAchievements, Is.Empty);
         }
 
-
-
         [Test]
         public void UnlockAchievementForUser_UnlocksAchievement_ForDeveloper()
         {
@@ -637,8 +617,6 @@ namespace Tests.ServiceTests
             Assert.That(fakeRepository.UnlockedAchievements, Is.Empty);
         }
 
-
-
         [Test]
         public void UnlockAchievementForUser_WhenRepositoryThrowsException_IsHandledGracefully()
         {
@@ -656,7 +634,6 @@ namespace Tests.ServiceTests
             // Act & Assert: The method should NOT throw
             Assert.DoesNotThrow(() => service.UnlockAchievementForUser(userId));
         }
-
 
         [Test]
         public void RemoveAchievement_CallsRepositoryWithoutException()
@@ -890,63 +867,63 @@ namespace Tests.ServiceTests
         [Test]
         public void GetAchievementIdByTypeAndCount_WithUnknownFriendshipCount_ReturnsNull()
         {
-            var result = _service.GetAchievementIdByTypeAndCount("Friendships", 999);
+            var result = achievementsService.GetAchievementIdByTypeAndCount("Friendships", 999);
             Assert.That(result, Is.Null);
         }
 
         [Test]
         public void GetAchievementIdByTypeAndCount_WithUnknownOwnedGamesCount_ReturnsNull()
         {
-            var result = _service.GetAchievementIdByTypeAndCount("Owned Games", 999);
+            var result = achievementsService.GetAchievementIdByTypeAndCount("Owned Games", 999);
             Assert.That(result, Is.Null);
         }
 
         [Test]
         public void GetAchievementIdByTypeAndCount_WithUnknownSoldGamesCount_ReturnsNull()
         {
-            var result = _service.GetAchievementIdByTypeAndCount("Sold Games", 999);
+            var result = achievementsService.GetAchievementIdByTypeAndCount("Sold Games", 999);
             Assert.That(result, Is.Null);
         }
 
         [Test]
         public void GetAchievementIdByTypeAndCount_WithUnknownReviewsGivenCount_ReturnsNull()
         {
-            var result = _service.GetAchievementIdByTypeAndCount("Number of Reviews Given", 999);
+            var result = achievementsService.GetAchievementIdByTypeAndCount("Number of Reviews Given", 999);
             Assert.That(result, Is.Null);
         }
 
         [Test]
         public void GetAchievementIdByTypeAndCount_WithUnknownReviewsReceivedCount_ReturnsNull()
         {
-            var result = _service.GetAchievementIdByTypeAndCount("Number of Reviews Received", 999);
+            var result = achievementsService.GetAchievementIdByTypeAndCount("Number of Reviews Received", 999);
             Assert.That(result, Is.Null);
         }
 
         [Test]
         public void GetAchievementIdByTypeAndCount_WithUnknownYearsOfActivityCount_ReturnsNull()
         {
-            var result = _service.GetAchievementIdByTypeAndCount("Years of Activity", 999);
+            var result = achievementsService.GetAchievementIdByTypeAndCount("Years of Activity", 999);
             Assert.That(result, Is.Null);
         }
 
         [Test]
         public void GetAchievementIdByTypeAndCount_WithUnknownPostsCount_ReturnsNull()
         {
-            var result = _service.GetAchievementIdByTypeAndCount("Number of Posts", 999);
+            var result = achievementsService.GetAchievementIdByTypeAndCount("Number of Posts", 999);
             Assert.That(result, Is.Null);
         }
 
         [Test]
         public void GetAchievementIdByTypeAndCount_WithInvalidDeveloperCount_ReturnsNull()
         {
-            var result = _service.GetAchievementIdByTypeAndCount("Developer", 999); // Developer only accepts 1
+            var result = achievementsService.GetAchievementIdByTypeAndCount("Developer", 999); // Developer only accepts 1
             Assert.That(result, Is.Null);
         }
 
         [Test]
         public void GetAchievementIdByTypeAndCount_WithUnknownCategory_ReturnsNull()
         {
-            var result = _service.GetAchievementIdByTypeAndCount("Unknown Type", 1);
+            var result = achievementsService.GetAchievementIdByTypeAndCount("Unknown Type", 1);
             Assert.That(result, Is.Null);
         }
 
@@ -1007,12 +984,6 @@ namespace Tests.ServiceTests
             // Assert
             Assert.That(result, Is.EqualTo(123));
         }
-
-
     }
-
-
-
-
 }
 

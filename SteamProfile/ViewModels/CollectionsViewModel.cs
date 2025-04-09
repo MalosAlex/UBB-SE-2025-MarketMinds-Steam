@@ -1,11 +1,11 @@
-﻿using CommunityToolkit.Mvvm.ComponentModel;
-using CommunityToolkit.Mvvm.Input;
-using BusinessLayer.Models;
-using BusinessLayer.Services.Interfaces;
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Linq;
+using CommunityToolkit.Mvvm.ComponentModel;
+using CommunityToolkit.Mvvm.Input;
+using BusinessLayer.Models;
+using BusinessLayer.Services.Interfaces;
 
 namespace SteamProfile.ViewModels
 {
@@ -39,28 +39,28 @@ namespace SteamProfile.ViewModels
         private const string ErrUpdateCollection = "Error updating collection. Please try again.";
         #endregion
 
-        private readonly ICollectionsService _collectionsService;
-        private readonly IUserService _userService;
-        private int _userId;
-        private ObservableCollection<Collection> _collections;
+        private readonly ICollectionsService collectionsService;
+        private readonly IUserService userService;
+        private int userIdentifier;
+        private ObservableCollection<Collection> collections;
 
         [ObservableProperty]
-        private Collection _selectedCollection;
+        private Collection selectedCollection;
 
         [ObservableProperty]
-        private string _errorMessage = string.Empty;
+        private string errorMessage = string.Empty;
 
         [ObservableProperty]
-        private bool _isLoading;
+        private bool isLoading;
 
         public ObservableCollection<Collection> Collections
         {
-            get => _collections;
+            get => collections;
             set
             {
-                if (_collections != value)
+                if (collections != value)
                 {
-                    _collections = value;
+                    collections = value;
                     OnPropertyChanged();
                 }
             }
@@ -68,9 +68,9 @@ namespace SteamProfile.ViewModels
 
         public CollectionsViewModel(ICollectionsService collectionsService, IUserService userService)
         {
-            _collectionsService = collectionsService ?? throw new ArgumentNullException(nameof(collectionsService));
-            _userService = userService ?? throw new ArgumentNullException(nameof(userService));
-            _collections = new ObservableCollection<Collection>();
+            this.collectionsService = collectionsService ?? throw new ArgumentNullException(nameof(collectionsService));
+            this.userService = userService ?? throw new ArgumentNullException(nameof(userService));
+            collections = new ObservableCollection<Collection>();
         }
 
         [RelayCommand]
@@ -78,11 +78,11 @@ namespace SteamProfile.ViewModels
         {
             try
             {
-                _userId = _userService.GetCurrentUser().UserId;
+                userIdentifier = userService.GetCurrentUser().UserId;
                 IsLoading = true;
                 ErrorMessage = string.Empty;
 
-                var collections = _collectionsService.GetAllCollections(_userId);
+                var collections = collectionsService.GetAllCollections(userIdentifier);
 
                 if (collections == null || collections.Count == 0)
                 {
@@ -112,7 +112,7 @@ namespace SteamProfile.ViewModels
         {
             try
             {
-                _collectionsService.DeleteCollection(collectionId, _userId);
+                collectionsService.DeleteCollection(collectionId, userIdentifier);
                 LoadCollections(); // Reload collections after deletion
             }
             catch (Exception)
@@ -150,7 +150,7 @@ namespace SteamProfile.ViewModels
                     return;
                 }
 
-                _collectionsService.AddGameToCollection(SelectedCollection.CollectionId, gameId, _userId);
+                collectionsService.AddGameToCollection(SelectedCollection.CollectionId, gameId, userIdentifier);
                 LoadCollections(); // Reload collections to update the UI
             }
             catch (Exception)
@@ -169,7 +169,7 @@ namespace SteamProfile.ViewModels
                     return;
                 }
 
-                _collectionsService.RemoveGameFromCollection(SelectedCollection.CollectionId, gameId);
+                collectionsService.RemoveGameFromCollection(SelectedCollection.CollectionId, gameId);
                 LoadCollections(); // Reload collections to update the UI
             }
             catch (Exception)
@@ -183,13 +183,12 @@ namespace SteamProfile.ViewModels
         {
             try
             {
-                _collectionsService.CreateCollection(
-                    _userId,
+                collectionsService.CreateCollection(
+                    userIdentifier,
                     parameters.Name,
                     parameters.CoverPicture,
                     parameters.IsPublic,
-                    parameters.CreatedAt
-                );
+                    parameters.CreatedAt);
                 LoadCollections(); // Reload collections after creation
             }
             catch (Exception)
@@ -203,13 +202,12 @@ namespace SteamProfile.ViewModels
         {
             try
             {
-                _collectionsService.UpdateCollection(
+                collectionsService.UpdateCollection(
                     parameters.CollectionId,
-                    _userId,
+                    userIdentifier,
                     parameters.Name,
                     parameters.CoverPicture,
-                    parameters.IsPublic
-                );
+                    parameters.IsPublic);
                 LoadCollections(); // Reload collections after update
             }
             catch (Exception)
@@ -220,17 +218,17 @@ namespace SteamProfile.ViewModels
 
         public List<Collection> GetPublicCollectionsForUser(int userId)
         {
-            return _collectionsService.GetPublicCollectionsForUser(userId);
+            return collectionsService.GetPublicCollectionsForUser(userId);
         }
 
         public Collection GetCollectionById(int collectionId, int userId)
         {
-            return _collectionsService.GetCollectionById(collectionId, userId);
+            return collectionsService.GetCollectionById(collectionId, userId);
         }
 
         public void RemoveGameFromCollection(int collectionId, int gameId)
         {
-            _collectionsService.RemoveGameFromCollection(collectionId, gameId);
+            collectionsService.RemoveGameFromCollection(collectionId, gameId);
         }
     }
 }

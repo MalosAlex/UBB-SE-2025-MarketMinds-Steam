@@ -683,7 +683,7 @@ namespace Tests.ServiceTests
             int userId = 1;
             var features = new List<Feature>
             {
-                new Feature { FeatureId = 1, Name = "", Type = "frame", Value = 100 } // Invalid feature
+                new Feature { FeatureId = 1, Name = string.Empty, Type = "frame", Value = 100 } // Invalid feature
             };
 
             this.mockRepository.Setup(r => r.GetUserFeatures(userId)).Returns(features);
@@ -692,4 +692,4 @@ namespace Tests.ServiceTests
             Assert.That(() => this.service.GetUserFeatures(userId), Throws.TypeOf<ValidationException>());
         }
     }
-} 
+}

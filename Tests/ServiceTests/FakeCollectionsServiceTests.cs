@@ -372,7 +372,7 @@ namespace Tests.ServiceTests
             var lastThreeCollections = fakeCollectionsService.GetLastThreeCollectionsForUser(1);
 
             // Assert: Expect exactly 3 collections and the first's CreatedAt is not earlier than the second's.
-            Assert.That(lastThreeCollections.Count == 3 
+            Assert.That(lastThreeCollections.Count == 3
                 && (lastThreeCollections.Count < 2 || lastThreeCollections[0].CreatedAt.CompareTo(lastThreeCollections[1].CreatedAt) >= 0), Is.True);
         }
 

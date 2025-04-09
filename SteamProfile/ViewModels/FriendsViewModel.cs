@@ -23,25 +23,25 @@ namespace SteamProfile.ViewModels
         private const string ErrDetailsPrefix = "\nDetails: ";
         #endregion
 
-        private readonly IFriendsService _friendsService;
-        private readonly IUserService _userService;
+        private readonly IFriendsService friendsService;
+        private readonly IUserService userService;
 
         [ObservableProperty]
-        private ObservableCollection<Friendship> _friendships = new ObservableCollection<Friendship>();
+        private ObservableCollection<Friendship> friendships = new ObservableCollection<Friendship>();
 
         [ObservableProperty]
-        private Friendship _selectedFriendship;
+        private Friendship selectedFriendship;
 
         [ObservableProperty]
-        private bool _isLoading;
+        private bool isLoading;
 
         [ObservableProperty]
-        private string _errorMessage;
+        private string errorMessage;
 
         public FriendsViewModel(IFriendsService friendsService, IUserService userService)
         {
-            _friendsService = friendsService ?? throw new ArgumentNullException(nameof(friendsService));
-            _userService = userService ?? throw new ArgumentNullException(nameof(userService));
+            this.friendsService = friendsService ?? throw new ArgumentNullException(nameof(friendsService));
+            this.userService = userService ?? throw new ArgumentNullException(nameof(userService));
         }
 
         [RelayCommand]
@@ -52,7 +52,7 @@ namespace SteamProfile.ViewModels
                 IsLoading = true;
                 ErrorMessage = null;
 
-                var friendships = _friendsService.GetAllFriendships();
+                var friendships = friendsService.GetAllFriendships();
 
                 Friendships.Clear();
                 foreach (var friendship in friendships)
@@ -86,10 +86,10 @@ namespace SteamProfile.ViewModels
                 IsLoading = true;
                 ErrorMessage = null;
 
-                _friendsService.RemoveFriend(friendshipId);
-                
+                friendsService.RemoveFriend(friendshipId);
+
                 // Refresh the friends list
-                var updatedFriendships = _friendsService.GetAllFriendships();
+                var updatedFriendships = friendsService.GetAllFriendships();
                 Friendships.Clear();
                 foreach (var friendship in updatedFriendships)
                 {

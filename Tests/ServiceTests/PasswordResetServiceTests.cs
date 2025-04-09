@@ -1,6 +1,4 @@
-// Copyright (c) MarketMinds. All rights reserved.
-// Licensed under the MIT License.
-
+using System.Reflection;
 using System;
 using System.IO;
 using System.Threading.Tasks;
@@ -11,7 +9,6 @@ using BusinessLayer.Models;
 using BusinessLayer.Data;
 using Moq;
 using NUnit.Framework;
-using System.Reflection;
 
 namespace Tests.ServiceTests
 {

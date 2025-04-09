@@ -1,3 +1,4 @@
+using System.Collections.Generic;
 using System;
 using System.Data;
 using System.Linq;
@@ -8,7 +9,6 @@ using BusinessLayer.Repositories.Interfaces;
 using Microsoft.Data.SqlClient;
 using Moq;
 using NUnit.Framework;
-using System.Collections.Generic;
 
 namespace Tests.RepositoryTests
 {
@@ -72,7 +72,7 @@ namespace Tests.RepositoryTests
                     }
                 }
             }
-            
+
             Assert.That(deleteProcCalled, Is.True, "DeleteExistingResetCodes was not called");
         }
 
@@ -107,7 +107,7 @@ namespace Tests.RepositoryTests
                     }
                 }
             }
-            
+
             Assert.That(storeProcCalled, Is.True, "StorePasswordResetCode was not called");
         }
 
@@ -149,12 +149,10 @@ namespace Tests.RepositoryTests
 
             this.mockDataLink.Setup(dl => dl.ExecuteReader(
                 It.IsAny<string>(),
-                It.Is<SqlParameter[]>(p => 
+                It.Is<SqlParameter[]>(p =>
                     p.Length == 2 &&
                     (string)p[0].Value == email &&
-                    (string)p[1].Value == code
-                )
-            )).Returns(dataTable);
+                    (string)p[1].Value == code))).Returns(dataTable);
 
             // Act
             bool result = this.repository.VerifyResetCode(email, code);
@@ -176,12 +174,10 @@ namespace Tests.RepositoryTests
 
             this.mockDataLink.Setup(dl => dl.ExecuteReader(
                 It.IsAny<string>(),
-                It.Is<SqlParameter[]>(p => 
+                It.Is<SqlParameter[]>(p =>
                     p.Length == 2 &&
                     (string)p[0].Value == email &&
-                    (string)p[1].Value == code
-                )
-            )).Returns(dataTable);
+                    (string)p[1].Value == code))).Returns(dataTable);
 
             // Act
             bool result = this.repository.VerifyResetCode(email, code);
@@ -203,12 +199,10 @@ namespace Tests.RepositoryTests
 
             this.mockDataLink.Setup(dl => dl.ExecuteReader(
                 It.IsAny<string>(),
-                It.Is<SqlParameter[]>(p => 
+                It.Is<SqlParameter[]>(p =>
                     p.Length == 2 &&
                     (string)p[0].Value == email &&
-                    (string)p[1].Value == code
-                )
-            )).Returns(dataTable);
+                    (string)p[1].Value == code))).Returns(dataTable);
 
             // Act
             bool result = this.repository.VerifyResetCode(email, code);
@@ -226,16 +220,14 @@ namespace Tests.RepositoryTests
             var dataTable = new DataTable();
             dataTable.Columns.Add("expiration_time", typeof(DateTime));
             dataTable.Columns.Add("used", typeof(bool));
-            // No rows added
 
+            // No rows added
             this.mockDataLink.Setup(dl => dl.ExecuteReader(
                 It.IsAny<string>(),
-                It.Is<SqlParameter[]>(p => 
+                It.Is<SqlParameter[]>(p =>
                     p.Length == 2 &&
                     (string)p[0].Value == email &&
-                    (string)p[1].Value == code
-                )
-            )).Returns(dataTable);
+                    (string)p[1].Value == code))).Returns(dataTable);
 
             // Act
             bool result = this.repository.VerifyResetCode(email, code);
@@ -253,8 +245,7 @@ namespace Tests.RepositoryTests
 
             this.mockDataLink.Setup(dl => dl.ExecuteReader(
                 It.IsAny<string>(),
-                It.Is<SqlParameter[]>(p => p.Length == 2)
-            )).Throws(new DatabaseOperationException("Database error"));
+                It.Is<SqlParameter[]>(p => p.Length == 2))).Throws(new DatabaseOperationException("Database error"));
 
             // Act & Assert
             try
@@ -282,13 +273,11 @@ namespace Tests.RepositoryTests
 
             this.mockDataLink.Setup(dl => dl.ExecuteReader(
                 It.IsAny<string>(),
-                It.Is<SqlParameter[]>(p => p.Length == 2)
-            )).Returns(dataTable);
+                It.Is<SqlParameter[]>(p => p.Length == 2))).Returns(dataTable);
 
             this.mockDataLink.Setup(dl => dl.ExecuteNonQuery(
                 It.IsAny<string>(),
-                It.Is<SqlParameter[]>(p => p.Length == 2)
-            )).Returns(1);
+                It.Is<SqlParameter[]>(p => p.Length == 2))).Returns(1);
 
             // Act
             bool result = this.repository.ResetPassword(email, code, newPassword);
@@ -306,12 +295,11 @@ namespace Tests.RepositoryTests
             string newPassword = "NewPassword123!";
             var dataTable = new DataTable();
             dataTable.Columns.Add("user_id", typeof(int));
-            // No rows added - invalid code
 
+            // No rows added - invalid code
             this.mockDataLink.Setup(dl => dl.ExecuteReader(
                 It.IsAny<string>(),
-                It.Is<SqlParameter[]>(p => p.Length == 2)
-            )).Returns(dataTable);
+                It.Is<SqlParameter[]>(p => p.Length == 2))).Returns(dataTable);
 
             // Act
             bool result = this.repository.ResetPassword(email, code, newPassword);
@@ -329,12 +317,11 @@ namespace Tests.RepositoryTests
             string newPassword = "NewPassword123!";
             var dataTable = new DataTable();
             dataTable.Columns.Add("user_id", typeof(int));
-            // No rows added - non-existent user
 
+            // No rows added - non-existent user
             this.mockDataLink.Setup(dl => dl.ExecuteReader(
                 It.IsAny<string>(),
-                It.Is<SqlParameter[]>(p => p.Length == 2)
-            )).Returns(dataTable);
+                It.Is<SqlParameter[]>(p => p.Length == 2))).Returns(dataTable);
 
             // Act
             bool result = this.repository.ResetPassword(email, code, newPassword);
@@ -353,8 +340,7 @@ namespace Tests.RepositoryTests
 
             this.mockDataLink.Setup(dl => dl.ExecuteReader(
                 It.IsAny<string>(),
-                It.Is<SqlParameter[]>(p => p.Length == 2)
-            )).Throws(new DatabaseOperationException("Database error"));
+                It.Is<SqlParameter[]>(p => p.Length == 2))).Throws(new DatabaseOperationException("Database error"));
 
             // Act & Assert
             try
@@ -394,7 +380,7 @@ namespace Tests.RepositoryTests
                     }
                 }
             }
-            
+
             Assert.That(procedureCalled, Is.True, "CleanupExpiredResetCodes was not called.");
         }
 
@@ -420,4 +406,4 @@ namespace Tests.RepositoryTests
             }
         }
     }
-} 
+}

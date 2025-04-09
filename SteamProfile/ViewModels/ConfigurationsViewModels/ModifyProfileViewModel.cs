@@ -1,10 +1,10 @@
-﻿using CommunityToolkit.Mvvm.ComponentModel;
+﻿using System;
+using System.Threading.Tasks;
+using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
 using Microsoft.UI.Xaml;
 using Microsoft.UI.Xaml.Controls;
 using SteamProfile.Views;
-using System;
-using System.Threading.Tasks;
 using Windows.Storage;
 using Windows.Storage.Pickers;
 using Windows.Storage.Streams;
@@ -13,15 +13,15 @@ namespace SteamProfile.ViewModels.ConfigurationsViewModels
 {
     public partial class ModifyProfileViewModel : ObservableObject
     {
-        private int _userId;
-        private string _originalImagePath = string.Empty;
-        private string _originalDescription = string.Empty;
-        private StorageFile _selectedImageFile;
+        private int userIdentifier;
+        private string originalImagePath = string.Empty;
+        private string originalDescription = string.Empty;
+        private StorageFile selectedImageFile;
 
         public ModifyProfileViewModel(Frame frame)
         {
             // Get current user ID (you might need to adjust how you get this)
-            _userId = App.UserService.GetCurrentUser().UserId; // Assuming this exists
+            userIdentifier = App.UserService.GetCurrentUser().UserId; // Assuming this exists
 
             // Load existing profile data
             LoadUserProfile();
@@ -32,20 +32,20 @@ namespace SteamProfile.ViewModels.ConfigurationsViewModels
 
         private void LoadUserProfile()
         {
-            var userProfile = App.UserProfileRepository.GetUserProfileByUserId(_userId);
+            var userProfile = App.UserProfileRepository.GetUserProfileByUserId(userIdentifier);
             if (userProfile != null)
             {
-                _originalImagePath = userProfile.ProfilePicture ?? string.Empty;
-                _originalDescription = userProfile.Bio ?? string.Empty;
+                originalImagePath = userProfile.ProfilePicture ?? string.Empty;
+                originalDescription = userProfile.Bio ?? string.Empty;
 
                 // Set current values
-                SelectedImagePath = _originalImagePath;
-                SelectedImageName = !string.IsNullOrEmpty(_originalImagePath) ?
-                    System.IO.Path.GetFileName(_originalImagePath) : "No image selected";
-                Description = _originalDescription;
+                SelectedImagePath = originalImagePath;
+                SelectedImageName = !string.IsNullOrEmpty(originalImagePath) ?
+                    System.IO.Path.GetFileName(originalImagePath) : "No image selected";
+                Description = originalDescription;
             }
         }
-        
+
         [RelayCommand]
         private async Task ChooseNewPhotoAsync()
         {
@@ -61,12 +61,12 @@ namespace SteamProfile.ViewModels.ConfigurationsViewModels
             filePicker.FileTypeFilter.Add(".jpeg");
             filePicker.FileTypeFilter.Add(".png");
 
-            _selectedImageFile = await filePicker.PickSingleFileAsync();
+            selectedImageFile = await filePicker.PickSingleFileAsync();
 
-            if (_selectedImageFile != null)
+            if (selectedImageFile != null)
             {
-                SelectedImageName = _selectedImageFile.Name;
-                SelectedImagePath = _selectedImageFile.Path;
+                SelectedImageName = selectedImageFile.Name;
+                SelectedImagePath = selectedImageFile.Path;
                 UpdateCanSave();
             }
         }
@@ -80,18 +80,18 @@ namespace SteamProfile.ViewModels.ConfigurationsViewModels
                 bool changesMade = false;
 
                 // Save new picture if changed
-                if (_selectedImageFile != null && SelectedImagePath != _originalImagePath)
+                if (selectedImageFile != null && SelectedImagePath != originalImagePath)
                 {
-                    App.UserProfileRepository.UpdateProfilePicture(_userId, _selectedImageFile.Path);
-                    _originalImagePath = SelectedImagePath;
+                    App.UserProfileRepository.UpdateProfilePicture(userIdentifier, selectedImageFile.Path);
+                    originalImagePath = SelectedImagePath;
                     changesMade = true;
                 }
 
                 // Save new description if changed
-                if (Description != _originalDescription)
+                if (Description != originalDescription)
                 {
-                    App.UserProfileRepository.UpdateProfileBio(_userId, Description);
-                    _originalDescription = Description;
+                    App.UserProfileRepository.UpdateProfileBio(userIdentifier, Description);
+                    originalDescription = Description;
                     changesMade = true;
                 }
 
@@ -127,7 +127,7 @@ namespace SteamProfile.ViewModels.ConfigurationsViewModels
         private void UpdateCanSave()
         {
             // Enable save button if anything has changed
-            CanSave = (Description != _originalDescription || SelectedImagePath != _originalImagePath)
+            CanSave = (Description != originalDescription || SelectedImagePath != originalImagePath)
                     && DescriptionErrorVisibility != Visibility.Visible;
         }
 

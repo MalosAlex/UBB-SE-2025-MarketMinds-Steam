@@ -11,14 +11,14 @@ namespace Tests.ServiceTests
     [TestFixture]
     public class FakeFriendsServiceTests
     {
-        private IFriendsService _fakeFriendsService;
+        private IFriendsService fakeFriendsService;
 
         [SetUp]
         public void SetUp()
         {
             // Arrange: Instantiate the fake friends service.
             // (Assuming FakeFriendsService is parameterless or has its own seeded data.)
-            _fakeFriendsService = new FakeFriendsService();
+            fakeFriendsService = new FakeFriendsService();
         }
 
         #region GetAllFriendships
@@ -27,7 +27,7 @@ namespace Tests.ServiceTests
         public void GetAllFriendships_CurrentUser_ReturnsFriendships()
         {
             // Act: Retrieve all friendships.
-            List<Friendship> friendshipList = _fakeFriendsService.GetAllFriendships();
+            List<Friendship> friendshipList = fakeFriendsService.GetAllFriendships();
 
             // Assert: Expect at least one friendship to be returned.
             Assert.That(friendshipList.Count, Is.GreaterThan(0));
@@ -37,7 +37,7 @@ namespace Tests.ServiceTests
         public void GetAllFriendships_CurrentUser_SortedByFriendUsername()
         {
             // Act: Retrieve all friendships.
-            List<Friendship> friendshipList = _fakeFriendsService.GetAllFriendships();
+            List<Friendship> friendshipList = fakeFriendsService.GetAllFriendships();
 
             // Assert: The list should be sorted by FriendUsername in ascending order.
             for (int i = 1; i < friendshipList.Count; i++)
@@ -55,13 +55,13 @@ namespace Tests.ServiceTests
         public void RemoveFriend_ValidFriendship_RemovesFriendship()
         {
             // Arrange: Get the initial list of friendships.
-            List<Friendship> initialFriendships = _fakeFriendsService.GetAllFriendships();
+            List<Friendship> initialFriendships = fakeFriendsService.GetAllFriendships();
             int initialCount = initialFriendships.Count;
             int friendshipIdToRemove = initialFriendships.First().FriendshipId;
 
             // Act: Remove the selected friendship.
-            _fakeFriendsService.RemoveFriend(friendshipIdToRemove);
-            List<Friendship> updatedFriendships = _fakeFriendsService.GetAllFriendships();
+            fakeFriendsService.RemoveFriend(friendshipIdToRemove);
+            List<Friendship> updatedFriendships = fakeFriendsService.GetAllFriendships();
 
             // Assert: Expect the friendship count to have decreased by one.
             Assert.That(updatedFriendships.Count, Is.EqualTo(initialCount - 1));
@@ -71,13 +71,13 @@ namespace Tests.ServiceTests
         public void RemoveFriend_NonExistentFriendship_NoChangeToFriendshipCount()
         {
             // Arrange: Get the initial list of friendships.
-            List<Friendship> initialFriendships = _fakeFriendsService.GetAllFriendships();
+            List<Friendship> initialFriendships = fakeFriendsService.GetAllFriendships();
             int initialCount = initialFriendships.Count;
             int nonExistentFriendshipId = -1; // Assume negative ids are never used
 
             // Act: Attempt to remove a non-existent friendship.
-            _fakeFriendsService.RemoveFriend(nonExistentFriendshipId);
-            List<Friendship> updatedFriendships = _fakeFriendsService.GetAllFriendships();
+            fakeFriendsService.RemoveFriend(nonExistentFriendshipId);
+            List<Friendship> updatedFriendships = fakeFriendsService.GetAllFriendships();
 
             // Assert: Count should remain the same.
             Assert.That(updatedFriendships.Count, Is.EqualTo(initialCount));
@@ -91,10 +91,10 @@ namespace Tests.ServiceTests
         public void GetFriendshipCount_CurrentUser_ReturnsCorrectCount()
         {
             // Arrange: Retrieve expected friendship count from all friendships.
-            int expectedCount = _fakeFriendsService.GetAllFriendships().Count;
+            int expectedCount = fakeFriendsService.GetAllFriendships().Count;
 
             // Act: Get the friendship count for user with id 1.
-            int returnedCount = _fakeFriendsService.GetFriendshipCount(1);
+            int returnedCount = fakeFriendsService.GetFriendshipCount(1);
 
             // Assert: The returned count matches the expected count.
             Assert.That(returnedCount, Is.EqualTo(expectedCount));
@@ -108,12 +108,12 @@ namespace Tests.ServiceTests
         public void AreUsersFriends_ExistingRelationship_ReturnsTrue()
         {
             // Arrange: Use an existing friendship from the seeded data.
-            Friendship existingFriendship = _fakeFriendsService.GetAllFriendships().First();
+            Friendship existingFriendship = fakeFriendsService.GetAllFriendships().First();
             int userId = existingFriendship.UserId;
             int friendId = existingFriendship.FriendId;
 
             // Act: Check if the two users are friends.
-            bool friendshipExists = _fakeFriendsService.AreUsersFriends(userId, friendId);
+            bool friendshipExists = fakeFriendsService.AreUsersFriends(userId, friendId);
 
             // Assert: Expect true for an existing relationship.
             Assert.That(friendshipExists, Is.True);
@@ -127,7 +127,7 @@ namespace Tests.ServiceTests
             int nonExistentFriendId = 999;
 
             // Act: Check friendship status.
-            bool friendshipExists = _fakeFriendsService.AreUsersFriends(userId, nonExistentFriendId);
+            bool friendshipExists = fakeFriendsService.AreUsersFriends(userId, nonExistentFriendId);
 
             // Assert: Expect false for a non-existent relationship.
             Assert.That(friendshipExists, Is.False);
@@ -141,13 +141,13 @@ namespace Tests.ServiceTests
         public void GetFriendshipId_ExistingRelationship_ReturnsCorrectId()
         {
             // Arrange: Use an existing friendship.
-            Friendship existingFriendship = _fakeFriendsService.GetAllFriendships().First();
+            Friendship existingFriendship = fakeFriendsService.GetAllFriendships().First();
             int userId = existingFriendship.UserId;
             int friendId = existingFriendship.FriendId;
             int expectedFriendshipId = existingFriendship.FriendshipId;
 
             // Act: Retrieve the friendship id.
-            int? returnedFriendshipId = _fakeFriendsService.GetFriendshipId(userId, friendId);
+            int? returnedFriendshipId = fakeFriendsService.GetFriendshipId(userId, friendId);
 
             // Assert: The returned id equals the expected friendship id.
             Assert.That(returnedFriendshipId, Is.EqualTo(expectedFriendshipId));
@@ -161,7 +161,7 @@ namespace Tests.ServiceTests
             int nonExistentFriendId = 999;
 
             // Act: Retrieve the friendship id.
-            int? returnedFriendshipId = _fakeFriendsService.GetFriendshipId(userId, nonExistentFriendId);
+            int? returnedFriendshipId = fakeFriendsService.GetFriendshipId(userId, nonExistentFriendId);
 
             // Assert: Expect null for a non-existent relationship.
             Assert.That(returnedFriendshipId, Is.Null);
@@ -175,13 +175,13 @@ namespace Tests.ServiceTests
         public void AddFriend_NewFriend_AddsFriendship()
         {
             // Arrange: Get the initial list of friendships.
-            List<Friendship> initialFriendships = _fakeFriendsService.GetAllFriendships();
+            List<Friendship> initialFriendships = fakeFriendsService.GetAllFriendships();
             int initialCount = initialFriendships.Count;
             int newFriendId = 100; // Assume friend id 100 is not already a friend
 
             // Act: Add the new friendship.
-            _fakeFriendsService.AddFriend(1, newFriendId);
-            List<Friendship> updatedFriendships = _fakeFriendsService.GetAllFriendships();
+            fakeFriendsService.AddFriend(1, newFriendId);
+            List<Friendship> updatedFriendships = fakeFriendsService.GetAllFriendships();
 
             // Assert: The friendship count increased by one.
             Assert.That(updatedFriendships.Count, Is.EqualTo(initialCount + 1));
@@ -191,12 +191,12 @@ namespace Tests.ServiceTests
         public void AddFriend_DuplicateFriendship_ThrowsException()
         {
             // Arrange: Use an existing friendship from the seeded data.
-            Friendship existingFriendship = _fakeFriendsService.GetAllFriendships().First();
+            Friendship existingFriendship = fakeFriendsService.GetAllFriendships().First();
             int userId = existingFriendship.UserId;
             int friendId = existingFriendship.FriendId;
 
             // Act & Assert: Adding the same friendship should throw an exception.
-            var exception = Assert.Throws<Exception>(() => _fakeFriendsService.AddFriend(userId, friendId));
+            var exception = Assert.Throws<Exception>(() => fakeFriendsService.AddFriend(userId, friendId));
             Assert.That(exception.Message, Is.EqualTo("Friendship already exists."));
         }
 

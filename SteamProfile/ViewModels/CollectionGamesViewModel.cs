@@ -1,9 +1,9 @@
-using CommunityToolkit.Mvvm.ComponentModel;
-using CommunityToolkit.Mvvm.Input;
-using BusinessLayer.Models;
 using System;
 using System.Collections.ObjectModel;
 using System.Diagnostics;
+using CommunityToolkit.Mvvm.ComponentModel;
+using CommunityToolkit.Mvvm.Input;
+using BusinessLayer.Models;
 using BusinessLayer.Services.Interfaces;
 
 namespace SteamProfile.ViewModels
@@ -14,27 +14,27 @@ namespace SteamProfile.ViewModels
         private const int AllOwnedGamesCollectionId = 1;
         private const string FailedToLoadGamesErrorMessage = "Failed to load games";
 
-        private readonly ICollectionsService _collectionsService;
+        private readonly ICollectionsService collectionsService;
 
         [ObservableProperty]
-        private string _collectionName;
+        private string collectionName;
 
         [ObservableProperty]
-        private ObservableCollection<OwnedGame> _games;
+        private ObservableCollection<OwnedGame> ownedGames;
 
         [ObservableProperty]
-        private bool _isLoading;
+        private bool isLoading;
 
         [ObservableProperty]
-        private string _errorMessage;
+        private string errorMessage;
 
         [ObservableProperty]
-        private bool _isAllOwnedGamesCollection;
+        private bool isAllOwnedGamesCollection;
 
         public CollectionGamesViewModel(ICollectionsService collectionsService)
         {
-            _collectionsService = collectionsService;
-            _games = new ObservableCollection<OwnedGame>();
+            this.collectionsService = collectionsService;
+            ownedGames = new ObservableCollection<OwnedGame>();
         }
 
         public void LoadGames(int collectionId)
@@ -44,11 +44,11 @@ namespace SteamProfile.ViewModels
                 IsLoading = true;
                 ErrorMessage = string.Empty;
                 IsAllOwnedGamesCollection = collectionId == AllOwnedGamesCollectionId;
-                var gamesInCollection = _collectionsService.GetGamesInCollection(collectionId);
-                Games.Clear();
+                var gamesInCollection = collectionsService.GetGamesInCollection(collectionId);
+                ownedGames.Clear();
                 foreach (var game in gamesInCollection)
                 {
-                    Games.Add(game);
+                    ownedGames.Add(game);
                 }
             }
             catch (Exception exception)

@@ -1,4 +1,5 @@
-﻿using System;
+﻿using System.Runtime.Serialization;
+using System;
 using System.Data;
 using System.Linq;
 using System.Collections.Generic;
@@ -9,22 +10,21 @@ using BusinessLayer.Models;
 using BusinessLayer.Repositories;
 using BusinessLayer.Exceptions;
 using Microsoft.Data.SqlClient;
-using System.Runtime.Serialization;
 
 namespace Tests.RepositoryTests
 {
     [TestFixture]
     public class WalletRepositoryTests
     {
-        private Mock<IDataLink> _mockDataLink;
-        private WalletRepository _repository;
+        private Mock<IDataLink> mockDataLink;
+        private WalletRepository walletRepository;
 
         [SetUp]
         public void SetUp()
         {
             // Arrange
-            _mockDataLink = new Mock<IDataLink>();
-            _repository = new WalletRepository(_mockDataLink.Object);
+            mockDataLink = new Mock<IDataLink>();
+            walletRepository = new WalletRepository(mockDataLink.Object);
         }
 
         [Test]
@@ -42,11 +42,11 @@ namespace Tests.RepositoryTests
             // Arrange
             int walletId = 1;
             var dataTable = CreateWalletDataTable();
-            _mockDataLink.Setup(dl => dl.ExecuteReader("GetWalletById", It.IsAny<SqlParameter[]>()))
+            mockDataLink.Setup(dl => dl.ExecuteReader("GetWalletById", It.IsAny<SqlParameter[]>()))
                          .Returns(dataTable);
 
             // Act
-            Wallet result = _repository.GetWallet(walletId);
+            Wallet result = walletRepository.GetWallet(walletId);
 
             // Assert
             Assert.That(result.WalletId, Is.EqualTo(1));
@@ -58,11 +58,11 @@ namespace Tests.RepositoryTests
             // Arrange
             int walletId = 1;
             var dataTable = CreateWalletDataTable();
-            _mockDataLink.Setup(dl => dl.ExecuteReader("GetWalletById", It.IsAny<SqlParameter[]>()))
+            mockDataLink.Setup(dl => dl.ExecuteReader("GetWalletById", It.IsAny<SqlParameter[]>()))
                          .Returns(dataTable);
 
             // Act
-            Wallet result = _repository.GetWallet(walletId);
+            Wallet result = walletRepository.GetWallet(walletId);
 
             // Assert
             Assert.That(result.UserId, Is.EqualTo(1));
@@ -74,11 +74,11 @@ namespace Tests.RepositoryTests
             // Arrange
             int walletId = 1;
             var dataTable = CreateWalletDataTable();
-            _mockDataLink.Setup(dl => dl.ExecuteReader("GetWalletById", It.IsAny<SqlParameter[]>()))
+            mockDataLink.Setup(dl => dl.ExecuteReader("GetWalletById", It.IsAny<SqlParameter[]>()))
                          .Returns(dataTable);
 
             // Act
-            Wallet result = _repository.GetWallet(walletId);
+            Wallet result = walletRepository.GetWallet(walletId);
 
             // Assert
             Assert.That(result.Balance, Is.EqualTo(100.50m));
@@ -90,11 +90,11 @@ namespace Tests.RepositoryTests
             // Arrange
             int walletId = 1;
             var dataTable = CreateWalletDataTable();
-            _mockDataLink.Setup(dl => dl.ExecuteReader("GetWalletById", It.IsAny<SqlParameter[]>()))
+            mockDataLink.Setup(dl => dl.ExecuteReader("GetWalletById", It.IsAny<SqlParameter[]>()))
                          .Returns(dataTable);
 
             // Act
-            Wallet result = _repository.GetWallet(walletId);
+            Wallet result = walletRepository.GetWallet(walletId);
 
             // Assert
             Assert.That(result.Points, Is.EqualTo(200));
@@ -105,11 +105,11 @@ namespace Tests.RepositoryTests
         {
             // Arrange
             int walletId = 1;
-            _mockDataLink.Setup(dl => dl.ExecuteReader("GetWalletById", It.IsAny<SqlParameter[]>()))
+            mockDataLink.Setup(dl => dl.ExecuteReader("GetWalletById", It.IsAny<SqlParameter[]>()))
                          .Throws(new DatabaseOperationException("Database error"));
 
             // Act & Assert
-            Assert.Throws<RepositoryException>(() => _repository.GetWallet(walletId));
+            Assert.Throws<RepositoryException>(() => walletRepository.GetWallet(walletId));
         }
 
         [Test]
@@ -117,11 +117,11 @@ namespace Tests.RepositoryTests
         {
             // Arrange
             int walletId = 1;
-            _mockDataLink.Setup(dl => dl.ExecuteReader("GetWalletById", It.IsAny<SqlParameter[]>()))
+            mockDataLink.Setup(dl => dl.ExecuteReader("GetWalletById", It.IsAny<SqlParameter[]>()))
                          .Throws(new DatabaseOperationException("Database error"));
 
             // Act & Assert
-            var ex = Assert.Throws<RepositoryException>(() => _repository.GetWallet(walletId));
+            var ex = Assert.Throws<RepositoryException>(() => walletRepository.GetWallet(walletId));
             Assert.That(ex.Message, Does.Contain("Failed to retrieve wallet"));
         }
 
@@ -138,11 +138,11 @@ namespace Tests.RepositoryTests
             dataTable.Columns.Add("wallet_id", typeof(int));
             dataTable.Rows.Add(5); // Wallet ID 5 for user 1
 
-            _mockDataLink.Setup(dl => dl.ExecuteReader("GetWalletIdByUserId", It.IsAny<SqlParameter[]>()))
+            mockDataLink.Setup(dl => dl.ExecuteReader("GetWalletIdByUserId", It.IsAny<SqlParameter[]>()))
                          .Returns(dataTable);
 
             // Act
-            int result = _repository.GetWalletIdByUserId(userId);
+            int result = walletRepository.GetWalletIdByUserId(userId);
 
             // Assert
             Assert.That(result, Is.EqualTo(5));
@@ -156,11 +156,11 @@ namespace Tests.RepositoryTests
             var emptyDataTable = new DataTable();
             emptyDataTable.Columns.Add("wallet_id", typeof(int));
 
-            _mockDataLink.Setup(dl => dl.ExecuteReader("GetWalletIdByUserId", It.IsAny<SqlParameter[]>()))
+            mockDataLink.Setup(dl => dl.ExecuteReader("GetWalletIdByUserId", It.IsAny<SqlParameter[]>()))
                          .Returns(emptyDataTable);
 
             // Act & Assert
-            Assert.Throws<RepositoryException>(() => _repository.GetWalletIdByUserId(userId));
+            Assert.Throws<RepositoryException>(() => walletRepository.GetWalletIdByUserId(userId));
         }
 
         [Test]
@@ -171,11 +171,11 @@ namespace Tests.RepositoryTests
             var emptyDataTable = new DataTable();
             emptyDataTable.Columns.Add("wallet_id", typeof(int));
 
-            _mockDataLink.Setup(dl => dl.ExecuteReader("GetWalletIdByUserId", It.IsAny<SqlParameter[]>()))
+            mockDataLink.Setup(dl => dl.ExecuteReader("GetWalletIdByUserId", It.IsAny<SqlParameter[]>()))
                          .Returns(emptyDataTable);
 
             // Act & Assert
-            var ex = Assert.Throws<RepositoryException>(() => _repository.GetWalletIdByUserId(userId));
+            var ex = Assert.Throws<RepositoryException>(() => walletRepository.GetWalletIdByUserId(userId));
             Assert.That(ex.Message, Does.Contain("No wallet found for user ID"));
         }
 
@@ -184,11 +184,11 @@ namespace Tests.RepositoryTests
         {
             // Arrange
             int userId = 1;
-            _mockDataLink.Setup(dl => dl.ExecuteReader("GetWalletIdByUserId", It.IsAny<SqlParameter[]>()))
+            mockDataLink.Setup(dl => dl.ExecuteReader("GetWalletIdByUserId", It.IsAny<SqlParameter[]>()))
                          .Throws(new DatabaseOperationException("Database error"));
 
             // Act & Assert
-            Assert.Throws<RepositoryException>(() => _repository.GetWalletIdByUserId(userId));
+            Assert.Throws<RepositoryException>(() => walletRepository.GetWalletIdByUserId(userId));
         }
 
         [Test]
@@ -196,11 +196,11 @@ namespace Tests.RepositoryTests
         {
             // Arrange
             int userId = 1;
-            _mockDataLink.Setup(dl => dl.ExecuteReader("GetWalletIdByUserId", It.IsAny<SqlParameter[]>()))
+            mockDataLink.Setup(dl => dl.ExecuteReader("GetWalletIdByUserId", It.IsAny<SqlParameter[]>()))
                          .Throws(new DatabaseOperationException("Database error"));
 
             // Act & Assert
-            var ex = Assert.Throws<RepositoryException>(() => _repository.GetWalletIdByUserId(userId));
+            var ex = Assert.Throws<RepositoryException>(() => walletRepository.GetWalletIdByUserId(userId));
             Assert.That(ex.Message, Does.Contain("Failed to retrieve wallet ID"));
         }
 
@@ -214,13 +214,13 @@ namespace Tests.RepositoryTests
             // Arrange
             decimal amount = 50.25m;
             int walletId = 1;
-            _mockDataLink.Setup(dl => dl.ExecuteReader("AddMoney", It.IsAny<SqlParameter[]>()));
+            mockDataLink.Setup(dl => dl.ExecuteReader("AddMoney", It.IsAny<SqlParameter[]>()));
 
             // Act
-            _repository.AddMoneyToWallet(amount, walletId);
+            walletRepository.AddMoneyToWallet(amount, walletId);
 
             // Assert
-            _mockDataLink.Verify(dl => dl.ExecuteReader("AddMoney", It.IsAny<SqlParameter[]>()), Times.Once);
+            mockDataLink.Verify(dl => dl.ExecuteReader("AddMoney", It.IsAny<SqlParameter[]>()), Times.Once);
         }
 
         [Test]
@@ -229,13 +229,13 @@ namespace Tests.RepositoryTests
             // Arrange
             decimal amount = 50.25m;
             int walletId = 1;
-            _mockDataLink.Setup(dl => dl.ExecuteReader("AddMoney", It.IsAny<SqlParameter[]>()));
+            mockDataLink.Setup(dl => dl.ExecuteReader("AddMoney", It.IsAny<SqlParameter[]>()));
 
             // Act
-            _repository.AddMoneyToWallet(amount, walletId);
+            walletRepository.AddMoneyToWallet(amount, walletId);
 
             // Assert
-            _mockDataLink.Verify(dl => dl.ExecuteReader("AddMoney",
+            mockDataLink.Verify(dl => dl.ExecuteReader("AddMoney",
                 It.Is<SqlParameter[]>(p => decimal.Parse(p[0].Value.ToString()) == amount)),
                 Times.Once);
         }
@@ -246,13 +246,13 @@ namespace Tests.RepositoryTests
             // Arrange
             decimal amount = 50.25m;
             int walletId = 1;
-            _mockDataLink.Setup(dl => dl.ExecuteReader("AddMoney", It.IsAny<SqlParameter[]>()));
+            mockDataLink.Setup(dl => dl.ExecuteReader("AddMoney", It.IsAny<SqlParameter[]>()));
 
             // Act
-            _repository.AddMoneyToWallet(amount, walletId);
+            walletRepository.AddMoneyToWallet(amount, walletId);
 
             // Assert
-            _mockDataLink.Verify(dl => dl.ExecuteReader("AddMoney",
+            mockDataLink.Verify(dl => dl.ExecuteReader("AddMoney",
                 It.Is<SqlParameter[]>(p => int.Parse(p[1].Value.ToString()) == walletId)),
                 Times.Once);
         }
@@ -267,13 +267,13 @@ namespace Tests.RepositoryTests
             // Arrange
             int amount = 100;
             int walletId = 1;
-            _mockDataLink.Setup(dl => dl.ExecuteReader("AddPoints", It.IsAny<SqlParameter[]>()));
+            mockDataLink.Setup(dl => dl.ExecuteReader("AddPoints", It.IsAny<SqlParameter[]>()));
 
             // Act
-            _repository.AddPointsToWallet(amount, walletId);
+            walletRepository.AddPointsToWallet(amount, walletId);
 
             // Assert
-            _mockDataLink.Verify(dl => dl.ExecuteReader("AddPoints", It.IsAny<SqlParameter[]>()), Times.Once);
+            mockDataLink.Verify(dl => dl.ExecuteReader("AddPoints", It.IsAny<SqlParameter[]>()), Times.Once);
         }
 
         [Test]
@@ -282,13 +282,13 @@ namespace Tests.RepositoryTests
             // Arrange
             int amount = 100;
             int walletId = 1;
-            _mockDataLink.Setup(dl => dl.ExecuteReader("AddPoints", It.IsAny<SqlParameter[]>()));
+            mockDataLink.Setup(dl => dl.ExecuteReader("AddPoints", It.IsAny<SqlParameter[]>()));
 
             // Act
-            _repository.AddPointsToWallet(amount, walletId);
+            walletRepository.AddPointsToWallet(amount, walletId);
 
             // Assert
-            _mockDataLink.Verify(dl => dl.ExecuteReader("AddPoints",
+            mockDataLink.Verify(dl => dl.ExecuteReader("AddPoints",
                 It.Is<SqlParameter[]>(p => int.Parse(p[0].Value.ToString()) == amount)),
                 Times.Once);
         }
@@ -299,13 +299,13 @@ namespace Tests.RepositoryTests
             // Arrange
             int amount = 100;
             int walletId = 1;
-            _mockDataLink.Setup(dl => dl.ExecuteReader("AddPoints", It.IsAny<SqlParameter[]>()));
+            mockDataLink.Setup(dl => dl.ExecuteReader("AddPoints", It.IsAny<SqlParameter[]>()));
 
             // Act
-            _repository.AddPointsToWallet(amount, walletId);
+            walletRepository.AddPointsToWallet(amount, walletId);
 
             // Assert
-            _mockDataLink.Verify(dl => dl.ExecuteReader("AddPoints",
+            mockDataLink.Verify(dl => dl.ExecuteReader("AddPoints",
                 It.Is<SqlParameter[]>(p => int.Parse(p[1].Value.ToString()) == walletId)),
                 Times.Once);
         }
@@ -320,11 +320,11 @@ namespace Tests.RepositoryTests
             // Arrange
             int walletId = 1;
             var dataTable = CreateWalletDataTable();
-            _mockDataLink.Setup(dl => dl.ExecuteReader("GetWalletById", It.IsAny<SqlParameter[]>()))
+            mockDataLink.Setup(dl => dl.ExecuteReader("GetWalletById", It.IsAny<SqlParameter[]>()))
                          .Returns(dataTable);
 
             // Act
-            decimal result = _repository.GetMoneyFromWallet(walletId);
+            decimal result = walletRepository.GetMoneyFromWallet(walletId);
 
             // Assert
             Assert.That(result, Is.EqualTo(100.50m));
@@ -340,11 +340,11 @@ namespace Tests.RepositoryTests
             // Arrange
             int walletId = 1;
             var dataTable = CreateWalletDataTable();
-            _mockDataLink.Setup(dl => dl.ExecuteReader("GetWalletById", It.IsAny<SqlParameter[]>()))
+            mockDataLink.Setup(dl => dl.ExecuteReader("GetWalletById", It.IsAny<SqlParameter[]>()))
                          .Returns(dataTable);
 
             // Act
-            int result = _repository.GetPointsFromWallet(walletId);
+            int result = walletRepository.GetPointsFromWallet(walletId);
 
             // Assert
             Assert.That(result, Is.EqualTo(200));
@@ -360,13 +360,13 @@ namespace Tests.RepositoryTests
             // Arrange
             var offer = new PointsOffer(10, 100); // price 10, points 100
             int walletId = 1;
-            _mockDataLink.Setup(dl => dl.ExecuteReader("BuyPoints", It.IsAny<SqlParameter[]>()));
+            mockDataLink.Setup(dl => dl.ExecuteReader("BuyPoints", It.IsAny<SqlParameter[]>()));
 
             // Act
-            _repository.PurchasePoints(offer, walletId);
+            walletRepository.PurchasePoints(offer, walletId);
 
             // Assert
-            _mockDataLink.Verify(dl => dl.ExecuteReader("BuyPoints", It.IsAny<SqlParameter[]>()), Times.Once);
+            mockDataLink.Verify(dl => dl.ExecuteReader("BuyPoints", It.IsAny<SqlParameter[]>()), Times.Once);
         }
 
         [Test]
@@ -375,13 +375,13 @@ namespace Tests.RepositoryTests
             // Arrange
             var offer = new PointsOffer(10, 100); // price 10, points 100
             int walletId = 1;
-            _mockDataLink.Setup(dl => dl.ExecuteReader("BuyPoints", It.IsAny<SqlParameter[]>()));
+            mockDataLink.Setup(dl => dl.ExecuteReader("BuyPoints", It.IsAny<SqlParameter[]>()));
 
             // Act
-            _repository.PurchasePoints(offer, walletId);
+            walletRepository.PurchasePoints(offer, walletId);
 
             // Assert
-            _mockDataLink.Verify(dl => dl.ExecuteReader("BuyPoints",
+            mockDataLink.Verify(dl => dl.ExecuteReader("BuyPoints",
                 It.Is<SqlParameter[]>(p => int.Parse(p[0].Value.ToString()) == offer.Price)),
                 Times.Once);
         }
@@ -392,13 +392,13 @@ namespace Tests.RepositoryTests
             // Arrange
             var offer = new PointsOffer(10, 100); // price 10, points 100
             int walletId = 1;
-            _mockDataLink.Setup(dl => dl.ExecuteReader("BuyPoints", It.IsAny<SqlParameter[]>()));
+            mockDataLink.Setup(dl => dl.ExecuteReader("BuyPoints", It.IsAny<SqlParameter[]>()));
 
             // Act
-            _repository.PurchasePoints(offer, walletId);
+            walletRepository.PurchasePoints(offer, walletId);
 
             // Assert
-            _mockDataLink.Verify(dl => dl.ExecuteReader("BuyPoints",
+            mockDataLink.Verify(dl => dl.ExecuteReader("BuyPoints",
                 It.Is<SqlParameter[]>(p => int.Parse(p[1].Value.ToString()) == offer.Points)),
                 Times.Once);
         }
@@ -409,13 +409,13 @@ namespace Tests.RepositoryTests
             // Arrange
             var offer = new PointsOffer(10, 100); // price 10, points 100
             int walletId = 1;
-            _mockDataLink.Setup(dl => dl.ExecuteReader("BuyPoints", It.IsAny<SqlParameter[]>()));
+            mockDataLink.Setup(dl => dl.ExecuteReader("BuyPoints", It.IsAny<SqlParameter[]>()));
 
             // Act
-            _repository.PurchasePoints(offer, walletId);
+            walletRepository.PurchasePoints(offer, walletId);
 
             // Assert
-            _mockDataLink.Verify(dl => dl.ExecuteReader("BuyPoints",
+            mockDataLink.Verify(dl => dl.ExecuteReader("BuyPoints",
                 It.Is<SqlParameter[]>(p => int.Parse(p[2].Value.ToString()) == walletId)),
                 Times.Once);
         }
@@ -429,13 +429,13 @@ namespace Tests.RepositoryTests
         {
             // Arrange
             int userId = 1;
-            _mockDataLink.Setup(dl => dl.ExecuteReader("CreateWallet", It.IsAny<SqlParameter[]>()));
+            mockDataLink.Setup(dl => dl.ExecuteReader("CreateWallet", It.IsAny<SqlParameter[]>()));
 
             // Act
-            _repository.AddNewWallet(userId);
+            walletRepository.AddNewWallet(userId);
 
             // Assert
-            _mockDataLink.Verify(dl => dl.ExecuteReader("CreateWallet", It.IsAny<SqlParameter[]>()), Times.Once);
+            mockDataLink.Verify(dl => dl.ExecuteReader("CreateWallet", It.IsAny<SqlParameter[]>()), Times.Once);
         }
 
         [Test]
@@ -443,13 +443,13 @@ namespace Tests.RepositoryTests
         {
             // Arrange
             int userId = 1;
-            _mockDataLink.Setup(dl => dl.ExecuteReader("CreateWallet", It.IsAny<SqlParameter[]>()));
+            mockDataLink.Setup(dl => dl.ExecuteReader("CreateWallet", It.IsAny<SqlParameter[]>()));
 
             // Act
-            _repository.AddNewWallet(userId);
+            walletRepository.AddNewWallet(userId);
 
             // Assert
-            _mockDataLink.Verify(dl => dl.ExecuteReader("CreateWallet",
+            mockDataLink.Verify(dl => dl.ExecuteReader("CreateWallet",
                 It.Is<SqlParameter[]>(p => int.Parse(p[0].Value.ToString()) == userId)),
                 Times.Once);
         }
@@ -459,11 +459,11 @@ namespace Tests.RepositoryTests
         {
             // Arrange
             int userId = 1;
-            _mockDataLink.Setup(dl => dl.ExecuteReader("CreateWallet", It.IsAny<SqlParameter[]>()))
+            mockDataLink.Setup(dl => dl.ExecuteReader("CreateWallet", It.IsAny<SqlParameter[]>()))
                          .Throws(new Exception("Test exception"));
 
             // Act & Assert
-            Assert.DoesNotThrow(() => _repository.AddNewWallet(userId));
+            Assert.DoesNotThrow(() => walletRepository.AddNewWallet(userId));
         }
 
         #endregion
@@ -475,13 +475,13 @@ namespace Tests.RepositoryTests
         {
             // Arrange
             int walletId = 1;
-            _mockDataLink.Setup(dl => dl.ExecuteReader("RemoveWallet", It.IsAny<SqlParameter[]>()));
+            mockDataLink.Setup(dl => dl.ExecuteReader("RemoveWallet", It.IsAny<SqlParameter[]>()));
 
             // Act
-            _repository.RemoveWallet(walletId);
+            walletRepository.RemoveWallet(walletId);
 
             // Assert
-            _mockDataLink.Verify(dl => dl.ExecuteReader("RemoveWallet", It.IsAny<SqlParameter[]>()), Times.Once);
+            mockDataLink.Verify(dl => dl.ExecuteReader("RemoveWallet", It.IsAny<SqlParameter[]>()), Times.Once);
         }
 
         [Test]
@@ -489,13 +489,13 @@ namespace Tests.RepositoryTests
         {
             // Arrange
             int walletId = 1;
-            _mockDataLink.Setup(dl => dl.ExecuteReader("RemoveWallet", It.IsAny<SqlParameter[]>()));
+            mockDataLink.Setup(dl => dl.ExecuteReader("RemoveWallet", It.IsAny<SqlParameter[]>()));
 
             // Act
-            _repository.RemoveWallet(walletId);
+            walletRepository.RemoveWallet(walletId);
 
             // Assert
-            _mockDataLink.Verify(dl => dl.ExecuteReader("RemoveWallet",
+            mockDataLink.Verify(dl => dl.ExecuteReader("RemoveWallet",
                 It.Is<SqlParameter[]>(p => int.Parse(p[0].Value.ToString()) == walletId)),
                 Times.Once);
         }
@@ -505,11 +505,11 @@ namespace Tests.RepositoryTests
         {
             // Arrange
             int walletId = 1;
-            _mockDataLink.Setup(dl => dl.ExecuteReader("RemoveWallet", It.IsAny<SqlParameter[]>()))
+            mockDataLink.Setup(dl => dl.ExecuteReader("RemoveWallet", It.IsAny<SqlParameter[]>()))
                          .Throws(new Exception("Test exception"));
 
             // Act & Assert
-            Assert.DoesNotThrow(() => _repository.RemoveWallet(walletId));
+            Assert.DoesNotThrow(() => walletRepository.RemoveWallet(walletId));
         }
 
         #endregion

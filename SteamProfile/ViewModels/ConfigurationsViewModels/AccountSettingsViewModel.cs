@@ -1,4 +1,7 @@
-﻿using CommunityToolkit.Mvvm.ComponentModel;
+﻿using System;
+using System.Text.RegularExpressions;
+using System.Threading.Tasks;
+using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
 using Microsoft.UI.Xaml;
 using Microsoft.UI.Xaml.Controls;
@@ -6,9 +9,6 @@ using BusinessLayer.Models;
 using BusinessLayer.Services;
 using BusinessLayer.Validators;
 using SteamProfile.Views;
-using System;
-using System.Text.RegularExpressions;
-using System.Threading.Tasks;
 using BusinessLayer.Services.Interfaces;
 
 namespace SteamProfile.ViewModels.ConfigurationsViewModels
@@ -16,65 +16,65 @@ namespace SteamProfile.ViewModels.ConfigurationsViewModels
     public partial class AccountSettingsViewModel : ObservableObject
     {
         [ObservableProperty]
-        private string _username = string.Empty;
+        private string username = string.Empty;
 
         [ObservableProperty]
-        private string _email = string.Empty;
+        private string email = string.Empty;
 
         [ObservableProperty]
-        private string _password = string.Empty;
+        private string password = string.Empty;
 
         [ObservableProperty]
-        private string _currentPassword = string.Empty;
+        private string currentPassword = string.Empty;
 
         [ObservableProperty]
-        private string _errorMessage = string.Empty;
+        private string errorMessage = string.Empty;
 
         [ObservableProperty]
-        private string _successMessage = string.Empty;
+        private string successMessage = string.Empty;
 
         [ObservableProperty]
-        private string _passwordConfirmationError = string.Empty;
+        private string passwordConfirmationError = string.Empty;
 
         [ObservableProperty]
-        private Visibility _emailErrorMessageVisibility = Visibility.Collapsed;
+        private Visibility emailErrorMessageVisibility = Visibility.Collapsed;
 
         [ObservableProperty]
-        private Visibility _passwordErrorMessageVisibility = Visibility.Collapsed;
+        private Visibility passwordErrorMessageVisibility = Visibility.Collapsed;
 
         [ObservableProperty]
-        private Visibility _usernameErrorMessageVisibility = Visibility.Collapsed;
+        private Visibility usernameErrorMessageVisibility = Visibility.Collapsed;
 
         [ObservableProperty]
-        private Visibility _passwordConfirmationErrorVisibility = Visibility.Collapsed;
+        private Visibility passwordConfirmationErrorVisibility = Visibility.Collapsed;
 
         [ObservableProperty]
-        private Visibility _successMessageVisibility = Visibility.Collapsed;
+        private Visibility successMessageVisibility = Visibility.Collapsed;
 
         [ObservableProperty]
-        private bool _updateEmailEnabled = false;
+        private bool updateEmailEnabled = false;
 
         [ObservableProperty]
-        private bool _updateUsernameEnabled = false;
+        private bool updateUsernameEnabled = false;
 
         [ObservableProperty]
-        private bool _updatePasswordEnabled = false;
+        private bool updatePasswordEnabled = false;
 
         // Event to request the View to show the password confirmation dialog
         public event EventHandler RequestPasswordConfirmation;
 
-        private readonly IUserService _userService;
-        private Action _pendingAction;
+        private readonly IUserService userService;
+        private Action pendingAction;
 
         public AccountSettingsViewModel()
         {
-            _userService = App.UserService;
+            userService = App.UserService;
 
-            var currentUser = _userService.GetCurrentUser();
+            var currentUser = userService.GetCurrentUser();
             if (currentUser != null)
             {
-                _username = currentUser.Username;
-                _email = currentUser.Email;
+                username = currentUser.Username;
+                email = currentUser.Email;
             }
         }
 
@@ -116,17 +116,19 @@ namespace SteamProfile.ViewModels.ConfigurationsViewModels
 
         private bool IsValidUsername(string username)
         {
-            if (!UserValidator.IsValidUsername(username)) 
+            if (!UserValidator.IsValidUsername(username))
+            {
                 return false;
-            return _userService.GetUserByUsername(username) == null; 
+            }
+            return userService.GetUserByUsername(username) == null;
         }
 
         [RelayCommand]
         private void UpdateUsername()
         {
-            _pendingAction = () =>
+            pendingAction = () =>
             {
-                if (_userService.UpdateUserUsername(Username, CurrentPassword))
+                if (userService.UpdateUserUsername(Username, CurrentPassword))
                 {
                     ShowSuccessMessage("Username updated successfully!");
                 }
@@ -142,9 +144,9 @@ namespace SteamProfile.ViewModels.ConfigurationsViewModels
         [RelayCommand]
         private void UpdateEmail()
         {
-            _pendingAction = () =>
+            pendingAction = () =>
             {
-                if (_userService.UpdateUserEmail(Email, CurrentPassword))
+                if (userService.UpdateUserEmail(Email, CurrentPassword))
                 {
                     ShowSuccessMessage("Email updated successfully!");
                 }
@@ -160,9 +162,9 @@ namespace SteamProfile.ViewModels.ConfigurationsViewModels
         [RelayCommand]
         private void UpdatePassword()
         {
-            _pendingAction = () =>
+            pendingAction = () =>
             {
-                if (_userService.UpdateUserPassword(Password, CurrentPassword))
+                if (userService.UpdateUserPassword(Password, CurrentPassword))
                 {
                     ShowSuccessMessage("Password updated successfully!");
                     Password = string.Empty; // Clear the password field
@@ -179,21 +181,18 @@ namespace SteamProfile.ViewModels.ConfigurationsViewModels
         [RelayCommand]
         private void Logout()
         {
-            _userService.Logout();
+            userService.Logout();
             NavigationService.Instance.Navigate(typeof(LoginPage));
         }
 
         [RelayCommand]
         private void DeleteAccount()
         {
-            _pendingAction = () =>
+            pendingAction = () =>
             {
-                _userService.DeleteUser(_userService.GetCurrentUser().UserId);
-
+                userService.DeleteUser(userService.GetCurrentUser().UserId);
                 NavigationService.Instance.Navigate(typeof(LoginPage));
-
             };
-
             RequestPasswordConfirmation?.Invoke(this, EventArgs.Empty);
         }
 
@@ -204,7 +203,7 @@ namespace SteamProfile.ViewModels.ConfigurationsViewModels
                 ErrorMessage = "Current password is required.";
                 return false;
             }
-            return _userService.VerifyUserPassword(CurrentPassword);
+            return userService.VerifyUserPassword(CurrentPassword);
         }
 
         private void ShowSuccessMessage(string message)
@@ -222,22 +221,22 @@ namespace SteamProfile.ViewModels.ConfigurationsViewModels
 
         public bool VerifyPassword(string password)
         {
-            return _userService.VerifyUserPassword(password);
+            return userService.VerifyUserPassword(password);
         }
 
         public void ExecutePendingAction()
         {
-            if (_pendingAction != null)
+            if (pendingAction != null)
             {
-                _pendingAction();
-                _pendingAction = null;
+                pendingAction();
+                pendingAction = null;
             }
             CurrentPassword = string.Empty;
         }
 
         public void CancelPendingAction()
         {
-            _pendingAction = null;
+            pendingAction = null;
             CurrentPassword = string.Empty;
         }
     }
