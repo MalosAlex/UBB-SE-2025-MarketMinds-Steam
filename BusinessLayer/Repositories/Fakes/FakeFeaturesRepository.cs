@@ -107,5 +107,33 @@ namespace BusinessLayer.Repositories.Fakes
                 }
             }
         }
+        public bool AddUserFeature(int userId, int featureId)
+        {
+            if (IsFeaturePurchased(userId, featureId))
+            {
+                return false;
+            }
+
+            var feature = features.FirstOrDefault(feature => feature.FeatureId == featureId);
+            if (feature == null)
+            {
+                return false;
+            }
+
+            var userFeature = new Feature
+            {
+                FeatureId = feature.FeatureId,
+                UserId = userId,
+                Name = feature.Name,
+                Value = feature.Value,
+                Description = feature.Description,
+                Type = feature.Type,
+                Source = feature.Source,
+                Equipped = false
+            };
+
+            userFeatures.Add(userFeature);
+            return true;
+        }
     }
 }

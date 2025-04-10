@@ -48,9 +48,9 @@ namespace Tests.RepositoryTests
             int userId = 1;
             string code = "123456";
             DateTime expiryTime = DateTime.Now.AddMinutes(30);
-            string deleteProc = "DeleteExistingResetCodes";
+            string deleteProcedure = "DeleteExistingResetCodes";
 
-            this.mockDataLink.Setup(dataLink => dataLink.ExecuteNonQuery(deleteProc, It.Is<SqlParameter[]>(sqlParameter => sqlParameter.Length == 1 && (int)sqlParameter[0].Value == userId)))
+            this.mockDataLink.Setup(dataLink => dataLink.ExecuteNonQuery(deleteProcedure, It.Is<SqlParameter[]>(sqlParameter => sqlParameter.Length == 1 && (int)sqlParameter[0].Value == userId)))
                 .Verifiable();
 
             this.mockDataLink.Setup(dataLink => dataLink.ExecuteNonQuery("StorePasswordResetCode", It.Is<SqlParameter[]>(sqlParameter => sqlParameter.Length == 3)))
@@ -60,20 +60,20 @@ namespace Tests.RepositoryTests
             this.passwordResetRepository.StoreResetCode(userId, code, expiryTime);
 
             // Assert
-            bool deleteProcCalled = false;
+            bool deleteProcedureCalled = false;
             foreach (var invocation in this.mockDataLink.Invocations)
             {
                 if (invocation.Method.Name == "ExecuteNonQuery")
                 {
-                    if ((string)invocation.Arguments[0] == deleteProc)
+                    if ((string)invocation.Arguments[0] == deleteProcedure)
                     {
-                        deleteProcCalled = true;
+                        deleteProcedureCalled = true;
                         break;
                     }
                 }
             }
 
-            Assert.That(deleteProcCalled, Is.True, "DeleteExistingResetCodes was not called");
+            Assert.That(deleteProcedureCalled, Is.True, "DeleteExistingResetCodes was not called");
         }
 
         [Test]
@@ -83,32 +83,32 @@ namespace Tests.RepositoryTests
             int userId = 1;
             string code = "123456";
             DateTime expiryTime = DateTime.Now.AddMinutes(30);
-            string storeProc = "StorePasswordResetCode";
+            string storeProcedure = "StorePasswordResetCode";
 
             this.mockDataLink.Setup(dataLink => dataLink.ExecuteNonQuery("DeleteExistingResetCodes", It.Is<SqlParameter[]>(sqlParameter => sqlParameter.Length == 1)))
                 .Verifiable();
 
-            this.mockDataLink.Setup(dataLink => dataLink.ExecuteNonQuery(storeProc, It.Is<SqlParameter[]>(sqlParameter => sqlParameter.Length == 3)))
+            this.mockDataLink.Setup(dataLink => dataLink.ExecuteNonQuery(storeProcedure, It.Is<SqlParameter[]>(sqlParameter => sqlParameter.Length == 3)))
                 .Verifiable();
 
             // Act
             this.passwordResetRepository.StoreResetCode(userId, code, expiryTime);
 
             // Assert
-            bool storeProcCalled = false;
+            bool storeProcedureCalled = false;
             foreach (var invocation in this.mockDataLink.Invocations)
             {
                 if (invocation.Method.Name == "ExecuteNonQuery")
                 {
-                    if ((string)invocation.Arguments[0] == storeProc)
+                    if ((string)invocation.Arguments[0] == storeProcedure)
                     {
-                        storeProcCalled = true;
+                        storeProcedureCalled = true;
                         break;
                     }
                 }
             }
 
-            Assert.That(storeProcCalled, Is.True, "StorePasswordResetCode was not called");
+            Assert.That(storeProcedureCalled, Is.True, "StorePasswordResetCode was not called");
         }
 
         [Test]
@@ -118,9 +118,9 @@ namespace Tests.RepositoryTests
             int userId = 1;
             string code = "123456";
             DateTime expiryTime = DateTime.Now.AddMinutes(30);
-            string deleteProc = "DeleteExistingResetCodes";
+            string deleteProcedure = "DeleteExistingResetCodes";
 
-            this.mockDataLink.Setup(dataLink => dataLink.ExecuteNonQuery(deleteProc, It.Is<SqlParameter[]>(sqlParameter => sqlParameter.Length == 1)))
+            this.mockDataLink.Setup(dataLink => dataLink.ExecuteNonQuery(deleteProcedure, It.Is<SqlParameter[]>(sqlParameter => sqlParameter.Length == 1)))
                 .Throws(new DatabaseOperationException("Database error"));
 
             // Act & Assert

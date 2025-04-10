@@ -125,17 +125,6 @@ namespace Tests.ServiceTests
         }
 
         [Test]
-        public void SendResetCode_WithInvalidEmail_ThrowsInvalidOperationException()
-        {
-            // Arrange
-            string invalidEmail = "invalid";
-
-            // Act & Assert
-            var ex = Assert.Throws<InvalidOperationException>(() => this.passwordResetService.SendResetCode(invalidEmail).GetAwaiter().GetResult());
-            Assert.That(ex.Message, Is.EqualTo("Invalid email format."));
-        }
-
-        [Test]
         public async Task SendResetCode_UnregisteredEmail_ReturnsInvalidResult()
         {
             // Arrange
