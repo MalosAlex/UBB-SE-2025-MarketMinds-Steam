@@ -73,12 +73,12 @@ namespace SteamProfile.Views
                 DataContext = ViewModel; // Ensure this is set correctly
                 Debug.WriteLine("Profile data loading initiated.");
             }
-            catch (Exception ex)
+            catch (Exception exception)
             {
-                Debug.WriteLine($"Error initializing ProfilePage: {ex.Message}");
-                if (ex.InnerException != null)
+                Debug.WriteLine($"Error initializing ProfilePage: {exception.Message}");
+                if (exception.InnerException != null)
                 {
-                    Debug.WriteLine($"Inner exception: {ex.InnerException.Message}");
+                    Debug.WriteLine($"Inner exception: {exception.InnerException.Message}");
                 }
 
                 // Show error dialog to user
@@ -241,9 +241,9 @@ namespace SteamProfile.Views
                 await errorDialog.ShowAsync();
                 Debug.WriteLine("Error dialog shown.");
             }
-            catch (Exception ex)
+            catch (Exception exception)
             {
-                Debug.WriteLine($"Error showing dialog: {ex.Message}");
+                Debug.WriteLine($"Error showing dialog: {exception.Message}");
             }
         }
 
@@ -281,9 +281,9 @@ namespace SteamProfile.Views
                     }
                 }
             }
-            catch (Exception ex)
+            catch (Exception exception)
             {
-                ShowErrorDialog($"Error unfriending user: {ex.Message}");
+                ShowErrorDialog($"Error unfriending user: {exception.Message}");
             }
         }
 
