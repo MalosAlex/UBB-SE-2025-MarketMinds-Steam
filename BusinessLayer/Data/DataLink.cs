@@ -1,8 +1,9 @@
-﻿using System.Configuration;
+﻿using System;
+using System.Configuration;
 using System.Data;
-using Microsoft.Extensions.Configuration;
-using Microsoft.Data.SqlClient;
 using BusinessLayer.Exceptions;
+using Microsoft.Data.SqlClient;
+using Microsoft.Extensions.Configuration;
 
 namespace BusinessLayer.Data
 {
@@ -72,13 +73,13 @@ namespace BusinessLayer.Data
                 using var testConnection = new SqlConnection(connectionString);
                 testConnection.Open();
             }
-            catch (SqlException ex)
+            catch (SqlException exception)
             {
-                throw new DatabaseConnectionException(ConnectionFailedErrorMessage, ex);
+                throw new DatabaseConnectionException(ConnectionFailedErrorMessage, exception);
             }
-            catch (Exception ex)
+            catch (Exception exception)
             {
-                throw new ConfigurationErrorsException(ConnectionInitErrorMessage, ex);
+                throw new ConfigurationErrorsException(ConnectionInitErrorMessage, exception);
             }
         }
 
@@ -124,17 +125,17 @@ namespace BusinessLayer.Data
 
                 return (T)Convert.ChangeType(result, typeof(T));
             }
-            catch (SqlException ex)
+            catch (SqlException exception)
             {
-                throw new DatabaseOperationException(ExecuteScalarErrorMessage + ex.Message, ex);
+                throw new DatabaseOperationException(ExecuteScalarErrorMessage + exception.Message, exception);
             }
-            catch (InvalidCastException ex)
+            catch (InvalidCastException exception)
             {
-                throw new DatabaseOperationException(ExecuteScalarCastErrorMessage + ex.Message, ex);
+                throw new DatabaseOperationException(ExecuteScalarCastErrorMessage + exception.Message, exception);
             }
-            catch (Exception ex)
+            catch (Exception exception)
             {
-                throw new DatabaseOperationException(ExecuteScalarUnexpectedErrorMessage + ex.Message, ex);
+                throw new DatabaseOperationException(ExecuteScalarUnexpectedErrorMessage + exception.Message, exception);
             }
         }
 
@@ -160,13 +161,13 @@ namespace BusinessLayer.Data
                 dataTable.Load(reader);
                 return dataTable;
             }
-            catch (SqlException ex)
+            catch (SqlException exception)
             {
-                throw new DatabaseOperationException(ExecuteReaderErrorMessage + ex.Message, ex);
+                throw new DatabaseOperationException(ExecuteReaderErrorMessage + exception.Message, exception);
             }
-            catch (Exception ex)
+            catch (Exception exception)
             {
-                throw new DatabaseOperationException(ExecuteReaderUnexpectedErrorMessage + ex.Message, ex);
+                throw new DatabaseOperationException(ExecuteReaderUnexpectedErrorMessage + exception.Message, exception);
             }
         }
 
@@ -189,13 +190,13 @@ namespace BusinessLayer.Data
 
                 return command.ExecuteNonQuery();
             }
-            catch (SqlException ex)
+            catch (SqlException exception)
             {
-                throw new DatabaseOperationException(ExecuteNonQueryErrorMessage + ex.Message, ex);
+                throw new DatabaseOperationException(ExecuteNonQueryErrorMessage + exception.Message, exception);
             }
-            catch (Exception ex)
+            catch (Exception exception)
             {
-                throw new DatabaseOperationException(ExecuteNonQueryUnexpectedErrorMessage + ex.Message, ex);
+                throw new DatabaseOperationException(ExecuteNonQueryUnexpectedErrorMessage + exception.Message, exception);
             }
         }
 
@@ -220,13 +221,13 @@ namespace BusinessLayer.Data
                 dataTable.Load(reader);
                 return dataTable;
             }
-            catch (SqlException ex)
+            catch (SqlException exception)
             {
-                throw new DatabaseOperationException(ExecuteReaderAsyncErrorMessage + ex.Message, ex);
+                throw new DatabaseOperationException(ExecuteReaderAsyncErrorMessage + exception.Message, exception);
             }
-            catch (Exception ex)
+            catch (Exception exception)
             {
-                throw new DatabaseOperationException(ExecuteReaderAsyncUnexpectedErrorMessage + ex.Message, ex);
+                throw new DatabaseOperationException(ExecuteReaderAsyncUnexpectedErrorMessage + exception.Message, exception);
             }
         }
 
@@ -248,13 +249,13 @@ namespace BusinessLayer.Data
                 await connection.OpenAsync();
                 await command.ExecuteNonQueryAsync();
             }
-            catch (SqlException ex)
+            catch (SqlException exception)
             {
-                throw new DatabaseOperationException(ExecuteNonQueryAsyncErrorMessage + ex.Message, ex);
+                throw new DatabaseOperationException(ExecuteNonQueryAsyncErrorMessage + exception.Message, exception);
             }
-            catch (Exception ex)
+            catch (Exception exception)
             {
-                throw new DatabaseOperationException(ExecuteNonQueryAsyncUnexpectedErrorMessage + ex.Message, ex);
+                throw new DatabaseOperationException(ExecuteNonQueryAsyncUnexpectedErrorMessage + exception.Message, exception);
             }
         }
 
