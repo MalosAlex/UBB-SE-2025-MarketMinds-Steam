@@ -24,7 +24,7 @@ namespace Tests.RepositoryTests
             // Arrange
 
             // Act
-            var offers = pointsOffersRepository.Offers;
+            var offers = pointsOffersRepository.PointsOffers;
 
             // Assert
             Assert.That(offers, Is.Not.Null);
@@ -36,7 +36,7 @@ namespace Tests.RepositoryTests
             // Arrange
 
             // Act
-            var offers = pointsOffersRepository.Offers;
+            var offers = pointsOffersRepository.PointsOffers;
 
             // Assert
             Assert.That(offers.Count, Is.EqualTo(5));
@@ -48,7 +48,7 @@ namespace Tests.RepositoryTests
             // Arrange
 
             // Act
-            var offers = pointsOffersRepository.Offers;
+            var offers = pointsOffersRepository.PointsOffers;
 
             // Assert
             Assert.That(offers[0].Price, Is.EqualTo(2));
@@ -60,7 +60,7 @@ namespace Tests.RepositoryTests
             // Arrange
 
             // Act
-            var offers = pointsOffersRepository.Offers;
+            var offers = pointsOffersRepository.PointsOffers;
 
             // Assert
             Assert.That(offers[0].Points, Is.EqualTo(5));
@@ -72,7 +72,7 @@ namespace Tests.RepositoryTests
             // Arrange
 
             // Act
-            var offers = pointsOffersRepository.Offers;
+            var offers = pointsOffersRepository.PointsOffers;
 
             // Assert
             Assert.That(offers[1].Price, Is.EqualTo(8));
@@ -84,7 +84,7 @@ namespace Tests.RepositoryTests
             // Arrange
 
             // Act
-            var offers = pointsOffersRepository.Offers;
+            var offers = pointsOffersRepository.PointsOffers;
 
             // Assert
             Assert.That(offers[1].Points, Is.EqualTo(25));
@@ -96,7 +96,7 @@ namespace Tests.RepositoryTests
             // Arrange
 
             // Act
-            var offers = pointsOffersRepository.Offers;
+            var offers = pointsOffersRepository.PointsOffers;
 
             // Assert
             Assert.That(offers[2].Price, Is.EqualTo(15));
@@ -108,7 +108,7 @@ namespace Tests.RepositoryTests
             // Arrange
 
             // Act
-            var offers = pointsOffersRepository.Offers;
+            var offers = pointsOffersRepository.PointsOffers;
 
             // Assert
             Assert.That(offers[2].Points, Is.EqualTo(50));
@@ -120,7 +120,7 @@ namespace Tests.RepositoryTests
             // Arrange
 
             // Act
-            var offers = pointsOffersRepository.Offers;
+            var offers = pointsOffersRepository.PointsOffers;
 
             // Assert
             Assert.That(offers[3].Price, Is.EqualTo(20));
@@ -132,7 +132,7 @@ namespace Tests.RepositoryTests
             // Arrange
 
             // Act
-            var offers = pointsOffersRepository.Offers;
+            var offers = pointsOffersRepository.PointsOffers;
 
             // Assert
             Assert.That(offers[3].Points, Is.EqualTo(100));
@@ -144,7 +144,7 @@ namespace Tests.RepositoryTests
             // Arrange
 
             // Act
-            var offers = pointsOffersRepository.Offers;
+            var offers = pointsOffersRepository.PointsOffers;
 
             // Assert
             Assert.That(offers[4].Price, Is.EqualTo(50));
@@ -156,7 +156,7 @@ namespace Tests.RepositoryTests
             // Arrange
 
             // Act
-            var offers = pointsOffersRepository.Offers;
+            var offers = pointsOffersRepository.PointsOffers;
 
             // Assert
             Assert.That(offers[4].Points, Is.EqualTo(500));
