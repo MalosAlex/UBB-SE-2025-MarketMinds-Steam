@@ -1,9 +1,9 @@
-﻿using Microsoft.UI.Xaml;
-using BusinessLayer.Models;
-using BusinessLayer.Validators;
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
+using Microsoft.UI.Xaml;
+using BusinessLayer.Models;
+using BusinessLayer.Validators;
 using CommunityToolkit.Mvvm.ComponentModel;
 
 namespace SteamProfile.ViewModels
@@ -41,9 +41,15 @@ namespace SteamProfile.ViewModels
         private Visibility statusMessageVisibility;
 
         // Computed properties - these must be manually maintained
-        public Visibility ErrorMessageVisibility => ShowErrorMessage ? Visibility.Visible : Visibility.Collapsed;
+        public Visibility ErrorMessageVisibility
+        {
+            get { return ShowErrorMessage ? Visibility.Visible : Visibility.Collapsed; }
+        }
 
-        public bool AreAllFieldsValid => IsNameValid && IsCardNumberValid && IsCvvValid && IsDateValid;
+        public bool AreAllFieldsValid
+        {
+            get { return IsNameValid && IsCardNumberValid && IsCvvValid && IsDateValid; }
+        }
 
         // Initialization
         public CardPaymentViewModel()
@@ -89,10 +95,26 @@ namespace SteamProfile.ViewModels
         }
 
         // Manually update error message visibility when validation properties change
-        partial void OnIsNameValidChanged(bool value) => UpdateErrorMessageVisibility();
-        partial void OnIsCardNumberValidChanged(bool value) => UpdateErrorMessageVisibility();
-        partial void OnIsCvvValidChanged(bool value) => UpdateErrorMessageVisibility();
-        partial void OnIsDateValidChanged(bool value) => UpdateErrorMessageVisibility();
+        partial void OnIsNameValidChanged(bool value)
+        {
+            UpdateErrorMessageVisibility();
+            OnPropertyChanged(nameof(AreAllFieldsValid));
+        }
+        partial void OnIsCardNumberValidChanged(bool value)
+        {
+            UpdateErrorMessageVisibility();
+            OnPropertyChanged(nameof(AreAllFieldsValid));
+        }
+        partial void OnIsCvvValidChanged(bool value)
+        {
+            UpdateErrorMessageVisibility();
+            OnPropertyChanged(nameof(AreAllFieldsValid));
+        }
+        partial void OnIsDateValidChanged(bool value)
+        {
+            UpdateErrorMessageVisibility();
+            OnPropertyChanged(nameof(AreAllFieldsValid));
+        }
 
         private void UpdateErrorMessageVisibility()
         {

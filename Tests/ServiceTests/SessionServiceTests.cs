@@ -1,4 +1,6 @@
-﻿using Moq;
+﻿using System;
+using System.Collections.Generic;
+using Moq;
 using BusinessLayer.Models;
 using BusinessLayer.Services;
 using BusinessLayer.Repositories.Interfaces;
@@ -8,16 +10,16 @@ namespace Tests.ServiceTests
     [TestFixture]
     internal class SessionServiceTests
     {
-        private Mock<ISessionRepository> _mockSessionRepository;
-        private Mock<IUsersRepository> _mockUsersRepository;
-        private SessionService _sessionService;
+        private Mock<ISessionRepository> mockSessionRepository;
+        private Mock<IUsersRepository> mockUsersRepository;
+        private SessionService sessionService;
 
         [SetUp]
         public void SetUp()
         {
-            _mockSessionRepository = new Mock<ISessionRepository>(MockBehavior.Strict);
-            _mockUsersRepository = new Mock<IUsersRepository>(MockBehavior.Strict);
-            _sessionService = new SessionService(_mockSessionRepository.Object, _mockUsersRepository.Object);
+            mockSessionRepository = new Mock<ISessionRepository>(MockBehavior.Strict);
+            mockUsersRepository = new Mock<IUsersRepository>(MockBehavior.Strict);
+            sessionService = new SessionService(mockSessionRepository.Object, mockUsersRepository.Object);
 
             // Clear the singleton session between tests
             UserSession.Instance.ClearSession();
@@ -64,16 +66,16 @@ namespace Tests.ServiceTests
                 ExpiresAt = DateTime.Now.AddHours(1)
             };
 
-            _mockSessionRepository.Setup(repo => repo.DeleteUserSessions(user.UserId));
-            _mockSessionRepository.Setup(repo => repo.CreateSession(user.UserId)).Returns(sessionDetails);
+            mockSessionRepository.Setup(repo => repo.DeleteUserSessions(user.UserId));
+            mockSessionRepository.Setup(repo => repo.CreateSession(user.UserId)).Returns(sessionDetails);
 
             // Act
-            var result = _sessionService.CreateNewSession(user);
+            var result = sessionService.CreateNewSession(user);
 
             // Assert
             Assert.That(result, Is.EqualTo(sessionDetails.SessionId));
-            _mockSessionRepository.Verify(repo => repo.DeleteUserSessions(user.UserId), Times.Once);
-            _mockSessionRepository.Verify(repo => repo.CreateSession(user.UserId), Times.Once);
+            mockSessionRepository.Verify(repo => repo.DeleteUserSessions(user.UserId), Times.Once);
+            mockSessionRepository.Verify(repo => repo.CreateSession(user.UserId), Times.Once);
         }
 
         [Test]
@@ -82,14 +84,14 @@ namespace Tests.ServiceTests
             // Arrange
             var sessionId = Guid.NewGuid();
             UserSession.Instance.UpdateSession(sessionId, 1, DateTime.Now, DateTime.Now.AddHours(1));
-            _mockSessionRepository.Setup(repo => repo.DeleteSession(sessionId));
+            mockSessionRepository.Setup(repo => repo.DeleteSession(sessionId));
 
             // Act
-            _sessionService.EndSession();
+            sessionService.EndSession();
 
             // Assert
             Assert.That(UserSession.Instance.CurrentSessionId, Is.Null);
-            _mockSessionRepository.Verify(repo => repo.DeleteSession(sessionId), Times.Once);
+            mockSessionRepository.Verify(repo => repo.DeleteSession(sessionId), Times.Once);
         }
 
         [Test]
@@ -99,14 +101,14 @@ namespace Tests.ServiceTests
             var userId = 1;
             var user = new User { UserId = userId };
             UserSession.Instance.UpdateSession(Guid.NewGuid(), userId, DateTime.Now, DateTime.Now.AddHours(1));
-            _mockUsersRepository.Setup(repo => repo.GetUserById(userId)).Returns(user);
+            mockUsersRepository.Setup(repo => repo.GetUserById(userId)).Returns(user);
 
             // Act
-            var result = _sessionService.GetCurrentUser();
+            var result = sessionService.GetCurrentUser();
 
             // Assert
             Assert.That(result, Is.EqualTo(user));
-            _mockUsersRepository.Verify(repo => repo.GetUserById(userId), Times.Once);
+            mockUsersRepository.Verify(repo => repo.GetUserById(userId), Times.Once);
         }
 
         [Test]
@@ -116,15 +118,15 @@ namespace Tests.ServiceTests
             var sessionId = Guid.NewGuid();
             // Set an expired session by setting ExpiresAt in the past
             UserSession.Instance.UpdateSession(sessionId, 1, DateTime.Now.AddHours(-2), DateTime.Now.AddHours(-1));
-            _mockSessionRepository.Setup(repo => repo.DeleteSession(sessionId));
+            mockSessionRepository.Setup(repo => repo.DeleteSession(sessionId));
 
             // Act
-            var result = _sessionService.GetCurrentUser();
+            var result = sessionService.GetCurrentUser();
 
             // Assert
             Assert.That(result, Is.Null);
             Assert.That(UserSession.Instance.CurrentSessionId, Is.Null);
-            _mockSessionRepository.Verify(repo => repo.DeleteSession(sessionId), Times.Once);
+            mockSessionRepository.Verify(repo => repo.DeleteSession(sessionId), Times.Once);
         }
 
         [Test]
@@ -134,7 +136,7 @@ namespace Tests.ServiceTests
             UserSession.Instance.UpdateSession(Guid.NewGuid(), 1, DateTime.Now, DateTime.Now.AddHours(1));
 
             // Act
-            var result = _sessionService.IsUserLoggedIn();
+            var result = sessionService.IsUserLoggedIn();
 
             // Assert
             Assert.That(result, Is.True);
@@ -153,14 +155,14 @@ namespace Tests.ServiceTests
                 ExpiresAt = DateTime.Now.AddHours(1)
             };
 
-            _mockSessionRepository.Setup(repo => repo.GetSessionById(sessionId)).Returns(sessionDetails);
+            mockSessionRepository.Setup(repo => repo.GetSessionById(sessionId)).Returns(sessionDetails);
 
             // Act
-            _sessionService.RestoreSessionFromDatabase(sessionId);
+            sessionService.RestoreSessionFromDatabase(sessionId);
 
             // Assert
             Assert.That(UserSession.Instance.CurrentSessionId, Is.EqualTo(sessionId));
-            _mockSessionRepository.Verify(repo => repo.GetSessionById(sessionId), Times.Once);
+            mockSessionRepository.Verify(repo => repo.GetSessionById(sessionId), Times.Once);
         }
 
         [Test]
@@ -178,16 +180,16 @@ namespace Tests.ServiceTests
                 ExpiresAt = DateTime.Now.AddHours(-1)
             };
 
-            _mockSessionRepository.Setup(repo => repo.GetSessionById(sessionId)).Returns(sessionDetails);
-            _mockSessionRepository.Setup(repo => repo.DeleteSession(sessionId));
+            mockSessionRepository.Setup(repo => repo.GetSessionById(sessionId)).Returns(sessionDetails);
+            mockSessionRepository.Setup(repo => repo.DeleteSession(sessionId));
 
             // Act
-            _sessionService.RestoreSessionFromDatabase(sessionId);
+            sessionService.RestoreSessionFromDatabase(sessionId);
 
             // Assert
             Assert.That(UserSession.Instance.CurrentSessionId, Is.Null);
-            _mockSessionRepository.Verify(repo => repo.GetSessionById(sessionId), Times.Once);
-            _mockSessionRepository.Verify(repo => repo.DeleteSession(sessionId), Times.Once);
+            mockSessionRepository.Verify(repo => repo.GetSessionById(sessionId), Times.Once);
+            mockSessionRepository.Verify(repo => repo.DeleteSession(sessionId), Times.Once);
         }
 
         [Test]
@@ -195,19 +197,19 @@ namespace Tests.ServiceTests
         {
             // Arrange
             var expiredSessionIds = new List<Guid> { Guid.NewGuid(), Guid.NewGuid() };
-            _mockSessionRepository.Setup(repo => repo.GetExpiredSessions()).Returns(expiredSessionIds);
+            mockSessionRepository.Setup(repo => repo.GetExpiredSessions()).Returns(expiredSessionIds);
             foreach (var sessionId in expiredSessionIds)
             {
-                _mockSessionRepository.Setup(repo => repo.DeleteSession(sessionId));
+                mockSessionRepository.Setup(repo => repo.DeleteSession(sessionId));
             }
 
             // Act
-            _sessionService.CleanupExpiredSessions();
+            sessionService.CleanupExpiredSessions();
 
             // Assert
             foreach (var sessionId in expiredSessionIds)
             {
-                _mockSessionRepository.Verify(repo => repo.DeleteSession(sessionId), Times.Once);
+                mockSessionRepository.Verify(repo => repo.DeleteSession(sessionId), Times.Once);
             }
         }
 
@@ -217,10 +219,10 @@ namespace Tests.ServiceTests
             // Arrange
             // Create some expired sessions
             var expiredSessionIds = new List<Guid> { Guid.NewGuid() };
-            _mockSessionRepository.Setup(repo => repo.GetExpiredSessions()).Returns(expiredSessionIds);
+            mockSessionRepository.Setup(repo => repo.GetExpiredSessions()).Returns(expiredSessionIds);
             foreach (var sessionId in expiredSessionIds)
             {
-                _mockSessionRepository.Setup(repo => repo.DeleteSession(sessionId));
+                mockSessionRepository.Setup(repo => repo.DeleteSession(sessionId));
             }
 
             // Setup a current session that is expired (thus invalid)
@@ -228,7 +230,7 @@ namespace Tests.ServiceTests
             UserSession.Instance.UpdateSession(currentSessionId, 1, DateTime.Now.AddHours(-2), DateTime.Now.AddHours(-1));
 
             // Act
-            _sessionService.CleanupExpiredSessions();
+            sessionService.CleanupExpiredSessions();
 
             // Assert
             Assert.That(UserSession.Instance.CurrentSessionId, Is.Null);

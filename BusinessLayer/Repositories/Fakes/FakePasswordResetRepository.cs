@@ -30,7 +30,7 @@ namespace BusinessLayer.Repositories.Fakes
                 return;
             }
             // Remove any existing code for this user
-            resetCodes.RemoveAll(rc => rc.UserId == userId);
+            resetCodes.RemoveAll(resetCode => resetCode.UserId == userId);
 
             // Add the new code
             resetCodes.Add(new ResetCode
@@ -44,10 +44,10 @@ namespace BusinessLayer.Repositories.Fakes
 
         public bool VerifyResetCode(string email, string code)
         {
-            var resetCode = resetCodes.FirstOrDefault(rc =>
-                rc.Email == email &&
-                rc.Code == code &&
-                rc.ExpiryTime > DateTime.Now);
+            var resetCode = resetCodes.FirstOrDefault(resetCode =>
+                resetCode.Email == email &&
+                resetCode.Code == code &&
+                resetCode.ExpiryTime > DateTime.Now);
 
             return resetCode != null;
         }
@@ -61,13 +61,13 @@ namespace BusinessLayer.Repositories.Fakes
             }
 
             // Remove the used code
-            resetCodes.RemoveAll(rc => rc.Email == email);
+            resetCodes.RemoveAll(resetCode => resetCode.Email == email);
             return true;
         }
 
         public void CleanupExpiredCodes()
         {
-            resetCodes.RemoveAll(rc => rc.ExpiryTime <= DateTime.Now);
+            resetCodes.RemoveAll(resetCode => resetCode.ExpiryTime <= DateTime.Now);
         }
 
         // Helper method to simulate getting email from userId

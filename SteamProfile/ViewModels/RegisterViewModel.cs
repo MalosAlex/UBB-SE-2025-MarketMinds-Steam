@@ -1,12 +1,12 @@
+using System;
+using System.Threading.Tasks;
+using System.Linq;
 using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
 using Microsoft.UI.Xaml.Controls;
 using BusinessLayer.Models;
 using BusinessLayer.Services;
 using SteamProfile.Views;
-using System;
-using System.Threading.Tasks;
-using System.Linq;
 using BusinessLayer.Exceptions;
 using BusinessLayer.Validators;
 using Windows.UI.WebUI;
@@ -17,10 +17,10 @@ namespace SteamProfile.ViewModels
 {
     public partial class RegisterViewModel : ObservableObject
     {
-        private IWalletService _walletService { get; set; }
-        private IUserService _userService {  get; set; }
-        private IUserProfilesRepository _userProfilesRepository { get; set; }
-        private readonly Frame _frame;
+        private IWalletService WalletService { get; set; }
+        private IUserService UserService { get; set; }
+        private IUserProfilesRepository UserProfilesRepository { get; set; }
+        private readonly Frame frame;
 
         [ObservableProperty]
         private string username;
@@ -43,10 +43,10 @@ namespace SteamProfile.ViewModels
 
         public RegisterViewModel(Frame frame)
         {
-            _walletService = App.WalletService;
-            _userService = App.UserService;
-            _userProfilesRepository = App.UserProfileRepository;
-            _frame = frame;
+            WalletService = App.WalletService;
+            UserService = App.UserService;
+            UserProfilesRepository = App.UserProfileRepository;
+            this.frame = frame;
         }
 
         [RelayCommand]
@@ -71,7 +71,7 @@ namespace SteamProfile.ViewModels
                 }
 
                 // Ensure email and username are unique
-                _userService.ValidateUserAndEmail(Email, Username);
+                UserService.ValidateUserAndEmail(Email, Username);
 
                 // Validate the password
                 if (Password != ConfirmPassword)
@@ -94,15 +94,14 @@ namespace SteamProfile.ViewModels
                     IsDeveloper = IsDeveloper
                 };
 
-
-                var createdUser = _userService.CreateUser(user);
+                var createdUser = UserService.CreateUser(user);
 
                 if (createdUser != null)
                 {
                     // Navigate to login page on successful registration
-                    _userProfilesRepository.CreateProfile(createdUser.UserId);
-                    _walletService.CreateWallet(createdUser.UserId);
-                    _frame.Navigate(typeof(LoginPage));
+                    UserProfilesRepository.CreateProfile(createdUser.UserId);
+                    WalletService.CreateWallet(createdUser.UserId);
+                    frame.Navigate(typeof(LoginPage));
                 }
                 else
                 {
@@ -126,7 +125,7 @@ namespace SteamProfile.ViewModels
         [RelayCommand]
         private void NavigateToLogin()
         {
-            _frame.Navigate(typeof(LoginPage));
+            frame.Navigate(typeof(LoginPage));
         }
     }
-} 
+}

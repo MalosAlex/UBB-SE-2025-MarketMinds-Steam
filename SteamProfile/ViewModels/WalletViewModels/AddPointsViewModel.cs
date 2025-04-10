@@ -1,13 +1,13 @@
-﻿using CommunityToolkit.Mvvm.ComponentModel;
+﻿using System;
+using System.Collections.ObjectModel;
+using System.Threading.Tasks;
+using System.Windows.Input;
+using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
 using Microsoft.UI.Xaml;
 using Microsoft.UI.Xaml.Controls;
 using BusinessLayer.Models;
 using BusinessLayer.Repositories;
-using System;
-using System.Collections.ObjectModel;
-using System.Threading.Tasks;
-using System.Windows.Input;
 using BusinessLayer.Repositories.Interfaces;
 
 namespace SteamProfile.ViewModels
@@ -40,13 +40,17 @@ namespace SteamProfile.ViewModels
             PurchasePointsCommand = new RelayCommand<PointsOffer>(BuyPoints, CanBuyPoints);
         }
 
-        private bool CanBuyPoints(PointsOffer pointsOffer) => pointsOffer != null && !IsProcessing;
+        private bool CanBuyPoints(PointsOffer pointsOffer)
+        {
+            return pointsOffer != null && !IsProcessing;
+        }
 
         private async void BuyPoints(PointsOffer pointsOffer)
         {
             if (pointsOffer == null)
+            {
                 return;
-
+            }
             IsProcessing = true;
 
             try

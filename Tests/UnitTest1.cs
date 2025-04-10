@@ -14,7 +14,6 @@ namespace Tests
         {
             int a = 5;
             Assert.That(a, Is.EqualTo(5));
-
         }
     }
 }

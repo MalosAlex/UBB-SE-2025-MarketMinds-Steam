@@ -60,7 +60,7 @@ namespace BusinessLayer.Validators
 
             if (!isPurchased)
             {
-                return (false, "Feature must be purchased before equipping.");
+                return (false, "Feature is not purchased by the user.");
             }
 
             return (true, string.Empty);

@@ -7,17 +7,17 @@ namespace SteamProfile.ViewModels
 {
     public partial class ShopViewModel : ObservableObject
     {
-        private readonly Frame _frame;
+        private readonly Frame shopViewModelFrame;
 
         public ShopViewModel(Frame frame)
         {
-            _frame = frame;
+            shopViewModelFrame = frame;
         }
 
         [RelayCommand]
         private void NavigateBack()
         {
-            _frame.GoBack();
+            shopViewModelFrame.GoBack();
         }
     }
-} 
+}

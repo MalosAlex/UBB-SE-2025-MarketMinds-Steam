@@ -20,7 +20,12 @@ namespace BusinessLayer.Repositories
             try
             {
                 // First, delete any existing reset codes for this user
-                DeleteExistingResetCodes(userId);
+                var deleteParameters = new SqlParameter[]
+                {
+                    new SqlParameter("@userId", userId)
+                };
+
+                dataLink.ExecuteNonQuery("DeleteExistingResetCodes", deleteParameters);
 
                 // Then store the new reset code
                 var parameters = new SqlParameter[]
@@ -32,26 +37,9 @@ namespace BusinessLayer.Repositories
 
                 dataLink.ExecuteNonQuery("StorePasswordResetCode", parameters);
             }
-            catch (DatabaseOperationException ex)
+            catch (DatabaseOperationException exception)
             {
-                throw new RepositoryException($"Failed to store reset code for user {userId}.", ex);
-            }
-        }
-
-        private void DeleteExistingResetCodes(int userId)
-        {
-            try
-            {
-                var parameters = new SqlParameter[]
-                {
-                    new SqlParameter("@userId", userId)
-                };
-
-                dataLink.ExecuteNonQuery("DeleteExistingResetCodes", parameters);
-            }
-            catch (DatabaseOperationException ex)
-            {
-                throw new RepositoryException($"Failed to delete existing reset codes for user {userId}.", ex);
+                throw new RepositoryException($"Failed to store reset code for user {userId}.", exception);
             }
         }
 
@@ -66,9 +54,9 @@ namespace BusinessLayer.Repositories
                 };
 
                 // Get the reset code data from database
-                DataTable result = dataLink.ExecuteReader("GetResetCodeData", parameters);
+                DataTable result = dataLink.ExecuteReader("GetResetCodeByEmailAndCode", parameters);
 
-                // Implement business logic in the application layer
+                // Check if the reset code exists and is valid
                 if (result.Rows.Count > 0)
                 {
                     DataRow row = result.Rows[0];
@@ -81,9 +69,9 @@ namespace BusinessLayer.Repositories
 
                 return false;
             }
-            catch (DatabaseOperationException ex)
+            catch (DatabaseOperationException exception)
             {
-                throw new RepositoryException("Failed to verify reset code.", ex);
+                throw new RepositoryException("Failed to verify reset code.", exception);
             }
         }
 
@@ -91,18 +79,13 @@ namespace BusinessLayer.Repositories
         {
             try
             {
-                // First verify the reset code is valid
-                if (!VerifyResetCode(email, code))
+                // Get the user ID for the email and verify the reset code
+                var parameters = new SqlParameter[]
                 {
-                    return false;
-                }
-
-                // Get the user ID for the email
-                var userIdParams = new SqlParameter[]
-                {
-                    new SqlParameter("@email", email)
+                    new SqlParameter("@email", email),
+                    new SqlParameter("@resetCode", code)
                 };
-                var userTable = dataLink.ExecuteReader("GetUserByEmail", userIdParams);
+                var userTable = dataLink.ExecuteReader("GetResetCodeByEmailAndCode", parameters);
 
                 if (userTable.Rows.Count == 0)
                 {
@@ -111,20 +94,19 @@ namespace BusinessLayer.Repositories
 
                 int userId = (int)userTable.Rows[0]["user_id"];
 
-                // Update the password and remove the reset code
-                var parameters = new SqlParameter[]
+                // Update the password and mark the reset code as used
+                var updateParameters = new SqlParameter[]
                 {
                     new SqlParameter("@userId", userId),
-                    new SqlParameter("@resetCode", code),
                     new SqlParameter("@newPassword", hashedPassword)
                 };
 
-                var result = dataLink.ExecuteScalar<int>("UpdatePasswordAndRemoveResetCode", parameters);
-                return result == 1;
+                int rowsAffected = dataLink.ExecuteNonQuery("UpdatePasswordAndMarkResetCodeUsed", updateParameters);
+                return rowsAffected > 0;
             }
-            catch (DatabaseOperationException ex)
+            catch (DatabaseOperationException exception)
             {
-                throw new RepositoryException("Failed to reset password.", ex);
+                throw new RepositoryException("Failed to reset password.", exception);
             }
         }
 
@@ -132,11 +114,11 @@ namespace BusinessLayer.Repositories
         {
             try
             {
-                dataLink.ExecuteNonQuery("CleanupResetCodes");
+                dataLink.ExecuteNonQuery("CleanupExpiredResetCodes", new SqlParameter[0]);
             }
-            catch (DatabaseOperationException ex)
+            catch (DatabaseOperationException exception)
             {
-                throw new RepositoryException("Failed to cleanup expired reset codes.", ex);
+                throw new RepositoryException("Failed to cleanup expired reset codes.", exception);
             }
         }
     }

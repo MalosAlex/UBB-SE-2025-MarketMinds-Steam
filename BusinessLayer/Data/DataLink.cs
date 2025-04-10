@@ -9,8 +9,42 @@ namespace BusinessLayer.Data
     public sealed partial class DataLink : IDataLink
     {
         private static readonly Lazy<DataLink> DataLinkInstance = new(() => new DataLink());
+
+        // Constants for configuration keys and error messages
+        private const string AppSettingsFileName = "appsettings.json";
+        private const bool OptionalAppSettings = false;
+        private const bool ReloadOnChange = true;
+
+        private const string LocalDataSourceKey = "LocalDataSource";
+        private const string InitialCatalogKey = "InitialCatalog";
+        private const string UserIdKey = "UserId";
+        private const string PasswordKey = "Password";
+
+        private const string MissingConfigErrorMessage = "Database connection settings are missing in appsettings.json";
+        private const string ConnectionInitErrorMessage = "Failed to initialize database connection.";
+        private const string ConnectionFailedErrorMessage = "Failed to establish database connection. Please check your connection settings.";
+
+        private const string ExecuteScalarErrorMessage = "Database error during ExecuteScalar operation: ";
+        private const string ExecuteScalarCastErrorMessage = "Error during ExecuteScalar operation: ";
+        private const string ExecuteScalarUnexpectedErrorMessage = "Unexpected error during ExecuteScalar operation: ";
+
+        private const string ExecuteReaderErrorMessage = "Database error during ExecuteReader operation: ";
+        private const string ExecuteReaderUnexpectedErrorMessage = "Error during ExecuteReader operation: ";
+
+        private const string ExecuteNonQueryErrorMessage = "Database error during ExecuteNonQuery operation: ";
+        private const string ExecuteNonQueryUnexpectedErrorMessage = "Error during ExecuteNonQuery operation: ";
+
+        private const string ExecuteReaderAsyncErrorMessage = "Database error during ExecuteReaderAsync operation: ";
+        private const string ExecuteReaderAsyncUnexpectedErrorMessage = "Error during ExecuteReaderAsync operation: ";
+
+        private const string ExecuteNonQueryAsyncErrorMessage = "Database error during ExecuteNonQueryAsync operation: ";
+        private const string ExecuteNonQueryAsyncUnexpectedErrorMessage = "Error during ExecuteNonQueryAsync operation: ";
+
+        private const bool UseIntegratedSecurity = true;
+        private const bool TrustServerCertificate = true;
+
         private readonly string connectionString;
-        private bool disposed;
+        private bool isConnectionDisposed;
 
         private DataLink()
         {
@@ -18,21 +52,21 @@ namespace BusinessLayer.Data
             {
                 var config = new ConfigurationBuilder()
                     .SetBasePath(AppDomain.CurrentDomain.BaseDirectory)
-                    .AddJsonFile("appsettings.json", optional: false, reloadOnChange: true)
+                    .AddJsonFile(AppSettingsFileName, OptionalAppSettings, ReloadOnChange)
                     .Build();
 
-                string? localDataSource = config["LocalDataSource"];
-                string? initialCatalog = config["InitialCatalog"];
-                string? userId = config["UserId"];
-                string? password = config["Password"];
+                string? localDataSource = config[LocalDataSourceKey];
+                string? initialCatalog = config[InitialCatalogKey];
+                string? userId = config[UserIdKey];
+                string? password = config[PasswordKey];
 
                 if (string.IsNullOrWhiteSpace(localDataSource) || string.IsNullOrWhiteSpace(initialCatalog))
                 {
-                    throw new ConfigurationErrorsException("Database connection settings are missing in appsettings.json");
+                    throw new ConfigurationErrorsException(MissingConfigErrorMessage);
                 }
 
-                // connectionString = $"Data Source={localDataSource};Initial Catalog={initialCatalog};User Id={userId};Password={password};TrustServerCertificate=True;";
-                connectionString = $"Data Source={localDataSource};Initial Catalog={initialCatalog};Integrated Security=True;TrustServerCertificate=True;";
+                // Integrated Security connection string
+                connectionString = $"Data Source={localDataSource};Initial Catalog={initialCatalog};Integrated Security={UseIntegratedSecurity};TrustServerCertificate={TrustServerCertificate};";
 
                 // Test the connection immediately
                 using var testConnection = new SqlConnection(connectionString);
@@ -40,11 +74,11 @@ namespace BusinessLayer.Data
             }
             catch (SqlException ex)
             {
-                throw new DatabaseConnectionException("Failed to establish database connection. Please check your connection settings.", ex);
+                throw new DatabaseConnectionException(ConnectionFailedErrorMessage, ex);
             }
             catch (Exception ex)
             {
-                throw new ConfigurationErrorsException("Failed to initialize database connection.", ex);
+                throw new ConfigurationErrorsException(ConnectionInitErrorMessage, ex);
             }
         }
 
@@ -52,7 +86,7 @@ namespace BusinessLayer.Data
 
         private SqlConnection CreateConnection()
         {
-            if (disposed)
+            if (isConnectionDisposed)
             {
                 throw new ObjectDisposedException(nameof(DataLink));
             }
@@ -92,15 +126,15 @@ namespace BusinessLayer.Data
             }
             catch (SqlException ex)
             {
-                throw new DatabaseOperationException($"Database error during ExecuteScalar operation: {ex.Message}", ex);
+                throw new DatabaseOperationException(ExecuteScalarErrorMessage + ex.Message, ex);
             }
             catch (InvalidCastException ex)
             {
-                throw new DatabaseOperationException($"Error during ExecuteScalar operation: {ex.Message}", ex);
+                throw new DatabaseOperationException(ExecuteScalarCastErrorMessage + ex.Message, ex);
             }
             catch (Exception ex)
             {
-                throw new DatabaseOperationException($"Unexpected error during ExecuteScalar operation: {ex.Message}", ex);
+                throw new DatabaseOperationException(ExecuteScalarUnexpectedErrorMessage + ex.Message, ex);
             }
         }
 
@@ -128,11 +162,11 @@ namespace BusinessLayer.Data
             }
             catch (SqlException ex)
             {
-                throw new DatabaseOperationException($"Database error during ExecuteReader operation: {ex.Message}", ex);
+                throw new DatabaseOperationException(ExecuteReaderErrorMessage + ex.Message, ex);
             }
             catch (Exception ex)
             {
-                throw new DatabaseOperationException($"Error during ExecuteReader operation: {ex.Message}", ex);
+                throw new DatabaseOperationException(ExecuteReaderUnexpectedErrorMessage + ex.Message, ex);
             }
         }
 
@@ -157,11 +191,11 @@ namespace BusinessLayer.Data
             }
             catch (SqlException ex)
             {
-                throw new DatabaseOperationException($"Database error during ExecuteNonQuery operation: {ex.Message}", ex);
+                throw new DatabaseOperationException(ExecuteNonQueryErrorMessage + ex.Message, ex);
             }
             catch (Exception ex)
             {
-                throw new DatabaseOperationException($"Error during ExecuteNonQuery operation: {ex.Message}", ex);
+                throw new DatabaseOperationException(ExecuteNonQueryUnexpectedErrorMessage + ex.Message, ex);
             }
         }
 
@@ -188,11 +222,11 @@ namespace BusinessLayer.Data
             }
             catch (SqlException ex)
             {
-                throw new DatabaseOperationException($"Database error during ExecuteReaderAsync operation: {ex.Message}", ex);
+                throw new DatabaseOperationException(ExecuteReaderAsyncErrorMessage + ex.Message, ex);
             }
             catch (Exception ex)
             {
-                throw new DatabaseOperationException($"Error during ExecuteReaderAsync operation: {ex.Message}", ex);
+                throw new DatabaseOperationException(ExecuteReaderAsyncUnexpectedErrorMessage + ex.Message, ex);
             }
         }
 
@@ -216,11 +250,11 @@ namespace BusinessLayer.Data
             }
             catch (SqlException ex)
             {
-                throw new DatabaseOperationException($"Database error during ExecuteNonQueryAsync operation: {ex.Message}", ex);
+                throw new DatabaseOperationException(ExecuteNonQueryAsyncErrorMessage + ex.Message, ex);
             }
             catch (Exception ex)
             {
-                throw new DatabaseOperationException($"Error during ExecuteNonQueryAsync operation: {ex.Message}", ex);
+                throw new DatabaseOperationException(ExecuteNonQueryAsyncUnexpectedErrorMessage + ex.Message, ex);
             }
         }
 
@@ -230,11 +264,11 @@ namespace BusinessLayer.Data
             GC.SuppressFinalize(this);
         }
 
-        private void Dispose(bool disposing)
+        private void Dispose(bool disposingStatus)
         {
-            if (!disposed)
+            if (!isConnectionDisposed)
             {
-                disposed = true;
+                isConnectionDisposed = disposingStatus;
             }
         }
     }

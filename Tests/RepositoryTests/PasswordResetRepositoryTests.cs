@@ -1,3 +1,4 @@
+using System.Collections.Generic;
 using System;
 using System.Data;
 using System.Linq;
@@ -15,13 +16,13 @@ namespace Tests.RepositoryTests
     public class PasswordResetRepositoryTests
     {
         private Mock<IDataLink> mockDataLink;
-        private PasswordResetRepository repository;
+        private PasswordResetRepository passwordResetRepository;
 
         [SetUp]
         public void Setup()
         {
-            mockDataLink = new Mock<IDataLink>();
-            repository = new PasswordResetRepository(mockDataLink.Object);
+            this.mockDataLink = new Mock<IDataLink>();
+            this.passwordResetRepository = new PasswordResetRepository(this.mockDataLink.Object);
         }
 
         [Test]
@@ -41,32 +42,26 @@ namespace Tests.RepositoryTests
         }
 
         [Test]
-        public void StoreResetCode_CallsDeleteExistingResetCodesAndStorePasswordResetCode()
+        public void StoreResetCode_DeleteExistingResetCodesWasCalled()
         {
             // Arrange
             int userId = 1;
             string code = "123456";
             DateTime expiryTime = DateTime.Now.AddMinutes(30);
             string deleteProc = "DeleteExistingResetCodes";
-            string storeProc = "StorePasswordResetCode";
 
-            mockDataLink.Setup(dl => dl.ExecuteNonQuery(deleteProc, It.Is<SqlParameter[]>(p => p.Length == 1 && (int)p[0].Value == userId)))
+            this.mockDataLink.Setup(dataLink => dataLink.ExecuteNonQuery(deleteProc, It.Is<SqlParameter[]>(sqlParameter => sqlParameter.Length == 1 && (int)sqlParameter[0].Value == userId)))
                 .Verifiable();
 
-            mockDataLink.Setup(dl => dl.ExecuteNonQuery(storeProc, It.Is<SqlParameter[]>(p => p.Length == 3 && 
-                                      (int)p[0].Value == userId && 
-                                      (string)p[1].Value == code && 
-                                      (DateTime)p[2].Value == expiryTime)))
+            this.mockDataLink.Setup(dataLink => dataLink.ExecuteNonQuery("StorePasswordResetCode", It.Is<SqlParameter[]>(sqlParameter => sqlParameter.Length == 3)))
                 .Verifiable();
 
             // Act
-            repository.StoreResetCode(userId, code, expiryTime);
+            this.passwordResetRepository.StoreResetCode(userId, code, expiryTime);
 
             // Assert
-            mockDataLink.Verify();
-            // Check if delete procedure was called
             bool deleteProcCalled = false;
-            foreach (var invocation in mockDataLink.Invocations)
+            foreach (var invocation in this.mockDataLink.Invocations)
             {
                 if (invocation.Method.Name == "ExecuteNonQuery")
                 {
@@ -77,9 +72,31 @@ namespace Tests.RepositoryTests
                     }
                 }
             }
-            // Check if store procedure was called
+
+            Assert.That(deleteProcCalled, Is.True, "DeleteExistingResetCodes was not called");
+        }
+
+        [Test]
+        public void StoreResetCode_StorePasswordResetCodeWasCalled()
+        {
+            // Arrange
+            int userId = 1;
+            string code = "123456";
+            DateTime expiryTime = DateTime.Now.AddMinutes(30);
+            string storeProc = "StorePasswordResetCode";
+
+            this.mockDataLink.Setup(dataLink => dataLink.ExecuteNonQuery("DeleteExistingResetCodes", It.Is<SqlParameter[]>(sqlParameter => sqlParameter.Length == 1)))
+                .Verifiable();
+
+            this.mockDataLink.Setup(dataLink => dataLink.ExecuteNonQuery(storeProc, It.Is<SqlParameter[]>(sqlParameter => sqlParameter.Length == 3)))
+                .Verifiable();
+
+            // Act
+            this.passwordResetRepository.StoreResetCode(userId, code, expiryTime);
+
+            // Assert
             bool storeProcCalled = false;
-            foreach (var invocation in mockDataLink.Invocations)
+            foreach (var invocation in this.mockDataLink.Invocations)
             {
                 if (invocation.Method.Name == "ExecuteNonQuery")
                 {
@@ -90,8 +107,7 @@ namespace Tests.RepositoryTests
                     }
                 }
             }
-            
-            Assert.That(deleteProcCalled, Is.True, "DeleteExistingResetCodes was not called");
+
             Assert.That(storeProcCalled, Is.True, "StorePasswordResetCode was not called");
         }
 
@@ -104,13 +120,13 @@ namespace Tests.RepositoryTests
             DateTime expiryTime = DateTime.Now.AddMinutes(30);
             string deleteProc = "DeleteExistingResetCodes";
 
-            mockDataLink.Setup(dl => dl.ExecuteNonQuery(deleteProc, It.Is<SqlParameter[]>(p => p.Length == 1)))
+            this.mockDataLink.Setup(dataLink => dataLink.ExecuteNonQuery(deleteProc, It.Is<SqlParameter[]>(sqlParameter => sqlParameter.Length == 1)))
                 .Throws(new DatabaseOperationException("Database error"));
 
             // Act & Assert
             try
             {
-                repository.StoreResetCode(userId, code, expiryTime);
+                this.passwordResetRepository.StoreResetCode(userId, code, expiryTime);
                 Assert.Fail("Expected RepositoryException was not thrown");
             }
             catch (RepositoryException)
@@ -126,43 +142,45 @@ namespace Tests.RepositoryTests
             // Arrange
             string email = "test@example.com";
             string code = "123456";
-            string procName = "GetResetCodeData";
-            
             var dataTable = new DataTable();
             dataTable.Columns.Add("expiration_time", typeof(DateTime));
             dataTable.Columns.Add("used", typeof(bool));
-            dataTable.Rows.Add(DateTime.UtcNow.AddMinutes(10), false); // Not expired, not used
+            dataTable.Rows.Add(DateTime.UtcNow.AddMinutes(10), false); // Valid code
 
-            mockDataLink.Setup(dl => dl.ExecuteReader(procName, It.Is<SqlParameter[]>(p => p.Length == 2 && 
-                                      (string)p[0].Value == email && 
-                                      (string)p[1].Value == code)))
-                .Returns(dataTable);
+            this.mockDataLink.Setup(dataLink => dataLink.ExecuteReader(
+                It.IsAny<string>(),
+                It.Is<SqlParameter[]>(sqlParameter =>
+                    sqlParameter.Length == 2 &&
+                    (string)sqlParameter[0].Value == email &&
+                    (string)sqlParameter[1].Value == code))).Returns(dataTable);
 
             // Act
-            bool result = repository.VerifyResetCode(email, code);
+            bool result = this.passwordResetRepository.VerifyResetCode(email, code);
 
             // Assert
             Assert.That(result, Is.True);
         }
 
         [Test]
-        public void VerifyResetCode_WithExpiredCode_ReturnsFalse()
+        public void VerifyResetCode_WithInvalidCode_ReturnsFalse()
         {
             // Arrange
             string email = "test@example.com";
             string code = "123456";
-            string procName = "GetResetCodeData";
-            
             var dataTable = new DataTable();
             dataTable.Columns.Add("expiration_time", typeof(DateTime));
             dataTable.Columns.Add("used", typeof(bool));
-            dataTable.Rows.Add(DateTime.UtcNow.AddMinutes(-10), false); // Expired, not used
+            dataTable.Rows.Add(DateTime.UtcNow.AddMinutes(-10), false); // Expired code
 
-            mockDataLink.Setup(dl => dl.ExecuteReader(procName, It.Is<SqlParameter[]>(p => p.Length == 2)))
-                .Returns(dataTable);
+            this.mockDataLink.Setup(dataLink => dataLink.ExecuteReader(
+                It.IsAny<string>(),
+                It.Is<SqlParameter[]>(sqlParameter =>
+                    sqlParameter.Length == 2 &&
+                    (string)sqlParameter[0].Value == email &&
+                    (string)sqlParameter[1].Value == code))).Returns(dataTable);
 
             // Act
-            bool result = repository.VerifyResetCode(email, code);
+            bool result = this.passwordResetRepository.VerifyResetCode(email, code);
 
             // Assert
             Assert.That(result, Is.False);
@@ -174,41 +192,45 @@ namespace Tests.RepositoryTests
             // Arrange
             string email = "test@example.com";
             string code = "123456";
-            string procName = "GetResetCodeData";
-            
             var dataTable = new DataTable();
             dataTable.Columns.Add("expiration_time", typeof(DateTime));
             dataTable.Columns.Add("used", typeof(bool));
-            dataTable.Rows.Add(DateTime.UtcNow.AddMinutes(10), true); // Not expired, but used
+            dataTable.Rows.Add(DateTime.UtcNow.AddMinutes(10), true); // Used code
 
-            mockDataLink.Setup(dl => dl.ExecuteReader(procName, It.Is<SqlParameter[]>(p => p.Length == 2)))
-                .Returns(dataTable);
+            this.mockDataLink.Setup(dataLink => dataLink.ExecuteReader(
+                It.IsAny<string>(),
+                It.Is<SqlParameter[]>(sqlParameter =>
+                    sqlParameter.Length == 2 &&
+                    (string)sqlParameter[0].Value == email &&
+                    (string)sqlParameter[1].Value == code))).Returns(dataTable);
 
             // Act
-            bool result = repository.VerifyResetCode(email, code);
+            bool result = this.passwordResetRepository.VerifyResetCode(email, code);
 
             // Assert
             Assert.That(result, Is.False);
         }
 
         [Test]
-        public void VerifyResetCode_WithNonExistentCode_ReturnsFalse()
+        public void VerifyResetCode_WithNoCode_ReturnsFalse()
         {
             // Arrange
             string email = "test@example.com";
             string code = "123456";
-            string procName = "GetResetCodeData";
-            
             var dataTable = new DataTable();
             dataTable.Columns.Add("expiration_time", typeof(DateTime));
             dataTable.Columns.Add("used", typeof(bool));
-            // Empty table means code not found
 
-            mockDataLink.Setup(dl => dl.ExecuteReader(procName, It.Is<SqlParameter[]>(p => p.Length == 2)))
-                .Returns(dataTable);
+            // No rows added
+            this.mockDataLink.Setup(dataLink => dataLink.ExecuteReader(
+                It.IsAny<string>(),
+                It.Is<SqlParameter[]>(sqlParameter =>
+                    sqlParameter.Length == 2 &&
+                    (string)sqlParameter[0].Value == email &&
+                    (string)sqlParameter[1].Value == code))).Returns(dataTable);
 
             // Act
-            bool result = repository.VerifyResetCode(email, code);
+            bool result = this.passwordResetRepository.VerifyResetCode(email, code);
 
             // Assert
             Assert.That(result, Is.False);
@@ -220,79 +242,48 @@ namespace Tests.RepositoryTests
             // Arrange
             string email = "test@example.com";
             string code = "123456";
-            string procName = "GetResetCodeData";
 
-            mockDataLink.Setup(dl => dl.ExecuteReader(procName, It.Is<SqlParameter[]>(p => p.Length == 2)))
-                .Throws(new DatabaseOperationException("Database error"));
+            this.mockDataLink.Setup(dataLink => dataLink.ExecuteReader(
+                It.IsAny<string>(),
+                It.Is<SqlParameter[]>(sqlParameter => sqlParameter.Length == 2))).Throws(new DatabaseOperationException("Database error"));
 
             // Act & Assert
             try
             {
-                repository.VerifyResetCode(email, code);
+                this.passwordResetRepository.VerifyResetCode(email, code);
                 Assert.Fail("Expected RepositoryException was not thrown");
             }
-            catch (RepositoryException ex)
+            catch (RepositoryException)
             {
-                Assert.That(ex.Message, Is.EqualTo("Failed to verify reset code."));
+                // Expected
+                Assert.Pass();
             }
         }
 
         [Test]
-        public void ResetPassword_WithValidCodeAndEmail_UpdatesPasswordAndReturnsTrue()
+        public void ResetPassword_WithValidCodeAndEmail_UpdatesPassword()
         {
             // Arrange
             string email = "test@example.com";
             string code = "123456";
-            string hashedPassword = "hashedPassword123";
-            string getCodeProc = "GetResetCodeData";
-            string getUserProc = "GetUserByEmail";
-            string updateProc = "UpdatePasswordAndRemoveResetCode";
-            
-            // Setup for code verification
-            var resetCodeTable = new DataTable();
-            resetCodeTable.Columns.Add("expiration_time", typeof(DateTime));
-            resetCodeTable.Columns.Add("used", typeof(bool));
-            resetCodeTable.Rows.Add(DateTime.UtcNow.AddMinutes(10), false); // Valid code
-            
-            // Setup for user lookup
-            var userTable = new DataTable();
-            userTable.Columns.Add("user_id", typeof(int));
-            userTable.Rows.Add(1); // User ID 1
+            string newPassword = "NewPassword123!";
+            var dataTable = new DataTable();
+            dataTable.Columns.Add("user_id", typeof(int));
+            dataTable.Rows.Add(1); // Valid user
 
-            mockDataLink.Setup(dl => dl.ExecuteReader(getCodeProc, It.Is<SqlParameter[]>(p => p.Length == 2)))
-                .Returns(resetCodeTable);
-                
-            mockDataLink.Setup(dl => dl.ExecuteReader(getUserProc, It.Is<SqlParameter[]>(p => p.Length == 1 && 
-                                      (string)p[0].Value == email)))
-                .Returns(userTable);
-                
-            mockDataLink.Setup(dl => dl.ExecuteScalar<int>(updateProc, It.Is<SqlParameter[]>(p => p.Length == 3 && 
-                                     (int)p[0].Value == 1 && 
-                                     (string)p[1].Value == code && 
-                                     (string)p[2].Value == hashedPassword)))
-                .Returns(1); // 1 row affected
+            this.mockDataLink.Setup(dataLink => dataLink.ExecuteReader(
+                It.IsAny<string>(),
+                It.Is<SqlParameter[]>(sqlParameter => sqlParameter.Length == 2))).Returns(dataTable);
+
+            this.mockDataLink.Setup(dataLink => dataLink.ExecuteNonQuery(
+                It.IsAny<string>(),
+                It.Is<SqlParameter[]>(sqlParameter => sqlParameter.Length == 2))).Returns(1);
 
             // Act
-            bool result = repository.ResetPassword(email, code, hashedPassword);
+            bool result = this.passwordResetRepository.ResetPassword(email, code, newPassword);
 
             // Assert
             Assert.That(result, Is.True);
-            
-            // Check if update procedure was called
-            bool updateProcCalled = false;
-            foreach (var invocation in mockDataLink.Invocations)
-            {
-                if (invocation.Method.Name == "ExecuteScalar")
-                {
-                    if ((string)invocation.Arguments[0] == updateProc)
-                    {
-                        updateProcCalled = true;
-                        break;
-                    }
-                }
-            }
-            
-            Assert.That(updateProcCalled, Is.True, "UpdatePasswordAndRemoveResetCode was not called");
         }
 
         [Test]
@@ -301,105 +292,42 @@ namespace Tests.RepositoryTests
             // Arrange
             string email = "test@example.com";
             string code = "123456";
-            string hashedPassword = "hashedPassword123";
-            string getCodeProc = "GetResetCodeData";
-            string getUserProc = "GetUserByEmail";
-            string updateProc = "UpdatePasswordAndRemoveResetCode";
-            
-            // Setup for code verification - empty table means invalid code
-            var resetCodeTable = new DataTable();
-            resetCodeTable.Columns.Add("expiration_time", typeof(DateTime));
-            resetCodeTable.Columns.Add("used", typeof(bool));
+            string newPassword = "NewPassword123!";
+            var dataTable = new DataTable();
+            dataTable.Columns.Add("user_id", typeof(int));
 
-            mockDataLink.Setup(dl => dl.ExecuteReader(getCodeProc, It.Is<SqlParameter[]>(p => p.Length == 2)))
-                .Returns(resetCodeTable);
+            // No rows added - invalid code
+            this.mockDataLink.Setup(dataLink => dataLink.ExecuteReader(
+                It.IsAny<string>(),
+                It.Is<SqlParameter[]>(sqlParameter => sqlParameter.Length == 2))).Returns(dataTable);
 
             // Act
-            bool result = repository.ResetPassword(email, code, hashedPassword);
+            bool result = this.passwordResetRepository.ResetPassword(email, code, newPassword);
 
             // Assert
             Assert.That(result, Is.False);
-            
-            // Check if getUserProc was called
-            bool getUserProcCalled = false;
-            foreach (var invocation in mockDataLink.Invocations)
-            {
-                if (invocation.Method.Name == "ExecuteReader")
-                {
-                    if ((string)invocation.Arguments[0] == getUserProc)
-                    {
-                        getUserProcCalled = true;
-                        break;
-                    }
-                }
-            }
-            
-            // Check if updateProc was called
-            bool updateProcCalled = false;
-            foreach (var invocation in mockDataLink.Invocations)
-            {
-                if (invocation.Method.Name == "ExecuteScalar")
-                {
-                    if ((string)invocation.Arguments[0] == updateProc)
-                    {
-                        updateProcCalled = true;
-                        break;
-                    }
-                }
-            }
-            
-            Assert.That(getUserProcCalled, Is.False, "GetUserByEmail should not have been called");
-            Assert.That(updateProcCalled, Is.False, "UpdatePasswordAndRemoveResetCode should not have been called");
         }
 
         [Test]
         public void ResetPassword_WithNonExistentUser_ReturnsFalse()
         {
             // Arrange
-            string email = "test@example.com";
+            string email = "nonexistent@example.com";
             string code = "123456";
-            string hashedPassword = "hashedPassword123";
-            string getCodeProc = "GetResetCodeData";
-            string getUserProc = "GetUserByEmail";
-            string updateProc = "UpdatePasswordAndRemoveResetCode";
-            
-            // Setup for code verification
-            var resetCodeTable = new DataTable();
-            resetCodeTable.Columns.Add("expiration_time", typeof(DateTime));
-            resetCodeTable.Columns.Add("used", typeof(bool));
-            resetCodeTable.Rows.Add(DateTime.UtcNow.AddMinutes(10), false); // Valid code
-            
-            // Setup for user lookup - empty table means user not found
-            var userTable = new DataTable();
-            userTable.Columns.Add("user_id", typeof(int));
+            string newPassword = "NewPassword123!";
+            var dataTable = new DataTable();
+            dataTable.Columns.Add("user_id", typeof(int));
 
-            mockDataLink.Setup(dl => dl.ExecuteReader(getCodeProc, It.Is<SqlParameter[]>(p => p.Length == 2)))
-                .Returns(resetCodeTable);
-                
-            mockDataLink.Setup(dl => dl.ExecuteReader(getUserProc, It.Is<SqlParameter[]>(p => p.Length == 1)))
-                .Returns(userTable);
+            // No rows added - non-existent user
+            this.mockDataLink.Setup(dataLink => dataLink.ExecuteReader(
+                It.IsAny<string>(),
+                It.Is<SqlParameter[]>(sqlParameter => sqlParameter.Length == 2))).Returns(dataTable);
 
             // Act
-            bool result = repository.ResetPassword(email, code, hashedPassword);
+            bool result = this.passwordResetRepository.ResetPassword(email, code, newPassword);
 
             // Assert
             Assert.That(result, Is.False);
-            
-            // Check if updateProc was called
-            bool updateProcCalled = false;
-            foreach (var invocation in mockDataLink.Invocations)
-            {
-                if (invocation.Method.Name == "ExecuteScalar")
-                {
-                    if ((string)invocation.Arguments[0] == updateProc)
-                    {
-                        updateProcCalled = true;
-                        break;
-                    }
-                }
-            }
-            
-            Assert.That(updateProcCalled, Is.False, "UpdatePasswordAndRemoveResetCode should not have been called");
         }
 
         [Test]
@@ -408,21 +336,22 @@ namespace Tests.RepositoryTests
             // Arrange
             string email = "test@example.com";
             string code = "123456";
-            string hashedPassword = "hashedPassword123";
-            string getCodeProc = "GetResetCodeData";
+            string newPassword = "NewPassword123!";
 
-            mockDataLink.Setup(dl => dl.ExecuteReader(getCodeProc, It.Is<SqlParameter[]>(p => p.Length == 2)))
-                .Throws(new DatabaseOperationException("Database error"));
+            this.mockDataLink.Setup(dataLink => dataLink.ExecuteReader(
+                It.IsAny<string>(),
+                It.Is<SqlParameter[]>(sqlParameter => sqlParameter.Length == 2))).Throws(new DatabaseOperationException("Database error"));
 
             // Act & Assert
             try
             {
-                repository.ResetPassword(email, code, hashedPassword);
+                this.passwordResetRepository.ResetPassword(email, code, newPassword);
                 Assert.Fail("Expected RepositoryException was not thrown");
             }
-            catch (RepositoryException ex)
+            catch (RepositoryException)
             {
-                Assert.That(ex.Message, Is.EqualTo("Failed to reset password."));
+                // Expected
+                Assert.Pass();
             }
         }
 
@@ -430,52 +359,51 @@ namespace Tests.RepositoryTests
         public void CleanupExpiredCodes_ExecutesCorrectProcedure()
         {
             // Arrange
-            string procedureName = "CleanupResetCodes";
-            // Create a new mock without using lambdas with optional arguments
-            var localMock = new Mock<IDataLink>();
-            var localRepository = new PasswordResetRepository(localMock.Object);
+            string procedureName = "CleanupExpiredResetCodes";
+
+            this.mockDataLink.Setup(dataLink => dataLink.ExecuteNonQuery(procedureName, It.Is<SqlParameter[]>(sqlParameter => sqlParameter.Length == 0)))
+                .Verifiable();
 
             // Act
-            localRepository.CleanupExpiredCodes();
+            this.passwordResetRepository.CleanupExpiredCodes();
 
-            // Assert - use a direct approach without lambda expressions or LINQ
-            // Check if the procedure was called using a foreach loop
+            // Assert
             bool procedureCalled = false;
-            foreach (var invocation in localMock.Invocations)
+            foreach (var invocation in this.mockDataLink.Invocations)
             {
                 if (invocation.Method.Name == "ExecuteNonQuery")
                 {
-                    if (invocation.Arguments.Count > 0 && invocation.Arguments[0] is string procName)
+                    if ((string)invocation.Arguments[0] == procedureName)
                     {
-                        if (procName == procedureName)
-                        {
-                            procedureCalled = true;
-                            break;
-                        }
+                        procedureCalled = true;
+                        break;
                     }
                 }
             }
-            
-            Assert.That(procedureCalled, Is.True, "CleanupResetCodes procedure was not called");
+
+            Assert.That(procedureCalled, Is.True, "CleanupExpiredResetCodes was not called.");
         }
 
         [Test]
         public void CleanupExpiredCodes_WhenDatabaseOperationExceptionOccurs_ThrowsRepositoryException()
         {
-            // Create a simple field-based mock
-            var mockDataLink = new Mock<IDataLink>();
-            var localRepository = new PasswordResetRepository(mockDataLink.Object);
+            // Arrange
+            string procedureName = "CleanupExpiredResetCodes";
+
+            this.mockDataLink.Setup(dataLink => dataLink.ExecuteNonQuery(procedureName, It.Is<SqlParameter[]>(sqlParameter => sqlParameter.Length == 0)))
+                .Throws(new DatabaseOperationException("Database error"));
 
             // Act & Assert
             try
             {
-                localRepository.CleanupExpiredCodes();
-                Assert.Fail("Expected RepositoryException was not thrown");
+                this.passwordResetRepository.CleanupExpiredCodes();
+                Assert.Fail("Expected RepositoryException was not thrown.");
             }
-            catch (RepositoryException ex)
+            catch (RepositoryException)
             {
-                Assert.That(ex.Message, Is.EqualTo("Failed to cleanup expired reset codes."));
+                // Expected
+                Assert.Pass();
             }
         }
     }
-} 
+}

@@ -11,7 +11,7 @@ namespace BusinessLayer.Repositories.Fakes
 
         public FakePointsOffersRepository()
         {
-            // Initialize with some test data
+            // Initialize with test data
             offers = new List<PointsOffer>
             {
                 new PointsOffer(2, 5),    // 5 points for $2
@@ -22,6 +22,9 @@ namespace BusinessLayer.Repositories.Fakes
             };
         }
 
-        public List<PointsOffer> Offers => offers;
+        public List<PointsOffer> Offers
+        {
+            get { return offers; }
+        }
     }
 }

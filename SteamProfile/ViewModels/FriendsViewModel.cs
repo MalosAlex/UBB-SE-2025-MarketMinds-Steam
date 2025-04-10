@@ -1,40 +1,47 @@
-﻿using CommunityToolkit.Mvvm.ComponentModel;
+﻿using System;
+using System.Collections.ObjectModel;
+using System.Linq;
+using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
 using Microsoft.UI.Xaml.Controls;
 using BusinessLayer.Models;
 using BusinessLayer.Services.Interfaces;
 using BusinessLayer.Exceptions;
 using SteamProfile.Views;
-using System;
-using System.Collections.ObjectModel;
-using System.Diagnostics;
-using System.Linq;
 using Windows.System;
 
 namespace SteamProfile.ViewModels
 {
     public partial class FriendsViewModel : ObservableObject
     {
-        private readonly IFriendsService _friendsService;
-        private readonly IUserService _userService;
+        #region Constants
+        // Error message constants
+        private const string ErrLoadFriends = "Error loading friends: ";
+        private const string ErrUnexpectedLoadFriends = "Unexpected error loading friends: ";
+        private const string ErrRemoveFriend = "Error removing friend: ";
+        private const string ErrUnexpectedRemoveFriend = "Unexpected error removing friend: ";
+        private const string ErrDetailsPrefix = "\nDetails: ";
+        #endregion
 
+        private readonly IFriendsService friendsService;
+        private readonly IUserService userService;
 
         [ObservableProperty]
-        private ObservableCollection<Friendship> _friendships = new ObservableCollection<Friendship>();
+        private ObservableCollection<Friendship> friendships = new ObservableCollection<Friendship>();
 
         [ObservableProperty]
-        private Friendship _selectedFriendship;
+        private Friendship selectedFriendship;
 
         [ObservableProperty]
-        private bool _isLoading;
+        private bool isLoading;
 
         [ObservableProperty]
-        private string _errorMessage;
+        private string errorMessage;
 
         public FriendsViewModel(IFriendsService friendsService, IUserService userService)
         {
-            _friendsService = friendsService ?? throw new ArgumentNullException(nameof(friendsService));
-            _userService = userService ?? throw new ArgumentNullException(nameof(friendsService));
+            this.friendsService = friendsService ?? throw new ArgumentNullException(nameof(friendsService));
+            this.userService = userService ?? throw new ArgumentNullException(nameof(userService));
         }
 
         [RelayCommand]
@@ -45,32 +52,25 @@ namespace SteamProfile.ViewModels
                 IsLoading = true;
                 ErrorMessage = null;
 
-                Debug.WriteLine("Loading friends for user ID ...");
-                var friendships = _friendsService.GetAllFriendships();
-                Debug.WriteLine($"Retrieved {friendships.Count} friendships");
+                var friendships = friendsService.GetAllFriendships();
 
                 Friendships.Clear();
                 foreach (var friendship in friendships)
                 {
-                    Debug.WriteLine($"Adding friendship: ID={friendship.FriendshipId}, Username={friendship.FriendUsername}");
                     Friendships.Add(friendship);
                 }
             }
-            catch (ServiceException ex)
+            catch (ServiceException serviceException)
             {
-                Debug.WriteLine($"Service error: {ex.Message}");
-                Debug.WriteLine($"Inner exception: {ex.InnerException?.Message}");
-                ErrorMessage = $"Error loading friends: {ex.Message}";
-                if (ex.InnerException != null)
+                ErrorMessage = ErrLoadFriends + serviceException.Message;
+                if (serviceException.InnerException != null)
                 {
-                    ErrorMessage += $"\nDetails: {ex.InnerException.Message}";
+                    ErrorMessage += ErrDetailsPrefix + serviceException.InnerException.Message;
                 }
             }
-            catch (Exception ex)
+            catch (Exception generalException)
             {
-                Debug.WriteLine($"Unexpected error: {ex.Message}");
-                Debug.WriteLine($"Stack trace: {ex.StackTrace}");
-                ErrorMessage = $"Unexpected error loading friends: {ex.Message}";
+                ErrorMessage = ErrUnexpectedLoadFriends + generalException.Message;
             }
             finally
             {
@@ -86,38 +86,27 @@ namespace SteamProfile.ViewModels
                 IsLoading = true;
                 ErrorMessage = null;
 
-                Debug.WriteLine($"Starting to remove friendship with ID {friendshipId}");
-                Debug.WriteLine($"Current number of friends before removal: {Friendships.Count}");
-                
-                _friendsService.RemoveFriend(friendshipId);
-                Debug.WriteLine("Friend removed successfully from database");
-                
+                friendsService.RemoveFriend(friendshipId);
+
                 // Refresh the friends list
-                var updatedFriendships = _friendsService.GetAllFriendships();
+                var updatedFriendships = friendsService.GetAllFriendships();
                 Friendships.Clear();
                 foreach (var friendship in updatedFriendships)
                 {
                     Friendships.Add(friendship);
                 }
-                Debug.WriteLine($"Friends list reloaded. New count: {Friendships.Count}");
             }
-            catch (ServiceException ex)
+            catch (ServiceException serviceException)
             {
-                Debug.WriteLine($"Service error: {ex.Message}");
-                Debug.WriteLine($"Inner exception: {ex.InnerException?.Message}");
-                Debug.WriteLine($"Stack trace: {ex.StackTrace}");
-                ErrorMessage = $"Error removing friend: {ex.Message}";
-                if (ex.InnerException != null)
+                ErrorMessage = ErrRemoveFriend + serviceException.Message;
+                if (serviceException.InnerException != null)
                 {
-                    ErrorMessage += $"\nDetails: {ex.InnerException.Message}";
+                    ErrorMessage += ErrDetailsPrefix + serviceException.InnerException.Message;
                 }
             }
-            catch (Exception ex)
+            catch (Exception generalException)
             {
-                Debug.WriteLine($"Unexpected error: {ex.Message}");
-                Debug.WriteLine($"Stack trace: {ex.StackTrace}");
-                Debug.WriteLine($"Inner exception: {ex.InnerException?.Message}");
-                ErrorMessage = $"Unexpected error removing friend: {ex.Message}";
+                ErrorMessage = ErrUnexpectedRemoveFriend + generalException.Message;
             }
             finally
             {

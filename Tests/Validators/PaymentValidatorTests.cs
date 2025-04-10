@@ -9,6 +9,8 @@ namespace Tests.Validators
     {
         private const int MAX_AMOUNT = 500;
 
+        #region IsMonetaryAmountValid Tests
+
         [Test]
         public void IsMonetaryAmountValid_ValidAmount_ReturnsTrue()
         {
@@ -91,7 +93,7 @@ namespace Tests.Validators
         public void IsMonetaryAmountValid_EmptyString_ReturnsFalse()
         {
             // Arrange
-            string amount = "";
+            string amount = string.Empty;
 
             // Act
             bool result = PaymentValidator.IsMonetaryAmountValid(amount, MAX_AMOUNT);
@@ -114,6 +116,24 @@ namespace Tests.Validators
         }
 
         [Test]
+        public void IsMonetaryAmountValid_ValidDigitsButCannotParse_ReturnsFalse()
+        {
+            // Arrange
+            // A number that's too large to be parsed as an int but contains only digits
+            string amount = "9999999999999999999"; // Exceeds int.MaxValue
+
+            // Act
+            bool result = PaymentValidator.IsMonetaryAmountValid(amount, MAX_AMOUNT);
+
+            // Assert
+            Assert.That(result, Is.False);
+        }
+
+        #endregion
+
+        #region IsCardNameValid Tests
+
+        [Test]
         public void IsCardNameValid_ValidName_ReturnsTrue()
         {
             // Arrange
@@ -130,7 +150,7 @@ namespace Tests.Validators
         public void IsCardNameValid_EmptyName_ReturnsFalse()
         {
             // Arrange
-            string name = "";
+            string name = string.Empty;
 
             // Act
             bool result = PaymentValidator.IsCardNameValid(name);
@@ -153,25 +173,63 @@ namespace Tests.Validators
         }
 
         [Test]
-        public void IsCardNumberValid_ValidNumber_ReturnsTrue()
+        public void IsCardNameValid_SingleName_ReturnsFalse()
         {
             // Arrange
-            string[] validNumbers = {
-                "4111111111111111",
-                "5555555555554444",
-                "3782822463100051"
-            };
+            string name = "John";
 
-            // Act & Assert
-            foreach (var number in validNumbers)
-            {
-                bool result = PaymentValidator.IsCardNumberValid(number);
-                Assert.That(result, Is.True, $"Card number {number} should be valid");
-            }
+            // Act
+            bool result = PaymentValidator.IsCardNameValid(name);
+
+            // Assert
+            Assert.That(result, Is.False);
+        }
+
+        #endregion
+
+        #region IsCardNumberValid Tests
+
+        [Test]
+        public void IsCardNumberValid_VisaNumber_ReturnsTrue()
+        {
+            // Arrange
+            string cardNumber = "4111111111111111";
+
+            // Act
+            bool result = PaymentValidator.IsCardNumberValid(cardNumber);
+
+            // Assert
+            Assert.That(result, Is.True);
         }
 
         [Test]
-        public void IsCardNumberValid_InvalidNumber_ReturnsFalse()
+        public void IsCardNumberValid_MastercardNumber_ReturnsTrue()
+        {
+            // Arrange
+            string cardNumber = "5555555555554444";
+
+            // Act
+            bool result = PaymentValidator.IsCardNumberValid(cardNumber);
+
+            // Assert
+            Assert.That(result, Is.True);
+        }
+
+        [Test]
+        public void IsCardNumberValid_AmexNumber_ReturnsTrue()
+        {
+            // Arrange
+            string cardNumber = "3782822463100051";
+
+            // Act
+            bool result = PaymentValidator.IsCardNumberValid(cardNumber);
+
+            // Assert
+            Assert.That(result, Is.True);
+        }
+
+        [Test]
+        public void IsCardNumberValid_TooLongNumber_ReturnsFalse()
         {
             // Arrange
             string invalidNumber = "12345678901234562";
@@ -200,7 +258,7 @@ namespace Tests.Validators
         public void IsCardNumberValid_EmptyNumber_ReturnsFalse()
         {
             // Arrange
-            string emptyNumber = "";
+            string emptyNumber = string.Empty;
 
             // Act
             bool result = PaymentValidator.IsCardNumberValid(emptyNumber);
@@ -235,28 +293,44 @@ namespace Tests.Validators
             Assert.That(result, Is.False);
         }
 
+        #endregion
+
+        #region IsCvvValid Tests
+
         [Test]
-        public void IsCvvValid_ValidCVV_ReturnsTrue()
+        public void IsCvvValid_ThreeDigitCVV_ReturnsTrue()
         {
             // Arrange
-            string[] validCVVs = { "123", "999", "000" };
+            string cvv = "123";
 
-            // Act & Assert
-            foreach (var cvv in validCVVs)
-            {
-                bool result = PaymentValidator.IsCvvValid(cvv);
-                Assert.That(result, Is.True, $"CVV {cvv} should be valid");
-            }
+            // Act
+            bool result = PaymentValidator.IsCvvValid(cvv);
+
+            // Assert
+            Assert.That(result, Is.True);
         }
 
         [Test]
-        public void IsCvvValid_FourDigitCVV_ReturnsTrue()
+        public void IsCvvValid_AllNinesCVV_ReturnsTrue()
         {
             // Arrange
-            string fourDigitCVV = "123";
+            string cvv = "999";
 
             // Act
-            bool result = PaymentValidator.IsCvvValid(fourDigitCVV);
+            bool result = PaymentValidator.IsCvvValid(cvv);
+
+            // Assert
+            Assert.That(result, Is.True);
+        }
+
+        [Test]
+        public void IsCvvValid_AllZerosCVV_ReturnsTrue()
+        {
+            // Arrange
+            string cvv = "000";
+
+            // Act
+            bool result = PaymentValidator.IsCvvValid(cvv);
 
             // Assert
             Assert.That(result, Is.True);
@@ -292,7 +366,7 @@ namespace Tests.Validators
         public void IsCvvValid_EmptyCVV_ReturnsFalse()
         {
             // Arrange
-            string emptyCVV = "";
+            string emptyCVV = string.Empty;
 
             // Act
             bool result = PaymentValidator.IsCvvValid(emptyCVV);
@@ -327,8 +401,12 @@ namespace Tests.Validators
             Assert.That(result, Is.False);
         }
 
+        #endregion
+
+        #region IsExpirationDateValid Tests
+
         [Test]
-        public void IsExpirationDateValid_ValidDate_ReturnsTrue()
+        public void IsExpirationDateValid_FutureDate_ReturnsTrue()
         {
             // Arrange
             string validDate = "12/28";
@@ -383,24 +461,62 @@ namespace Tests.Validators
         }
 
         [Test]
-        public void IsExpirationDateValid_InvalidFormat_ReturnsFalse()
+        public void IsExpirationDateValid_SingleDigitMonthFormat_ReturnsFalse()
         {
             // Arrange
-            string[] invalidFormats = { "1/23", "1234", "12-23", "12.23" };
+            string invalidFormat = "1/23";
 
-            // Act & Assert
-            foreach (var format in invalidFormats)
-            {
-                bool result = PaymentValidator.IsExpirationDateValid(format);
-                Assert.That(result, Is.False, $"Format {format} should be invalid");
-            }
+            // Act
+            bool result = PaymentValidator.IsExpirationDateValid(invalidFormat);
+
+            // Assert
+            Assert.That(result, Is.False);
+        }
+
+        [Test]
+        public void IsExpirationDateValid_NoSlashFormat_ReturnsFalse()
+        {
+            // Arrange
+            string invalidFormat = "1234";
+
+            // Act
+            bool result = PaymentValidator.IsExpirationDateValid(invalidFormat);
+
+            // Assert
+            Assert.That(result, Is.False);
+        }
+
+        [Test]
+        public void IsExpirationDateValid_DashSeparatorFormat_ReturnsFalse()
+        {
+            // Arrange
+            string invalidFormat = "12-23";
+
+            // Act
+            bool result = PaymentValidator.IsExpirationDateValid(invalidFormat);
+
+            // Assert
+            Assert.That(result, Is.False);
+        }
+
+        [Test]
+        public void IsExpirationDateValid_DotSeparatorFormat_ReturnsFalse()
+        {
+            // Arrange
+            string invalidFormat = "12.23";
+
+            // Act
+            bool result = PaymentValidator.IsExpirationDateValid(invalidFormat);
+
+            // Assert
+            Assert.That(result, Is.False);
         }
 
         [Test]
         public void IsExpirationDateValid_EmptyDate_ReturnsFalse()
         {
             // Arrange
-            string emptyDate = "";
+            string emptyDate = string.Empty;
 
             // Act
             bool result = PaymentValidator.IsExpirationDateValid(emptyDate);
@@ -422,52 +538,158 @@ namespace Tests.Validators
             Assert.That(result, Is.False);
         }
 
+        #endregion
+
+        #region IsEmailValid Tests
+
         [Test]
-        public void IsEmailValid_ValidEmail_ReturnsTrue()
+        public void IsEmailValid_SimpleValidEmail_ReturnsTrue()
         {
             // Arrange
-            string[] validEmails = {
-                "user@example.com",
-                "name.surname@domain.co.uk",
-                "user123@gmail.com",
-                "user+tag@domain.org"
-            };
+            string email = "user@example.com";
 
-            // Act & Assert
-            foreach (var email in validEmails)
-            {
-                bool result = PaymentValidator.IsEmailValid(email);
-                Assert.That(result, Is.True, $"Email {email} should be valid");
-            }
+            // Act
+            bool result = PaymentValidator.IsEmailValid(email);
+
+            // Assert
+            Assert.That(result, Is.True);
         }
 
         [Test]
-        public void IsEmailValid_InvalidEmail_ReturnsFalse()
+        public void IsEmailValid_ComplexValidEmail_ReturnsTrue()
         {
             // Arrange
-            string[] invalidEmails = {
-                "plainaddress",
-                "@missingusername.com",
-                "user@.com",
-                "user@domain..com",
-                "user@domain@domain.com",
-                "user@domain.com.",
-                ".user@domain.com"
-            };
+            string email = "name.surname@domain.co.uk";
 
-            // Act & Assert
-            foreach (var email in invalidEmails)
-            {
-                bool result = PaymentValidator.IsEmailValid(email);
-                Assert.That(result, Is.False, $"Email {email} should be invalid");
-            }
+            // Act
+            bool result = PaymentValidator.IsEmailValid(email);
+
+            // Assert
+            Assert.That(result, Is.True);
+        }
+
+        [Test]
+        public void IsEmailValid_ValidEmailWithNumbers_ReturnsTrue()
+        {
+            // Arrange
+            string email = "user123@gmail.com";
+
+            // Act
+            bool result = PaymentValidator.IsEmailValid(email);
+
+            // Assert
+            Assert.That(result, Is.True);
+        }
+
+        [Test]
+        public void IsEmailValid_ValidEmailWithPlusTag_ReturnsTrue()
+        {
+            // Arrange
+            string email = "user+tag@domain.org";
+
+            // Act
+            bool result = PaymentValidator.IsEmailValid(email);
+
+            // Assert
+            Assert.That(result, Is.True);
+        }
+
+        [Test]
+        public void IsEmailValid_MissingAtSymbol_ReturnsFalse()
+        {
+            // Arrange
+            string email = "plainaddress";
+
+            // Act
+            bool result = PaymentValidator.IsEmailValid(email);
+
+            // Assert
+            Assert.That(result, Is.False);
+        }
+
+        [Test]
+        public void IsEmailValid_MissingUsername_ReturnsFalse()
+        {
+            // Arrange
+            string email = "@missingusername.com";
+
+            // Act
+            bool result = PaymentValidator.IsEmailValid(email);
+
+            // Assert
+            Assert.That(result, Is.False);
+        }
+
+        [Test]
+        public void IsEmailValid_MissingDomainName_ReturnsFalse()
+        {
+            // Arrange
+            string email = "user@.com";
+
+            // Act
+            bool result = PaymentValidator.IsEmailValid(email);
+
+            // Assert
+            Assert.That(result, Is.False);
+        }
+
+        [Test]
+        public void IsEmailValid_DoubleDotInDomain_ReturnsFalse()
+        {
+            // Arrange
+            string email = "user@domain..com";
+
+            // Act
+            bool result = PaymentValidator.IsEmailValid(email);
+
+            // Assert
+            Assert.That(result, Is.False);
+        }
+
+        [Test]
+        public void IsEmailValid_DoubleAtSymbol_ReturnsFalse()
+        {
+            // Arrange
+            string email = "user@domain@domain.com";
+
+            // Act
+            bool result = PaymentValidator.IsEmailValid(email);
+
+            // Assert
+            Assert.That(result, Is.False);
+        }
+
+        [Test]
+        public void IsEmailValid_DotAtEnd_ReturnsFalse()
+        {
+            // Arrange
+            string email = "user@domain.com.";
+
+            // Act
+            bool result = PaymentValidator.IsEmailValid(email);
+
+            // Assert
+            Assert.That(result, Is.False);
+        }
+
+        [Test]
+        public void IsEmailValid_DotAtStart_ReturnsFalse()
+        {
+            // Arrange
+            string email = ".user@domain.com";
+
+            // Act
+            bool result = PaymentValidator.IsEmailValid(email);
+
+            // Assert
+            Assert.That(result, Is.False);
         }
 
         [Test]
         public void IsEmailValid_EmptyEmail_ReturnsFalse()
         {
             // Arrange
-            string emptyEmail = "";
+            string emptyEmail = string.Empty;
 
             // Act
             bool result = PaymentValidator.IsEmailValid(emptyEmail);
@@ -489,6 +711,10 @@ namespace Tests.Validators
             Assert.That(result, Is.False);
         }
 
+        #endregion
+
+        #region IsPasswordValid Tests
+
         [Test]
         public void IsPasswordValid_ValidPassword_ReturnsTrue()
         {
@@ -506,7 +732,7 @@ namespace Tests.Validators
         public void IsPasswordValid_EmptyPassword_ReturnsFalse()
         {
             // Arrange
-            string emptyPassword = "";
+            string emptyPassword = string.Empty;
 
             // Act
             bool result = PaymentValidator.IsPasswordValid(emptyPassword);
@@ -529,17 +755,70 @@ namespace Tests.Validators
         }
 
         [Test]
-        public void IsMonetaryAmountValid_ValidDigitsButCannotParse_ReturnsFalse()
+        public void IsPasswordValid_NoUppercase_ReturnsFalse()
         {
             // Arrange
-            // A number that's too large to be parsed as an int but contains only digits
-            string amount = "9999999999999999999"; // Exceeds int.MaxValue
+            string password = "pass123!";
 
             // Act
-            bool result = PaymentValidator.IsMonetaryAmountValid(amount, MAX_AMOUNT);
+            bool result = PaymentValidator.IsPasswordValid(password);
 
             // Assert
             Assert.That(result, Is.False);
         }
+
+        [Test]
+        public void IsPasswordValid_NoLowercase_ReturnsFalse()
+        {
+            // Arrange
+            string password = "PASS123!";
+
+            // Act
+            bool result = PaymentValidator.IsPasswordValid(password);
+
+            // Assert
+            Assert.That(result, Is.False);
+        }
+
+        [Test]
+        public void IsPasswordValid_NoDigit_ReturnsFalse()
+        {
+            // Arrange
+            string password = "Password!";
+
+            // Act
+            bool result = PaymentValidator.IsPasswordValid(password);
+
+            // Assert
+            Assert.That(result, Is.False);
+        }
+
+        [Test]
+        public void IsPasswordValid_NoSpecialCharacter_ReturnsFalse()
+        {
+            // Arrange
+            string password = "Password123";
+
+            // Act
+            bool result = PaymentValidator.IsPasswordValid(password);
+
+            // Assert
+            Assert.That(result, Is.False);
+        }
+
+        [Test]
+        public void IsPasswordValid_TooShort_ReturnsFalse()
+        {
+            // Arrange
+            string password = "Pa1!";
+
+            // Act
+            bool result = PaymentValidator.IsPasswordValid(password);
+
+            // Assert
+            Assert.That(result, Is.False);
+        }
+
+        #endregion
     }
 }

@@ -1,4 +1,5 @@
-﻿using BusinessLayer.Data;
+﻿using System.Data;
+using BusinessLayer.Data;
 using BusinessLayer.Exceptions;
 using BusinessLayer.Models;
 using BusinessLayer.Repositories;
@@ -11,14 +12,14 @@ namespace Tests.RepositoryTests
     [TestFixture]
     internal class UserProfileRepositoryTests
     {
-        private UserProfilesRepository _userProfilesRepository;
-        private Mock<IDataLink> _mockDataLink;
+        private UserProfilesRepository userProfileRepository;
+        private Mock<IDataLink> mockDataLink;
 
         [SetUp]
         public void Setup()
         {
-            _mockDataLink = new Mock<IDataLink>();
-            _userProfilesRepository = new UserProfilesRepository(_mockDataLink.Object);
+            mockDataLink = new Mock<IDataLink>();
+            userProfileRepository = new UserProfilesRepository(mockDataLink.Object);
         }
 
         [Test]
@@ -45,12 +46,12 @@ namespace Tests.RepositoryTests
             dataTable.Columns.Add("last_modified", typeof(DateTime));
             dataTable.Rows.Add(profileId, userId, "Test Bio", "TestPicture.jpg", DateTime.Now);
 
-            _mockDataLink
-                .Setup(dataLink => dataLink.ExecuteReader("GetUserProfileByUserId", It.IsAny<SqlParameter[]>()))
+            mockDataLink
+                .Setup(dl => dl.ExecuteReader("GetUserProfileByUserId", It.IsAny<SqlParameter[]>()))
                 .Returns(dataTable);
 
             // Act
-            var result = _userProfilesRepository.GetUserProfileByUserId(userId);
+            var result = userProfileRepository.GetUserProfileByUserId(userId);
 
             // Assert
             Assert.That(result, Is.Not.Null);
@@ -63,12 +64,12 @@ namespace Tests.RepositoryTests
             var userId = 1;
             var dataTable = new DataTable();
 
-            _mockDataLink
-                .Setup(dataLink => dataLink.ExecuteReader("GetUserProfileByUserId", It.IsAny<SqlParameter[]>()))
+            mockDataLink
+                .Setup(dl => dl.ExecuteReader("GetUserProfileByUserId", It.IsAny<SqlParameter[]>()))
                 .Returns(dataTable);
 
             // Act
-            var result = _userProfilesRepository.GetUserProfileByUserId(userId);
+            var result = userProfileRepository.GetUserProfileByUserId(userId);
 
             // Assert
             Assert.That(result, Is.Null);
@@ -80,12 +81,12 @@ namespace Tests.RepositoryTests
             // Arrange
             var userId = 1;
 
-            _mockDataLink
-                .Setup(dataLink => dataLink.ExecuteReader("GetUserProfileByUserId", It.IsAny<SqlParameter[]>()))
+            mockDataLink
+                .Setup(dl => dl.ExecuteReader("GetUserProfileByUserId", It.IsAny<SqlParameter[]>()))
                 .Throws(new DatabaseOperationException("Database Error"));
 
             // Act & Assert
-            Assert.Throws<RepositoryException>(() => _userProfilesRepository.GetUserProfileByUserId(userId));
+            Assert.Throws<RepositoryException>(() => userProfileRepository.GetUserProfileByUserId(userId));
         }
 
         [Test]
@@ -107,12 +108,12 @@ namespace Tests.RepositoryTests
             dataTable.Columns.Add("last_modified", typeof(DateTime));
             dataTable.Rows.Add(profile.ProfileId, profile.UserId, profile.Bio, "TestPicture.jpg", DateTime.Now);
 
-            _mockDataLink
-                .Setup(dataLink => dataLink.ExecuteReader("UpdateUserProfile", It.IsAny<SqlParameter[]>()))
+            mockDataLink
+                .Setup(dl => dl.ExecuteReader("UpdateUserProfile", It.IsAny<SqlParameter[]>()))
                 .Returns(dataTable);
 
             // Act
-            var result = _userProfilesRepository.UpdateProfile(profile);
+            var result = userProfileRepository.UpdateProfile(profile);
 
             // Assert
             Assert.That(result, Is.Not.Null);
@@ -131,12 +132,12 @@ namespace Tests.RepositoryTests
 
             var dataTable = new DataTable();
 
-            _mockDataLink
-                .Setup(dataLink => dataLink.ExecuteReader("UpdateUserProfile", It.IsAny<SqlParameter[]>()))
+            mockDataLink
+                .Setup(dl => dl.ExecuteReader("UpdateUserProfile", It.IsAny<SqlParameter[]>()))
                 .Returns(dataTable);
 
             // Act
-            var result = _userProfilesRepository.UpdateProfile(profile);
+            var result = userProfileRepository.UpdateProfile(profile);
 
             // Assert
             Assert.That(result, Is.Null);
@@ -153,12 +154,12 @@ namespace Tests.RepositoryTests
                 Bio = "Test Bio",
             };
 
-            _mockDataLink
-                .Setup(dataLink => dataLink.ExecuteReader("UpdateUserProfile", It.IsAny<SqlParameter[]>()))
+            mockDataLink
+                .Setup(dl => dl.ExecuteReader("UpdateUserProfile", It.IsAny<SqlParameter[]>()))
                 .Throws(new DatabaseOperationException("Database Error"));
 
             // Act & Assert
-            Assert.Throws<RepositoryException>(() => _userProfilesRepository.UpdateProfile(profile));
+            Assert.Throws<RepositoryException>(() => userProfileRepository.UpdateProfile(profile));
         }
 
         [Test]
@@ -181,12 +182,12 @@ namespace Tests.RepositoryTests
             dataTable.Columns.Add("last_modified", typeof(DateTime));
             dataTable.Rows.Add(profile.ProfileId, profile.UserId, DBNull.Value, "pic.png", DateTime.Now);
 
-            _mockDataLink
-                .Setup(dataLink => dataLink.ExecuteReader("UpdateUserProfile", It.IsAny<SqlParameter[]>()))
+            mockDataLink
+                .Setup(dl => dl.ExecuteReader("UpdateUserProfile", It.IsAny<SqlParameter[]>()))
                 .Returns(dataTable);
 
             // Act
-            var result = _userProfilesRepository.UpdateProfile(profile);
+            var result = userProfileRepository.UpdateProfile(profile);
 
             // Assert
             Assert.That(result, Is.Not.Null);
@@ -212,12 +213,12 @@ namespace Tests.RepositoryTests
             dataTable.Columns.Add("last_modified", typeof(DateTime));
             dataTable.Rows.Add(profile.ProfileId, profile.UserId, profile.Bio, profile.ProfilePicture, DateTime.Now);
 
-            _mockDataLink
-                .Setup(dataLink => dataLink.ExecuteReader("UpdateUserProfile", It.IsAny<SqlParameter[]>()))
+            mockDataLink
+                .Setup(dl => dl.ExecuteReader("UpdateUserProfile", It.IsAny<SqlParameter[]>()))
                 .Returns(dataTable);
 
             // Act
-            var result = _userProfilesRepository.UpdateProfile(profile);
+            var result = userProfileRepository.UpdateProfile(profile);
 
             // Assert
             Assert.That(result, Is.Not.Null);
@@ -238,12 +239,12 @@ namespace Tests.RepositoryTests
             dataTable.Columns.Add("last_modified", typeof(DateTime));
             dataTable.Rows.Add(profileId, userId, "Test Bio", "TestPicture.jpg", DateTime.Now);
 
-            _mockDataLink
-                .Setup(dataLink => dataLink.ExecuteReader("CreateUserProfile", It.IsAny<SqlParameter[]>()))
+            mockDataLink
+                .Setup(dl => dl.ExecuteReader("CreateUserProfile", It.IsAny<SqlParameter[]>()))
                 .Returns(dataTable);
 
             // Act
-            var result = _userProfilesRepository.CreateProfile(userId);
+            var result = userProfileRepository.CreateProfile(userId);
 
             // Assert
             Assert.That(result, Is.Not.Null);
@@ -256,12 +257,12 @@ namespace Tests.RepositoryTests
             var userId = 1;
             var dataTable = new DataTable();
 
-            _mockDataLink
-                .Setup(dataLink => dataLink.ExecuteReader("CreateUserProfile", It.IsAny<SqlParameter[]>()))
+            mockDataLink
+                .Setup(dl => dl.ExecuteReader("CreateUserProfile", It.IsAny<SqlParameter[]>()))
                 .Returns(dataTable);
 
             // Act
-            var result = _userProfilesRepository.CreateProfile(userId);
+            var result = userProfileRepository.CreateProfile(userId);
 
             // Assert
             Assert.That(result, Is.Null);
@@ -273,12 +274,12 @@ namespace Tests.RepositoryTests
             // Arrange
             var userId = 1;
 
-            _mockDataLink
-                .Setup(dataLink => dataLink.ExecuteReader("CreateUserProfile", It.IsAny<SqlParameter[]>()))
+            mockDataLink
+                .Setup(dl => dl.ExecuteReader("CreateUserProfile", It.IsAny<SqlParameter[]>()))
                 .Throws(new DatabaseOperationException("Database Error"));
 
             // Act & Assert
-            Assert.Throws<RepositoryException>(() => _userProfilesRepository.CreateProfile(userId));
+            Assert.Throws<RepositoryException>(() => userProfileRepository.CreateProfile(userId));
         }
 
         [Test]
@@ -288,12 +289,12 @@ namespace Tests.RepositoryTests
             var userId = 1;
             var bio = "This is a test bio.";
 
-            _mockDataLink
-                .Setup(dataLink => dataLink.ExecuteReader("UpdateUserProfileBio", It.IsAny<SqlParameter[]>()))
+            mockDataLink
+                .Setup(dl => dl.ExecuteReader("UpdateUserProfileBio", It.IsAny<SqlParameter[]>()))
                 .Returns(new DataTable());
 
             // Act & Assert
-            Assert.DoesNotThrow(() => _userProfilesRepository.UpdateProfileBio(userId, bio));
+            Assert.DoesNotThrow(() => userProfileRepository.UpdateProfileBio(userId, bio));
         }
 
         [Test]
@@ -303,12 +304,12 @@ namespace Tests.RepositoryTests
             var userId = 1;
             var bio = "This is a test bio.";
 
-            _mockDataLink
-                .Setup(dataLink => dataLink.ExecuteReader("UpdateUserProfileBio", It.IsAny<SqlParameter[]>()))
+            mockDataLink
+                .Setup(dl => dl.ExecuteReader("UpdateUserProfileBio", It.IsAny<SqlParameter[]>()))
                 .Throws(new DatabaseOperationException("Database error"));
 
             // Act & Assert
-            var ex = Assert.Throws<RepositoryException>(() => _userProfilesRepository.UpdateProfileBio(userId, bio));
+            var ex = Assert.Throws<RepositoryException>(() => userProfileRepository.UpdateProfileBio(userId, bio));
             Assert.That(ex.Message, Is.EqualTo($"Failed to update profile for user {userId}."));
         }
 
@@ -319,12 +320,12 @@ namespace Tests.RepositoryTests
             var userId = 1;
             var picture = "profile_picture_url";
 
-            _mockDataLink
-                .Setup(dataLink => dataLink.ExecuteReader("UpdateUserProfilePicture", It.IsAny<SqlParameter[]>()))
+            mockDataLink
+                .Setup(dl => dl.ExecuteReader("UpdateUserProfilePicture", It.IsAny<SqlParameter[]>()))
                 .Returns(new DataTable());
 
             // Act & Assert
-            Assert.DoesNotThrow(() => _userProfilesRepository.UpdateProfilePicture(userId, picture));
+            Assert.DoesNotThrow(() => userProfileRepository.UpdateProfilePicture(userId, picture));
         }
 
         [Test]
@@ -334,12 +335,12 @@ namespace Tests.RepositoryTests
             var userId = 1;
             var picture = "profile_picture_url";
 
-            _mockDataLink
-                .Setup(dataLink => dataLink.ExecuteReader("UpdateUserProfilePicture", It.IsAny<SqlParameter[]>()))
+            mockDataLink
+                .Setup(dl => dl.ExecuteReader("UpdateUserProfilePicture", It.IsAny<SqlParameter[]>()))
                 .Throws(new DatabaseOperationException("Database error"));
 
             // Act & Assert
-            var ex = Assert.Throws<RepositoryException>(() => _userProfilesRepository.UpdateProfilePicture(userId, picture));
+            var ex = Assert.Throws<RepositoryException>(() => userProfileRepository.UpdateProfilePicture(userId, picture));
             Assert.That(ex.Message, Is.EqualTo($"Failed to update profile for user {userId}."));
         }
     }

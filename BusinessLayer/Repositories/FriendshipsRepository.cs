@@ -1,4 +1,7 @@
+using System;
 using System.Data;
+using System.Linq;
+using System.Collections.Generic;
 using BusinessLayer.Data;
 using BusinessLayer.Models;
 using Microsoft.Data.SqlClient;
@@ -9,6 +12,45 @@ namespace BusinessLayer.Repositories
 {
     public class FriendshipsRepository : IFriendshipsRepository
     {
+        // SQL Parameter Names
+        private const string ParamUserId = "@user_id";
+        private const string ParamFriendId = "@friend_id";
+        private const string ParamFriendshipIdCamel = "@friendshipId";
+        private const string ParamFriendshipIdUnderscore = "@friendship_id";
+
+        // Stored Procedure Names
+        private const string SP_GetFriendsForUser = "GetFriendsForUser";
+        private const string SP_GetUserById = "GetUserById";
+        private const string SP_GetUserProfileByUserId = "GetUserProfileByUserId";
+        private const string SP_AddFriend = "AddFriend";
+        private const string SP_GetFriendshipById = "GetFriendshipById";
+        private const string SP_RemoveFriend = "RemoveFriend";
+        private const string SP_GetFriendshipCountForUser = "GetFriendshipCountForUser";
+        private const string SP_GetFriendshipId = "GetFriendshipId";
+
+        // Error messages
+        private const string Err_GetFriendshipsDb = "Database error while retrieving friendships.";
+        private const string Err_GetFriendshipsUnexpected = "An unexpected error occurred while retrieving friendships.";
+        private const string Err_AddFriendshipDb = "Database error while adding friendship.";
+        private const string Err_AddFriendshipUnexpected = "An unexpected error occurred while adding friendship.";
+        private const string Err_UserDoesNotExist = "User with ID {0} does not exist.";
+        private const string Err_FriendshipAlreadyExists = "Friendship already exists.";
+        private const string Err_GetFriendshipByIdDb = "Database error while retrieving friendship by ID.";
+        private const string Err_GetFriendshipByIdUnexpected = "An unexpected error occurred while retrieving friendship by ID.";
+        private const string Err_RemoveFriendshipDb = "Database error while removing friendship.";
+        private const string Err_RemoveFriendshipUnexpected = "An unexpected error occurred while removing friendship.";
+        private const string Err_GetFriendshipCountDb = "Database error while retrieving friendship count.";
+        private const string Err_GetFriendshipCountUnexpected = "An unexpected error occurred while retrieving friendship count.";
+        private const string Err_GetFriendshipIdDb = "Database error while retrieving friendship ID.";
+        private const string Err_GetFriendshipIdUnexpected = "An unexpected error occurred while retrieving friendship ID.";
+
+        // Column Names
+        private const string ColFriendshipId = "friendship_id";
+        private const string ColUserId = "user_id";
+        private const string ColFriendId = "friend_id";
+        private const string ColUsername = "username";
+        private const string ColProfilePicture = "profile_picture";
+
         private readonly IDataLink dataLink;
 
         public FriendshipsRepository(IDataLink dataLink)
@@ -16,196 +58,210 @@ namespace BusinessLayer.Repositories
             this.dataLink = dataLink ?? throw new ArgumentNullException(nameof(dataLink));
         }
 
-        public List<Friendship> GetAllFriendships(int userId)
+        public List<Friendship> GetAllFriendships(int userIdentifier)
         {
             try
             {
-                var parameters = new SqlParameter[]
+                var storedProcedureParameters = new SqlParameter[]
                 {
-                    new SqlParameter("@user_id", userId)
+                    new SqlParameter(ParamUserId, userIdentifier)
                 };
 
-                var dataTable = dataLink.ExecuteReader("GetFriendsForUser", parameters);
+                var friendshipDataTable = dataLink.ExecuteReader(SP_GetFriendsForUser, storedProcedureParameters);
 
-                var friendships = new List<Friendship>();
-                foreach (DataRow row in dataTable.Rows)
+                var listOfFriendships = new List<Friendship>();
+                foreach (DataRow friendshipDataRow in friendshipDataTable.Rows)
                 {
                     var friendship = new Friendship(
-                        friendshipId: Convert.ToInt32(row["friendship_id"]),
-                        userId: Convert.ToInt32(row["user_id"]),
-                        friendId: Convert.ToInt32(row["friend_id"]));
+                        friendshipId: Convert.ToInt32(friendshipDataRow[ColFriendshipId]),
+                        userId: Convert.ToInt32(friendshipDataRow[ColUserId]),
+                        friendId: Convert.ToInt32(friendshipDataRow[ColFriendId]));
 
-                    var friendshipParameters = new SqlParameter[]
+                    var friendProfileQueryParameters = new SqlParameter[]
                     {
-                        new SqlParameter("@user_id", friendship.FriendId)
+                        new SqlParameter(ParamUserId, friendship.FriendId)
                     };
-                    var friendUserProfileData = dataLink.ExecuteReader("GetUserById", friendshipParameters);
-                    if (friendUserProfileData.Rows.Count > 0)
+
+                    var friendUserProfileDataTable = dataLink.ExecuteReader(SP_GetUserById, friendProfileQueryParameters);
+                    if (friendUserProfileDataTable.Rows.Count > 0)
                     {
-                        friendship.FriendUsername = friendUserProfileData.Rows[0]["username"].ToString();
-                        var userProfileParameters = new SqlParameter[]
+                        friendship.FriendUsername = friendUserProfileDataTable.Rows[0][ColUsername].ToString();
+
+                        var friendProfilePictureQueryParameters = new SqlParameter[]
                         {
-                            new SqlParameter("@user_id", friendship.FriendId)
+                            new SqlParameter(ParamUserId, friendship.FriendId)
                         };
-                        var userProfileData = dataLink.ExecuteReader("GetUserProfileByUserId", userProfileParameters);
-                        if (userProfileData.Rows.Count > 0)
+
+                        var friendUserProfilePictureDataTable = dataLink.ExecuteReader(SP_GetUserProfileByUserId, friendProfilePictureQueryParameters);
+                        if (friendUserProfilePictureDataTable.Rows.Count > 0)
                         {
-                            friendship.FriendProfilePicture = userProfileData.Rows[0]["profile_picture"].ToString();
+                            friendship.FriendProfilePicture = friendUserProfilePictureDataTable.Rows[0][ColProfilePicture].ToString();
                         }
                     }
 
-                    friendships.Add(friendship);
+                    listOfFriendships.Add(friendship);
                 }
 
-                friendships = friendships.OrderBy(f => f.FriendUsername).ToList();
-                return friendships;
+                listOfFriendships = listOfFriendships
+                    .OrderBy(friendship => friendship.FriendUsername)
+                    .ToList();
+
+                return listOfFriendships;
             }
-            catch (SqlException ex)
+            catch (SqlException sqlException)
             {
-                throw new RepositoryException("Database error while retrieving friendships.", ex);
+                throw new RepositoryException(Err_GetFriendshipsDb, sqlException);
             }
-            catch (Exception ex)
+            catch (Exception generalException)
             {
-                throw new RepositoryException("An unexpected error occurred while retrieving friendships.", ex);
+                throw new RepositoryException(Err_GetFriendshipsUnexpected, generalException);
             }
         }
 
-        public void AddFriendship(int userId, int friendId)
+        public void AddFriendship(int userIdentifier, int friendUserIdentifier)
         {
             try
             {
-                var userProfileParameters = new SqlParameter[] { new SqlParameter("@user_id", userId) };
-                var friendshipParameters = new SqlParameter[] { new SqlParameter("@user_id", friendId) };
-
-                var userProfileData = dataLink.ExecuteReader("GetUserById", userProfileParameters);
-                var friendUserProfileData = dataLink.ExecuteReader("GetUserById", friendshipParameters);
-
-                if (userProfileData.Rows.Count == 0)
+                var userExistenceCheckParameters = new SqlParameter[]
                 {
-                    throw new RepositoryException($"User with ID {userId} does not exist.");
-                }
-
-                if (friendUserProfileData.Rows.Count == 0)
-                {
-                    throw new RepositoryException($"User with ID {friendId} does not exist.");
-                }
-
-                var existingFriendships = GetAllFriendships(userId);
-                if (existingFriendships.Any(f => f.FriendId == friendId))
-                {
-                    throw new RepositoryException("Friendship already exists.");
-                }
-
-                var parameters = new SqlParameter[]
-                {
-                    new SqlParameter("@user_id", userId),
-                    new SqlParameter("@friend_id", friendId)
+                    new SqlParameter(ParamUserId, userIdentifier)
                 };
-                dataLink.ExecuteNonQuery("AddFriend", parameters);
+                var friendExistenceCheckParameters = new SqlParameter[]
+                {
+                    new SqlParameter(ParamUserId, friendUserIdentifier)
+                };
+
+                var userRecordDataTable = dataLink.ExecuteReader(SP_GetUserById, userExistenceCheckParameters);
+                var friendRecordDataTable = dataLink.ExecuteReader(SP_GetUserById, friendExistenceCheckParameters);
+
+                if (userRecordDataTable.Rows.Count == 0)
+                {
+                    throw new RepositoryException(string.Format(Err_UserDoesNotExist, userIdentifier));
+                }
+
+                if (friendRecordDataTable.Rows.Count == 0)
+                {
+                    throw new RepositoryException(string.Format(Err_UserDoesNotExist, friendUserIdentifier));
+                }
+
+                var existingFriendshipsForUser = GetAllFriendships(userIdentifier);
+                if (existingFriendshipsForUser.Any(existingFriendship => existingFriendship.FriendId == friendUserIdentifier))
+                {
+                    throw new RepositoryException(Err_FriendshipAlreadyExists);
+                }
+
+                var createFriendshipParameters = new SqlParameter[]
+                {
+                    new SqlParameter(ParamUserId, userIdentifier),
+                    new SqlParameter(ParamFriendId, friendUserIdentifier)
+                };
+                dataLink.ExecuteNonQuery(SP_AddFriend, createFriendshipParameters);
             }
-            catch (SqlException ex)
+            catch (SqlException sqlException)
             {
-                throw new RepositoryException("Database error while adding friendship.", ex);
+                throw new RepositoryException(Err_AddFriendshipDb, sqlException);
             }
             catch (RepositoryException)
             {
                 throw;
             }
-            catch (Exception ex)
+            catch (Exception generalException)
             {
-                throw new RepositoryException("An unexpected error occurred while adding friendship.", ex);
+                throw new RepositoryException(Err_AddFriendshipUnexpected, generalException);
             }
         }
 
-        public Friendship GetFriendshipById(int friendshipId)
+        public Friendship GetFriendshipById(int friendshipIdentifier)
         {
             try
             {
-                var parameters = new SqlParameter[]
+                var retrieveFriendshipParameters = new SqlParameter[]
                 {
-                    new SqlParameter("@friendshipId", friendshipId)
+                    new SqlParameter(ParamFriendshipIdCamel, friendshipIdentifier)
                 };
-                var dataTable = dataLink.ExecuteReader("GetFriendshipById", parameters);
-                return dataTable.Rows.Count > 0 ? MapDataRowToFriendship(dataTable.Rows[0]) : null;
+                var friendshipDataTable = dataLink.ExecuteReader(SP_GetFriendshipById, retrieveFriendshipParameters);
+                return friendshipDataTable.Rows.Count > 0
+                    ? MapDataRowToFriendship(friendshipDataTable.Rows[0])
+                    : null;
             }
-            catch (SqlException ex)
+            catch (SqlException sqlException)
             {
-                throw new RepositoryException("Database error while retrieving friendship by ID.", ex);
+                throw new RepositoryException(Err_GetFriendshipByIdDb, sqlException);
             }
-            catch (Exception ex)
+            catch (Exception generalException)
             {
-                throw new RepositoryException("An unexpected error occurred while retrieving friendship by ID.", ex);
+                throw new RepositoryException(Err_GetFriendshipByIdUnexpected, generalException);
             }
         }
 
-        public void RemoveFriendship(int friendshipId)
+        public void RemoveFriendship(int friendshipIdentifier)
         {
             try
             {
-                var parameters = new SqlParameter[]
+                var deleteFriendshipParameters = new SqlParameter[]
                 {
-                    new SqlParameter("@friendship_id", friendshipId)
+                    new SqlParameter(ParamFriendshipIdUnderscore, friendshipIdentifier)
                 };
-                dataLink.ExecuteNonQuery("RemoveFriend", parameters);
+                dataLink.ExecuteNonQuery(SP_RemoveFriend, deleteFriendshipParameters);
             }
-            catch (SqlException ex)
+            catch (SqlException sqlException)
             {
-                throw new RepositoryException("Database error while removing friendship.", ex);
+                throw new RepositoryException(Err_RemoveFriendshipDb, sqlException);
             }
-            catch (Exception ex)
+            catch (Exception generalException)
             {
-                throw new RepositoryException("An unexpected error occurred while removing friendship.", ex);
+                throw new RepositoryException(Err_RemoveFriendshipUnexpected, generalException);
             }
         }
 
-        public int GetFriendshipCount(int userId)
+        public int GetFriendshipCount(int userIdentifier)
         {
             try
             {
-                var parameters = new SqlParameter[]
+                var countQueryParameters = new SqlParameter[]
                 {
-                    new SqlParameter("@user_id", userId)
+                    new SqlParameter(ParamUserId, userIdentifier)
                 };
-                return dataLink.ExecuteScalar<int>("GetFriendshipCountForUser", parameters);
+                return dataLink.ExecuteScalar<int>(SP_GetFriendshipCountForUser, countQueryParameters);
             }
-            catch (SqlException ex)
+            catch (SqlException sqlException)
             {
-                throw new RepositoryException("Database error while retrieving friendship count.", ex);
+                throw new RepositoryException(Err_GetFriendshipCountDb, sqlException);
             }
-            catch (Exception ex)
+            catch (Exception generalException)
             {
-                throw new RepositoryException("An unexpected error occurred while retrieving friendship count.", ex);
+                throw new RepositoryException(Err_GetFriendshipCountUnexpected, generalException);
             }
         }
 
-        public int? GetFriendshipId(int userId, int friendId)
+        public int? GetFriendshipId(int userIdentifier, int friendIdentifier)
         {
             try
             {
-                var parameters = new SqlParameter[]
+                var retrieveFriendshipIdParameters = new SqlParameter[]
                 {
-                    new SqlParameter("@user_id", userId),
-                    new SqlParameter("@friend_id", friendId)
+                    new SqlParameter(ParamUserId, userIdentifier),
+                    new SqlParameter(ParamFriendId, friendIdentifier)
                 };
-                var result = dataLink.ExecuteScalar<int?>("GetFriendshipId", parameters);
-                return result;
+                var friendshipIdentifierResult = dataLink.ExecuteScalar<int?>(SP_GetFriendshipId, retrieveFriendshipIdParameters);
+                return friendshipIdentifierResult;
             }
-            catch (SqlException ex)
+            catch (SqlException sqlException)
             {
-                throw new RepositoryException("Database error while retrieving friendship ID.", ex);
+                throw new RepositoryException(Err_GetFriendshipIdDb, sqlException);
             }
-            catch (Exception ex)
+            catch (Exception generalException)
             {
-                throw new RepositoryException("An unexpected error occurred while retrieving friendship ID.", ex);
+                throw new RepositoryException(Err_GetFriendshipIdUnexpected, generalException);
             }
         }
 
-        private static Friendship MapDataRowToFriendship(DataRow row)
+        private static Friendship MapDataRowToFriendship(DataRow friendshipDataRow)
         {
             return new Friendship(
-                friendshipId: Convert.ToInt32(row["friendship_id"]),
-                userId: Convert.ToInt32(row["user_id"]),
-                friendId: Convert.ToInt32(row["friend_id"]));
+                friendshipId: Convert.ToInt32(friendshipDataRow[ColFriendshipId]),
+                userId: Convert.ToInt32(friendshipDataRow[ColUserId]),
+                friendId: Convert.ToInt32(friendshipDataRow[ColFriendId]));
         }
     }
 }

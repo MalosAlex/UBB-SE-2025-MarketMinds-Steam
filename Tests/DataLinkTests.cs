@@ -1,10 +1,10 @@
-﻿using BusinessLayer.Data;
+﻿using System.Data;
+using System.Linq;
+using System.Threading.Tasks;
+using BusinessLayer.Data;
 using BusinessLayer.Exceptions;
 using Microsoft.Data.SqlClient;
 using NUnit.Framework;
-using System.Data;
-using System.Linq;
-using System.Threading.Tasks;
 
 namespace Tests
 {
@@ -12,13 +12,13 @@ namespace Tests
     public class DataLinkTests
     {
         // DataLink is a singleton with a direct database dependency.
-        private DataLink _dataLink;
-        
+        private DataLink dataLink;
+
         [SetUp]
         public void SetUp()
         {
             // Get the singleton instance for use in all tests.
-            _dataLink = DataLink.Instance;
+            dataLink = DataLink.Instance;
         }
 
         [Test]
@@ -39,7 +39,7 @@ namespace Tests
             // Assert
             Assert.That(instance2, Is.SameAs(instance1));
         }
-        
+
         [Test]
         public void ExecuteScalar_GetFriendshipCountForUser_ReturnsExpectedValue()
         {
@@ -51,11 +51,11 @@ namespace Tests
             };
 
             // Act
-            int count = _dataLink.ExecuteScalar<int>(storedProcedure, parameters);
+            int count = dataLink.ExecuteScalar<int>(storedProcedure, parameters);
             // Assert
             Assert.That(count, Is.EqualTo(2));
         }
-        
+
         [Test]
         public void ExecuteScalar_GetFriendshipId_WithValidParameters_ReturnsExpectedValue()
         {
@@ -68,11 +68,11 @@ namespace Tests
             };
 
             // Act
-            int friendshipId = _dataLink.ExecuteScalar<int>(storedProcedure, parameters);
+            int friendshipId = dataLink.ExecuteScalar<int>(storedProcedure, parameters);
             // Assert
             Assert.That(friendshipId, Is.EqualTo(1));
         }
-        
+
         [Test]
         public void ExecuteReader_GetFriendsForUser_ReturnsDataTableWithExpectedStructure()
         {
@@ -84,12 +84,12 @@ namespace Tests
             };
 
             // Act
-            DataTable dt = _dataLink.ExecuteReader(storedProcedure, parameters);
-            
+            DataTable dt = dataLink.ExecuteReader(storedProcedure, parameters);
+
             // Assert that the DataTable has the correct columns and row count based on your seeded data.
             Assert.That(dt.Rows.Count, Is.EqualTo(2));
         }
-        
+
         [Test]
         public void ExecuteReader_GetUserById_ReturnsUserData()
         {
@@ -101,13 +101,12 @@ namespace Tests
             };
 
             // Act
-            DataTable dt = _dataLink.ExecuteReader(storedProcedure, parameters);
+            DataTable dt = dataLink.ExecuteReader(storedProcedure, parameters);
 
             // Assert that the DataTable contains the expected user data.
             Assert.That(dt.Columns.Contains("user_id"), Is.True);
-            
         }
-        
+
         [Test]
         public void ExecuteReader_GetUserProfileByUserId_ReturnsProfileData()
         {
@@ -119,45 +118,45 @@ namespace Tests
             };
 
             // Act
-            DataTable dt = _dataLink.ExecuteReader(storedProcedure, parameters);
+            DataTable dt = dataLink.ExecuteReader(storedProcedure, parameters);
 
             // Assert that the DataTable contains the expected profile data.
             Assert.That(dt.Rows[0]["profile_picture"].ToString(), Is.EqualTo("ms-appx:///Assets\\download.jpg"));
         }
-        
+
         [Test]
         public void ExecuteNonQuery_WithInvalidProcedureName_ThrowsDatabaseOperationException()
         {
             // Using an invalid stored procedure name should throw an exception.
             string invalidProcedure = "NonExistentProcedure";
-            
+
             // Act & Assert
-            Assert.That(() => _dataLink.ExecuteNonQuery(invalidProcedure),
+            Assert.That(() => dataLink.ExecuteNonQuery(invalidProcedure),
                 Throws.TypeOf<DatabaseOperationException>());
         }
-        
+
         [Test]
         public async Task ExecuteReaderAsync_WithInvalidProcedureName_ThrowsDatabaseOperationException()
         {
             // Arrange
             string invalidProcedure = "NonExistentProcedure";
-            
+
             // Act & Assert
-            Assert.That(async () => await _dataLink.ExecuteReaderAsync(invalidProcedure),
+            Assert.That(async () => await dataLink.ExecuteReaderAsync(invalidProcedure),
                 Throws.TypeOf<DatabaseOperationException>());
         }
-        
+
         [Test]
         public async Task ExecuteNonQueryAsync_WithInvalidProcedureName_ThrowsDatabaseOperationException()
         {
             // Arrange
             string invalidProcedure = "NonExistentProcedure";
-            
+
             // Act & Assert
-            Assert.That(async () => await _dataLink.ExecuteNonQueryAsync(invalidProcedure),
+            Assert.That(async () => await dataLink.ExecuteNonQueryAsync(invalidProcedure),
                 Throws.TypeOf<DatabaseOperationException>());
         }
-        
+
         [Test]
         public void ExecuteScalar_NullResult_ReturnsDefaultValue()
         {
@@ -171,12 +170,12 @@ namespace Tests
             };
 
             // Act
-            int? result = _dataLink.ExecuteScalar<int?>(storedProcedure, parameters);
+            int? result = dataLink.ExecuteScalar<int?>(storedProcedure, parameters);
 
             // Assert - expecting a null result.
             Assert.That(result, Is.Null);
         }
-        
+
         [Test]
         public void ExecuteReader_GetAllCollectionsForUser_ReturnsAllCollections()
         {
@@ -188,13 +187,13 @@ namespace Tests
             };
 
             // Act
-            DataTable dt = _dataLink.ExecuteReader(storedProcedure, parameters);
+            DataTable dt = dataLink.ExecuteReader(storedProcedure, parameters);
             // Assert
             Assert.That(dt.Columns.Contains("collection_id"), Is.True);
             Assert.That(dt.Columns.Contains("name"), Is.True);
             Assert.That(dt.Rows.Count, Is.EqualTo(4));
         }
-        
+
         [Test]
         public void ExecuteReader_GetPublicCollectionsForUser_ReturnsOnlyPublicCollections()
         {
@@ -206,13 +205,13 @@ namespace Tests
             };
 
             // Act
-            DataTable dt = _dataLink.ExecuteReader(storedProcedure, parameters);
+            DataTable dt = dataLink.ExecuteReader(storedProcedure, parameters);
             // Assert
             Assert.That(dt.Columns.Contains("collection_id"), Is.True);
             Assert.That(dt.Columns.Contains("is_public"), Is.True);
             Assert.That(dt.Rows.Count, Is.EqualTo(3));
         }
-        
+
         [Test]
         public void ExecuteReader_GetGamesInCollection_ReturnsGamesInCollection()
         {
@@ -224,13 +223,13 @@ namespace Tests
             };
 
             // Act
-            DataTable dt = _dataLink.ExecuteReader(storedProcedure, parameters);
+            DataTable dt = dataLink.ExecuteReader(storedProcedure, parameters);
             // Assert
             Assert.That(dt.Columns.Contains("game_id"), Is.True);
             Assert.That(dt.Columns.Contains("title"), Is.True);
             Assert.That(dt.Rows.Count, Is.EqualTo(0));
         }
-        
+
         [Test]
         public void ExecuteReader_GetGamesNotInCollection_ReturnsGamesNotInSpecifiedCollection()
         {
@@ -243,12 +242,10 @@ namespace Tests
             };
 
             // Act
-            DataTable dt = _dataLink.ExecuteReader(storedProcedure, parameters);
+            DataTable dt = dataLink.ExecuteReader(storedProcedure, parameters);
             // Assert
             Assert.That(dt.Columns.Contains("game_id"), Is.True);
             Assert.That(dt.Rows.Count, Is.EqualTo(0));
         }
-        
-        
     }
 }

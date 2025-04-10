@@ -9,91 +9,114 @@ namespace Tests.ServiceTests
     [TestFixture]
     public class FakeOwnedGamesServiceTests
     {
-        private IOwnedGamesService _fakeOwnedGamesService;
+        private IOwnedGamesService fakeOwnedGamesService;
 
         [SetUp]
         public void SetUp()
         {
-            _fakeOwnedGamesService = new FakeOwnedGamesService();
+            // Arrange: Instantiate the fake owned games service.
+            fakeOwnedGamesService = new FakeOwnedGamesService();
         }
 
+        #region GetAllOwnedGames
+
         [Test]
-        public void GetAllOwnedGames_ReturnsCorrectCountForUser1()
+        public void GetAllOwnedGames_UserExists_ReturnsCorrectGameCount()
         {
-            // Act: For userId = 1, seeded data contains 2 games.
-            var result = _fakeOwnedGamesService.GetAllOwnedGames(1);
-            // Assert count equals 2.
-            Assert.That(result.Count, Is.EqualTo(2));
+            // Act: For userId 1, seeded data contains 2 games.
+            List<OwnedGame> ownedGames = fakeOwnedGamesService.GetAllOwnedGames(1);
+
+            // Assert: Expect the count to be exactly 2.
+            Assert.That(ownedGames.Count, Is.EqualTo(2));
         }
 
         [Test]
-        public void GetAllOwnedGames_AllReturnedGamesHaveUserId1()
+        public void GetAllOwnedGames_UserExists_AllReturnedGamesHaveUserId1()
         {
-            // Act
-            var result = _fakeOwnedGamesService.GetAllOwnedGames(1);
-            // Assert each returned game has UserId == 1.
-            Assert.That(result.TrueForAll(game => game.UserId == 1), Is.True);
+            // Act: Retrieve owned games for userId 1.
+            List<OwnedGame> ownedGames = fakeOwnedGamesService.GetAllOwnedGames(1);
+
+            // Assert: Verify each game has UserId equal to 1.
+            Assert.That(ownedGames.TrueForAll(game => game.UserId == 1), Is.True);
         }
 
+        #endregion
+
+        #region GetOwnedGameById
+
         [Test]
-        public void GetOwnedGameById_ReturnsGame_WhenExists()
+        public void GetOwnedGameById_GameExists_ReturnsNonNullGame()
         {
-            // Act: For userId = 1, GameId 100 exists.
-            var game = _fakeOwnedGamesService.GetOwnedGameById(100, 1);
-            // Assert game is not null.
-            Assert.That(game, Is.Not.Null);
+            // Act: For userId 1, GameId 100 exists.
+            OwnedGame ownedGame = fakeOwnedGamesService.GetOwnedGameById(100, 1);
+
+            // Assert: Expect the returned game to be non-null.
+            Assert.That(ownedGame, Is.Not.Null);
         }
 
         [Test]
-        public void GetOwnedGameById_ReturnsGameWithCorrectGameId_WhenExists()
+        public void GetOwnedGameById_GameExists_ReturnsGameWithCorrectGameId()
         {
-            // Act
-            var game = _fakeOwnedGamesService.GetOwnedGameById(100, 1);
-            // Assert GameId equals 100.
-            Assert.That(game.GameId, Is.EqualTo(100));
+            // Act: Retrieve the owned game for GameId 100 for userId 1.
+            OwnedGame ownedGame = fakeOwnedGamesService.GetOwnedGameById(100, 1);
+
+            // Assert: Verify that the game's GameId equals 100.
+            Assert.That(ownedGame.GameId, Is.EqualTo(100));
         }
 
         [Test]
-        public void GetOwnedGameById_ReturnsNull_WhenGameDoesNotExist()
+        public void GetOwnedGameById_GameDoesNotExist_ReturnsNull()
         {
-            // Act: For userId = 1, GameId 999 does not exist.
-            var game = _fakeOwnedGamesService.GetOwnedGameById(999, 1);
-            // Assert game is null.
-            Assert.That(game, Is.Null);
+            // Act: For userId 1, GameId 999 does not exist.
+            OwnedGame ownedGame = fakeOwnedGamesService.GetOwnedGameById(999, 1);
+
+            // Assert: Expect the returned value to be null.
+            Assert.That(ownedGame, Is.Null);
         }
 
+        #endregion
+
+        #region RemoveOwnedGame
+
         [Test]
-        public void RemoveOwnedGame_DecreasesCount_WhenGameExists()
+        public void RemoveOwnedGame_GameExists_DecreasesGameCount()
         {
-            // Arrange: Get initial count.
-            int initialCount = _fakeOwnedGamesService.GetAllOwnedGames(1).Count;
-            // Act: Remove an existing game (GameId 100).
-            _fakeOwnedGamesService.RemoveOwnedGame(100, 1);
-            int afterCount = _fakeOwnedGamesService.GetAllOwnedGames(1).Count;
-            // Assert that count decreased by one.
-            Assert.That(afterCount, Is.EqualTo(initialCount - 1));
+            // Arrange: Retrieve the initial count of owned games for userId 1.
+            int initialGameCount = fakeOwnedGamesService.GetAllOwnedGames(1).Count;
+
+            // Act: Remove an existing game (GameId 100) for userId 1.
+            fakeOwnedGamesService.RemoveOwnedGame(100, 1);
+            int updatedGameCount = fakeOwnedGamesService.GetAllOwnedGames(1).Count;
+
+            // Assert: Expect the count to decrease by one.
+            Assert.That(updatedGameCount, Is.EqualTo(initialGameCount - 1));
         }
 
         [Test]
-        public void RemoveOwnedGame_RemovedGameIsNotRetrievable()
+        public void RemoveOwnedGame_GameExists_GameIsNoLongerRetrievable()
         {
             // Act: Remove game with GameId 100 for userId 1.
-            _fakeOwnedGamesService.RemoveOwnedGame(100, 1);
-            var game = _fakeOwnedGamesService.GetOwnedGameById(100, 1);
-            // Assert that the removed game is null.
-            Assert.That(game, Is.Null);
+            fakeOwnedGamesService.RemoveOwnedGame(100, 1);
+            OwnedGame removedGame = fakeOwnedGamesService.GetOwnedGameById(100, 1);
+
+            // Assert: The removed game should not be retrievable (should be null).
+            Assert.That(removedGame, Is.Null);
         }
 
         [Test]
-        public void RemoveOwnedGame_DoesNothing_WhenGameNotFound()
+        public void RemoveOwnedGame_GameDoesNotExist_DoesNotChangeGameCount()
         {
-            // Arrange: Get initial count.
-            int initialCount = _fakeOwnedGamesService.GetAllOwnedGames(1).Count;
-            // Act: Attempt to remove a game that does not exist.
-            _fakeOwnedGamesService.RemoveOwnedGame(999, 1);
-            int afterCount = _fakeOwnedGamesService.GetAllOwnedGames(1).Count;
-            // Assert that the count remains unchanged.
-            Assert.That(afterCount, Is.EqualTo(initialCount));
+            // Arrange: Retrieve the initial count of owned games for userId 1.
+            int initialGameCount = fakeOwnedGamesService.GetAllOwnedGames(1).Count;
+
+            // Act: Attempt to remove a non-existing game (GameId 999) for userId 1.
+            fakeOwnedGamesService.RemoveOwnedGame(999, 1);
+            int updatedGameCount = fakeOwnedGamesService.GetAllOwnedGames(1).Count;
+
+            // Assert: Expect the game count to remain unchanged.
+            Assert.That(updatedGameCount, Is.EqualTo(initialGameCount));
         }
+
+        #endregion
     }
 }
