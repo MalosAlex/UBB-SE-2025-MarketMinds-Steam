@@ -4,6 +4,6 @@ namespace BusinessLayer.Repositories.Interfaces
 {
     public interface IPointsOffersRepository
     {
-        List<PointsOffer> Offers { get; }
+        List<PointsOffer> PointsOffers { get; }
     }
 }

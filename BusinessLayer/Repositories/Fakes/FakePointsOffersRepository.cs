@@ -22,7 +22,7 @@ namespace BusinessLayer.Repositories.Fakes
             };
         }
 
-        public List<PointsOffer> Offers
+        public List<PointsOffer> PointsOffers
         {
             get { return offers; }
         }

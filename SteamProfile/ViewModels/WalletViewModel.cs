@@ -41,7 +41,7 @@ namespace SteamProfile.ViewModels
         {
             this.walletService = walletService ?? throw new ArgumentNullException(nameof(walletService));
             this.pointsOffersRepository = pointsOffersRepository ?? throw new ArgumentNullException(nameof(pointsOffersRepository));
-            PointsOffers = this.pointsOffersRepository.Offers;
+            PointsOffers = this.pointsOffersRepository.PointsOffers;
             RefreshWalletData();
         }
 

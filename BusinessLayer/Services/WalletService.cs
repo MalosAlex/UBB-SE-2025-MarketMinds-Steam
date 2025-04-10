@@ -42,20 +42,20 @@ namespace BusinessLayer.Services
         {
             walletRepository.AddNewWallet(userId);
         }
-        public void PurchasePoints(PointsOffer offer)
+        public void PurchasePoints(PointsOffer pointsOffer)
         {
-            if (offer == null)
+            if (pointsOffer == null)
             {
-                throw new ArgumentNullException(nameof(offer));
+                throw new ArgumentNullException(nameof(pointsOffer));
             }
 
             // Check if user has enough balance
-            if (GetBalance() < offer.Price)
+            if (GetBalance() < pointsOffer.Price)
             {
                 throw new InvalidOperationException("Insufficient funds");
             }
 
-            walletRepository.PurchasePoints(offer, userService.GetCurrentUser().UserId);
+            walletRepository.PurchasePoints(pointsOffer, userService.GetCurrentUser().UserId);
         }
 
         // Moved from WalletViewModel
