@@ -308,8 +308,8 @@ namespace Tests.RepositoryTests
                 .Throws(new DatabaseOperationException("Database error"));
 
             // Act & Assert
-            var ex = Assert.Throws<RepositoryException>(() => userProfileRepository.UpdateProfileBio(userId, bio));
-            Assert.That(ex.Message, Is.EqualTo($"Failed to update profile for user {userId}."));
+            var exception = Assert.Throws<RepositoryException>(() => userProfileRepository.UpdateProfileBio(userId, bio));
+            Assert.That(exception.Message, Is.EqualTo($"Failed to update profile for user {userId}."));
         }
 
         [Test]
@@ -339,8 +339,8 @@ namespace Tests.RepositoryTests
                 .Throws(new DatabaseOperationException("Database error"));
 
             // Act & Assert
-            var ex = Assert.Throws<RepositoryException>(() => userProfileRepository.UpdateProfilePicture(userId, picture));
-            Assert.That(ex.Message, Is.EqualTo($"Failed to update profile for user {userId}."));
+            var exception = Assert.Throws<RepositoryException>(() => userProfileRepository.UpdateProfilePicture(userId, picture));
+            Assert.That(exception.Message, Is.EqualTo($"Failed to update profile for user {userId}."));
         }
     }
 }
