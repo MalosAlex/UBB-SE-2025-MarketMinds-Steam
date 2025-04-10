@@ -100,8 +100,9 @@ namespace Tests.Models
         public void Games_AddOwnedGame_GameIsInList()
         {
             // Arrange
+            int userIdentifier = 1;
             var collection = CreateValidCollection();
-            var ownedGame = new OwnedGame(1, "Test", "Test"); // Assuming this is a simple model
+            var ownedGame = new OwnedGame(userIdentifier, "Test", "Test"); // Assuming this is a simple model
 
             // Act
             collection.Games.Add(ownedGame);
@@ -122,7 +123,8 @@ namespace Tests.Models
 
         private Collection CreateValidCollection()
         {
-            return new Collection(1, "Test", DateOnly.FromDateTime(DateTime.Today));
+            int userIdentifier = 1;
+            return new Collection(userIdentifier, "Test", DateOnly.FromDateTime(DateTime.Today));
         }
     }
 }

@@ -23,6 +23,7 @@ namespace Tests.RepositoryTests
         {
             // Act: Get all collections for user with ID 1.
             var collectionsForUser1 = fakeCollectionsRepository.GetAllCollections(1);
+
             // Assert: Expect exactly three collections.
             Assert.That(collectionsForUser1.Count, Is.EqualTo(3));
         }
@@ -32,6 +33,7 @@ namespace Tests.RepositoryTests
         {
             // Act: Get all collections for a user that has none (user ID 999).
             var collectionsForNonExistingUser = fakeCollectionsRepository.GetAllCollections(999);
+
             // Assert: Expect an empty list.
             Assert.That(collectionsForNonExistingUser, Is.Empty);
         }
@@ -41,6 +43,7 @@ namespace Tests.RepositoryTests
         {
             // Act: Get the last three collections for user with ID 1.
             var lastThreeCollectionsForUser1 = fakeCollectionsRepository.GetLastThreeCollectionsForUser(1);
+
             // Assert: Expect exactly three collections.
             Assert.That(lastThreeCollectionsForUser1.Count, Is.EqualTo(3));
         }
@@ -50,6 +53,7 @@ namespace Tests.RepositoryTests
         {
             // Act: Get the last three collections for user with ID 1.
             var lastThreeCollectionsForUser1 = fakeCollectionsRepository.GetLastThreeCollectionsForUser(1);
+
             // Assert: The first collection's CreatedAt should be greater than or equal to the second's.
             Assert.That(lastThreeCollectionsForUser1.First().CreatedAt,
                         Is.GreaterThanOrEqualTo(lastThreeCollectionsForUser1.ElementAt(1).CreatedAt));
@@ -60,6 +64,7 @@ namespace Tests.RepositoryTests
         {
             // Act: Retrieve the collection with CollectionId 2 for user with ID 1.
             var retrievedCollection = fakeCollectionsRepository.GetCollectionById(2, 1);
+
             // Assert: The collection's name should be "Test Collection 2".
             Assert.That(retrievedCollection.CollectionName, Is.EqualTo("Test Collection 2"));
         }
@@ -69,6 +74,7 @@ namespace Tests.RepositoryTests
         {
             // Act: Try to retrieve a collection that does not exist (CollectionId 999 for user with ID 1).
             var retrievedCollection = fakeCollectionsRepository.GetCollectionById(999, 1);
+
             // Assert: Expect the result to be null.
             Assert.That(retrievedCollection, Is.Null);
         }
@@ -78,6 +84,7 @@ namespace Tests.RepositoryTests
         {
             // Act: Call the method for retrieving games in a collection using the single-parameter overload.
             var ownedGamesForCollection = fakeCollectionsRepository.GetGamesInCollection(1);
+
             // Assert: Should always return an empty list.
             Assert.That(ownedGamesForCollection, Is.Empty);
         }
@@ -87,6 +94,7 @@ namespace Tests.RepositoryTests
         {
             // Act: Call the overload with userId for collection with ID 1.
             var ownedGamesForUserCollection1 = fakeCollectionsRepository.GetGamesInCollection(1, 1);
+
             // Assert: Expect exactly two games.
             Assert.That(ownedGamesForUserCollection1.Count, Is.EqualTo(2));
         }
@@ -96,6 +104,7 @@ namespace Tests.RepositoryTests
         {
             // Act: Call the overload with userId for collection with an ID other than 1 (e.g. 2).
             var ownedGamesForUserCollectionNot1 = fakeCollectionsRepository.GetGamesInCollection(2, 1);
+
             // Assert: Expect an empty list.
             Assert.That(ownedGamesForUserCollectionNot1, Is.Empty);
         }
@@ -133,8 +142,10 @@ namespace Tests.RepositoryTests
         {
             // Arrange: Get the collection count before removal for user 1.
             int collectionCountBeforeRemoval = fakeCollectionsRepository.GetAllCollections(1).Count;
+
             // Act: Remove the collection with CollectionId "1" for user "1".
             fakeCollectionsRepository.RemoveCollectionForUser("1", "1");
+
             // Assert: The new count should decrease by one.
             int collectionCountAfterRemoval = fakeCollectionsRepository.GetAllCollections(1).Count;
             Assert.That(collectionCountAfterRemoval, Is.EqualTo(collectionCountBeforeRemoval - 1));
@@ -147,8 +158,10 @@ namespace Tests.RepositoryTests
             var newCollection = new Collection(1, "New Collection", DateOnly.FromDateTime(DateTime.Now), "new.jpg", true);
             newCollection.CollectionId = 0;
             int collectionCountBeforeAddition = fakeCollectionsRepository.GetAllCollections(1).Count;
+
             // Act: Save the new collection.
             fakeCollectionsRepository.SaveCollection("1", newCollection);
+
             // Assert: The collection count should increase by one.
             int collectionCountAfterAddition = fakeCollectionsRepository.GetAllCollections(1).Count;
             Assert.That(collectionCountAfterAddition, Is.EqualTo(collectionCountBeforeAddition + 1));
@@ -159,9 +172,11 @@ namespace Tests.RepositoryTests
         {
             // Arrange: Retrieve an existing collection for user 1.
             var existingCollection = fakeCollectionsRepository.GetCollectionById(2, 1);
+
             // Act: Change its name and then save the updated collection.
             existingCollection.CollectionName = "Updated Name";
             fakeCollectionsRepository.SaveCollection("1", existingCollection);
+
             // Assert: The updated collection should reflect the new name.
             var updatedCollection = fakeCollectionsRepository.GetCollectionById(2, 1);
             Assert.That(updatedCollection.CollectionName, Is.EqualTo("Updated Name"));
@@ -172,8 +187,10 @@ namespace Tests.RepositoryTests
         {
             // Arrange: Get the collection count for user 1 before deletion.
             int collectionCountBeforeDeletion = fakeCollectionsRepository.GetAllCollections(1).Count;
+
             // Act: Delete the collection with CollectionId 2 for user 1.
             fakeCollectionsRepository.DeleteCollection(2, 1);
+
             // Assert: The collection count should decrease by one.
             int collectionCountAfterDeletion = fakeCollectionsRepository.GetAllCollections(1).Count;
             Assert.That(collectionCountAfterDeletion, Is.EqualTo(collectionCountBeforeDeletion - 1));
@@ -184,8 +201,10 @@ namespace Tests.RepositoryTests
         {
             // Arrange: Get the current collection count for user 1.
             int collectionCountBeforeCreation = fakeCollectionsRepository.GetAllCollections(1).Count;
+
             // Act: Create a new collection for user 1.
             fakeCollectionsRepository.CreateCollection(1, "Created Collection", "created.jpg", true, DateOnly.FromDateTime(DateTime.Now));
+
             // Assert: The collection count should increase by one.
             int collectionCountAfterCreation = fakeCollectionsRepository.GetAllCollections(1).Count;
             Assert.That(collectionCountAfterCreation, Is.EqualTo(collectionCountBeforeCreation + 1));
@@ -196,8 +215,10 @@ namespace Tests.RepositoryTests
         {
             // Arrange: Retrieve a collection for user 1.
             var collectionToUpdate = fakeCollectionsRepository.GetCollectionById(2, 1);
+
             // Act: Update its details.
             fakeCollectionsRepository.UpdateCollection(2, 1, "Updated Collection", "updated.jpg", false);
+
             // Assert: The collection's name should be updated to "Updated Collection".
             var updatedCollection = fakeCollectionsRepository.GetCollectionById(2, 1);
             Assert.That(updatedCollection.CollectionName, Is.EqualTo("Updated Collection"));
@@ -208,6 +229,7 @@ namespace Tests.RepositoryTests
         {
             // Act: Retrieve public collections for user 1.
             var publicCollectionsForUser1 = fakeCollectionsRepository.GetPublicCollectionsForUser(1);
+
             // Assert: Based on seeded data for user 1, expect two public collections.
             Assert.That(publicCollectionsForUser1.Count, Is.EqualTo(2));
         }
@@ -217,6 +239,7 @@ namespace Tests.RepositoryTests
         {
             // Act: Retrieve games not in a collection for user 1.
             var dummyGamesNotInCollection = fakeCollectionsRepository.GetGamesNotInCollection(1, 1);
+
             // Assert: Expect the list to contain one dummy game.
             Assert.That(dummyGamesNotInCollection.Count, Is.EqualTo(1));
         }

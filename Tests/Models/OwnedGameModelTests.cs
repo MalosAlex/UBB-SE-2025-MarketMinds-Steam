@@ -89,9 +89,10 @@ namespace Tests.Models
         {
             // Arrange
             var expected = "Terraria";
+            int userIdentifier = 1;
 
             // Act
-            var ownedGame = new OwnedGame(1, expected, "Description");
+            var ownedGame = new OwnedGame(userIdentifier, expected, "Description");
 
             // Assert
             Assert.That(ownedGame.GameTitle, Is.EqualTo(expected));
@@ -102,9 +103,10 @@ namespace Tests.Models
         {
             // Arrange
             var expected = "Adventure game";
+            int userIdentifier = 1;
 
             // Act
-            var ownedGame = new OwnedGame(1, "GameTitle", expected);
+            var ownedGame = new OwnedGame(userIdentifier, "GameTitle", expected);
 
             // Assert
             Assert.That(ownedGame.Description, Is.EqualTo(expected));
@@ -115,9 +117,10 @@ namespace Tests.Models
         {
             // Arrange
             var expected = "https://cover.jpg";
+            int userIdentifier = 1;
 
             // Act
-            var ownedGame = new OwnedGame(1, "GameTitle", "Description", expected);
+            var ownedGame = new OwnedGame(userIdentifier, "GameTitle", "Description", expected);
 
             // Assert
             Assert.That(ownedGame.CoverPicture, Is.EqualTo(expected));
@@ -125,7 +128,8 @@ namespace Tests.Models
 
         private OwnedGame CreateValidOwnedGame()
         {
-            return new OwnedGame(1, "Test Game", "Test description");
+            int userIdentifier = 1;
+            return new OwnedGame(userIdentifier, "Test Game", "Test description");
         }
     }
 }

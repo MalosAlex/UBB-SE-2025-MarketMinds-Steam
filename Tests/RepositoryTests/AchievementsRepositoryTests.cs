@@ -98,7 +98,7 @@ namespace Tests.RepositoryTests
                 .Setup(dataLink => dataLink.ExecuteScalar<int>("IsAchievementsTableEmpty", null))
                 .Throws(new Exception("Something went wrong"));
 
-            // Assert
+            // Act & Assert
             Assert.Throws<RepositoryException>(() => achievementsRepository.IsAchievementsTableEmpty());
         }
 
@@ -121,7 +121,7 @@ namespace Tests.RepositoryTests
             mockDataLink.Setup(dataLink => dataLink.ExecuteNonQuery("UpdateAchievementIcon", It.IsAny<SqlParameter[]>()))
                          .Throws(new Exception("test"));
 
-            // Assert
+            // Act & Assert
             Assert.Throws<RepositoryException>(() => achievementsRepository.UpdateAchievementIconUrl(10, "url"));
         }
 
@@ -300,7 +300,7 @@ namespace Tests.RepositoryTests
             mockDataLink.Setup(dataLink => dataLink.ExecuteNonQuery("UnlockAchievement", It.IsAny<SqlParameter[]>()))
                          .Throws(new Exception("test"));
 
-            // Assert
+            // Act & Assert
             Assert.Throws<RepositoryException>(() => achievementsRepository.UnlockAchievement(1, 100));
         }
 
@@ -323,7 +323,7 @@ namespace Tests.RepositoryTests
             mockDataLink.Setup(dataLink => dataLink.ExecuteNonQuery("RemoveAchievement", It.IsAny<SqlParameter[]>()))
                          .Throws(new Exception("test"));
 
-            // Assert
+            // Act & Assert
             Assert.Throws<RepositoryException>(() => achievementsRepository.RemoveAchievement(1, 100));
         }
 
@@ -346,7 +346,7 @@ namespace Tests.RepositoryTests
             mockDataLink.Setup(dataLink => dataLink.ExecuteReader("GetUnlockedDataForAchievement", It.IsAny<SqlParameter[]>()))
                          .Throws(new Exception("test"));
 
-            // Assert
+            // Act & Assert
             Assert.Throws<RepositoryException>(() => achievementsRepository.GetUnlockedDataForAchievement(1, 2));
         }
 
@@ -774,7 +774,7 @@ namespace Tests.RepositoryTests
             mockDataLink.Setup(dataLink => dataLink.ExecuteReader("GetAllAchievements", null))
                          .Throws(new Exception("DB error"));
 
-            // Act
+            // Act & Assert
             Assert.Throws<RepositoryException>(() => achievementsRepository.GetAchievementsWithStatusForUser(1));
         }
 
@@ -799,7 +799,7 @@ namespace Tests.RepositoryTests
             mockDataLink.Setup(dataLink => dataLink.ExecuteScalar<int>("GetNumberOfSoldGames", It.IsAny<SqlParameter[]>()))
                          .Throws(new Exception("fail"));
 
-            // Assert
+            // Act & Assert
             Assert.Throws<RepositoryException>(() => achievementsRepository.GetNumberOfSoldGames(1));
         }
 
@@ -880,7 +880,7 @@ namespace Tests.RepositoryTests
             mockDataLink.Setup(dataLink => dataLink.ExecuteScalar<int>("GetNumberOfReviewsGiven", It.IsAny<SqlParameter[]>()))
                          .Throws(new Exception("fail"));
 
-            // Assert
+            // Act & Assert
             Assert.Throws<RepositoryException>(() => achievementsRepository.GetNumberOfReviewsGiven(1));
         }
 
@@ -905,7 +905,7 @@ namespace Tests.RepositoryTests
             mockDataLink.Setup(dataLink => dataLink.ExecuteScalar<int>("GetNumberOfReviewsReceived", It.IsAny<SqlParameter[]>()))
                          .Throws(new Exception("Simulated failure"));
 
-            // Act
+            // Act & Assert
             Assert.Throws<RepositoryException>(() => achievementsRepository.GetNumberOfReviewsReceived(1));
         }
 
@@ -933,7 +933,7 @@ namespace Tests.RepositoryTests
             mockDataLink.Setup(dataLink => dataLink.ExecuteScalar<DateTime>("GetUserCreatedAt", It.IsAny<SqlParameter[]>()))
                          .Throws(new Exception("Database fail"));
 
-            // Assert
+            // Act & Assert
             Assert.Throws<RepositoryException>(() => achievementsRepository.GetYearsOfAcftivity(1));
         }
 
@@ -986,7 +986,7 @@ namespace Tests.RepositoryTests
             mockDataLink.Setup(dataLink => dataLink.ExecuteScalar<bool>("IsUserDeveloper", It.IsAny<SqlParameter[]>()))
                          .Throws(new Exception("fail"));
 
-            // Assert
+            // Act & Assert
             Assert.Throws<RepositoryException>(() => achievementsRepository.IsUserDeveloper(1));
         }
 
@@ -1011,7 +1011,7 @@ namespace Tests.RepositoryTests
                 .Setup(dataLink => dataLink.ExecuteScalar<int>("GetNumberOfPosts", It.IsAny<SqlParameter[]>()))
                 .Throws(new Exception("Simulated DB failure"));
 
-            // Assert
+            // Act & Assert
             Assert.Throws<RepositoryException>(() => achievementsRepository.GetNumberOfPosts(1));
         }
     }
