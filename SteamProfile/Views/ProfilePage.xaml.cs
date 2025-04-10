@@ -64,8 +64,7 @@ namespace SteamProfile.Views
                         App.UserProfileRepository,
                         App.CollectionsRepository,
                         App.FeaturesService,
-                        App.AchievementsService
-                    );
+                        App.AchievementsService);
 
                     Debug.WriteLine("ProfileViewModel initialized with services.");
                     ViewModel = ProfileViewModel.Instance;
