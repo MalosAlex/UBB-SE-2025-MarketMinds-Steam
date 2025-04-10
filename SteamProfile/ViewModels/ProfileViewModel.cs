@@ -13,6 +13,7 @@ using BusinessLayer.Services;
 using SteamProfile.Views;
 using Microsoft.UI.Xaml;
 using BusinessLayer.Repositories;
+using BusinessLayer.Repositories.Interfaces;
 using BusinessLayer.Services.Interfaces;
 
 namespace SteamProfile.ViewModels
@@ -23,8 +24,8 @@ namespace SteamProfile.ViewModels
         private readonly IUserService userService;
         private readonly IFriendsService friendsService;
         private readonly DispatcherQueue dispatcherQueue;
-        private readonly UserProfilesRepository userProfileRepository;
-        private readonly FeaturesService featuresService;
+        private readonly IUserProfilesRepository userProfileRepository;
+        private readonly IFeaturesService featuresService;
         private readonly IAchievementsService achievementsService;
 
         [ObservableProperty]
