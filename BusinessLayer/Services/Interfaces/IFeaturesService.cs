@@ -13,5 +13,7 @@ namespace BusinessLayer.Services.Interfaces
         (bool success, string message) PurchaseFeature(int userId, int featureId);
         (string profilePicturePath, string bioText, List<Feature> equippedFeatures) GetFeaturePreviewData(int userId, int featureId);
         IUserService UserService { get; }
+
+        List<Feature> GetUserFeatures(int userId);
     }
 }

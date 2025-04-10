@@ -9,6 +9,7 @@ using System.Text;
 using System.Threading.Tasks;
 using BusinessLayer.Models;
 using BusinessLayer.Repositories;
+using BusinessLayer.Repositories.Interfaces;
 using BusinessLayer.Services;
 using BusinessLayer.Services.Interfaces;
 using CommunityToolkit.Mvvm.ComponentModel;
@@ -24,12 +25,12 @@ namespace SteamProfile.ViewModels
 {
     public partial class FeaturesViewModel : ObservableObject
     {
-        private readonly FeaturesService featuresService;
+        private readonly IFeaturesService featuresService;
         private readonly IUserService userService;
         private XamlRoot xamlRoot;
         private string statusMessage = string.Empty;
         private const string PathStart = "ms-appx:///";
-        private readonly UserProfilesRepository userProfilesRepository;
+        private readonly IUserProfilesRepository userProfilesRepository;
         private SolidColorBrush statusColor = new(Colors.Black);
         private FeatureDisplay selectedFeature;
         private XamlRoot featuresXamlRoot;

@@ -5,15 +5,15 @@ namespace BusinessLayer.Repositories
 {
     public class PointsOffersRepository : IPointsOffersRepository
     {
-        public List<PointsOffer> Offers { get; } = [];
+        public List<PointsOffer> PointsOffers { get; } = [];
 
         public PointsOffersRepository()
         {
-            Offers.Add(new PointsOffer(2, 5));
-            Offers.Add(new PointsOffer(8, 25));
-            Offers.Add(new PointsOffer(15, 50));
-            Offers.Add(new PointsOffer(20, 100));
-            Offers.Add(new PointsOffer(50, 500));
+            PointsOffers.Add(new PointsOffer(2, 5));
+            PointsOffers.Add(new PointsOffer(8, 25));
+            PointsOffers.Add(new PointsOffer(15, 50));
+            PointsOffers.Add(new PointsOffer(20, 100));
+            PointsOffers.Add(new PointsOffer(50, 500));
         }
     }
 }

@@ -13,13 +13,13 @@ namespace BusinessLayer.Services
     {
         private readonly string resetCodesPath;
         private readonly IUserService userService;
-        private readonly PasswordResetValidator validator;
+        private readonly PasswordResetValidator passwordResetValidator;
         private readonly IPasswordResetRepository passwordResetRepository;
 
         public PasswordResetService(IPasswordResetRepository passwordResetRepository, IUserService userService)
         {
             this.userService = userService ?? throw new ArgumentNullException(nameof(userService));
-            validator = new PasswordResetValidator();
+            passwordResetValidator = new PasswordResetValidator();
             resetCodesPath = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "ResetCodes");
             Directory.CreateDirectory(resetCodesPath);
             this.passwordResetRepository = passwordResetRepository ?? throw new ArgumentNullException(nameof(passwordResetRepository));
@@ -27,10 +27,10 @@ namespace BusinessLayer.Services
 
         public async Task<(bool isValid, string message)> SendResetCode(string email)
         {
-            var validationResult = validator.ValidateEmail(email);
+            var validationResult = passwordResetValidator.ValidateEmail(email);
             if (!validationResult.isValid)
             {
-                throw new InvalidOperationException(validationResult.message);
+                throw new InvalidOperationException(validationResult.errorMessage);
             }
 
             var user = userService.GetUserByEmail(email);
@@ -69,16 +69,16 @@ namespace BusinessLayer.Services
 
         public (bool isValid, string message) VerifyResetCode(string email, string code)
         {
-            var emailValidation = validator.ValidateEmail(email);
+            var emailValidation = passwordResetValidator.ValidateEmail(email);
             if (!emailValidation.isValid)
             {
-                throw new InvalidOperationException(emailValidation.message);
+                throw new InvalidOperationException(emailValidation.errorMessage);
             }
 
-            var codeValidation = validator.ValidateResetCode(code);
+            var codeValidation = passwordResetValidator.ValidateResetCode(code);
             if (!codeValidation.isValid)
             {
-                throw new InvalidOperationException(codeValidation.message);
+                throw new InvalidOperationException(codeValidation.errorMessage);
             }
 
             try
@@ -121,22 +121,22 @@ namespace BusinessLayer.Services
         {
             try
             {
-                var emailValidation = validator.ValidateEmail(email);
+                var emailValidation = passwordResetValidator.ValidateEmail(email);
                 if (!emailValidation.isValid)
                 {
-                    throw new InvalidOperationException(emailValidation.message);
+                    throw new InvalidOperationException(emailValidation.errorMessage);
                 }
 
-                var codeValidation = validator.ValidateResetCode(code);
+                var codeValidation = passwordResetValidator.ValidateResetCode(code);
                 if (!codeValidation.isValid)
                 {
-                    throw new InvalidOperationException(codeValidation.message);
+                    throw new InvalidOperationException(codeValidation.errorMessage);
                 }
 
-                var passwordValidation = validator.ValidatePassword(newPassword);
+                var passwordValidation = passwordResetValidator.ValidatePassword(newPassword);
                 if (!passwordValidation.isValid)
                 {
-                    return (false, passwordValidation.message);
+                    return (false, passwordValidation.errorMessage);
                 }
 
                 var verificationResult = VerifyResetCode(email, code);

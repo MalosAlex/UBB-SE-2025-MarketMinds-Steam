@@ -16,7 +16,7 @@ namespace Tests.RepositoryTests
     public class PasswordResetRepositoryTests
     {
         private Mock<IDataLink> mockDataLink;
-        private PasswordResetRepository passwordResetRepository;
+        private IPasswordResetRepository passwordResetRepository;
 
         [SetUp]
         public void Setup()
