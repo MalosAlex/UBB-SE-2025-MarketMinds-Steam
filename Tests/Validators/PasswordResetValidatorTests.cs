@@ -40,7 +40,7 @@ namespace Tests.Validators
             var result = passwordResetValidator.ValidateEmail(email);
 
             // Assert
-            Assert.That(result.message, Is.Empty);
+            Assert.That(result.errorMessage, Is.Empty);
         }
 
         [Test]
@@ -66,7 +66,7 @@ namespace Tests.Validators
             var result = passwordResetValidator.ValidateEmail(email);
 
             // Assert
-            Assert.That(result.message, Is.EqualTo("Email address is required."));
+            Assert.That(result.errorMessage, Is.EqualTo("Email address is required."));
         }
 
         [Test]
@@ -92,7 +92,7 @@ namespace Tests.Validators
             var result = passwordResetValidator.ValidateEmail(email);
 
             // Assert
-            Assert.That(result.message, Is.EqualTo("Email address is required."));
+            Assert.That(result.errorMessage, Is.EqualTo("Email address is required."));
         }
 
         [Test]
@@ -118,7 +118,7 @@ namespace Tests.Validators
             var result = passwordResetValidator.ValidateEmail(email);
 
             // Assert
-            Assert.That(result.message, Is.EqualTo("Email address is required."));
+            Assert.That(result.errorMessage, Is.EqualTo("Email address is required."));
         }
 
         [TestCase("test")]
@@ -148,7 +148,7 @@ namespace Tests.Validators
             var result = passwordResetValidator.ValidateEmail(email);
 
             // Assert
-            Assert.That(result.message, Is.EqualTo("Invalid email format."));
+            Assert.That(result.errorMessage, Is.EqualTo("Invalid email format."));
         }
 
         [TestCase("test@example.com")]
@@ -176,7 +176,7 @@ namespace Tests.Validators
             var result = passwordResetValidator.ValidateEmail(email);
 
             // Assert
-            Assert.That(result.message, Is.Empty);
+            Assert.That(result.errorMessage, Is.Empty);
         }
 
         #endregion
@@ -206,7 +206,7 @@ namespace Tests.Validators
             var result = passwordResetValidator.ValidateResetCode(code);
 
             // Assert
-            Assert.That(result.message, Is.Empty);
+            Assert.That(result.errorMessage, Is.Empty);
         }
 
         [Test]
@@ -232,7 +232,7 @@ namespace Tests.Validators
             var result = passwordResetValidator.ValidateResetCode(code);
 
             // Assert
-            Assert.That(result.message, Is.EqualTo("Reset code is required."));
+            Assert.That(result.errorMessage, Is.EqualTo("Reset code is required."));
         }
 
         [Test]
@@ -258,7 +258,7 @@ namespace Tests.Validators
             var result = passwordResetValidator.ValidateResetCode(code);
 
             // Assert
-            Assert.That(result.message, Is.EqualTo("Reset code is required."));
+            Assert.That(result.errorMessage, Is.EqualTo("Reset code is required."));
         }
 
         [Test]
@@ -284,7 +284,7 @@ namespace Tests.Validators
             var result = passwordResetValidator.ValidateResetCode(code);
 
             // Assert
-            Assert.That(result.message, Is.EqualTo("Reset code is required."));
+            Assert.That(result.errorMessage, Is.EqualTo("Reset code is required."));
         }
 
         [TestCase("12345")]
@@ -312,7 +312,7 @@ namespace Tests.Validators
             var result = passwordResetValidator.ValidateResetCode(code);
 
             // Assert
-            Assert.That(result.message, Is.EqualTo("Reset code must be a 6-digit number."));
+            Assert.That(result.errorMessage, Is.EqualTo("Reset code must be a 6-digit number."));
         }
 
         [TestCase("123456")]
@@ -338,7 +338,7 @@ namespace Tests.Validators
             var result = passwordResetValidator.ValidateResetCode(code);
 
             // Assert
-            Assert.That(result.message, Is.Empty);
+            Assert.That(result.errorMessage, Is.Empty);
         }
 
         #endregion
@@ -368,7 +368,7 @@ namespace Tests.Validators
             var result = passwordResetValidator.ValidatePassword(password);
 
             // Assert
-            Assert.That(result.message, Is.Empty);
+            Assert.That(result.errorMessage, Is.Empty);
         }
 
         [Test]
@@ -394,7 +394,7 @@ namespace Tests.Validators
             var result = passwordResetValidator.ValidatePassword(password);
 
             // Assert
-            Assert.That(result.message, Is.EqualTo("New password is required."));
+            Assert.That(result.errorMessage, Is.EqualTo("New password is required."));
         }
 
         [Test]
@@ -420,7 +420,7 @@ namespace Tests.Validators
             var result = passwordResetValidator.ValidatePassword(password);
 
             // Assert
-            Assert.That(result.message, Is.EqualTo("New password is required."));
+            Assert.That(result.errorMessage, Is.EqualTo("New password is required."));
         }
 
         [Test]
@@ -446,7 +446,7 @@ namespace Tests.Validators
             var result = passwordResetValidator.ValidatePassword(password);
 
             // Assert
-            Assert.That(result.message, Is.EqualTo("New password is required."));
+            Assert.That(result.errorMessage, Is.EqualTo("New password is required."));
         }
 
         [Test]
@@ -472,7 +472,7 @@ namespace Tests.Validators
             var result = passwordResetValidator.ValidatePassword(password);
 
             // Assert
-            Assert.That(result.message, Is.EqualTo("Password must be at least 8 characters long."));
+            Assert.That(result.errorMessage, Is.EqualTo("Password must be at least 8 characters long."));
         }
 
         [Test]
@@ -498,7 +498,7 @@ namespace Tests.Validators
             var result = passwordResetValidator.ValidatePassword(password);
 
             // Assert
-            Assert.That(result.message, Is.EqualTo("Password must contain at least one uppercase letter."));
+            Assert.That(result.errorMessage, Is.EqualTo("Password must contain at least one uppercase letter."));
         }
 
         [Test]
@@ -524,7 +524,7 @@ namespace Tests.Validators
             var result = passwordResetValidator.ValidatePassword(password);
 
             // Assert
-            Assert.That(result.message, Is.EqualTo("Password must contain at least one lowercase letter."));
+            Assert.That(result.errorMessage, Is.EqualTo("Password must contain at least one lowercase letter."));
         }
 
         [Test]
@@ -550,7 +550,7 @@ namespace Tests.Validators
             var result = passwordResetValidator.ValidatePassword(password);
 
             // Assert
-            Assert.That(result.message, Is.EqualTo("Password must contain at least one digit."));
+            Assert.That(result.errorMessage, Is.EqualTo("Password must contain at least one digit."));
         }
 
         [Test]
@@ -576,7 +576,7 @@ namespace Tests.Validators
             var result = passwordResetValidator.ValidatePassword(password);
 
             // Assert
-            Assert.That(result.message, Is.EqualTo("Password must contain at least one special character."));
+            Assert.That(result.errorMessage, Is.EqualTo("Password must contain at least one special character."));
         }
 
         [TestCase("Password123!")]
@@ -604,7 +604,7 @@ namespace Tests.Validators
             var result = passwordResetValidator.ValidatePassword(password);
 
             // Assert
-            Assert.That(result.message, Is.Empty);
+            Assert.That(result.errorMessage, Is.Empty);
         }
 
         #endregion

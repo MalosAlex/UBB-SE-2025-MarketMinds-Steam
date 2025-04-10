@@ -38,7 +38,7 @@ namespace BusinessLayer.Validators
             }
 
             string[] validTypes = { "frame", "emoji", "background", "pet", "hat" };
-            if (!Array.Exists(validTypes, t => t.Equals(type, StringComparison.OrdinalIgnoreCase)))
+            if (!Array.Exists(validTypes, currentType => currentType.Equals(type, StringComparison.OrdinalIgnoreCase)))
             {
                 return (false, "Invalid feature type.");
             }
