@@ -93,7 +93,7 @@ namespace BusinessLayer.Services.Fakes
             return false;
         }
 
-        public int? GetFriendshipId(int firstUserId, int secondUserId)
+        public int? GetFriendshipIdentifier(int firstUserId, int secondUserId)
         {
             foreach (Friendship friendship in friendshipList)
             {

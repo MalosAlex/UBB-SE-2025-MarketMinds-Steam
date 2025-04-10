@@ -50,7 +50,7 @@ namespace BusinessLayer.Services
             }
         }
 
-        public Collection GetCollectionById(int collectionId, int userId)
+        public Collection GetCollectionByIdentifier(int collectionId, int userId)
         {
             try
             {

@@ -54,7 +54,7 @@ namespace Tests.ServiceTests
             // Arrange
 
             // Act: For userId 1, GameId 100 exists.
-            OwnedGame ownedGame = fakeOwnedGamesService.GetOwnedGameById(100, 1);
+            OwnedGame ownedGame = fakeOwnedGamesService.GetOwnedGameByIdentifier(100, 1);
 
             // Assert: Expect the returned game to be non-null.
             Assert.That(ownedGame, Is.Not.Null);
@@ -66,7 +66,7 @@ namespace Tests.ServiceTests
             // Arrange
 
             // Act: Retrieve the owned game for GameId 100 for userId 1.
-            OwnedGame ownedGame = fakeOwnedGamesService.GetOwnedGameById(100, 1);
+            OwnedGame ownedGame = fakeOwnedGamesService.GetOwnedGameByIdentifier(100, 1);
 
             // Assert: Verify that the game's GameId equals 100.
             Assert.That(ownedGame.GameId, Is.EqualTo(100));
@@ -78,7 +78,7 @@ namespace Tests.ServiceTests
             // Arrange
 
             // Act: For userId 1, GameId 999 does not exist.
-            OwnedGame ownedGame = fakeOwnedGamesService.GetOwnedGameById(999, 1);
+            OwnedGame ownedGame = fakeOwnedGamesService.GetOwnedGameByIdentifier(999, 1);
 
             // Assert: Expect the returned value to be null.
             Assert.That(ownedGame, Is.Null);
@@ -109,7 +109,7 @@ namespace Tests.ServiceTests
 
             // Act: Remove game with GameId 100 for userId 1.
             fakeOwnedGamesService.RemoveOwnedGame(100, 1);
-            OwnedGame removedGame = fakeOwnedGamesService.GetOwnedGameById(100, 1);
+            OwnedGame removedGame = fakeOwnedGamesService.GetOwnedGameByIdentifier(100, 1);
 
             // Assert: The removed game should not be retrievable (should be null).
             Assert.That(removedGame, Is.Null);

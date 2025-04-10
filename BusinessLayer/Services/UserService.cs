@@ -22,7 +22,7 @@ namespace BusinessLayer.Services
             return usersRepository.GetAllUsers();
         }
 
-        public User GetUserById(int userId) => usersRepository.GetUserById(userId);
+        public User GetUserByIdentifier(int userId) => usersRepository.GetUserById(userId);
 
         public User GetUserByEmail(string email) => usersRepository.GetUserByEmail(email);
 

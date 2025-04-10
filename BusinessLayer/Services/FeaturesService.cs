@@ -115,7 +115,7 @@ namespace BusinessLayer.Services
                     return (false, validationResult.errorMessage);
                 }
 
-                var user = userService.GetUserById(userId);
+                var user = userService.GetUserByIdentifier(userId);
                 if (user == null)
                 {
                     return (false, "User not found.");

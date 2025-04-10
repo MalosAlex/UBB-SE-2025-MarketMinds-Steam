@@ -5,10 +5,10 @@ namespace BusinessLayer.Services.Interfaces
     public interface IFriendsService
     {
         List<Friendship> GetAllFriendships();
-        void RemoveFriend(int friendshipId);
-        int GetFriendshipCount(int userId);
-        bool AreUsersFriends(int userId1, int userId2);
-        int? GetFriendshipId(int userId1, int userId2);
-        void AddFriend(int userId, int friendId);
+        void RemoveFriend(int friendshipIdentifier);
+        int GetFriendshipCount(int userIdentifier);
+        bool AreUsersFriends(int userIdentifier1, int userIdentifier2);
+        int? GetFriendshipIdentifier(int userIdentifier1, int userIdentifier2);
+        void AddFriend(int userIdentifier, int friendIdentifier);
     }
 }

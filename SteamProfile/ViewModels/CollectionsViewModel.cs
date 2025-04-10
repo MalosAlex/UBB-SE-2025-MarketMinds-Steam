@@ -223,7 +223,7 @@ namespace SteamProfile.ViewModels
 
         public Collection GetCollectionById(int collectionId, int userId)
         {
-            return collectionsService.GetCollectionById(collectionId, userId);
+            return collectionsService.GetCollectionByIdentifier(collectionId, userId);
         }
 
         public void RemoveGameFromCollection(int collectionId, int gameId)

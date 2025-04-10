@@ -117,7 +117,7 @@ namespace Tests.ServiceTests
                                      .Returns(expectedGame);
 
             // Act: Retrieve the owned game.
-            OwnedGame resultGame = ownedGamesService.GetOwnedGameById(1, 1);
+            OwnedGame resultGame = ownedGamesService.GetOwnedGameByIdentifier(1, 1);
 
             // Assert: The result should not be null.
             Assert.That(resultGame, Is.Not.Null);
@@ -132,7 +132,7 @@ namespace Tests.ServiceTests
                                      .Returns(expectedGame);
 
             // Act: Retrieve the owned game.
-            OwnedGame resultGame = ownedGamesService.GetOwnedGameById(1, 1);
+            OwnedGame resultGame = ownedGamesService.GetOwnedGameByIdentifier(1, 1);
 
             // Assert: The game's title should equal "Game A".
             Assert.That(resultGame.GameTitle, Is.EqualTo("Game A"));
@@ -146,7 +146,7 @@ namespace Tests.ServiceTests
                                      .Returns((OwnedGame)null);
 
             // Act: Attempt to retrieve a non-existent owned game.
-            OwnedGame resultGame = ownedGamesService.GetOwnedGameById(999, 1);
+            OwnedGame resultGame = ownedGamesService.GetOwnedGameByIdentifier(999, 1);
 
             // Assert: The result should be null.
             Assert.That(resultGame, Is.Null);
@@ -161,7 +161,7 @@ namespace Tests.ServiceTests
 
             // Act & Assert: Expect a ServiceException with the proper message.
             ServiceException exception = Assert.Throws<ServiceException>(
-                () => ownedGamesService.GetOwnedGameById(1, 1));
+                () => ownedGamesService.GetOwnedGameByIdentifier(1, 1));
             Assert.That(exception.Message, Is.EqualTo("Failed to retrieve owned game."));
         }
 
@@ -174,7 +174,7 @@ namespace Tests.ServiceTests
 
             // Act & Assert: Expect a ServiceException with the unexpected error message.
             ServiceException exception = Assert.Throws<ServiceException>(
-                () => ownedGamesService.GetOwnedGameById(1, 1));
+                () => ownedGamesService.GetOwnedGameByIdentifier(1, 1));
             Assert.That(exception.Message, Is.EqualTo("An unexpected error occurred while retrieving owned game."));
         }
 

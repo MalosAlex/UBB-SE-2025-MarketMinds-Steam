@@ -147,7 +147,7 @@ namespace Tests.ServiceTests
             int expectedFriendshipId = existingFriendship.FriendshipId;
 
             // Act: Retrieve the friendship id.
-            int? returnedFriendshipId = fakeFriendsService.GetFriendshipId(userId, friendId);
+            int? returnedFriendshipId = fakeFriendsService.GetFriendshipIdentifier(userId, friendId);
 
             // Assert: The returned id equals the expected friendship id.
             Assert.That(returnedFriendshipId, Is.EqualTo(expectedFriendshipId));
@@ -161,7 +161,7 @@ namespace Tests.ServiceTests
             int nonExistentFriendId = 999;
 
             // Act: Retrieve the friendship id.
-            int? returnedFriendshipId = fakeFriendsService.GetFriendshipId(userId, nonExistentFriendId);
+            int? returnedFriendshipId = fakeFriendsService.GetFriendshipIdentifier(userId, nonExistentFriendId);
 
             // Assert: Expect null for a non-existent relationship.
             Assert.That(returnedFriendshipId, Is.Null);
