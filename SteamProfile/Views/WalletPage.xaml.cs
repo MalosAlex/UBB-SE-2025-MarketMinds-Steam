@@ -23,24 +23,24 @@ namespace SteamProfile.Views
             this.DataContext = ViewModel;
         }
 
-        protected override void OnNavigatedTo(NavigationEventArgs e)
+        protected override void OnNavigatedTo(NavigationEventArgs eventArgs)
         {
-            base.OnNavigatedTo(e);
+            base.OnNavigatedTo(eventArgs);
 
             // Refresh wallet data when navigating to this page
             ViewModel.RefreshWalletData();
         }
 
-        private void AddMoneyButton_Click(object sender, RoutedEventArgs e)
+        private void AddMoneyButton_Click(object sender, RoutedEventArgs eventArgs)
         {
             Frame.Navigate(typeof(AddMoneyPage), ViewModel);
         }
 
-        private void AddPointsButton_Click(object sender, RoutedEventArgs e)
+        private void AddPointsButton_Click(object sender, RoutedEventArgs eventArgs)
         {
             Frame.Navigate(typeof(AddPointsPage), ViewModel);
         }
-        private void GoBack(object sender, RoutedEventArgs e)
+        private void GoBack(object sender, RoutedEventArgs eventArgs)
         {
             Frame.GoBack();
         }

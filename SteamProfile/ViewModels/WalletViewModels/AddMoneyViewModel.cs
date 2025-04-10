@@ -11,8 +11,11 @@ namespace SteamProfile.ViewModels
 {
     public partial class AddMoneyViewModel : ObservableObject
     {
+        private const string AmountNavigationKey = "amount";
+        private const string ViewModelNavigationKey = "viewModel";
+
         private readonly WalletViewModel walletViewModel;
-        private const int MAXIMUM_AMOUNT = 500;
+        private const int MAXIMUM_MONEY_AMOUNT = 500;
 
         [ObservableProperty]
         [NotifyPropertyChangedFor(nameof(ErrorMessageVisibility))]
@@ -31,14 +34,7 @@ namespace SteamProfile.ViewModels
         {
             get
             {
-                if (ShowErrorMessage)
-                {
-                    return Visibility.Visible;
-                }
-                else
-                {
-                    return Visibility.Collapsed;
-                }
+                return ShowErrorMessage ? Visibility.Visible : Visibility.Collapsed;
             }
         }
 
@@ -52,22 +48,19 @@ namespace SteamProfile.ViewModels
             this.walletViewModel = walletViewModel ?? throw new ArgumentNullException(nameof(walletViewModel));
             isInputValid = false;
             showErrorMessage = false;
+            amountToAdd = string.Empty;
 
-            // Initialize the command
             AddFundsCommand = new RelayCommand(ProcessAddFunds, CanProcessAddFunds);
         }
 
-        // Called when AmountToAdd property changes
         partial void OnAmountToAddChanged(string value)
         {
             ValidateInput(value);
-            // Force command to reevaluate CanExecute
             (AddFundsCommand as RelayCommand)?.NotifyCanExecuteChanged();
         }
 
         public void ValidateInput(string input)
         {
-            // Business logic moved to PaymentValidator
             ShowErrorMessage = false;
             IsInputValid = false;
 
@@ -76,7 +69,7 @@ namespace SteamProfile.ViewModels
                 return;
             }
 
-            IsInputValid = PaymentValidator.IsMonetaryAmountValid(input, MAXIMUM_AMOUNT);
+            IsInputValid = PaymentValidator.IsMonetaryAmountValid(input, MAXIMUM_MONEY_AMOUNT);
             ShowErrorMessage = !IsInputValid;
         }
 
@@ -84,14 +77,8 @@ namespace SteamProfile.ViewModels
         {
             if (!IsInputValid || string.IsNullOrEmpty(AmountToAdd))
             {
+                ShowErrorMessage = true;
                 return;
-            }
-
-            if (int.TryParse(AmountToAdd, out int amount))
-            {
-                walletViewModel.AddFunds(amount);
-                AmountToAdd = string.Empty;
-                IsInputValid = false;
             }
         }
 
@@ -102,10 +89,15 @@ namespace SteamProfile.ViewModels
 
         public Dictionary<string, object> CreateNavigationParameters()
         {
+            if (!IsInputValid || !int.TryParse(AmountToAdd, out int amountValue))
+            {
+                return new Dictionary<string, object>();
+            }
+
             return new Dictionary<string, object>
             {
-                { "sum", int.Parse(AmountToAdd) },
-                { "viewModel", walletViewModel }
+                 { AmountNavigationKey, amountValue },
+                 { ViewModelNavigationKey, walletViewModel }
             };
         }
     }

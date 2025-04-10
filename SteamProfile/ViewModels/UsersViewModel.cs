@@ -39,7 +39,7 @@ namespace SteamProfile.ViewModels
 
         private UsersViewModel(IUserService userService)
         {
-            userService = userService ?? throw new ArgumentNullException(nameof(userService));
+            this.userService = userService ?? throw new ArgumentNullException(nameof(userService));
             usersList = new ObservableCollection<User>();
             LoadUsers();
         }

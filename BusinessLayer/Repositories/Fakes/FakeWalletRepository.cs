@@ -60,11 +60,11 @@ namespace BusinessLayer.Repositories.Fakes
             throw new RepositoryException($"No wallet found for user ID {userId}.");
         }
 
-        public void AddMoneyToWallet(decimal amount, int walletId)
+        public void AddMoneyToWallet(decimal moneyToAdd, int walletId)
         {
             if (wallets.TryGetValue(walletId, out var wallet))
             {
-                wallet.Balance += amount;
+                wallet.Balance += moneyToAdd;
             }
             else
             {
@@ -72,11 +72,11 @@ namespace BusinessLayer.Repositories.Fakes
             }
         }
 
-        public void AddPointsToWallet(int amount, int walletId)
+        public void AddPointsToWallet(int pointsToAdd, int walletId)
         {
             if (wallets.TryGetValue(walletId, out var wallet))
             {
-                wallet.Points += amount;
+                wallet.Points += pointsToAdd;
             }
             else
             {

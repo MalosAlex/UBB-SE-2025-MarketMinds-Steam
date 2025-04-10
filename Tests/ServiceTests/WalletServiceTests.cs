@@ -29,10 +29,10 @@ namespace Tests.ServiceTests
             currentUser = new User { UserId = USER_ID, Username = "testuser" };
 
             // Set up UserService to return the test user
-            mockUserService.Setup(u => u.GetCurrentUser()).Returns(currentUser);
+            mockUserService.Setup(mockUser => mockUser.GetCurrentUser()).Returns(currentUser);
 
             // Set up WalletRepository to return a wallet ID for the test user
-            mockWalletRepository.Setup(w => w.GetWalletIdByUserId(USER_ID)).Returns(WALLET_ID);
+            mockWalletRepository.Setup(mockWallet => mockWallet.GetWalletIdByUserId(USER_ID)).Returns(WALLET_ID);
 
             // Create service with mocked dependencies
             walletService = new WalletService(mockWalletRepository.Object, mockUserService.Object);
@@ -41,6 +41,8 @@ namespace Tests.ServiceTests
         [Test]
         public void Constructor_NullWalletRepository_ThrowsArgumentNullException()
         {
+            // Arrange
+
             // Act & Assert
             Assert.Throws<ArgumentNullException>(() => new WalletService(null, mockUserService.Object));
         }
@@ -48,6 +50,8 @@ namespace Tests.ServiceTests
         [Test]
         public void Constructor_NullUserService_ThrowsArgumentNullException()
         {
+            // Arrange
+
             // Act & Assert
             Assert.Throws<ArgumentNullException>(() => new WalletService(mockWalletRepository.Object, null));
         }
@@ -62,7 +66,7 @@ namespace Tests.ServiceTests
             walletService.AddMoney(amount);
 
             // Assert
-            mockWalletRepository.Verify(r => r.AddMoneyToWallet(amount, USER_ID), Times.Once);
+            mockWalletRepository.Verify(mockWalletRepository => mockWalletRepository.AddMoneyToWallet(amount, USER_ID), Times.Once);
         }
 
         [Test]
@@ -75,7 +79,7 @@ namespace Tests.ServiceTests
             walletService.AddPoints(points);
 
             // Assert
-            mockWalletRepository.Verify(r => r.AddPointsToWallet(points, USER_ID), Times.Once);
+            mockWalletRepository.Verify(mockWalletRepository => mockWalletRepository.AddPointsToWallet(points, USER_ID), Times.Once);
         }
 
         [Test]
@@ -83,7 +87,7 @@ namespace Tests.ServiceTests
         {
             // Arrange
             decimal expectedBalance = 150.50m;
-            mockWalletRepository.Setup(r => r.GetMoneyFromWallet(WALLET_ID)).Returns(expectedBalance);
+            mockWalletRepository.Setup(mockWalletRepository => mockWalletRepository.GetMoneyFromWallet(WALLET_ID)).Returns(expectedBalance);
 
             // Act
             decimal result = walletService.GetBalance();
@@ -97,7 +101,7 @@ namespace Tests.ServiceTests
         {
             // Arrange
             int expectedPoints = 250;
-            mockWalletRepository.Setup(r => r.GetPointsFromWallet(WALLET_ID)).Returns(expectedPoints);
+            mockWalletRepository.Setup(mockWalletRepository => mockWalletRepository.GetPointsFromWallet(WALLET_ID)).Returns(expectedPoints);
 
             // Act
             int result = walletService.GetPoints();
@@ -116,12 +120,14 @@ namespace Tests.ServiceTests
             walletService.CreateWallet(userId);
 
             // Assert
-            mockWalletRepository.Verify(r => r.AddNewWallet(userId), Times.Once);
+            mockWalletRepository.Verify(mockWalletRepository => mockWalletRepository.AddNewWallet(userId), Times.Once);
         }
 
         [Test]
         public void PurchasePoints_NullOffer_ThrowsArgumentNullException()
         {
+            // Arrange
+
             // Act & Assert
             Assert.Throws<ArgumentNullException>(() => walletService.PurchasePoints(null));
         }
@@ -131,7 +137,7 @@ namespace Tests.ServiceTests
         {
             // Arrange
             var offer = new PointsOffer(100, 200); // Price 100, points 200
-            mockWalletRepository.Setup(r => r.GetMoneyFromWallet(WALLET_ID)).Returns(50m); // Only 50 in wallet
+            mockWalletRepository.Setup(mockWalletRepository => mockWalletRepository.GetMoneyFromWallet(WALLET_ID)).Returns(50m); // Only 50 in wallet
 
             // Act & Assert
             Assert.Throws<InvalidOperationException>(() => walletService.PurchasePoints(offer));
@@ -142,11 +148,11 @@ namespace Tests.ServiceTests
         {
             // Arrange
             var offer = new PointsOffer(100, 200); // Price 100, points 200
-            mockWalletRepository.Setup(r => r.GetMoneyFromWallet(WALLET_ID)).Returns(50m); // Only 50 in wallet
+            mockWalletRepository.Setup(mockWalletRepository => mockWalletRepository.GetMoneyFromWallet(WALLET_ID)).Returns(50m); // Only 50 in wallet
 
             // Act & Assert
-            var ex = Assert.Throws<InvalidOperationException>(() => walletService.PurchasePoints(offer));
-            Assert.That(ex.Message, Is.EqualTo("Insufficient funds"));
+            var exception = Assert.Throws<InvalidOperationException>(() => walletService.PurchasePoints(offer));
+            Assert.That(exception.Message, Is.EqualTo("Insufficient funds"));
         }
 
         [Test]
@@ -154,18 +160,20 @@ namespace Tests.ServiceTests
         {
             // Arrange
             var offer = new PointsOffer(100, 200); // Price 100, points 200
-            mockWalletRepository.Setup(r => r.GetMoneyFromWallet(WALLET_ID)).Returns(150m); // 150 in wallet
+            mockWalletRepository.Setup(mockWalletRepository => mockWalletRepository.GetMoneyFromWallet(WALLET_ID)).Returns(150m); // 150 in wallet
 
             // Act
             walletService.PurchasePoints(offer);
 
             // Assert
-            mockWalletRepository.Verify(r => r.PurchasePoints(offer, USER_ID), Times.Once);
+            mockWalletRepository.Verify(mockWalletRepository => mockWalletRepository.PurchasePoints(offer, USER_ID), Times.Once);
         }
 
         [Test]
         public void TryPurchasePoints_NullOffer_ReturnsFalse()
         {
+            // Arrange
+
             // Act
             bool result = walletService.TryPurchasePoints(null);
 
@@ -178,7 +186,7 @@ namespace Tests.ServiceTests
         {
             // Arrange
             var offer = new PointsOffer(100, 200); // Price 100, points 200
-            mockWalletRepository.Setup(r => r.GetMoneyFromWallet(WALLET_ID)).Returns(50m); // Only 50 in wallet
+            mockWalletRepository.Setup(mockWalletRepository => mockWalletRepository.GetMoneyFromWallet(WALLET_ID)).Returns(50m); // Only 50 in wallet
 
             // Act
             bool result = walletService.TryPurchasePoints(offer);
@@ -192,8 +200,8 @@ namespace Tests.ServiceTests
         {
             // Arrange
             var offer = new PointsOffer(100, 200); // Price 100, points 200
-            mockWalletRepository.Setup(r => r.GetMoneyFromWallet(WALLET_ID)).Returns(150m); // 150 in wallet
-            mockWalletRepository.Setup(r => r.PurchasePoints(offer, USER_ID)).Throws(new Exception("Test exception"));
+            mockWalletRepository.Setup(mockWalletRepository => mockWalletRepository.GetMoneyFromWallet(WALLET_ID)).Returns(150m); // 150 in wallet
+            mockWalletRepository.Setup(mockWalletRepository => mockWalletRepository.PurchasePoints(offer, USER_ID)).Throws(new Exception("Test exception"));
 
             // Act
             bool result = walletService.TryPurchasePoints(offer);
@@ -207,7 +215,7 @@ namespace Tests.ServiceTests
         {
             // Arrange
             var offer = new PointsOffer(100, 200); // Price 100, points 200
-            mockWalletRepository.Setup(r => r.GetMoneyFromWallet(WALLET_ID)).Returns(150m); // 150 in wallet
+            mockWalletRepository.Setup(mockWalletRepository => mockWalletRepository.GetMoneyFromWallet(WALLET_ID)).Returns(150m); // 150 in wallet
 
             // Act
             bool result = walletService.TryPurchasePoints(offer);

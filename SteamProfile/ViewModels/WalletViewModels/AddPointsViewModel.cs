@@ -55,7 +55,7 @@ namespace SteamProfile.ViewModels
 
             try
             {
-                bool success = await walletViewModel.AddPoints(pointsOffer);
+                bool success = await walletViewModel.PurchasePoints(pointsOffer);
                 if (success)
                 {
                     UserPoints = walletViewModel.Points;
