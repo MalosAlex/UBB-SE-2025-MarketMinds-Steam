@@ -4,7 +4,7 @@ namespace BusinessLayer.Services.Interfaces
 {
     public interface IWalletService
     {
-        void CreateWallet(int userId);
+        void CreateWallet(int userIdentifier);
         void PurchasePoints(PointsOffer offer);
         decimal GetBalance();
         int GetPoints();

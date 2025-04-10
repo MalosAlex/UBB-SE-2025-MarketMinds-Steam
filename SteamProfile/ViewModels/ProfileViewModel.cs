@@ -236,7 +236,7 @@ namespace SteamProfile.ViewModels
                 try
                 {
                     // Instead of using Task.Run, try direct call to reduce complexity
-                    currentUser = userService.GetUserById(user_id);
+                    currentUser = userService.GetUserByIdentifier(user_id);
 
                     if (currentUser == null)
                     {
@@ -541,7 +541,7 @@ namespace SteamProfile.ViewModels
                 if (IsFriend)
                 {
                     // Remove friend
-                    var friendshipId = await Task.Run(() => friendsService.GetFriendshipId(userService.GetCurrentUser().UserId, userIdentifier));
+                    var friendshipId = await Task.Run(() => friendsService.GetFriendshipIdentifier(userService.GetCurrentUser().UserId, userIdentifier));
                     if (friendshipId.HasValue)
                     {
                         await Task.Run(() => friendsService.RemoveFriend(friendshipId.Value));

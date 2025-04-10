@@ -41,7 +41,7 @@ namespace BusinessLayer.Services.Fakes
             return result;
         }
 
-        public Collection GetCollectionById(int collectionId, int userId)
+        public Collection GetCollectionByIdentifier(int collectionId, int userId)
         {
             Collection foundCollection = null;
             foreach (Collection collection in collectionList)

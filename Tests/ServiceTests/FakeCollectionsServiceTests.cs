@@ -49,7 +49,7 @@ namespace Tests.ServiceTests
             var fakeCollectionsService = new FakeCollectionsService();
 
             // Act: For collectionId 1 and user 1, dummy games are attached.
-            var collectionWithGames = fakeCollectionsService.GetCollectionById(1, 1);
+            var collectionWithGames = fakeCollectionsService.GetCollectionByIdentifier(1, 1);
 
             // Assert: Expect the dummy games list to have exactly 2 games.
             Assert.That(collectionWithGames.Games.Count, Is.EqualTo(2));
@@ -62,7 +62,7 @@ namespace Tests.ServiceTests
             var fakeCollectionsService = new FakeCollectionsService();
 
             // Act: Request a collection for a non-matching user.
-            var collectionForWrongUser = fakeCollectionsService.GetCollectionById(1, 999);
+            var collectionForWrongUser = fakeCollectionsService.GetCollectionByIdentifier(1, 999);
 
             // Assert: Expect null since the collection does not belong to user 999.
             Assert.That(collectionForWrongUser, Is.Null);
@@ -75,7 +75,7 @@ namespace Tests.ServiceTests
             var fakeCollectionsService = new FakeCollectionsService();
 
             // Act: For a collection other than 1, no dummy games are attached.
-            var collectionWithoutGames = fakeCollectionsService.GetCollectionById(2, 1);
+            var collectionWithoutGames = fakeCollectionsService.GetCollectionByIdentifier(2, 1);
 
             // Assert: Expect the games list to remain as-is (seeded fakes do not add games).
             Assert.That(collectionWithoutGames.Games.Count, Is.EqualTo(0));
@@ -230,7 +230,7 @@ namespace Tests.ServiceTests
 
             // Act: Save (update) the existing collection.
             fakeCollectionsService.SaveCollection("1", existingCollection);
-            var updatedCollection = fakeCollectionsService.GetCollectionById(existingCollection.CollectionId, 1);
+            var updatedCollection = fakeCollectionsService.GetCollectionByIdentifier(existingCollection.CollectionId, 1);
 
             // Assert: Expect the updated collection's name to be "Updated Name".
             Assert.That(updatedCollection.CollectionName, Is.EqualTo("Updated Name"));
@@ -318,7 +318,7 @@ namespace Tests.ServiceTests
 
             // Act: Update collection with id 2 for user 1.
             fakeCollectionsService.UpdateCollection(2, 1, "Updated Collection", "newCover.jpg", false);
-            var updatedCollection = fakeCollectionsService.GetCollectionById(2, 1);
+            var updatedCollection = fakeCollectionsService.GetCollectionByIdentifier(2, 1);
 
             // Assert: Expect the collection's name to be "Updated Collection".
             Assert.That(updatedCollection.CollectionName, Is.EqualTo("Updated Collection"));

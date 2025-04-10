@@ -43,7 +43,7 @@ namespace Tests.ServiceTests
             // nothing
 
             // Act
-            User user = userService.GetUserById(1);
+            User user = userService.GetUserByIdentifier(1);
 
             // Assert
             Assert.That(user.UserId, Is.EqualTo(1));

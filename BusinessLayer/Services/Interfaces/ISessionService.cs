@@ -8,7 +8,7 @@ namespace BusinessLayer.Services.Interfaces
         void EndSession();
         User GetCurrentUser();
         bool IsUserLoggedIn();
-        void RestoreSessionFromDatabase(Guid sessionId);
+        void RestoreSessionFromDatabase(Guid sessionIdentifier);
         void CleanupExpiredSessions();
     }
 }

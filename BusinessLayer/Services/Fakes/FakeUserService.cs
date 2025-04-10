@@ -53,7 +53,7 @@ namespace BusinessLayer.Services.Fakes
             return null;
         }
 
-        public User GetUserById(int userId)
+        public User GetUserByIdentifier(int userId)
         {
             var fakeUser = new User();
             fakeUser.Username = "fakeId";

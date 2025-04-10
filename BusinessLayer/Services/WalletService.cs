@@ -29,17 +29,17 @@ namespace BusinessLayer.Services
 
         public decimal GetBalance()
         {
-            int userId = userService.GetCurrentUser().UserId;
+            int userIdentifier = userService.GetCurrentUser().UserId;
 
             try
             {
-                int walletId = walletRepository.GetWalletIdByUserId(userId);
-                return walletRepository.GetMoneyFromWallet(walletId);
+                int walletIdentifier = walletRepository.GetWalletIdByUserId(userIdentifier);
+                return walletRepository.GetMoneyFromWallet(walletIdentifier);
             }
             catch (RepositoryException ex) when (ex.Message.Contains("No wallet found"))
             {
                 // No wallet found, create one
-                CreateWallet(userId);
+                CreateWallet(userIdentifier);
                 return 0m; // New wallet has 0 balance
             }
         }
@@ -61,9 +61,9 @@ namespace BusinessLayer.Services
             }
         }
 
-        public void CreateWallet(int userId)
+        public void CreateWallet(int userIdentifier)
         {
-            walletRepository.AddNewWallet(userId);
+            walletRepository.AddNewWallet(userIdentifier);
         }
         public void PurchasePoints(PointsOffer pointsOffer)
         {

@@ -39,7 +39,7 @@ namespace BusinessLayer.Services
             }
         }
 
-        public OwnedGame GetOwnedGameById(int gameId, int userId)
+        public OwnedGame GetOwnedGameByIdentifier(int gameId, int userId)
         {
             try
             {
