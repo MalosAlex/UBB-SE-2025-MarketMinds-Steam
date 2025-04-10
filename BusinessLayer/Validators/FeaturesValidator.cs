@@ -5,26 +5,46 @@ namespace BusinessLayer.Validators
 {
     public static class FeaturesValidator
     {
+        // === Constants ===
+
+        // Numeric constants
+        private const int MinValidId = 1;
+        private const int MinFeatureValue = 0;
+
+        // Error messages
+        private const string ErrorFeatureNull = "Feature cannot be null.";
+        private const string ErrorFeatureNameEmpty = "Feature name cannot be empty.";
+        private const string ErrorFeatureTypeEmpty = "Feature type cannot be empty.";
+        private const string ErrorFeatureValueNegative = "Feature value cannot be negative.";
+        private const string ErrorInvalidFeatureType = "Invalid feature type.";
+        private const string ErrorInvalidUserId = "Invalid user ID.";
+        private const string ErrorInvalidFeatureId = "Invalid feature ID.";
+        private const string ErrorFeatureNotPurchased = "Feature is not purchased by the user.";
+
+        // Valid types
+        private static readonly string[] ValidFeatureTypes = { "frame", "emoji", "background", "pet", "hat" };
+
+        // === Validation Methods ===
         public static (bool isValid, string errorMessage) ValidateFeature(Feature feature)
         {
             if (feature == null)
             {
-                return (false, "Feature cannot be null.");
+                return (false, ErrorFeatureNull);
             }
 
             if (string.IsNullOrWhiteSpace(feature.Name))
             {
-                return (false, "Feature name cannot be empty.");
+                return (false, ErrorFeatureNameEmpty);
             }
 
             if (string.IsNullOrWhiteSpace(feature.Type))
             {
-                return (false, "Feature type cannot be empty.");
+                return (false, ErrorFeatureTypeEmpty);
             }
 
-            if (feature.Value < 0)
+            if (feature.Value < MinFeatureValue)
             {
-                return (false, "Feature value cannot be negative.");
+                return (false, ErrorFeatureValueNegative);
             }
 
             return (true, string.Empty);
@@ -34,13 +54,12 @@ namespace BusinessLayer.Validators
         {
             if (string.IsNullOrWhiteSpace(type))
             {
-                return (false, "Feature type cannot be empty.");
+                return (false, ErrorFeatureTypeEmpty);
             }
 
-            string[] validTypes = { "frame", "emoji", "background", "pet", "hat" };
-            if (!Array.Exists(validTypes, currentType => currentType.Equals(type, StringComparison.OrdinalIgnoreCase)))
+            if (!Array.Exists(ValidFeatureTypes, currentType => currentType.Equals(type, StringComparison.OrdinalIgnoreCase)))
             {
-                return (false, "Invalid feature type.");
+                return (false, ErrorInvalidFeatureType);
             }
 
             return (true, string.Empty);
@@ -48,19 +67,19 @@ namespace BusinessLayer.Validators
 
         public static (bool isValid, string errorMessage) ValidateFeatureEquip(int userId, int featureId, bool isPurchased)
         {
-            if (userId <= 0)
+            if (userId < MinValidId)
             {
-                return (false, "Invalid user ID.");
+                return (false, ErrorInvalidUserId);
             }
 
-            if (featureId <= 0)
+            if (featureId < MinValidId)
             {
-                return (false, "Invalid feature ID.");
+                return (false, ErrorInvalidFeatureId);
             }
 
             if (!isPurchased)
             {
-                return (false, "Feature is not purchased by the user.");
+                return (false, ErrorFeatureNotPurchased);
             }
 
             return (true, string.Empty);

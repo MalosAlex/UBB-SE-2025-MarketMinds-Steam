@@ -5,17 +5,43 @@ namespace BusinessLayer.Validators
 {
     public class PasswordResetValidator
     {
+        // === Constants ===
+
+        // Lengths
+        private const int ResetCodeLength = 6;
+        private const int MinimumPasswordLength = 8;
+
+        // Regex patterns
+        private const string EmailPattern = @"^[a-zA-Z0-9][a-zA-Z0-9._%+-]*@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$";
+        private const string ResetCodePattern = @"^\d{6}$";
+        private const string UppercasePattern = @"[A-Z]";
+        private const string LowercasePattern = @"[a-z]";
+        private const string DigitPattern = @"[0-9]";
+        private const string SpecialCharacterPattern = @"[!@#$%^&*(),.?""':{}|<>]";
+
+        // Error messages
+        private const string EmailRequiredMessage = "Email address is required.";
+        private const string InvalidEmailFormatMessage = "Invalid email format.";
+        private const string ResetCodeRequiredMessage = "Reset code is required.";
+        private const string InvalidResetCodeMessage = "Reset code must be a 6-digit number.";
+        private const string PasswordRequiredMessage = "New password is required.";
+        private const string PasswordTooShortMessage = "Password must be at least 8 characters long.";
+        private const string PasswordMissingUppercaseMessage = "Password must contain at least one uppercase letter.";
+        private const string PasswordMissingLowercaseMessage = "Password must contain at least one lowercase letter.";
+        private const string PasswordMissingDigitMessage = "Password must contain at least one digit.";
+        private const string PasswordMissingSpecialCharMessage = "Password must contain at least one special character.";
+
+        // === Validation Methods ===
         public (bool isValid, string errorMessage) ValidateEmail(string email)
         {
             if (string.IsNullOrWhiteSpace(email))
             {
-                return (false, "Email address is required.");
+                return (false, EmailRequiredMessage);
             }
 
-            var emailPattern = @"^[a-zA-Z0-9][a-zA-Z0-9._%+-]*@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$";
-            if (!Regex.IsMatch(email, emailPattern))
+            if (!Regex.IsMatch(email, EmailPattern))
             {
-                return (false, "Invalid email format.");
+                return (false, InvalidEmailFormatMessage);
             }
 
             return (true, string.Empty);
@@ -25,12 +51,12 @@ namespace BusinessLayer.Validators
         {
             if (string.IsNullOrWhiteSpace(code))
             {
-                return (false, "Reset code is required.");
+                return (false, ResetCodeRequiredMessage);
             }
 
-            if (!Regex.IsMatch(code, @"^\d{6}$"))
+            if (!Regex.IsMatch(code, ResetCodePattern))
             {
-                return (false, "Reset code must be a 6-digit number.");
+                return (false, InvalidResetCodeMessage);
             }
 
             return (true, string.Empty);
@@ -40,32 +66,32 @@ namespace BusinessLayer.Validators
         {
             if (string.IsNullOrWhiteSpace(newPassword))
             {
-                return (false, "New password is required.");
+                return (false, PasswordRequiredMessage);
             }
 
-            if (newPassword.Length < 8)
+            if (newPassword.Length < MinimumPasswordLength)
             {
-                return (false, "Password must be at least 8 characters long.");
+                return (false, PasswordTooShortMessage);
             }
 
-            if (!Regex.IsMatch(newPassword, @"[A-Z]"))
+            if (!Regex.IsMatch(newPassword, UppercasePattern))
             {
-                return (false, "Password must contain at least one uppercase letter.");
+                return (false, PasswordMissingUppercaseMessage);
             }
 
-            if (!Regex.IsMatch(newPassword, @"[a-z]"))
+            if (!Regex.IsMatch(newPassword, LowercasePattern))
             {
-                return (false, "Password must contain at least one lowercase letter.");
+                return (false, PasswordMissingLowercaseMessage);
             }
 
-            if (!Regex.IsMatch(newPassword, @"[0-9]"))
+            if (!Regex.IsMatch(newPassword, DigitPattern))
             {
-                return (false, "Password must contain at least one digit.");
+                return (false, PasswordMissingDigitMessage);
             }
 
-            if (!Regex.IsMatch(newPassword, @"[!@#$%^&*(),.?""':{}|<>]"))
+            if (!Regex.IsMatch(newPassword, SpecialCharacterPattern))
             {
-                return (false, "Password must contain at least one special character.");
+                return (false, PasswordMissingSpecialCharMessage);
             }
 
             return (true, string.Empty);
