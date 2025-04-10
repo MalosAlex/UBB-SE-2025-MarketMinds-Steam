@@ -112,8 +112,8 @@ namespace Tests.Integration
             var offer = new PointsOffer(200, 500); // $200 for 500 points (more than the test user has)
 
             // Act & Assert
-            var ex = Assert.Throws<InvalidOperationException>(() => walletService.PurchasePoints(offer));
-            Assert.That(ex.Message, Is.EqualTo("Insufficient funds"));
+            var exception = Assert.Throws<InvalidOperationException>(() => walletService.PurchasePoints(offer));
+            Assert.That(exception.Message, Is.EqualTo("Insufficient funds"));
         }
 
         [Test]

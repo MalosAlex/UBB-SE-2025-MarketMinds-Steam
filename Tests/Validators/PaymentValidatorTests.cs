@@ -7,7 +7,7 @@ namespace Tests.Validators
     [TestFixture]
     public class PaymentValidatorTests
     {
-        private const int MAX_AMOUNT = 500;
+        private const int MAXIMUM_MONEY_AMOUNT = 500;
 
         #region IsMonetaryAmountValid Tests
 
@@ -15,10 +15,10 @@ namespace Tests.Validators
         public void IsMonetaryAmountValid_ValidAmount_ReturnsTrue()
         {
             // Arrange
-            string amount = "250";
+            string amountString = "250";
 
             // Act
-            bool result = PaymentValidator.IsMonetaryAmountValid(amount, MAX_AMOUNT);
+            bool result = PaymentValidator.IsMonetaryAmountValid(amountString, MAXIMUM_MONEY_AMOUNT);
 
             // Assert
             Assert.That(result, Is.True);
@@ -28,10 +28,10 @@ namespace Tests.Validators
         public void IsMonetaryAmountValid_MaximumAmount_ReturnsTrue()
         {
             // Arrange
-            string amount = MAX_AMOUNT.ToString();
+            string amountString = MAXIMUM_MONEY_AMOUNT.ToString();
 
             // Act
-            bool result = PaymentValidator.IsMonetaryAmountValid(amount, MAX_AMOUNT);
+            bool result = PaymentValidator.IsMonetaryAmountValid(amountString, MAXIMUM_MONEY_AMOUNT);
 
             // Assert
             Assert.That(result, Is.True);
@@ -41,10 +41,10 @@ namespace Tests.Validators
         public void IsMonetaryAmountValid_ExceedsMaximum_ReturnsFalse()
         {
             // Arrange
-            string amount = (MAX_AMOUNT + 1).ToString();
+            string amountString = (MAXIMUM_MONEY_AMOUNT + 1).ToString();
 
             // Act
-            bool result = PaymentValidator.IsMonetaryAmountValid(amount, MAX_AMOUNT);
+            bool result = PaymentValidator.IsMonetaryAmountValid(amountString, MAXIMUM_MONEY_AMOUNT);
 
             // Assert
             Assert.That(result, Is.False);
@@ -54,10 +54,10 @@ namespace Tests.Validators
         public void IsMonetaryAmountValid_ZeroAmount_ReturnsFalse()
         {
             // Arrange
-            string amount = "0";
+            string amountString = "0";
 
             // Act
-            bool result = PaymentValidator.IsMonetaryAmountValid(amount, MAX_AMOUNT);
+            bool result = PaymentValidator.IsMonetaryAmountValid(amountString, MAXIMUM_MONEY_AMOUNT);
 
             // Assert
             Assert.That(result, Is.False);
@@ -67,10 +67,10 @@ namespace Tests.Validators
         public void IsMonetaryAmountValid_NegativeAmount_ReturnsFalse()
         {
             // Arrange
-            string amount = "-10";
+            string amountString = "-10";
 
             // Act
-            bool result = PaymentValidator.IsMonetaryAmountValid(amount, MAX_AMOUNT);
+            bool result = PaymentValidator.IsMonetaryAmountValid(amountString, MAXIMUM_MONEY_AMOUNT);
 
             // Assert
             Assert.That(result, Is.False);
@@ -80,10 +80,10 @@ namespace Tests.Validators
         public void IsMonetaryAmountValid_NonNumericString_ReturnsFalse()
         {
             // Arrange
-            string amount = "abc";
+            string amountString = "abc";
 
             // Act
-            bool result = PaymentValidator.IsMonetaryAmountValid(amount, MAX_AMOUNT);
+            bool result = PaymentValidator.IsMonetaryAmountValid(amountString, MAXIMUM_MONEY_AMOUNT);
 
             // Assert
             Assert.That(result, Is.False);
@@ -93,10 +93,10 @@ namespace Tests.Validators
         public void IsMonetaryAmountValid_EmptyString_ReturnsFalse()
         {
             // Arrange
-            string amount = string.Empty;
+            string amountString = string.Empty;
 
             // Act
-            bool result = PaymentValidator.IsMonetaryAmountValid(amount, MAX_AMOUNT);
+            bool result = PaymentValidator.IsMonetaryAmountValid(amountString, MAXIMUM_MONEY_AMOUNT);
 
             // Assert
             Assert.That(result, Is.False);
@@ -106,10 +106,10 @@ namespace Tests.Validators
         public void IsMonetaryAmountValid_NullString_ReturnsFalse()
         {
             // Arrange
-            string amount = null;
+            string amountString = null;
 
             // Act
-            bool result = PaymentValidator.IsMonetaryAmountValid(amount, MAX_AMOUNT);
+            bool result = PaymentValidator.IsMonetaryAmountValid(amountString, MAXIMUM_MONEY_AMOUNT);
 
             // Assert
             Assert.That(result, Is.False);
@@ -120,10 +120,10 @@ namespace Tests.Validators
         {
             // Arrange
             // A number that's too large to be parsed as an int but contains only digits
-            string amount = "9999999999999999999"; // Exceeds int.MaxValue
+            string amountString = "9999999999999999999";
 
             // Act
-            bool result = PaymentValidator.IsMonetaryAmountValid(amount, MAX_AMOUNT);
+            bool result = PaymentValidator.IsMonetaryAmountValid(amountString, MAXIMUM_MONEY_AMOUNT);
 
             // Assert
             Assert.That(result, Is.False);
@@ -137,10 +137,10 @@ namespace Tests.Validators
         public void IsCardNameValid_ValidName_ReturnsTrue()
         {
             // Arrange
-            string name = "John Smith";
+            string cardholderName = "John Smith";
 
             // Act
-            bool result = PaymentValidator.IsCardNameValid(name);
+            bool result = PaymentValidator.IsCardNameValid(cardholderName);
 
             // Assert
             Assert.That(result, Is.True);
@@ -150,10 +150,10 @@ namespace Tests.Validators
         public void IsCardNameValid_EmptyName_ReturnsFalse()
         {
             // Arrange
-            string name = string.Empty;
+            string cardholderName = string.Empty;
 
             // Act
-            bool result = PaymentValidator.IsCardNameValid(name);
+            bool result = PaymentValidator.IsCardNameValid(cardholderName);
 
             // Assert
             Assert.That(result, Is.False);
@@ -163,10 +163,10 @@ namespace Tests.Validators
         public void IsCardNameValid_NullName_ReturnsFalse()
         {
             // Arrange
-            string name = null;
+            string cardholderName = null;
 
             // Act
-            bool result = PaymentValidator.IsCardNameValid(name);
+            bool result = PaymentValidator.IsCardNameValid(cardholderName);
 
             // Assert
             Assert.That(result, Is.False);
@@ -176,10 +176,10 @@ namespace Tests.Validators
         public void IsCardNameValid_SingleName_ReturnsFalse()
         {
             // Arrange
-            string name = "John";
+            string cardholderName = "John";
 
             // Act
-            bool result = PaymentValidator.IsCardNameValid(name);
+            bool result = PaymentValidator.IsCardNameValid(cardholderName);
 
             // Assert
             Assert.That(result, Is.False);
@@ -219,10 +219,10 @@ namespace Tests.Validators
         public void IsCardNumberValid_AmexNumber_ReturnsTrue()
         {
             // Arrange
-            string cardNumber = "3782822463100051";
+            string americanExpressCardNumber = "3782822463100051";
 
             // Act
-            bool result = PaymentValidator.IsCardNumberValid(cardNumber);
+            bool result = PaymentValidator.IsCardNumberValid(americanExpressCardNumber);
 
             // Assert
             Assert.That(result, Is.True);
@@ -232,10 +232,10 @@ namespace Tests.Validators
         public void IsCardNumberValid_TooLongNumber_ReturnsFalse()
         {
             // Arrange
-            string invalidNumber = "12345678901234562";
+            string tooLongCardNumber = "12345678901234562";
 
             // Act
-            bool result = PaymentValidator.IsCardNumberValid(invalidNumber);
+            bool result = PaymentValidator.IsCardNumberValid(tooLongCardNumber);
 
             // Assert
             Assert.That(result, Is.False);
@@ -245,10 +245,10 @@ namespace Tests.Validators
         public void IsCardNumberValid_TooShortNumber_ReturnsFalse()
         {
             // Arrange
-            string tooShortNumber = "1234";
+            string tooShortCardNumber = "1234";
 
             // Act
-            bool result = PaymentValidator.IsCardNumberValid(tooShortNumber);
+            bool result = PaymentValidator.IsCardNumberValid(tooShortCardNumber);
 
             // Assert
             Assert.That(result, Is.False);
@@ -258,10 +258,10 @@ namespace Tests.Validators
         public void IsCardNumberValid_EmptyNumber_ReturnsFalse()
         {
             // Arrange
-            string emptyNumber = string.Empty;
+            string emptyCardNumber = string.Empty;
 
             // Act
-            bool result = PaymentValidator.IsCardNumberValid(emptyNumber);
+            bool result = PaymentValidator.IsCardNumberValid(emptyCardNumber);
 
             // Assert
             Assert.That(result, Is.False);
@@ -271,10 +271,10 @@ namespace Tests.Validators
         public void IsCardNumberValid_NullNumber_ReturnsFalse()
         {
             // Arrange
-            string nullNumber = null;
+            string nullCardNumber = null;
 
             // Act
-            bool result = PaymentValidator.IsCardNumberValid(nullNumber);
+            bool result = PaymentValidator.IsCardNumberValid(nullCardNumber);
 
             // Assert
             Assert.That(result, Is.False);
@@ -284,10 +284,10 @@ namespace Tests.Validators
         public void IsCardNumberValid_NonNumericInput_ReturnsFalse()
         {
             // Arrange
-            string nonNumericInput = "123abc456def";
+            string nonNumericCardNumber = "123abc456def";
 
             // Act
-            bool result = PaymentValidator.IsCardNumberValid(nonNumericInput);
+            bool result = PaymentValidator.IsCardNumberValid(nonNumericCardNumber);
 
             // Assert
             Assert.That(result, Is.False);
@@ -295,107 +295,107 @@ namespace Tests.Validators
 
         #endregion
 
-        #region IsCvvValid Tests
+        #region IsCardVerificationValueValid Tests
 
         [Test]
-        public void IsCvvValid_ThreeDigitCVV_ReturnsTrue()
+        public void IsCardVerificationValueValid_ThreeDigitCVV_ReturnsTrue()
         {
             // Arrange
-            string cvv = "123";
+            string cardVerificationValueString = "123";
 
             // Act
-            bool result = PaymentValidator.IsCvvValid(cvv);
+            bool result = PaymentValidator.IsCardVerificationValueValid(cardVerificationValueString);
 
             // Assert
             Assert.That(result, Is.True);
         }
 
         [Test]
-        public void IsCvvValid_AllNinesCVV_ReturnsTrue()
+        public void IsCardVerificationValueValid_AllNinesCVV_ReturnsTrue()
         {
             // Arrange
-            string cvv = "999";
+            string cardVerificationValueString = "999";
 
             // Act
-            bool result = PaymentValidator.IsCvvValid(cvv);
+            bool result = PaymentValidator.IsCardVerificationValueValid(cardVerificationValueString);
 
             // Assert
             Assert.That(result, Is.True);
         }
 
         [Test]
-        public void IsCvvValid_AllZerosCVV_ReturnsTrue()
+        public void IsCardVerificationValueValid_AllZerosCVV_ReturnsTrue()
         {
             // Arrange
-            string cvv = "000";
+            string cardVerificationValueString = "000";
 
             // Act
-            bool result = PaymentValidator.IsCvvValid(cvv);
+            bool result = PaymentValidator.IsCardVerificationValueValid(cardVerificationValueString);
 
             // Assert
             Assert.That(result, Is.True);
         }
 
         [Test]
-        public void IsCvvValid_TooShortCVV_ReturnsFalse()
+        public void IsCardVerificationValueValid_TooShortCVV_ReturnsFalse()
         {
             // Arrange
-            string tooShortCVV = "12";
+            string tooShortCardVerificationValue = "12";
 
             // Act
-            bool result = PaymentValidator.IsCvvValid(tooShortCVV);
+            bool result = PaymentValidator.IsCardVerificationValueValid(tooShortCardVerificationValue);
 
             // Assert
             Assert.That(result, Is.False);
         }
 
         [Test]
-        public void IsCvvValid_TooLongCVV_ReturnsFalse()
+        public void IsCardVerificationValueValid_TooLongCVV_ReturnsFalse()
         {
             // Arrange
-            string tooLongCVV = "12345";
+            string tooLongCardVerificationValue = "12345";
 
             // Act
-            bool result = PaymentValidator.IsCvvValid(tooLongCVV);
+            bool result = PaymentValidator.IsCardVerificationValueValid(tooLongCardVerificationValue);
 
             // Assert
             Assert.That(result, Is.False);
         }
 
         [Test]
-        public void IsCvvValid_EmptyCVV_ReturnsFalse()
+        public void IsCardVerificationValueValid_EmptyCVV_ReturnsFalse()
         {
             // Arrange
-            string emptyCVV = string.Empty;
+            string emptyCardVerificationValue = string.Empty;
 
             // Act
-            bool result = PaymentValidator.IsCvvValid(emptyCVV);
+            bool result = PaymentValidator.IsCardVerificationValueValid(emptyCardVerificationValue);
 
             // Assert
             Assert.That(result, Is.False);
         }
 
         [Test]
-        public void IsCvvValid_NullCVV_ReturnsFalse()
+        public void IsCardVerificationValueValid_NullCVV_ReturnsFalse()
         {
             // Arrange
-            string nullCVV = null;
+            string nullCardVerificationValue = null;
 
             // Act
-            bool result = PaymentValidator.IsCvvValid(nullCVV);
+            bool result = PaymentValidator.IsCardVerificationValueValid(nullCardVerificationValue);
 
             // Assert
             Assert.That(result, Is.False);
         }
 
         [Test]
-        public void IsCvvValid_NonNumericCVV_ReturnsFalse()
+        public void IsCardVerificationValueValid_NonNumericCVV_ReturnsFalse()
         {
             // Arrange
-            string nonNumericCVV = "12A";
+            string nonNumericCardVerificationValue = "12A";
 
             // Act
-            bool result = PaymentValidator.IsCvvValid(nonNumericCVV);
+            bool result = PaymentValidator.IsCardVerificationValueValid(nonNumericCardVerificationValue);
 
             // Assert
             Assert.That(result, Is.False);
@@ -409,10 +409,10 @@ namespace Tests.Validators
         public void IsExpirationDateValid_FutureDate_ReturnsTrue()
         {
             // Arrange
-            string validDate = "12/28";
+            string futureExpirationDateString = "12/28";
 
             // Act
-            bool result = PaymentValidator.IsExpirationDateValid(validDate);
+            bool result = PaymentValidator.IsExpirationDateValid(futureExpirationDateString);
 
             // Assert
             Assert.That(result, Is.True);
@@ -423,11 +423,11 @@ namespace Tests.Validators
         {
             // Arrange
             int currentMonth = DateTime.Now.Month;
-            int currentYear = DateTime.Now.Year % 100;
-            string currentDate = $"{currentMonth:D2}/{currentYear:D2}";
+            int currentYearTwoDigits = DateTime.Now.Year % 100;
+            string currentExpirationDateString = $"{currentMonth:D2}/{currentYearTwoDigits:D2}";
 
             // Act
-            bool result = PaymentValidator.IsExpirationDateValid(currentDate);
+            bool result = PaymentValidator.IsExpirationDateValid(currentExpirationDateString);
 
             // Assert
             Assert.That(result, Is.True);
@@ -437,11 +437,11 @@ namespace Tests.Validators
         public void IsExpirationDateValid_PastDate_ReturnsFalse()
         {
             // Arrange
-            int lastYear = (DateTime.Now.Year - 1) % 100;
-            string pastDate = $"12/{lastYear:D2}";
+            int lastYearTwoDigits = (DateTime.Now.Year - 1) % 100;
+            string pastExpirationDateString = $"12/{lastYearTwoDigits:D2}";
 
             // Act
-            bool result = PaymentValidator.IsExpirationDateValid(pastDate);
+            bool result = PaymentValidator.IsExpirationDateValid(pastExpirationDateString);
 
             // Assert
             Assert.That(result, Is.False);
@@ -451,10 +451,10 @@ namespace Tests.Validators
         public void IsExpirationDateValid_InvalidMonth_ReturnsFalse()
         {
             // Arrange
-            string invalidMonth = "13/30";
+            string expirationDateWithInvalidMonth = "13/30";
 
             // Act
-            bool result = PaymentValidator.IsExpirationDateValid(invalidMonth);
+            bool result = PaymentValidator.IsExpirationDateValid(expirationDateWithInvalidMonth);
 
             // Assert
             Assert.That(result, Is.False);
@@ -464,10 +464,10 @@ namespace Tests.Validators
         public void IsExpirationDateValid_SingleDigitMonthFormat_ReturnsFalse()
         {
             // Arrange
-            string invalidFormat = "1/23";
+            string expirationDateWithSingleDigitMonth = "1/23";
 
             // Act
-            bool result = PaymentValidator.IsExpirationDateValid(invalidFormat);
+            bool result = PaymentValidator.IsExpirationDateValid(expirationDateWithSingleDigitMonth);
 
             // Assert
             Assert.That(result, Is.False);
@@ -477,10 +477,10 @@ namespace Tests.Validators
         public void IsExpirationDateValid_NoSlashFormat_ReturnsFalse()
         {
             // Arrange
-            string invalidFormat = "1234";
+            string expirationDateWithoutSlash = "1234";
 
             // Act
-            bool result = PaymentValidator.IsExpirationDateValid(invalidFormat);
+            bool result = PaymentValidator.IsExpirationDateValid(expirationDateWithoutSlash);
 
             // Assert
             Assert.That(result, Is.False);
@@ -490,10 +490,10 @@ namespace Tests.Validators
         public void IsExpirationDateValid_DashSeparatorFormat_ReturnsFalse()
         {
             // Arrange
-            string invalidFormat = "12-23";
+            string expirationDateWithDashSeparator = "12-23";
 
             // Act
-            bool result = PaymentValidator.IsExpirationDateValid(invalidFormat);
+            bool result = PaymentValidator.IsExpirationDateValid(expirationDateWithDashSeparator);
 
             // Assert
             Assert.That(result, Is.False);
@@ -503,10 +503,10 @@ namespace Tests.Validators
         public void IsExpirationDateValid_DotSeparatorFormat_ReturnsFalse()
         {
             // Arrange
-            string invalidFormat = "12.23";
+            string expirationDateWithDotSeparator = "12.23";
 
             // Act
-            bool result = PaymentValidator.IsExpirationDateValid(invalidFormat);
+            bool result = PaymentValidator.IsExpirationDateValid(expirationDateWithDotSeparator);
 
             // Assert
             Assert.That(result, Is.False);
@@ -516,10 +516,10 @@ namespace Tests.Validators
         public void IsExpirationDateValid_EmptyDate_ReturnsFalse()
         {
             // Arrange
-            string emptyDate = string.Empty;
+            string emptyExpirationDateString = string.Empty;
 
             // Act
-            bool result = PaymentValidator.IsExpirationDateValid(emptyDate);
+            bool result = PaymentValidator.IsExpirationDateValid(emptyExpirationDateString);
 
             // Assert
             Assert.That(result, Is.False);
@@ -529,10 +529,10 @@ namespace Tests.Validators
         public void IsExpirationDateValid_NullDate_ReturnsFalse()
         {
             // Arrange
-            string nullDate = null;
+            string nullExpirationDateString = null;
 
             // Act
-            bool result = PaymentValidator.IsExpirationDateValid(nullDate);
+            bool result = PaymentValidator.IsExpirationDateValid(nullExpirationDateString);
 
             // Assert
             Assert.That(result, Is.False);

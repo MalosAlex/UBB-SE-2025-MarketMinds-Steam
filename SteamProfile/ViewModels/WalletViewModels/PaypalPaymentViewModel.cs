@@ -10,6 +10,10 @@ namespace SteamProfile.ViewModels
 {
     public partial class PaypalPaymentViewModel : ObservableObject
     {
+        private const string AmountKey = "amount";
+        private const string ViewModelKey = "viewModel";
+        private const string UserKey = "user";
+
         [ObservableProperty]
         private int amount;
 
@@ -60,15 +64,18 @@ namespace SteamProfile.ViewModels
             Amount = paymentAmount;
             User = currentUser;
             WalletViewModel = currentWalletViewModel;
-            AmountText = "Sum: " + Amount.ToString();
+            AmountText = $"Sum: {Amount}";
         }
 
         public void Initialize(Dictionary<string, object> parameters)
         {
-            Amount = parameters.ContainsKey("sum") ? (int)parameters["sum"] : 0;
-            WalletViewModel = parameters.ContainsKey("viewModel") ? (WalletViewModel)parameters["viewModel"] : null;
-            User = parameters.ContainsKey("user") ? (User)parameters["user"] : null;
-            AmountText = "Sum: " + Amount.ToString();
+            Amount = parameters.ContainsKey(AmountKey) ? (int)parameters[AmountKey] : 0;
+
+            WalletViewModel = parameters.ContainsKey(ViewModelKey) ? (WalletViewModel)parameters[ViewModelKey] : null;
+
+            User = parameters.ContainsKey(UserKey) ? (User)parameters[UserKey] : null;
+
+            AmountText = $"Sum: {Amount}";
         }
 
         partial void OnShowErrorMessageChanged(bool oldValue, bool newValue)
@@ -78,14 +85,12 @@ namespace SteamProfile.ViewModels
 
         public void ValidateEmail(string emailAddress)
         {
-            // Business logic moved to PaymentValidator
             IsEmailValid = PaymentValidator.IsEmailValid(emailAddress);
             ShowErrorMessage = !IsEmailValid;
         }
 
         public void ValidatePassword(string password)
         {
-            // Business logic moved to PaymentValidator
             IsPasswordValid = PaymentValidator.IsPasswordValid(password);
             ShowErrorMessage = !IsPasswordValid;
         }
@@ -95,16 +100,21 @@ namespace SteamProfile.ViewModels
             if (!AreAllFieldsValid)
             {
                 ShowErrorMessage = true;
+                StatusMessage = "Please correct the invalid fields.";
+                StatusMessageVisibility = Visibility.Visible;
                 return false;
             }
 
             ShowErrorMessage = false;
             StatusMessageVisibility = Visibility.Visible;
             StatusMessage = "Processing...";
+
             await Task.Delay(1000);
 
             WalletViewModel?.AddFunds(Amount);
+
             StatusMessage = "Payment was performed successfully";
+
             await Task.Delay(5000);
 
             return true;
