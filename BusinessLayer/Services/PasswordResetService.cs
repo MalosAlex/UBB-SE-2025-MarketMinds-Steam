@@ -196,9 +196,9 @@ namespace BusinessLayer.Services
                 string fileContent = string.Empty;
                 try
                 {
-                    using (var sr = new StreamReader(file))
+                    using (var streamReader = new StreamReader(file))
                     {
-                        fileContent = sr.ReadToEnd().Trim();
+                        fileContent = streamReader.ReadToEnd().Trim();
                     }
 
                     string[] parts = fileContent.Split('|');
