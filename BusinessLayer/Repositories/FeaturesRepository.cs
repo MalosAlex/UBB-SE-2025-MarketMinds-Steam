@@ -11,6 +11,13 @@ namespace BusinessLayer.Repositories
     {
         private readonly IDataLink dataLink;
 
+        private const string FeatureIdentifierString = "feature_id";
+        private const string NameString = "name";
+        private const string ValueString = "value";
+        private const string DescriptionString = "description";
+        private const string TypeString = "type";
+        private const string SourceString = "source";
+
         public FeaturesRepository(IDataLink datalink)
         {
             dataLink = datalink ?? throw new ArgumentNullException(nameof(datalink));
@@ -32,13 +39,12 @@ namespace BusinessLayer.Repositories
                 {
                     features.Add(new Feature
                     {
-                        FeatureId = Convert.ToInt32(row["feature_id"]),
-                        Name = row["name"].ToString(),
-                        Value = Convert.ToInt32(row["value"]),
-                        Description = row["description"].ToString(),
-                        Type = row["type"].ToString(),
-                        Source = row["source"].ToString(),
-                        Equipped = Convert.ToBoolean(row["equipped"])
+                        FeatureId = Convert.ToInt32(row[FeatureIdentifierString]),
+                        Name = row[NameString].ToString(),
+                        Value = Convert.ToInt32(row[ValueString]),
+                        Description = row[DescriptionString].ToString(),
+                        Type = row[TypeString].ToString(),
+                        Source = row[SourceString].ToString()
                     });
                 }
 
@@ -62,23 +68,16 @@ namespace BusinessLayer.Repositories
                 var features = new List<Feature>();
                 var dataTable = dataLink.ExecuteReader("GetFeaturesByType", parameters);
 
-                const string featureIdentifierString = "feature_id";
-                const string nameString = "name";
-                const string valueString = "value";
-                const string descriptionString = "description";
-                const string typeString = "type";
-                const string sourceString = "source";
-
                 foreach (DataRow row in dataTable.Rows)
                 {
                     features.Add(new Feature
                     {
-                        FeatureId = Convert.ToInt32(row[featureIdentifierString]),
-                        Name = row[nameString].ToString(),
-                        Value = Convert.ToInt32(row[valueString]),
-                        Description = row[descriptionString].ToString(),
-                        Type = row[typeString].ToString(),
-                        Source = row[sourceString].ToString()
+                        FeatureId = Convert.ToInt32(row[FeatureIdentifierString]),
+                        Name = row[NameString].ToString(),
+                        Value = Convert.ToInt32(row[ValueString]),
+                        Description = row[DescriptionString].ToString(),
+                        Type = row[TypeString].ToString(),
+                        Source = row[SourceString].ToString()
                     });
                 }
 
@@ -106,13 +105,12 @@ namespace BusinessLayer.Repositories
                 {
                     features.Add(new Feature
                     {
-                        FeatureId = Convert.ToInt32(row["feature_id"]),
-                        Name = row["name"].ToString(),
-                        Value = Convert.ToInt32(row["value"]),
-                        Description = row["description"].ToString(),
-                        Type = row["type"].ToString(),
-                        Source = row["source"].ToString(),
-                        Equipped = Convert.ToBoolean(row["equipped"])
+                        FeatureId = Convert.ToInt32(row[FeatureIdentifierString]),
+                        Name = row[NameString].ToString(),
+                        Value = Convert.ToInt32(row[ValueString]),
+                        Description = row[DescriptionString].ToString(),
+                        Type = row[TypeString].ToString(),
+                        Source = row[SourceString].ToString()
                     });
                 }
 
@@ -190,7 +188,7 @@ namespace BusinessLayer.Repositories
             }
             catch (DatabaseOperationException exception)
             {
-                System.Diagnostics.Debug.WriteLine($"Failed to unequip feature {featureIdentifier} for user {userId}: {exception.Message}");
+                System.Diagnostics.Debug.WriteLine($"Failed to unequip feature {featureIdentifier} for user {userIdentifier}: {exception.Message}");
                 return false;
             }
         }
@@ -247,7 +245,7 @@ namespace BusinessLayer.Repositories
                 var parameters = new SqlParameter[]
                 {
                     new SqlParameter("@userId", userIdentifier),
-                    new SqlParameter("@featureId", featureId),
+                    new SqlParameter("@featureId", featureIdentifier),
                     new SqlParameter("@equipped", false) // New features are unequipped by default
                 };
 
