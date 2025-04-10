@@ -12,5 +12,6 @@ namespace BusinessLayer.Repositories.Interfaces
         bool EquipFeature(int userId, int featureId);
         bool UnequipFeature(int userId, int featureId);
         bool UnequipFeaturesByType(int userId, string featureType);
+        bool AddUserFeature(int userId, int featureId);
     }
 }

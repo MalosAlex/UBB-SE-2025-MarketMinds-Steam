@@ -10,10 +10,10 @@ namespace BusinessLayer.Repositories.Fakes
         public FakeCollectionsRepository()
         {
             // Seed with some dummy collections for testing.
-            collectionList.Add(new Collection(userId: 1, name: "Test Collection 1", createdAt: DateOnly.FromDateTime(DateTime.Now.AddDays(-5)), coverPicture: "pic1.jpg", isPublic: true) { CollectionId = 1 });
-            collectionList.Add(new Collection(userId: 1, name: "Test Collection 2", createdAt: DateOnly.FromDateTime(DateTime.Now.AddDays(-3)), coverPicture: "pic2.jpg", isPublic: false) { CollectionId = 2 });
-            collectionList.Add(new Collection(userId: 1, name: "Test Collection 3", createdAt: DateOnly.FromDateTime(DateTime.Now.AddDays(-1)), coverPicture: "pic3.jpg", isPublic: true) { CollectionId = 3 });
-            collectionList.Add(new Collection(userId: 2, name: "Other User Collection", createdAt: DateOnly.FromDateTime(DateTime.Now.AddDays(-2)), coverPicture: "pic4.jpg", isPublic: true) { CollectionId = 4 });
+            collectionList.Add(new Collection(userId: 1, collectionName: "Test Collection 1", createdAt: DateOnly.FromDateTime(DateTime.Now.AddDays(-5)), coverPicture: "pic1.jpg", isPublic: true) { CollectionId = 1 });
+            collectionList.Add(new Collection(userId: 1, collectionName: "Test Collection 2", createdAt: DateOnly.FromDateTime(DateTime.Now.AddDays(-3)), coverPicture: "pic2.jpg", isPublic: false) { CollectionId = 2 });
+            collectionList.Add(new Collection(userId: 1, collectionName: "Test Collection 3", createdAt: DateOnly.FromDateTime(DateTime.Now.AddDays(-1)), coverPicture: "pic3.jpg", isPublic: true) { CollectionId = 3 });
+            collectionList.Add(new Collection(userId: 2, collectionName: "Other User Collection", createdAt: DateOnly.FromDateTime(DateTime.Now.AddDays(-2)), coverPicture: "pic4.jpg", isPublic: true) { CollectionId = 4 });
         }
 
         public List<Collection> GetAllCollections(int userId)
@@ -134,7 +134,7 @@ namespace BusinessLayer.Repositories.Fakes
             if (collection != null)
             {
                 // For simplicity, we replace properties.
-                collection.Name = name;
+                collection.CollectionName = name;
                 collection.CoverPicture = coverPicture;
                 collection.IsPublic = isPublic;
                 // Update CreatedAt to now (as in original implementation)

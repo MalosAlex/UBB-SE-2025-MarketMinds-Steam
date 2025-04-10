@@ -8,23 +8,23 @@ namespace BusinessLayer.Services
     public class CollectionsService : ICollectionsService
     {
         // Error message constants
-        private const string Err_RetrieveCollectionsDb = "Failed to retrieve collections from database";
-        private const string Err_RetrieveCollectionsUnexpected = "An unexpected error occurred while retrieving collections";
-        private const string Err_RetrieveCollection = "Failed to retrieve collection.";
-        private const string Err_RetrieveCollectionUnexpected = "An unexpected error occurred while retrieving collection.";
-        private const string Err_RetrieveGamesDb = "Failed to retrieve games from database";
-        private const string Err_RetrieveGamesUnexpected = "An unexpected error occurred while retrieving games";
-        private const string Err_AddGameToCollection = "Failed to add game to collection";
-        private const string Err_Unexpected = "An unexpected error occurred";
-        private const string Err_RemoveGameFromCollection = "Failed to remove game from collection.";
-        private const string Err_RemoveGameFromCollectionUnexpected = "An unexpected error occurred while removing game from collection.";
-        private const string Err_DeleteCollection = "Failed to delete collection";
-        private const string Err_CreateCollectionDb = "Failed to create collection in database";
-        private const string Err_CreateCollectionUnexpected = "An unexpected error occurred while creating collection";
-        private const string Err_UpdateCollectionDb = "Failed to update collection in database";
-        private const string Err_UpdateCollectionUnexpected = "An unexpected error occurred while updating collection";
-        private const string Err_RetrievePublicCollectionsDb = "Failed to retrieve public collections from database";
-        private const string Err_RetrievePublicCollectionsUnexpected = "An unexpected error occurred while retrieving public collections";
+        private const string Error_RetrieveCollectionsDataBase = "Failed to retrieve collections from database";
+        private const string Error_RetrieveCollectionsUnexpected = "An unexpected error occurred while retrieving collections";
+        private const string Error_RetrieveCollection = "Failed to retrieve collection.";
+        private const string Error_RetrieveCollectionUnexpected = "An unexpected error occurred while retrieving collection.";
+        private const string Error_RetrieveGamesDataBase = "Failed to retrieve games from database";
+        private const string Error_RetrieveGamesUnexpected = "An unexpected error occurred while retrieving games";
+        private const string Error_AddGameToCollection = "Failed to add game to collection";
+        private const string Error_Unexpected = "An unexpected error occurred";
+        private const string Error_RemoveGameFromCollection = "Failed to remove game from collection.";
+        private const string Error_RemoveGameFromCollectionUnexpected = "An unexpected error occurred while removing game from collection.";
+        private const string Error_DeleteCollection = "Failed to delete collection";
+        private const string Error_CreateCollectionDataBase = "Failed to create collection in database";
+        private const string Error_CreateCollectionUnexpected = "An unexpected error occurred while creating collection";
+        private const string Error_UpdateCollectionDataBase = "Failed to update collection in database";
+        private const string Error_UpdateCollectionUnexpected = "An unexpected error occurred while updating collection";
+        private const string Error_RetrievePublicCollectionsDataBase = "Failed to retrieve public collections from database";
+        private const string Error_RetrievePublicCollectionsUnexpected = "An unexpected error occurred while retrieving public collections";
 
         private readonly ICollectionsRepository collectionsRepository;
 
@@ -42,15 +42,15 @@ namespace BusinessLayer.Services
             }
             catch (RepositoryException repositoryException)
             {
-                throw new ServiceException(Err_RetrieveCollectionsDb, repositoryException);
+                throw new ServiceException(Error_RetrieveCollectionsDataBase, repositoryException);
             }
             catch (Exception generalException)
             {
-                throw new ServiceException(Err_RetrieveCollectionsUnexpected, generalException);
+                throw new ServiceException(Error_RetrieveCollectionsUnexpected, generalException);
             }
         }
 
-        public Collection GetCollectionById(int collectionId, int userId)
+        public Collection GetCollectionByIdentifier(int collectionId, int userId)
         {
             try
             {
@@ -62,11 +62,11 @@ namespace BusinessLayer.Services
             }
             catch (RepositoryException repositoryException)
             {
-                throw new ServiceException(Err_RetrieveCollection, repositoryException);
+                throw new ServiceException(Error_RetrieveCollection, repositoryException);
             }
             catch (Exception generalException)
             {
-                throw new ServiceException(Err_RetrieveCollectionUnexpected, generalException);
+                throw new ServiceException(Error_RetrieveCollectionUnexpected, generalException);
             }
         }
 
@@ -79,11 +79,11 @@ namespace BusinessLayer.Services
             }
             catch (RepositoryException repositoryException)
             {
-                throw new ServiceException(Err_RetrieveGamesDb, repositoryException);
+                throw new ServiceException(Error_RetrieveGamesDataBase, repositoryException);
             }
             catch (Exception generalException)
             {
-                throw new ServiceException(Err_RetrieveGamesUnexpected, generalException);
+                throw new ServiceException(Error_RetrieveGamesUnexpected, generalException);
             }
         }
 
@@ -95,11 +95,11 @@ namespace BusinessLayer.Services
             }
             catch (RepositoryException repositoryException)
             {
-                throw new ServiceException(Err_AddGameToCollection, repositoryException);
+                throw new ServiceException(Error_AddGameToCollection, repositoryException);
             }
             catch (Exception generalException)
             {
-                throw new ServiceException(Err_Unexpected, generalException);
+                throw new ServiceException(Error_Unexpected, generalException);
             }
         }
 
@@ -111,11 +111,11 @@ namespace BusinessLayer.Services
             }
             catch (RepositoryException repositoryException)
             {
-                throw new ServiceException(Err_RemoveGameFromCollection, repositoryException);
+                throw new ServiceException(Error_RemoveGameFromCollection, repositoryException);
             }
             catch (Exception generalException)
             {
-                throw new ServiceException(Err_RemoveGameFromCollectionUnexpected, generalException);
+                throw new ServiceException(Error_RemoveGameFromCollectionUnexpected, generalException);
             }
         }
 
@@ -127,39 +127,39 @@ namespace BusinessLayer.Services
             }
             catch (Exception generalException)
             {
-                throw new Exception(Err_DeleteCollection, generalException);
+                throw new Exception(Error_DeleteCollection, generalException);
             }
         }
 
-        public void CreateCollection(int userId, string name, string coverPicture, bool isPublic, DateOnly createdAt)
+        public void CreateCollection(int userId, string collectionName, string coverPicture, bool isPublic, DateOnly createdAt)
         {
             try
             {
-                collectionsRepository.CreateCollection(userId, name, coverPicture, isPublic, createdAt);
+                collectionsRepository.CreateCollection(userId, collectionName, coverPicture, isPublic, createdAt);
             }
             catch (RepositoryException repositoryException)
             {
-                throw new ServiceException(Err_CreateCollectionDb, repositoryException);
+                throw new ServiceException(Error_CreateCollectionDataBase, repositoryException);
             }
             catch (Exception generalException)
             {
-                throw new ServiceException(Err_CreateCollectionUnexpected, generalException);
+                throw new ServiceException(Error_CreateCollectionUnexpected, generalException);
             }
         }
 
-        public void UpdateCollection(int collectionId, int userId, string name, string coverPicture, bool isPublic)
+        public void UpdateCollection(int collectionId, int userId, string collectionName, string coverPicture, bool isPublic)
         {
             try
             {
-                collectionsRepository.UpdateCollection(collectionId, userId, name, coverPicture, isPublic);
+                collectionsRepository.UpdateCollection(collectionId, userId, collectionName, coverPicture, isPublic);
             }
             catch (RepositoryException repositoryException)
             {
-                throw new ServiceException(Err_UpdateCollectionDb, repositoryException);
+                throw new ServiceException(Error_UpdateCollectionDataBase, repositoryException);
             }
             catch (Exception generalException)
             {
-                throw new ServiceException(Err_UpdateCollectionUnexpected, generalException);
+                throw new ServiceException(Error_UpdateCollectionUnexpected, generalException);
             }
         }
 
@@ -172,11 +172,11 @@ namespace BusinessLayer.Services
             }
             catch (RepositoryException repositoryException)
             {
-                throw new ServiceException(Err_RetrievePublicCollectionsDb, repositoryException);
+                throw new ServiceException(Error_RetrievePublicCollectionsDataBase, repositoryException);
             }
             catch (Exception generalException)
             {
-                throw new ServiceException(Err_RetrievePublicCollectionsUnexpected, generalException);
+                throw new ServiceException(Error_RetrievePublicCollectionsUnexpected, generalException);
             }
         }
 

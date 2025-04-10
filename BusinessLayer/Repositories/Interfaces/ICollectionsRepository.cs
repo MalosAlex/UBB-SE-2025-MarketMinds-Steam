@@ -16,8 +16,8 @@ namespace BusinessLayer.Repositories.Interfaces
         void RemoveCollectionForUser(string userId, string collectionId);
         void SaveCollection(string userId, Collection collection);
         void DeleteCollection(int collectionId, int userId);
-        void CreateCollection(int userId, string name, string coverPicture, bool isPublic, DateOnly createdAt);
-        void UpdateCollection(int collectionId, int userId, string name, string coverPicture, bool isPublic);
+        void CreateCollection(int userId, string collectionName, string coverPicture, bool isPublic, DateOnly createdAt);
+        void UpdateCollection(int collectionId, int userId, string collectionName, string coverPicture, bool isPublic);
         List<Collection> GetPublicCollectionsForUser(int userId);
         List<OwnedGame> GetGamesNotInCollection(int collectionId, int userId);
     }

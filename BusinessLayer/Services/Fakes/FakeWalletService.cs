@@ -5,23 +5,23 @@ namespace BusinessLayer.Services.Fakes
 {
     public class FakeWalletService : IWalletService
     {
-        private decimal balance = 100m;
+        private decimal walletBalance = 100m;
         private int points = 0;
         public List<string> Actions = new();
 
         public void AddMoney(decimal amount)
         {
-            balance += amount;
+            walletBalance += amount;
         }
 
         public void AddPoints(int points)
         {
-            points += points;
+            this.points += points;
         }
 
         public decimal GetBalance()
         {
-            return balance;
+            return walletBalance;
         }
 
         public int GetPoints()
@@ -35,12 +35,12 @@ namespace BusinessLayer.Services.Fakes
 
         public void PurchasePoints(PointsOffer offer)
         {
-            if (balance < offer.Price)
+            if (walletBalance < offer.Price)
             {
                 throw new InvalidOperationException("Insufficient funds");
             }
 
-            balance -= offer.Price;
+            walletBalance -= offer.Price;
             points += offer.Points;
         }
         public bool TryPurchasePoints(PointsOffer pointsOffer)
@@ -52,7 +52,7 @@ namespace BusinessLayer.Services.Fakes
 
             try
             {
-                if (balance >= pointsOffer.Price)
+                if (walletBalance >= pointsOffer.Price)
                 {
                     PurchasePoints(pointsOffer);
                     return true;

@@ -32,7 +32,9 @@ namespace Tests.RepositoryTests
         [Test]
         public void Constructor_NullDataLink_ThrowsArgumentNullException()
         {
-            // Assert
+            // Arrange
+
+            // Act & Assert
             Assert.Throws<ArgumentNullException>(() => new CollectionsRepository(null));
         }
 

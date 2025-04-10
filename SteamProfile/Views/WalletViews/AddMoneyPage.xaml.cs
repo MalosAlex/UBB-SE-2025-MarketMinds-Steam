@@ -14,23 +14,23 @@ namespace SteamProfile.Views.WalletViews
             this.InitializeComponent();
         }
 
-        protected override void OnNavigatedTo(NavigationEventArgs e)
+        protected override void OnNavigatedTo(NavigationEventArgs eventArgs)
         {
-            base.OnNavigatedTo(e);
+            base.OnNavigatedTo(eventArgs);
 
-            if (e.Parameter is WalletViewModel walletViewModel)
+            if (eventArgs.Parameter is WalletViewModel walletViewModel)
             {
                 ViewModel = new AddMoneyViewModel(walletViewModel);
                 this.DataContext = ViewModel;
             }
         }
 
-        private void SumToBeAddedTextBox_TextChanged(object sender, TextChangedEventArgs e)
+        private void SumToBeAddedTextBox_TextChanged(object sender, TextChangedEventArgs eventArgs)
         {
             ViewModel.ValidateInput(sumToBeAddedTextBox.Text);
         }
 
-        private void UseCardForPayment(object sender, RoutedEventArgs e)
+        private void UseCardForPayment(object sender, RoutedEventArgs eventArgs)
         {
             if (ViewModel.IsInputValid)
             {
@@ -38,7 +38,7 @@ namespace SteamProfile.Views.WalletViews
             }
         }
 
-        private void UsePaypalForPayment(object sender, RoutedEventArgs e)
+        private void UsePaypalForPayment(object sender, RoutedEventArgs eventArgs)
         {
             if (ViewModel.IsInputValid)
             {
@@ -46,7 +46,7 @@ namespace SteamProfile.Views.WalletViews
             }
         }
 
-        private void Cancel(object sender, RoutedEventArgs e)
+        private void Cancel(object sender, RoutedEventArgs eventArgs)
         {
             Frame.GoBack();
         }

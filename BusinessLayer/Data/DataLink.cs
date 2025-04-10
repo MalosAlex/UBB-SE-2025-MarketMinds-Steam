@@ -1,8 +1,9 @@
-﻿using System.Configuration;
+﻿using System;
+using System.Configuration;
 using System.Data;
-using Microsoft.Extensions.Configuration;
-using Microsoft.Data.SqlClient;
 using BusinessLayer.Exceptions;
+using Microsoft.Data.SqlClient;
+using Microsoft.Extensions.Configuration;
 
 namespace BusinessLayer.Data
 {
@@ -132,9 +133,9 @@ namespace BusinessLayer.Data
             {
                 throw new DatabaseOperationException(ExecuteScalarCastErrorMessage + exception.Message, exception);
             }
-            catch (Exception ex)
+            catch (Exception exception)
             {
-                throw new DatabaseOperationException(ExecuteScalarUnexpectedErrorMessage + ex.Message, ex);
+                throw new DatabaseOperationException(ExecuteScalarUnexpectedErrorMessage + exception.Message, exception);
             }
         }
 

@@ -72,7 +72,7 @@ namespace SteamProfile.ViewModels
                     AvailableGames.Add(availableGame);
                 }
             }
-            catch (Exception ex)
+            catch (Exception exception)
             {
                 ErrorMessage = FailedToLoadAvailableGamesErrorMessage;
             }
@@ -82,15 +82,15 @@ namespace SteamProfile.ViewModels
             }
         }
 
-        public void AddGameToCollection(OwnedGame game)
+        public void AddGameToCollection(OwnedGame ownedGame)
         {
             try
             {
                 var currentUser = userService.GetCurrentUser();
-                collectionsService.AddGameToCollection(collectionId, game.GameId, currentUser.UserId);
-                AvailableGames.Remove(game);
+                collectionsService.AddGameToCollection(collectionId, ownedGame.GameId, currentUser.UserId);
+                AvailableGames.Remove(ownedGame);
             }
-            catch (Exception ex)
+            catch (Exception exception)
             {
                 ErrorMessage = FailedToAddGameErrorMessage;
             }

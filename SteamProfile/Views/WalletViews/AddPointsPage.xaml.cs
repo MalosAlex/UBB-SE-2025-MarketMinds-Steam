@@ -17,11 +17,11 @@ namespace SteamProfile.Views.WalletViews
             this.InitializeComponent();
         }
 
-        protected override void OnNavigatedTo(NavigationEventArgs e)
+        protected override void OnNavigatedTo(NavigationEventArgs eventArgs)
         {
-            base.OnNavigatedTo(e);
+            base.OnNavigatedTo(eventArgs);
 
-            if (e.Parameter is WalletViewModel walletViewModel)
+            if (eventArgs.Parameter is WalletViewModel walletViewModel)
             {
                 var repository = new PointsOffersRepository();
                 addPointsViewModel = new AddPointsViewModel(walletViewModel, repository, this.Frame);

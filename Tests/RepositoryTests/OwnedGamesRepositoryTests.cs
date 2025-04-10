@@ -108,7 +108,7 @@ namespace Tests.RepositoryTests
             // Act
             List<OwnedGame> ownedGamesForUser = ownedGamesRepository.GetAllOwnedGames(1);
             // Assert: The first game's title should be "Game 0".
-            Assert.That(ownedGamesForUser.First().Title, Is.EqualTo("Game 0"));
+            Assert.That(ownedGamesForUser.First().GameTitle, Is.EqualTo("Game 0"));
         }
 
         [Test]
@@ -161,7 +161,7 @@ namespace Tests.RepositoryTests
             // Act
             OwnedGame retrievedOwnedGame = ownedGamesRepository.GetOwnedGameById(1, 1);
             // Assert: The title of the retrieved game should be "Game 0".
-            Assert.That(retrievedOwnedGame.Title, Is.EqualTo("Game 0"));
+            Assert.That(retrievedOwnedGame.GameTitle, Is.EqualTo("Game 0"));
         }
 
         [Test]

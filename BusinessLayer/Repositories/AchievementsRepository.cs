@@ -83,13 +83,13 @@ namespace BusinessLayer.Repositories
             }
         }
 
-        public List<Achievement> GetUnlockedAchievementsForUser(int userId)
+        public List<Achievement> GetUnlockedAchievementsForUser(int userIdentifier)
         {
             try
             {
                 var parameters = new SqlParameter[]
                 {
-                    new SqlParameter("@userId", userId)
+                    new SqlParameter("@userId", userIdentifier)
                 };
                 var dataTable = dataLink.ExecuteReader("GetUnlockedAchievements", parameters);
                 return MapDataTableToAchievements(dataTable);
@@ -100,13 +100,13 @@ namespace BusinessLayer.Repositories
             }
         }
 
-        public void UnlockAchievement(int userId, int achievementId)
+        public void UnlockAchievement(int userIdentifier, int achievementId)
         {
             try
             {
                 var parameters = new SqlParameter[]
                 {
-                    new SqlParameter("@userId", userId),
+                    new SqlParameter("@userId", userIdentifier),
                     new SqlParameter("@achievementId", achievementId)
                 };
                 dataLink.ExecuteNonQuery("UnlockAchievement", parameters);
@@ -117,13 +117,13 @@ namespace BusinessLayer.Repositories
             }
         }
 
-        public void RemoveAchievement(int userId, int achievementId)
+        public void RemoveAchievement(int userIdentifier, int achievementId)
         {
             try
             {
                 var parameters = new SqlParameter[]
                 {
-                    new SqlParameter("@userId", userId),
+                    new SqlParameter("@userId", userIdentifier),
                     new SqlParameter("@achievementId", achievementId)
                 };
                 dataLink.ExecuteNonQuery("RemoveAchievement", parameters);
@@ -134,13 +134,13 @@ namespace BusinessLayer.Repositories
             }
         }
 
-        public AchievementUnlockedData GetUnlockedDataForAchievement(int userId, int achievementId)
+        public AchievementUnlockedData GetUnlockedDataForAchievement(int userIdentifier, int achievementId)
         {
             try
             {
                 var parameters = new SqlParameter[]
                 {
-                    new SqlParameter("@user_id", userId),
+                    new SqlParameter("@user_id", userIdentifier),
                     new SqlParameter("@achievement_id", achievementId)
                 };
                 var dataTable = dataLink.ExecuteReader("GetUnlockedDataForAchievement", parameters);
@@ -154,13 +154,13 @@ namespace BusinessLayer.Repositories
             }
         }
 
-        public bool IsAchievementUnlocked(int userId, int achievementId)
+        public bool IsAchievementUnlocked(int userIdentifier, int achievementId)
         {
             try
             {
                 var parameters = new SqlParameter[]
             {
-                new SqlParameter("@user_id", userId),
+                new SqlParameter("@user_id", userIdentifier),
                 new SqlParameter("@achievement_id", achievementId)
             };
 
@@ -174,7 +174,7 @@ namespace BusinessLayer.Repositories
             }
         }
 
-        public List<AchievementWithStatus> GetAchievementsWithStatusForUser(int userId)
+        public List<AchievementWithStatus> GetAchievementsWithStatusForUser(int userIdentifier)
         {
             try
             {
@@ -183,8 +183,8 @@ namespace BusinessLayer.Repositories
 
                 foreach (var achievement in allAchievements)
                 {
-                    var isUnlocked = IsAchievementUnlocked(userId, achievement.AchievementId);
-                    var unlockedData = GetUnlockedDataForAchievement(userId, achievement.AchievementId);
+                    var isUnlocked = IsAchievementUnlocked(userIdentifier, achievement.AchievementId);
+                    var unlockedData = GetUnlockedDataForAchievement(userIdentifier, achievement.AchievementId);
                     achievementsWithStatus.Add(new AchievementWithStatus
                     {
                         Achievement = achievement,
@@ -207,13 +207,13 @@ namespace BusinessLayer.Repositories
             }
         }
 
-        public int GetNumberOfSoldGames(int userId)
+        public int GetNumberOfSoldGames(int userIdentifier)
         {
             try
             {
                 var parameters = new SqlParameter[]
                 {
-                new SqlParameter("@user_id", userId)
+                new SqlParameter("@user_id", userIdentifier)
                 };
 
                 var result = dataLink.ExecuteScalar<int>("GetNumberOfSoldGames", parameters);
@@ -225,13 +225,13 @@ namespace BusinessLayer.Repositories
             }
         }
 
-        public int GetFriendshipCount(int userId)
+        public int GetFriendshipCount(int userIdentifier)
         {
             try
             {
                 var parameters = new SqlParameter[]
                 {
-                    new SqlParameter("@user_id", userId)
+                    new SqlParameter("@user_id", userIdentifier)
                 };
                 return dataLink.ExecuteScalar<int>("GetFriendshipCountForUser", parameters);
             }
@@ -242,13 +242,13 @@ namespace BusinessLayer.Repositories
             }
         }
 
-        public int GetNumberOfOwnedGames(int userId)
+        public int GetNumberOfOwnedGames(int userIdentifier)
         {
             try
             {
                 var parameters = new SqlParameter[]
                 {
-                new SqlParameter("@user_id", userId)
+                new SqlParameter("@user_id", userIdentifier)
                 };
 
                 var result = dataLink.ExecuteScalar<int>("GetNumberOfOwnedGames", parameters);
@@ -260,13 +260,13 @@ namespace BusinessLayer.Repositories
             }
         }
 
-        public int GetNumberOfReviewsGiven(int userId)
+        public int GetNumberOfReviewsGiven(int userIdentifier)
         {
             try
             {
                 var parameters = new SqlParameter[]
                 {
-                new SqlParameter("@user_id", userId)
+                new SqlParameter("@user_id", userIdentifier)
                 };
 
                 var result = dataLink.ExecuteScalar<int>("GetNumberOfReviewsGiven", parameters);
@@ -278,13 +278,13 @@ namespace BusinessLayer.Repositories
             }
         }
 
-        public int GetNumberOfReviewsReceived(int userId)
+        public int GetNumberOfReviewsReceived(int userIdentifier)
         {
             try
             {
                 var parameters = new SqlParameter[]
                 {
-                new SqlParameter("@user_id", userId)
+                new SqlParameter("@user_id", userIdentifier)
                 };
 
                 var result = dataLink.ExecuteScalar<int>("GetNumberOfReviewsReceived", parameters);
@@ -296,13 +296,13 @@ namespace BusinessLayer.Repositories
             }
         }
 
-        public int GetNumberOfPosts(int userId)
+        public int GetNumberOfPosts(int userIdentifier)
         {
             try
             {
                 var parameters = new SqlParameter[]
                 {
-                new SqlParameter("@user_id", userId)
+                new SqlParameter("@user_id", userIdentifier)
                 };
 
                 var result = dataLink.ExecuteScalar<int>("GetNumberOfPosts", parameters);
@@ -314,13 +314,13 @@ namespace BusinessLayer.Repositories
             }
         }
 
-        public int GetYearsOfAcftivity(int userId)
+        public int GetYearsOfAcftivity(int userIdentifier)
         {
             try
             {
                 var parameters = new SqlParameter[]
                 {
-            new SqlParameter("@user_id", userId)
+            new SqlParameter("@user_id", userIdentifier)
                 };
 
                 var createdAt = dataLink.ExecuteScalar<DateTime>("GetUserCreatedAt", parameters);
@@ -360,13 +360,13 @@ namespace BusinessLayer.Repositories
             }
         }
 
-        public bool IsUserDeveloper(int userId)
+        public bool IsUserDeveloper(int userIdentifier)
         {
             try
             {
                 var parameters = new SqlParameter[]
                 {
-            new SqlParameter("@user_id", userId)
+            new SqlParameter("@user_id", userIdentifier)
                 };
 
                 var result = dataLink.ExecuteScalar<bool>("IsUserDeveloper", parameters);

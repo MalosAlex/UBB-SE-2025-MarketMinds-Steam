@@ -67,7 +67,7 @@ namespace Tests.ServiceTests
             List<Collection> seededCollectionsForUser1 = fakeCollectionsRepositoryInstance.GetAllCollections(1);
             int existingCollectionId = seededCollectionsForUser1[0].CollectionId;
             // Act: Retrieve the collection by its ID for user 1.
-            Collection retrievedCollection = collectionsServiceInstance.GetCollectionById(existingCollectionId, 1);
+            Collection retrievedCollection = collectionsServiceInstance.GetCollectionByIdentifier(existingCollectionId, 1);
             // Assert: The returned collection should not be null.
             Assert.That(retrievedCollection, Is.Not.Null);
         }
@@ -79,7 +79,7 @@ namespace Tests.ServiceTests
             List<Collection> seededCollectionsForUser1 = fakeCollectionsRepositoryInstance.GetAllCollections(1);
             int expectedCollectionId = seededCollectionsForUser1[0].CollectionId;
             // Act: Retrieve the collection by its ID for user 1.
-            Collection retrievedCollection = collectionsServiceInstance.GetCollectionById(expectedCollectionId, 1);
+            Collection retrievedCollection = collectionsServiceInstance.GetCollectionByIdentifier(expectedCollectionId, 1);
             // Assert: The returned collection's CollectionId should equal the expected ID.
             Assert.That(retrievedCollection.CollectionId, Is.EqualTo(expectedCollectionId));
         }
@@ -91,7 +91,7 @@ namespace Tests.ServiceTests
             List<Collection> seededCollectionsForUser1 = fakeCollectionsRepositoryInstance.GetAllCollections(1);
             int selectedCollectionId = seededCollectionsForUser1[0].CollectionId;
             // Act: Retrieve the collection by its ID.
-            Collection retrievedCollection = collectionsServiceInstance.GetCollectionById(selectedCollectionId, 1);
+            Collection retrievedCollection = collectionsServiceInstance.GetCollectionByIdentifier(selectedCollectionId, 1);
             // Assert: The Games property of the collection should not be null.
             Assert.That(retrievedCollection.Games, Is.Not.Null);
         }
@@ -159,12 +159,12 @@ namespace Tests.ServiceTests
             // Arrange: Create a new collection to later delete.
             collectionsServiceInstance.CreateCollection(1, "Service Delete Test", "test.jpg", true, DateOnly.FromDateTime(DateTime.Now));
             List<Collection> seededCollectionsForUser1 = fakeCollectionsRepositoryInstance.GetAllCollections(1);
-            Collection collectionToDelete = seededCollectionsForUser1.FirstOrDefault(c => c.Name == "Service Delete Test");
+            Collection collectionToDelete = seededCollectionsForUser1.FirstOrDefault(collectionToDelete => collectionToDelete.CollectionName == "Service Delete Test");
             // Act: Delete the specified collection.
             collectionsServiceInstance.DeleteCollection(collectionToDelete.CollectionId, 1);
             // Assert: Verify that the collection no longer exists.
             List<Collection> collectionsAfterDeletion = fakeCollectionsRepositoryInstance.GetAllCollections(1);
-            bool collectionExists = collectionsAfterDeletion.Any(c => c.CollectionId == collectionToDelete.CollectionId);
+            bool collectionExists = collectionsAfterDeletion.Any(collectionExists => collectionExists.CollectionId == collectionToDelete.CollectionId);
             Assert.That(collectionExists, Is.False);
         }
 
@@ -193,7 +193,7 @@ namespace Tests.ServiceTests
         {
             // Arrange: Retrieve an existing collection and prepare updated properties.
             List<Collection> seededCollectionsForUser1 = fakeCollectionsRepositoryInstance.GetAllCollections(1);
-            Collection originalCollection = new Collection(1, seededCollectionsForUser1[0].Name, seededCollectionsForUser1[0].CreatedAt, seededCollectionsForUser1[0].CoverPicture, seededCollectionsForUser1[0].IsPublic)
+            Collection originalCollection = new Collection(1, seededCollectionsForUser1[0].CollectionName, seededCollectionsForUser1[0].CreatedAt, seededCollectionsForUser1[0].CoverPicture, seededCollectionsForUser1[0].IsPublic)
             {
                 CollectionId = seededCollectionsForUser1[0].CollectionId
             };
@@ -205,7 +205,7 @@ namespace Tests.ServiceTests
             collectionsServiceInstance.UpdateCollection(collectionIdToUpdate, 1, updatedCollectionName, updatedCoverPicture, updatedVisibilitySetting);
             Collection updatedCollection = fakeCollectionsRepositoryInstance.GetCollectionById(collectionIdToUpdate, 1);
             // Assert: The collection's properties should match the updated values.
-            Assert.That(updatedCollection, Has.Property("Name").EqualTo(updatedCollectionName)
+            Assert.That(updatedCollection, Has.Property("CollectionName").EqualTo(updatedCollectionName)
                                              .And.Property("CoverPicture").EqualTo(updatedCoverPicture)
                                              .And.Property("IsPublic").EqualTo(updatedVisibilitySetting));
         }
@@ -305,7 +305,7 @@ namespace Tests.ServiceTests
                                              .Throws(new RepositoryException("Repo error"));
             ICollectionsService collectionsServiceExceptionInstance = new CollectionsService(collectionsRepositoryMockInstance.Object);
             // Act & Assert
-            Assert.That(Assert.Throws<ServiceException>(() => collectionsServiceExceptionInstance.GetCollectionById(1, 1)).Message,
+            Assert.That(Assert.Throws<ServiceException>(() => collectionsServiceExceptionInstance.GetCollectionByIdentifier(1, 1)).Message,
                         Is.EqualTo("Failed to retrieve collection."));
         }
 
@@ -318,7 +318,7 @@ namespace Tests.ServiceTests
                                              .Throws(new Exception("Generic error"));
             ICollectionsService collectionsServiceExceptionInstance = new CollectionsService(collectionsRepositoryMockInstance.Object);
             // Act & Assert
-            Assert.That(Assert.Throws<ServiceException>(() => collectionsServiceExceptionInstance.GetCollectionById(1, 1)).Message,
+            Assert.That(Assert.Throws<ServiceException>(() => collectionsServiceExceptionInstance.GetCollectionByIdentifier(1, 1)).Message,
                         Is.EqualTo("An unexpected error occurred while retrieving collection."));
         }
 
@@ -334,7 +334,7 @@ namespace Tests.ServiceTests
                                              .Throws(new RepositoryException("Repo error"));
             ICollectionsService collectionsServiceExceptionInstance = new CollectionsService(collectionsRepositoryMockInstance.Object);
             // Act & Assert
-            Assert.That(Assert.Throws<ServiceException>(() => collectionsServiceExceptionInstance.GetCollectionById(1, 1)).Message,
+            Assert.That(Assert.Throws<ServiceException>(() => collectionsServiceExceptionInstance.GetCollectionByIdentifier(1, 1)).Message,
                         Is.EqualTo("Failed to retrieve collection."));
         }
 
@@ -350,7 +350,7 @@ namespace Tests.ServiceTests
                                              .Throws(new Exception("Generic error"));
             ICollectionsService collectionsServiceExceptionInstance = new CollectionsService(collectionsRepositoryMockInstance.Object);
             // Act & Assert
-            Assert.That(Assert.Throws<ServiceException>(() => collectionsServiceExceptionInstance.GetCollectionById(1, 1)).Message,
+            Assert.That(Assert.Throws<ServiceException>(() => collectionsServiceExceptionInstance.GetCollectionByIdentifier(1, 1)).Message,
                         Is.EqualTo("An unexpected error occurred while retrieving collection."));
         }
 

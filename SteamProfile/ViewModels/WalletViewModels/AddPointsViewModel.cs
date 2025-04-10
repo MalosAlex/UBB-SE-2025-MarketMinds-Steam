@@ -33,7 +33,7 @@ namespace SteamProfile.ViewModels
             this.offersRepository = offersRepository ?? throw new ArgumentNullException(nameof(offersRepository));
             this.navigationFrame = navigationFrame ?? throw new ArgumentNullException(nameof(navigationFrame));
 
-            PointsOffers = new ObservableCollection<PointsOffer>(this.offersRepository.Offers);
+            PointsOffers = new ObservableCollection<PointsOffer>(this.offersRepository.PointsOffers);
             UserPoints = this.walletViewModel.Points;
             IsProcessing = false;
 
@@ -55,7 +55,7 @@ namespace SteamProfile.ViewModels
 
             try
             {
-                bool success = await walletViewModel.AddPoints(pointsOffer);
+                bool success = await walletViewModel.PurchasePoints(pointsOffer);
                 if (success)
                 {
                     UserPoints = walletViewModel.Points;

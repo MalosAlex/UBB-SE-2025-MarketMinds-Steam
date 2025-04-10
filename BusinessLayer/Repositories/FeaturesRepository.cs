@@ -11,6 +11,13 @@ namespace BusinessLayer.Repositories
     {
         private readonly IDataLink dataLink;
 
+        private const string FeatureIdentifierString = "feature_id";
+        private const string NameString = "name";
+        private const string ValueString = "value";
+        private const string DescriptionString = "description";
+        private const string TypeString = "type";
+        private const string SourceString = "source";
+
         public FeaturesRepository(IDataLink datalink)
         {
             dataLink = datalink ?? throw new ArgumentNullException(nameof(datalink));
@@ -32,21 +39,20 @@ namespace BusinessLayer.Repositories
                 {
                     features.Add(new Feature
                     {
-                        FeatureId = Convert.ToInt32(row["feature_id"]),
-                        Name = row["name"].ToString(),
-                        Value = Convert.ToInt32(row["value"]),
-                        Description = row["description"].ToString(),
-                        Type = row["type"].ToString(),
-                        Source = row["source"].ToString(),
-                        Equipped = Convert.ToBoolean(row["equipped"])
+                        FeatureId = Convert.ToInt32(row[FeatureIdentifierString]),
+                        Name = row[NameString].ToString(),
+                        Value = Convert.ToInt32(row[ValueString]),
+                        Description = row[DescriptionString].ToString(),
+                        Type = row[TypeString].ToString(),
+                        Source = row[SourceString].ToString()
                     });
                 }
 
                 return features;
             }
-            catch (DatabaseOperationException ex)
+            catch (DatabaseOperationException exception)
             {
-                throw new DatabaseOperationException("Failed to retrieve features.", ex);
+                throw new DatabaseOperationException("Failed to retrieve features.", exception);
             }
         }
 
@@ -66,30 +72,30 @@ namespace BusinessLayer.Repositories
                 {
                     features.Add(new Feature
                     {
-                        FeatureId = Convert.ToInt32(row["feature_id"]),
-                        Name = row["name"].ToString(),
-                        Value = Convert.ToInt32(row["value"]),
-                        Description = row["description"].ToString(),
-                        Type = row["type"].ToString(),
-                        Source = row["source"].ToString()
+                        FeatureId = Convert.ToInt32(row[FeatureIdentifierString]),
+                        Name = row[NameString].ToString(),
+                        Value = Convert.ToInt32(row[ValueString]),
+                        Description = row[DescriptionString].ToString(),
+                        Type = row[TypeString].ToString(),
+                        Source = row[SourceString].ToString()
                     });
                 }
 
                 return features;
             }
-            catch (DatabaseOperationException ex)
+            catch (DatabaseOperationException exception)
             {
-                throw new DatabaseOperationException($"Failed to retrieve features of type {type}.", ex);
+                throw new DatabaseOperationException($"Failed to retrieve features of type {type}.", exception);
             }
         }
 
-        public List<Feature> GetUserFeatures(int userId)
+        public List<Feature> GetUserFeatures(int userIdentifier)
         {
             try
             {
                 var parameters = new SqlParameter[]
                 {
-                    new SqlParameter("@userId", userId)
+                    new SqlParameter("@userIdentifier", userIdentifier)
                 };
 
                 var features = new List<Feature>();
@@ -99,79 +105,78 @@ namespace BusinessLayer.Repositories
                 {
                     features.Add(new Feature
                     {
-                        FeatureId = Convert.ToInt32(row["feature_id"]),
-                        Name = row["name"].ToString(),
-                        Value = Convert.ToInt32(row["value"]),
-                        Description = row["description"].ToString(),
-                        Type = row["type"].ToString(),
-                        Source = row["source"].ToString(),
-                        Equipped = Convert.ToBoolean(row["equipped"])
+                        FeatureId = Convert.ToInt32(row[FeatureIdentifierString]),
+                        Name = row[NameString].ToString(),
+                        Value = Convert.ToInt32(row[ValueString]),
+                        Description = row[DescriptionString].ToString(),
+                        Type = row[TypeString].ToString(),
+                        Source = row[SourceString].ToString()
                     });
                 }
 
                 return features;
             }
-            catch (DatabaseOperationException ex)
+            catch (DatabaseOperationException exception)
             {
-                throw new DatabaseOperationException($"Failed to retrieve features for user {userId}.", ex);
+                throw new DatabaseOperationException($"Failed to retrieve features for user {userIdentifier}.", exception);
             }
         }
 
-        public bool EquipFeature(int userId, int featureId)
+        public bool EquipFeature(int userIdentifier, int featureIdentifier)
         {
             try
             {
                 // Check if the relationship exists
-                var checkParams = new SqlParameter[]
+                var checkParameters = new SqlParameter[]
                 {
-                    new SqlParameter("@userId", userId),
-                    new SqlParameter("@featureId", featureId)
+                    new SqlParameter("@userIdentifier", userIdentifier),
+                    new SqlParameter("@featureIdentifier", featureIdentifier)
                 };
 
-                var relationshipTable = dataLink.ExecuteReader("GetFeatureUserRelationship", checkParams);
+                var relationshipTable = dataLink.ExecuteReader("GetFeatureUserRelationship", checkParameters);
 
                 if (relationshipTable.Rows.Count > 0)
                 {
                     // Update existing relationship
-                    var updateParams = new SqlParameter[]
+                    var updateParameters = new SqlParameter[]
                     {
-                        new SqlParameter("@userId", userId),
-                        new SqlParameter("@featureId", featureId),
+                        new SqlParameter("@userId", userIdentifier),
+                        new SqlParameter("@featureId", featureIdentifier),
                         new SqlParameter("@equipped", 1)
                     };
 
-                    dataLink.ExecuteNonQuery("UpdateFeatureUserEquipStatus", updateParams);
+                    dataLink.ExecuteNonQuery("UpdateFeatureUserEquipStatus", updateParameters);
                     return true;
                 }
 
                 return false; // Feature is not purchased
             }
-            catch (DatabaseOperationException ex)
+            catch (DatabaseOperationException exception)
             {
-                System.Diagnostics.Debug.WriteLine($"Failed to equip feature {featureId} for user {userId}: {ex.Message}");
+                System.Diagnostics.Debug.WriteLine($"Failed to equip feature {featureIdentifier} for user {userIdentifier}: {exception.Message}");
                 return false;
             }
         }
 
-        public bool UnequipFeature(int userId, int featureId)
+        public bool UnequipFeature(int userIdentifier, int featureIdentifier)
         {
             try
             {
                 // Check if the relationship exists
-                var checkParams = new SqlParameter[]
+                var checkParameters = new SqlParameter[]
                 {
-                    new SqlParameter("@userId", userId),
-                    new SqlParameter("@featureId", featureId)
+                    new SqlParameter("@userId", userIdentifier),
+                    new SqlParameter("@featureId", featureIdentifier)
                 };
 
-                var relationshipTable = dataLink.ExecuteReader("GetFeatureUserRelationship", checkParams);
+                var relationshipTable = dataLink.ExecuteReader("GetFeatureUserRelationship", checkParameters);
 
                 if (relationshipTable.Rows.Count > 0)
                 {
                     var parameters = new SqlParameter[]
                     {
-                        new SqlParameter("@userId", userId),
-                        new SqlParameter("@featureId", featureId),
+                        new SqlParameter("@userId", userIdentifier),
+                        new SqlParameter("@featureId", featureIdentifier),
                         new SqlParameter("@equipped", 0)
                     };
 
@@ -181,49 +186,75 @@ namespace BusinessLayer.Repositories
 
                 return false; // Feature is not purchased
             }
-            catch (DatabaseOperationException ex)
+            catch (DatabaseOperationException exception)
             {
-                System.Diagnostics.Debug.WriteLine($"Failed to unequip feature {featureId} for user {userId}: {ex.Message}");
+                System.Diagnostics.Debug.WriteLine($"Failed to unequip feature {featureIdentifier} for user {userIdentifier}: {exception.Message}");
                 return false;
             }
         }
 
-        public bool UnequipFeaturesByType(int userId, string featureType)
+        public bool UnequipFeaturesByType(int userIdentifier, string featureType)
         {
             try
             {
                 var parameters = new SqlParameter[]
                 {
-                    new SqlParameter("@userId", userId),
+                    new SqlParameter("@userId", userIdentifier),
                     new SqlParameter("@featureType", featureType)
                 };
 
                 dataLink.ExecuteNonQuery("UnequipFeaturesByType", parameters);
-                return true;  // If no exception, consider it successful
+                return true;
             }
-            catch (DatabaseOperationException ex)
+            catch (DatabaseOperationException)
             {
-                System.Diagnostics.Debug.WriteLine($"Failed to unequip features of type {featureType} for user {userId}: {ex.Message}");
                 return false;
             }
         }
 
-        public bool IsFeaturePurchased(int userId, int featureId)
+        public bool IsFeaturePurchased(int userIdentifier, int featureIdentifier)
         {
             try
             {
                 var parameters = new SqlParameter[]
                 {
-                    new SqlParameter("@userId", userId),
-                    new SqlParameter("@featureId", featureId)
+                    new SqlParameter("@userId", userIdentifier),
+                    new SqlParameter("@featureId", featureIdentifier)
                 };
 
                 var relationshipTable = dataLink.ExecuteReader("GetFeatureUserRelationship", parameters);
                 return relationshipTable.Rows.Count > 0;
             }
-            catch (DatabaseOperationException ex)
+            catch (DatabaseOperationException exception)
             {
-                throw new DatabaseOperationException($"Failed to check feature purchase status.", ex);
+                throw new DatabaseOperationException($"Failed to check feature purchase status.", exception);
+            }
+        }
+
+        public bool AddUserFeature(int userIdentifier, int featureIdentifier)
+        {
+            try
+            {
+                // First check if the user already has this feature
+                if (IsFeaturePurchased(userIdentifier, featureIdentifier))
+                {
+                    return false;
+                }
+
+                // Add the feature to the user's purchased features
+                var parameters = new SqlParameter[]
+                {
+                    new SqlParameter("@userId", userIdentifier),
+                    new SqlParameter("@featureId", featureIdentifier),
+                    new SqlParameter("@equipped", false) // New features are unequipped by default
+                };
+
+                dataLink.ExecuteNonQuery("AddUserFeature", parameters);
+                return true;
+            }
+            catch (DatabaseOperationException)
+            {
+                return false;
             }
         }
     }

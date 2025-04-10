@@ -5,21 +5,21 @@ namespace BusinessLayer.Validators
     public static class FriendshipValidator
     {
         // Validation constants
-        private const int MinUserId = 1;
+        private const int MinimumUserId = 1;
 
         // Validation error message constants
-        private const string ErrInvalidUserId = "User ID must be greater than 0.";
-        private const string ErrInvalidFriendId = "Friend ID must be greater than 0.";
-        private const string ErrSelfFriendship = "User cannot be friends with themselves.";
+        private const string ErrorInvalidUserId = "User ID must be greater than 0.";
+        private const string ErrorInvalidFriendId = "Friend ID must be greater than 0.";
+        private const string ErrorSelfFriendship = "User cannot be friends with themselves.";
 
         public static bool IsUserIdValid(int userId)
         {
-            return userId >= MinUserId;
+            return userId >= MinimumUserId;
         }
 
         public static bool IsFriendIdValid(int friendUserId)
         {
-            return friendUserId >= MinUserId;
+            return friendUserId >= MinimumUserId;
         }
 
         public static bool IsNotSelfFriendship(int userId, int friendUserId)
@@ -31,17 +31,17 @@ namespace BusinessLayer.Validators
         {
             if (!IsUserIdValid(friendship.UserId))
             {
-                throw new InvalidOperationException(ErrInvalidUserId);
+                throw new InvalidOperationException(ErrorInvalidUserId);
             }
 
             if (!IsFriendIdValid(friendship.FriendId))
             {
-                throw new InvalidOperationException(ErrInvalidFriendId);
+                throw new InvalidOperationException(ErrorInvalidFriendId);
             }
 
             if (!IsNotSelfFriendship(friendship.UserId, friendship.FriendId))
             {
-                throw new InvalidOperationException(ErrSelfFriendship);
+                throw new InvalidOperationException(ErrorSelfFriendship);
             }
         }
     }

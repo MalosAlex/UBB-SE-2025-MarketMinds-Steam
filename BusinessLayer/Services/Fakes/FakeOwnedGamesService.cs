@@ -23,7 +23,7 @@ namespace BusinessLayer.Services.Fakes
             return ownedGameList.Where(ownedGame => ownedGame.UserId == userId).ToList();
         }
 
-        public OwnedGame GetOwnedGameById(int gameId, int userId)
+        public OwnedGame GetOwnedGameByIdentifier(int gameId, int userId)
         {
             return ownedGameList.FirstOrDefault(ownedGame => ownedGame.GameId == gameId && ownedGame.UserId == userId);
         }

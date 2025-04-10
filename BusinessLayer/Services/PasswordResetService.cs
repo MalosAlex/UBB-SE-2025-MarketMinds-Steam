@@ -5,6 +5,7 @@ using BusinessLayer.Exceptions;
 using BusinessLayer.Services.Interfaces;
 using BusinessLayer.Validators;
 using BusinessLayer.Repositories;
+using BusinessLayer.Repositories.Interfaces;
 
 namespace BusinessLayer.Services
 {
@@ -12,13 +13,13 @@ namespace BusinessLayer.Services
     {
         private readonly string resetCodesPath;
         private readonly IUserService userService;
-        private readonly PasswordResetValidator validator;
-        private readonly PasswordResetRepository passwordResetRepository;
+        private readonly PasswordResetValidator passwordResetValidator;
+        private readonly IPasswordResetRepository passwordResetRepository;
 
-        public PasswordResetService(PasswordResetRepository passwordResetRepository, IUserService userService)
+        public PasswordResetService(IPasswordResetRepository passwordResetRepository, IUserService userService)
         {
             this.userService = userService ?? throw new ArgumentNullException(nameof(userService));
-            validator = new PasswordResetValidator();
+            passwordResetValidator = new PasswordResetValidator();
             resetCodesPath = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "ResetCodes");
             Directory.CreateDirectory(resetCodesPath);
             this.passwordResetRepository = passwordResetRepository ?? throw new ArgumentNullException(nameof(passwordResetRepository));
@@ -26,10 +27,10 @@ namespace BusinessLayer.Services
 
         public async Task<(bool isValid, string message)> SendResetCode(string email)
         {
-            var validationResult = validator.ValidateEmail(email);
+            var validationResult = passwordResetValidator.ValidateEmail(email);
             if (!validationResult.isValid)
             {
-                throw new InvalidOperationException(validationResult.message);
+                throw new InvalidOperationException(validationResult.errorMessage);
             }
 
             var user = userService.GetUserByEmail(email);
@@ -60,24 +61,24 @@ namespace BusinessLayer.Services
 
                 return (true, "Reset code sent successfully.");
             }
-            catch (Exception ex)
+            catch (Exception exception)
             {
-                return (false, $"Failed to send reset code: {ex.Message}");
+                return (false, $"Failed to send reset code: {exception.Message}");
             }
         }
 
         public (bool isValid, string message) VerifyResetCode(string email, string code)
         {
-            var emailValidation = validator.ValidateEmail(email);
+            var emailValidation = passwordResetValidator.ValidateEmail(email);
             if (!emailValidation.isValid)
             {
-                throw new InvalidOperationException(emailValidation.message);
+                throw new InvalidOperationException(emailValidation.errorMessage);
             }
 
-            var codeValidation = validator.ValidateResetCode(code);
+            var codeValidation = passwordResetValidator.ValidateResetCode(code);
             if (!codeValidation.isValid)
             {
-                throw new InvalidOperationException(codeValidation.message);
+                throw new InvalidOperationException(codeValidation.errorMessage);
             }
 
             try
@@ -110,9 +111,9 @@ namespace BusinessLayer.Services
 
                 return (true, "Code verified successfully.");
             }
-            catch (Exception ex)
+            catch (Exception exception)
             {
-                return (false, $"Failed to verify reset code: {ex.Message}");
+                return (false, $"Failed to verify reset code: {exception.Message}");
             }
         }
 
@@ -120,22 +121,22 @@ namespace BusinessLayer.Services
         {
             try
             {
-                var emailValidation = validator.ValidateEmail(email);
+                var emailValidation = passwordResetValidator.ValidateEmail(email);
                 if (!emailValidation.isValid)
                 {
-                    throw new InvalidOperationException(emailValidation.message);
+                    throw new InvalidOperationException(emailValidation.errorMessage);
                 }
 
-                var codeValidation = validator.ValidateResetCode(code);
+                var codeValidation = passwordResetValidator.ValidateResetCode(code);
                 if (!codeValidation.isValid)
                 {
-                    throw new InvalidOperationException(codeValidation.message);
+                    throw new InvalidOperationException(codeValidation.errorMessage);
                 }
 
-                var passwordValidation = validator.ValidatePassword(newPassword);
+                var passwordValidation = passwordResetValidator.ValidatePassword(newPassword);
                 if (!passwordValidation.isValid)
                 {
-                    return (false, passwordValidation.message);
+                    return (false, passwordValidation.errorMessage);
                 }
 
                 var verificationResult = VerifyResetCode(email, code);
@@ -160,9 +161,9 @@ namespace BusinessLayer.Services
                 File.Delete(GetResetCodeFilePath(email));
                 return (true, "Password reset successfully.");
             }
-            catch (Exception ex)
+            catch (Exception exception)
             {
-                return (false, $"Failed to reset password: {ex.Message}");
+                return (false, $"Failed to reset password: {exception.Message}");
             }
         }
 
@@ -179,9 +180,9 @@ namespace BusinessLayer.Services
             {
                 filePaths = Directory.GetFiles(resetCodesPath);
             }
-            catch (Exception ex)
+            catch (Exception exception)
             {
-                Console.WriteLine($"Error accessing directory: {ex.Message}");
+                Console.WriteLine($"Error accessing directory: {exception.Message}");
                 return;
             }
 
@@ -195,9 +196,9 @@ namespace BusinessLayer.Services
                 string fileContent = string.Empty;
                 try
                 {
-                    using (var sr = new StreamReader(file))
+                    using (var streamReader = new StreamReader(file))
                     {
-                        fileContent = sr.ReadToEnd().Trim();
+                        fileContent = streamReader.ReadToEnd().Trim();
                     }
 
                     string[] parts = fileContent.Split('|');
@@ -239,9 +240,9 @@ namespace BusinessLayer.Services
                         }
                     }
                 }
-                catch (Exception ex)
+                catch (Exception exception)
                 {
-                    Console.WriteLine($"Error processing file {file}: {ex.Message}");
+                    Console.WriteLine($"Error processing file {file}: {exception.Message}");
                     try
                     {
                         // Try to delete by creation time if reading fails

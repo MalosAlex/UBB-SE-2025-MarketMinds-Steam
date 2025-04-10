@@ -29,19 +29,19 @@ namespace SteamProfile.Views
             forgotPasswordViewModel.PasswordResetSuccess += OnPasswordResetSuccess;
         }
 
-        private void OnPasswordResetSuccess(object sender, System.EventArgs e)
+        private void OnPasswordResetSuccess(object sender, System.EventArgs eventArguments)
         {
             // Show the login button when password reset is successful
             GoToLoginButton.Visibility = Visibility.Visible;
         }
 
-        private void GoToLogin_Click(object sender, RoutedEventArgs e)
+        private void GoToLogin_Click(object sender, RoutedEventArgs routedEventArguments)
         {
             // Navigate to login page
             this.Frame.Navigate(typeof(LoginPage));
         }
 
-        private void BackToLogin_Click(object sender, RoutedEventArgs e)
+        private void BackToLogin_Click(object sender, RoutedEventArgs routedEventArguments)
         {
             // Navigate back to login page
             this.Frame.Navigate(typeof(LoginPage));

@@ -72,65 +72,77 @@ namespace Tests.Models
         }
 
         [Test]
-        public void Constructor_AssignsFriendshipIdCorrectly()
+        public void Constructor_AssignsFriendshipId_AssignsCorrectly()
         {
             // Arrange
             var expected = 5;
+            int userIdentifier = 1;
+            int friendIdentifier = 1;
 
             // Act
-            var friendship = new Friendship(expected, 1, 2);
+            var friendship = new Friendship(expected, userIdentifier, friendIdentifier);
 
             // Assert
             Assert.That(friendship.FriendshipId, Is.EqualTo(expected));
         }
 
         [Test]
-        public void Constructor_AssignsUserIdCorrectly()
+        public void Constructor_AssignsUserId_AssignsCorrectly()
         {
             // Arrange
             var expected = 10;
+            int friendshipIdentifier = 1;
+            int friendIdentifier = 2;
 
             // Act
-            var friendship = new Friendship(1, expected, 2);
+            var friendship = new Friendship(friendshipIdentifier, expected, friendIdentifier);
 
             // Assert
             Assert.That(friendship.UserId, Is.EqualTo(expected));
         }
 
         [Test]
-        public void Constructor_AssignsFriendIdCorrectly()
+        public void Constructor_AssignsFriendId_AssignsCorrectly()
         {
             // Arrange
             var expected = 20;
+            int userIdentifier = 1;
+            int friendshipIdentifier = 1;
 
             // Act
-            var friendship = new Friendship(1, 1, expected);
+            var friendship = new Friendship(friendshipIdentifier, userIdentifier, expected);
 
             // Assert
             Assert.That(friendship.FriendId, Is.EqualTo(expected));
         }
 
         [Test]
-        public void Constructor_AssignsFriendUsernameCorrectly()
+        public void Constructor_AssignsFriendUsername_AssignsCorrectly()
         {
             // Arrange
             var expected = "co_op_buddy";
+            int userIdentifier = 1;
+            int friendshipIdentifier = 1;
+            int friendIdentifier = 1;
 
             // Act
-            var friendship = new Friendship(1, 1, 1, expected);
+            var friendship = new Friendship(friendshipIdentifier, userIdentifier, friendIdentifier, expected);
 
             // Assert
             Assert.That(friendship.FriendUsername, Is.EqualTo(expected));
         }
 
         [Test]
-        public void Constructor_AssignsFriendProfilePictureCorrectly()
+        public void Constructor_AssignsFriendProfilePicture_AssignsCorrectly()
         {
             // Arrange
             var expected = "https://img.url/pic.png";
+            int userIdentifier = 1;
+            int friendshipIdentifier = 1;
+            int friendIdentifier = 1;
 
             // Act
-            var friendship = new Friendship(1, 1, 1, "user", expected);
+            var friendship = new Friendship(userIdentifier, friendshipIdentifier, friendIdentifier, "user", expected);
 
             // Assert
             Assert.That(friendship.FriendProfilePicture, Is.EqualTo(expected));
@@ -138,7 +150,10 @@ namespace Tests.Models
 
         private Friendship CreateValidFriendship()
         {
-            return new Friendship(1, 1, 2, "testuser", "https://img.test/user.png");
+            int userIdentifier = 1;
+            int friendshipIdentifier = 1;
+            int friendIdentifier = 2;
+            return new Friendship(friendshipIdentifier, userIdentifier, friendIdentifier, "testuser", "https://img.test/user.png");
         }
     }
 }

@@ -39,12 +39,12 @@
                          MaxLength="5"
                          TextChanged="ValidDate"/>
 
-                <TextBox x:Name="CVVTextBox" 
+                <TextBox x:Name="CardVerificationValueTextBox" 
                          Grid.Column="1"
-                         Header="CVV:" 
+                         Header="Card Verification Value:" 
                          PlaceholderText="3-digit code"
                          MaxLength="3"
-                         TextChanged="ValidCVV"/>
+                         TextChanged="ValidCardVerificationValue"/>
             </Grid>
 
             <TextBlock x:Name="ErrorMessage" 

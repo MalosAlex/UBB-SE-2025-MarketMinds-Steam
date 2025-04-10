@@ -9,6 +9,7 @@ using System.Text;
 using System.Threading.Tasks;
 using BusinessLayer.Models;
 using BusinessLayer.Repositories;
+using BusinessLayer.Repositories.Interfaces;
 using BusinessLayer.Services;
 using BusinessLayer.Services.Interfaces;
 using CommunityToolkit.Mvvm.ComponentModel;
@@ -24,11 +25,12 @@ namespace SteamProfile.ViewModels
 {
     public partial class FeaturesViewModel : ObservableObject
     {
-        private readonly FeaturesService featuresService;
+        private readonly IFeaturesService featuresService;
         private readonly IUserService userService;
         private XamlRoot xamlRoot;
         private string statusMessage = string.Empty;
-        private readonly UserProfilesRepository userProfilesRepository;
+        private const string PathStart = "ms-appx:///";
+        private readonly IUserProfilesRepository userProfilesRepository;
         private SolidColorBrush statusColor = new(Colors.Black);
         private FeatureDisplay selectedFeature;
         private XamlRoot featuresXamlRoot;
@@ -76,17 +78,23 @@ namespace SteamProfile.ViewModels
         {
             try
             {
+                const string frameString = "frame";
+                const string emojiString = "emoji";
+                const string backgroundString = "background";
+                const string petString = "pet";
+                const string hatString = "hat";
+
                 var features = featuresService.GetFeaturesByCategories();
 
-                UpdateCollection(Frames, features.GetValueOrDefault("frame", new()));
-                UpdateCollection(Emojis, features.GetValueOrDefault("emoji", new()));
-                UpdateCollection(Backgrounds, features.GetValueOrDefault("background", new()));
-                UpdateCollection(Pets, features.GetValueOrDefault("pet", new()));
-                UpdateCollection(Hats, features.GetValueOrDefault("hat", new()));
+                UpdateCollection(Frames, features.GetValueOrDefault(frameString, new()));
+                UpdateCollection(Emojis, features.GetValueOrDefault(emojiString, new()));
+                UpdateCollection(Backgrounds, features.GetValueOrDefault(backgroundString, new()));
+                UpdateCollection(Pets, features.GetValueOrDefault(petString, new()));
+                UpdateCollection(Hats, features.GetValueOrDefault(hatString, new()));
 
                 StatusMessage = string.Empty;
             }
-            catch (Exception ex)
+            catch (Exception exception)
             {
                 StatusMessage = "Failed to load features. Please try again later.";
                 StatusColor = new SolidColorBrush(Colors.Red);
@@ -159,20 +167,17 @@ namespace SteamProfile.ViewModels
         {
             try
             {
-                // Call service to equip feature
                 bool success = featuresService.EquipFeature(
                     userService.GetCurrentUser().UserId,
                     featureId);
 
                 if (success)
                 {
-                    // Notify that a feature was equipped
                     FeatureEquipStatusChanged?.Invoke(this, userService.GetCurrentUser().UserId);
 
                     StatusMessage = "Feature equipped successfully";
                     StatusColor = new SolidColorBrush(Colors.Green);
 
-                    // Refresh features list to update UI
                     LoadFeatures();
                 }
                 else
@@ -183,9 +188,9 @@ namespace SteamProfile.ViewModels
 
                 return success;
             }
-            catch (Exception ex)
+            catch (Exception exception)
             {
-                StatusMessage = $"Error: {ex.Message}";
+                StatusMessage = $"Error: {exception.Message}";
                 StatusColor = new SolidColorBrush(Colors.Red);
                 return false;
             }
@@ -210,42 +215,31 @@ namespace SteamProfile.ViewModels
 
         private void PurchaseFeature(int userId, FeatureDisplay feature)
         {
-            // TODO: Implement purchase logic
-            StatusMessage = "Purchase feature not implemented yet.";
-            StatusColor = new SolidColorBrush(Colors.Red);
+            var result = featuresService.PurchaseFeature(userId, feature.FeatureId);
+
+            StatusMessage = result.message;
+            StatusColor = new SolidColorBrush(result.success ? Colors.Green : Colors.Red);
+
+            if (result.success)
+            {
+                LoadFeatures();
+            }
         }
 
         private async Task ShowPreviewDialog(FeatureDisplay featureDisplay)
         {
-            // Get current user and equipped features
+            // Get current user
             var user = userService.GetCurrentUser();
-            var userFeatures = featuresService.GetUserEquippedFeatures(user.UserId);
 
-            // Get the user profile to access bio and profile picture
-            var userProfile = userProfilesRepository.GetUserProfileByUserId(user.UserId);
+            // Use service to get preview data
+            var previewData = featuresService.GetFeaturePreviewData(user.UserId, featureDisplay.FeatureId);
 
-            // Create adaptive profile control
             var profileControl = new AdaptiveProfileControl();
 
-            // Get profile picture path
-            string profilePicturePath = "ms-appx:///Assets/default-profile.png";
-            if (userProfile != null && !string.IsNullOrEmpty(userProfile.ProfilePicture))
-            {
-                profilePicturePath = userProfile.ProfilePicture;
-                if (!profilePicturePath.StartsWith("ms-appx:///"))
-                {
-                    profilePicturePath = $"ms-appx:///{profilePicturePath}";
-                }
-            }
+            string profilePicturePath = previewData.profilePicturePath;
+            string bioText = previewData.bioText;
+            var userFeatures = previewData.equippedFeatures;
 
-            // Get bio text
-            string bioText = "No bio available";
-            if (userProfile != null && !string.IsNullOrEmpty(userProfile.Bio))
-            {
-                bioText = userProfile.Bio;
-            }
-
-            // Extract feature paths from equipped features
             string hatPath = null;
             string petPath = null;
             string emojiPath = null;
@@ -260,7 +254,7 @@ namespace SteamProfile.ViewModels
                 }
 
                 string path = feature.Source;
-                if (!path.StartsWith("ms-appx:///"))
+                if (!path.StartsWith(PathStart))
                 {
                     path = $"ms-appx:///{path}";
                 }
@@ -275,7 +269,6 @@ namespace SteamProfile.ViewModels
                 }
             }
 
-            // Apply the preview feature
             string previewPath = featureDisplay.Source;
             switch (featureDisplay.Type.ToLower())
             {
@@ -286,7 +279,6 @@ namespace SteamProfile.ViewModels
                 case "background": backgroundPath = previewPath; break;
             }
 
-            // Update the profile control with all the information
             profileControl.UpdateProfile(
                 user.Username,
                 bioText,
@@ -297,11 +289,9 @@ namespace SteamProfile.ViewModels
                 framePath,
                 backgroundPath);
 
-            // Adjust size for the dialog
             profileControl.Width = 350;
             profileControl.Height = 500;
 
-            // Create and show preview dialog
             var previewDialog = new ContentDialog
             {
                 XamlRoot = featuresXamlRoot,

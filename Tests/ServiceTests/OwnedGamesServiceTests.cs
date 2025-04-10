@@ -28,6 +28,10 @@ namespace Tests.ServiceTests
         [Test]
         public void OwnedGamesService_Constructor_NullRepository_ThrowsArgumentNullException()
         {
+            // Arrange
+
+            // Act
+
             // Assert: A null repository should trigger an ArgumentNullException.
             Assert.Throws<ArgumentNullException>(() => new OwnedGamesService(null));
         }
@@ -45,7 +49,7 @@ namespace Tests.ServiceTests
                 new OwnedGame(1, "Game A", "Desc A", "coverA.jpg") { GameId = 1 },
                 new OwnedGame(1, "Game B", "Desc B", "coverB.jpg") { GameId = 2 }
             };
-            ownedGamesRepositoryMock.Setup(repo => repo.GetAllOwnedGames(It.IsAny<int>()))
+            ownedGamesRepositoryMock.Setup(mockOwnedGamesRepository => mockOwnedGamesRepository.GetAllOwnedGames(It.IsAny<int>()))
                                      .Returns(ownedGamesList);
 
             // Act: Retrieve the owned games for user 1.
@@ -64,22 +68,22 @@ namespace Tests.ServiceTests
                 new OwnedGame(1, "Game A", "Desc A", "coverA.jpg") { GameId = 1 },
                 new OwnedGame(1, "Game B", "Desc B", "coverB.jpg") { GameId = 2 }
             };
-            ownedGamesRepositoryMock.Setup(repo => repo.GetAllOwnedGames(It.IsAny<int>()))
+            ownedGamesRepositoryMock.Setup(mockOwnedGamesRepository => mockOwnedGamesRepository.GetAllOwnedGames(It.IsAny<int>()))
                                      .Returns(ownedGamesList);
 
             // Act: Retrieve the list for user 1.
             List<OwnedGame> resultOwnedGames = ownedGamesService.GetAllOwnedGames(1);
 
             // Assert: Expect the first game's title to be "Game A".
-            Assert.That(resultOwnedGames[0].Title, Is.EqualTo("Game A"));
+            Assert.That(resultOwnedGames[0].GameTitle, Is.EqualTo("Game A"));
         }
 
         [Test]
         public void GetAllOwnedGames_RepositoryThrows_ThrowsServiceExceptionWithRepoErrorMessage()
         {
             // Arrange: Setup the repository to throw a RepositoryException.
-            ownedGamesRepositoryMock.Setup(repo => repo.GetAllOwnedGames(It.IsAny<int>()))
-                                     .Throws(new RepositoryException("Repo error"));
+            ownedGamesRepositoryMock.Setup(mockOwnedGamesRepository => mockOwnedGamesRepository.GetAllOwnedGames(It.IsAny<int>()))
+                                     .Throws(new RepositoryException("Repository error"));
 
             // Act & Assert: Expect a ServiceException with the proper message.
             ServiceException exception = Assert.Throws<ServiceException>(
@@ -91,7 +95,7 @@ namespace Tests.ServiceTests
         public void GetAllOwnedGames_GenericException_ThrowsServiceExceptionWithUnexpectedErrorMessage()
         {
             // Arrange: Setup the repository to throw a generic Exception.
-            ownedGamesRepositoryMock.Setup(repo => repo.GetAllOwnedGames(It.IsAny<int>()))
+            ownedGamesRepositoryMock.Setup(mockOwnedGamesRepository => mockOwnedGamesRepository.GetAllOwnedGames(It.IsAny<int>()))
                                      .Throws(new Exception("Generic error"));
 
             // Act & Assert: Expect a ServiceException with the unexpected error message.
@@ -109,11 +113,11 @@ namespace Tests.ServiceTests
         {
             // Arrange: Create an owned game.
             var expectedGame = new OwnedGame(1, "Game A", "Desc A", "coverA.jpg") { GameId = 1 };
-            ownedGamesRepositoryMock.Setup(repo => repo.GetOwnedGameById(1, 1))
+            ownedGamesRepositoryMock.Setup(mockOwnedGamesRepository => mockOwnedGamesRepository.GetOwnedGameById(1, 1))
                                      .Returns(expectedGame);
 
             // Act: Retrieve the owned game.
-            OwnedGame resultGame = ownedGamesService.GetOwnedGameById(1, 1);
+            OwnedGame resultGame = ownedGamesService.GetOwnedGameByIdentifier(1, 1);
 
             // Assert: The result should not be null.
             Assert.That(resultGame, Is.Not.Null);
@@ -124,25 +128,25 @@ namespace Tests.ServiceTests
         {
             // Arrange: Create an owned game.
             var expectedGame = new OwnedGame(1, "Game A", "Desc A", "coverA.jpg") { GameId = 1 };
-            ownedGamesRepositoryMock.Setup(repo => repo.GetOwnedGameById(1, 1))
+            ownedGamesRepositoryMock.Setup(mockOwnedGamesRepository => mockOwnedGamesRepository.GetOwnedGameById(1, 1))
                                      .Returns(expectedGame);
 
             // Act: Retrieve the owned game.
-            OwnedGame resultGame = ownedGamesService.GetOwnedGameById(1, 1);
+            OwnedGame resultGame = ownedGamesService.GetOwnedGameByIdentifier(1, 1);
 
             // Assert: The game's title should equal "Game A".
-            Assert.That(resultGame.Title, Is.EqualTo("Game A"));
+            Assert.That(resultGame.GameTitle, Is.EqualTo("Game A"));
         }
 
         [Test]
         public void GetOwnedGameById_GameNotFound_ReturnsNull()
         {
             // Arrange: Setup repository to return null when the game is not found.
-            ownedGamesRepositoryMock.Setup(repo => repo.GetOwnedGameById(999, 1))
+            ownedGamesRepositoryMock.Setup(mockOwnedGamesRepository => mockOwnedGamesRepository.GetOwnedGameById(999, 1))
                                      .Returns((OwnedGame)null);
 
             // Act: Attempt to retrieve a non-existent owned game.
-            OwnedGame resultGame = ownedGamesService.GetOwnedGameById(999, 1);
+            OwnedGame resultGame = ownedGamesService.GetOwnedGameByIdentifier(999, 1);
 
             // Assert: The result should be null.
             Assert.That(resultGame, Is.Null);
@@ -152,12 +156,12 @@ namespace Tests.ServiceTests
         public void GetOwnedGameById_RepositoryThrows_ThrowsServiceExceptionWithRepoErrorMessage()
         {
             // Arrange: Setup repository to throw a RepositoryException.
-            ownedGamesRepositoryMock.Setup(repo => repo.GetOwnedGameById(It.IsAny<int>(), It.IsAny<int>()))
-                                     .Throws(new RepositoryException("Repo error"));
+            ownedGamesRepositoryMock.Setup(mockOwnedGamesRepository => mockOwnedGamesRepository.GetOwnedGameById(It.IsAny<int>(), It.IsAny<int>()))
+                                     .Throws(new RepositoryException("Repository error"));
 
             // Act & Assert: Expect a ServiceException with the proper message.
             ServiceException exception = Assert.Throws<ServiceException>(
-                () => ownedGamesService.GetOwnedGameById(1, 1));
+                () => ownedGamesService.GetOwnedGameByIdentifier(1, 1));
             Assert.That(exception.Message, Is.EqualTo("Failed to retrieve owned game."));
         }
 
@@ -165,12 +169,12 @@ namespace Tests.ServiceTests
         public void GetOwnedGameById_GenericException_ThrowsServiceExceptionWithUnexpectedErrorMessage()
         {
             // Arrange: Setup repository to throw a generic Exception.
-            ownedGamesRepositoryMock.Setup(repo => repo.GetOwnedGameById(It.IsAny<int>(), It.IsAny<int>()))
+            ownedGamesRepositoryMock.Setup(mockOwnedGamesRepository => mockOwnedGamesRepository.GetOwnedGameById(It.IsAny<int>(), It.IsAny<int>()))
                                      .Throws(new Exception("Generic error"));
 
             // Act & Assert: Expect a ServiceException with the unexpected error message.
             ServiceException exception = Assert.Throws<ServiceException>(
-                () => ownedGamesService.GetOwnedGameById(1, 1));
+                () => ownedGamesService.GetOwnedGameByIdentifier(1, 1));
             Assert.That(exception.Message, Is.EqualTo("An unexpected error occurred while retrieving owned game."));
         }
 
@@ -182,13 +186,13 @@ namespace Tests.ServiceTests
         public void RemoveOwnedGame_SuccessfulCall_CallsRepositoryOnce()
         {
             // Arrange: Setup the repository expectation for removing an owned game.
-            ownedGamesRepositoryMock.Setup(repo => repo.RemoveOwnedGame(1, 1));
+            ownedGamesRepositoryMock.Setup(mockOwnedGamesRepository => mockOwnedGamesRepository.RemoveOwnedGame(1, 1));
 
             // Act: Invoke the service method to remove the owned game.
             ownedGamesService.RemoveOwnedGame(1, 1);
 
             // Assert: Verify that the repository's RemoveOwnedGame method was called exactly once.
-            ownedGamesRepositoryMock.Verify(repo => repo.RemoveOwnedGame(1, 1), Times.Once);
+            ownedGamesRepositoryMock.Verify(mockOwnedGamesRepository => mockOwnedGamesRepository.RemoveOwnedGame(1, 1), Times.Once);
             // A dummy assert follows to maintain the one-assert-per-test guideline.
             Assert.That(true, Is.True);
         }
@@ -197,8 +201,8 @@ namespace Tests.ServiceTests
         public void RemoveOwnedGame_RepositoryThrows_ThrowsServiceExceptionWithRepoErrorMessage()
         {
             // Arrange: Setup repository to throw a RepositoryException upon removing a game.
-            ownedGamesRepositoryMock.Setup(repo => repo.RemoveOwnedGame(It.IsAny<int>(), It.IsAny<int>()))
-                                     .Throws(new RepositoryException("Repo error"));
+            ownedGamesRepositoryMock.Setup(mockOwnedGamesRepository => mockOwnedGamesRepository.RemoveOwnedGame(It.IsAny<int>(), It.IsAny<int>()))
+                                     .Throws(new RepositoryException("Repository error"));
 
             // Act & Assert: Expect a ServiceException with the proper message.
             ServiceException exception = Assert.Throws<ServiceException>(
@@ -210,7 +214,7 @@ namespace Tests.ServiceTests
         public void RemoveOwnedGame_GenericException_ThrowsServiceExceptionWithUnexpectedErrorMessage()
         {
             // Arrange: Setup repository to throw a generic Exception on remove.
-            ownedGamesRepositoryMock.Setup(repo => repo.RemoveOwnedGame(It.IsAny<int>(), It.IsAny<int>()))
+            ownedGamesRepositoryMock.Setup(mockOwnedGamesRepository => mockOwnedGamesRepository.RemoveOwnedGame(It.IsAny<int>(), It.IsAny<int>()))
                                      .Throws(new Exception("Generic error"));
 
             // Act & Assert: Expect a ServiceException with the unexpected error message.

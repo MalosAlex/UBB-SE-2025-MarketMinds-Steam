@@ -8,12 +8,12 @@ namespace BusinessLayer.Services
     public class OwnedGamesService : IOwnedGamesService
     {
         // Error message constants
-        private const string Err_RetrieveOwnedGames = "Failed to retrieve owned games.";
-        private const string Err_RetrieveOwnedGamesUnexpected = "An unexpected error occurred while retrieving owned games.";
-        private const string Err_RetrieveOwnedGame = "Failed to retrieve owned game.";
-        private const string Err_RetrieveOwnedGameUnexpected = "An unexpected error occurred while retrieving owned game.";
-        private const string Err_RemoveOwnedGame = "Failed to remove owned game.";
-        private const string Err_RemoveOwnedGameUnexpected = "An unexpected error occurred while removing owned game.";
+        private const string Error_RetrieveOwnedGames = "Failed to retrieve owned games.";
+        private const string Error_RetrieveOwnedGamesUnexpected = "An unexpected error occurred while retrieving owned games.";
+        private const string Error_RetrieveOwnedGame = "Failed to retrieve owned game.";
+        private const string Error_RetrieveOwnedGameUnexpected = "An unexpected error occurred while retrieving owned game.";
+        private const string Error_RemoveOwnedGame = "Failed to remove owned game.";
+        private const string Error_RemoveOwnedGameUnexpected = "An unexpected error occurred while removing owned game.";
 
         private readonly IOwnedGamesRepository ownedGamesRepository;
 
@@ -31,15 +31,15 @@ namespace BusinessLayer.Services
             }
             catch (RepositoryException repositoryException)
             {
-                throw new ServiceException(Err_RetrieveOwnedGames, repositoryException);
+                throw new ServiceException(Error_RetrieveOwnedGames, repositoryException);
             }
             catch (Exception unexpectedException)
             {
-                throw new ServiceException(Err_RetrieveOwnedGamesUnexpected, unexpectedException);
+                throw new ServiceException(Error_RetrieveOwnedGamesUnexpected, unexpectedException);
             }
         }
 
-        public OwnedGame GetOwnedGameById(int gameId, int userId)
+        public OwnedGame GetOwnedGameByIdentifier(int gameId, int userId)
         {
             try
             {
@@ -54,11 +54,11 @@ namespace BusinessLayer.Services
             }
             catch (RepositoryException repositoryException)
             {
-                throw new ServiceException(Err_RetrieveOwnedGame, repositoryException);
+                throw new ServiceException(Error_RetrieveOwnedGame, repositoryException);
             }
             catch (Exception unexpectedException)
             {
-                throw new ServiceException(Err_RetrieveOwnedGameUnexpected, unexpectedException);
+                throw new ServiceException(Error_RetrieveOwnedGameUnexpected, unexpectedException);
             }
         }
 
@@ -70,11 +70,11 @@ namespace BusinessLayer.Services
             }
             catch (RepositoryException repositoryException)
             {
-                throw new ServiceException(Err_RemoveOwnedGame, repositoryException);
+                throw new ServiceException(Error_RemoveOwnedGame, repositoryException);
             }
             catch (Exception unexpectedException)
             {
-                throw new ServiceException(Err_RemoveOwnedGameUnexpected, unexpectedException);
+                throw new ServiceException(Error_RemoveOwnedGameUnexpected, unexpectedException);
             }
         }
     }

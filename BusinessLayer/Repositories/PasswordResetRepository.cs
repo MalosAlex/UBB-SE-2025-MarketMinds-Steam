@@ -20,12 +20,12 @@ namespace BusinessLayer.Repositories
             try
             {
                 // First, delete any existing reset codes for this user
-                var deleteParams = new SqlParameter[]
+                var deleteParameters = new SqlParameter[]
                 {
                     new SqlParameter("@userId", userId)
                 };
 
-                dataLink.ExecuteNonQuery("DeleteExistingResetCodes", deleteParams);
+                dataLink.ExecuteNonQuery("DeleteExistingResetCodes", deleteParameters);
 
                 // Then store the new reset code
                 var parameters = new SqlParameter[]
@@ -37,9 +37,9 @@ namespace BusinessLayer.Repositories
 
                 dataLink.ExecuteNonQuery("StorePasswordResetCode", parameters);
             }
-            catch (DatabaseOperationException ex)
+            catch (DatabaseOperationException exception)
             {
-                throw new RepositoryException($"Failed to store reset code for user {userId}.", ex);
+                throw new RepositoryException($"Failed to store reset code for user {userId}.", exception);
             }
         }
 
@@ -61,17 +61,17 @@ namespace BusinessLayer.Repositories
                 {
                     DataRow row = result.Rows[0];
                     DateTime expirationTime = (DateTime)row["expiration_time"];
-                    bool used = (bool)row["used"];
+                    bool isCodeUsed = (bool)row["used"];
 
                     // Check if code is valid, unexpired, and unused
-                    return !used && expirationTime > DateTime.UtcNow;
+                    return !isCodeUsed && expirationTime > DateTime.UtcNow;
                 }
 
                 return false;
             }
-            catch (DatabaseOperationException ex)
+            catch (DatabaseOperationException exception)
             {
-                throw new RepositoryException("Failed to verify reset code.", ex);
+                throw new RepositoryException("Failed to verify reset code.", exception);
             }
         }
 
@@ -95,18 +95,18 @@ namespace BusinessLayer.Repositories
                 int userId = (int)userTable.Rows[0]["user_id"];
 
                 // Update the password and mark the reset code as used
-                var updateParams = new SqlParameter[]
+                var updateParameters = new SqlParameter[]
                 {
                     new SqlParameter("@userId", userId),
                     new SqlParameter("@newPassword", hashedPassword)
                 };
 
-                int rowsAffected = dataLink.ExecuteNonQuery("UpdatePasswordAndMarkResetCodeUsed", updateParams);
+                int rowsAffected = dataLink.ExecuteNonQuery("UpdatePasswordAndMarkResetCodeUsed", updateParameters);
                 return rowsAffected > 0;
             }
-            catch (DatabaseOperationException ex)
+            catch (DatabaseOperationException exception)
             {
-                throw new RepositoryException("Failed to reset password.", ex);
+                throw new RepositoryException("Failed to reset password.", exception);
             }
         }
 
@@ -116,9 +116,9 @@ namespace BusinessLayer.Repositories
             {
                 dataLink.ExecuteNonQuery("CleanupExpiredResetCodes", new SqlParameter[0]);
             }
-            catch (DatabaseOperationException ex)
+            catch (DatabaseOperationException exception)
             {
-                throw new RepositoryException("Failed to cleanup expired reset codes.", ex);
+                throw new RepositoryException("Failed to cleanup expired reset codes.", exception);
             }
         }
     }

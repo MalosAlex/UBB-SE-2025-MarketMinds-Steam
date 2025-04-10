@@ -1,7 +1,8 @@
-﻿using BusinessLayer.Services.Interfaces;
+﻿    using BusinessLayer.Services.Interfaces;
 using BusinessLayer.Models;
 using BusinessLayer.Repositories;
 using BusinessLayer.Repositories.Interfaces;
+using BusinessLayer.Exceptions;
 
 namespace BusinessLayer.Services
 {
@@ -28,34 +29,56 @@ namespace BusinessLayer.Services
 
         public decimal GetBalance()
         {
-            return walletRepository.GetMoneyFromWallet(walletRepository.GetWalletIdByUserId(userService.GetCurrentUser().UserId));
+            int userIdentifier = userService.GetCurrentUser().UserId;
+
+            try
+            {
+                int walletIdentifier = walletRepository.GetWalletIdByUserId(userIdentifier);
+                return walletRepository.GetMoneyFromWallet(walletIdentifier);
+            }
+            catch (RepositoryException ex) when (ex.Message.Contains("No wallet found"))
+            {
+                // No wallet found, create one
+                CreateWallet(userIdentifier);
+                return 0m; // New wallet has 0 balance
+            }
         }
 
         public int GetPoints()
         {
             int userId = userService.GetCurrentUser().UserId;
-            int walletId = walletRepository.GetWalletIdByUserId(userId);
-            return walletRepository.GetPointsFromWallet(walletId);
+
+            try
+            {
+                int walletId = walletRepository.GetWalletIdByUserId(userId);
+                return walletRepository.GetPointsFromWallet(walletId);
+            }
+            catch (RepositoryException ex) when (ex.Message.Contains("No wallet found"))
+            {
+                // No wallet found, create one
+                CreateWallet(userId);
+                return 0; // New wallet has 0 points
+            }
         }
 
-        public void CreateWallet(int userId)
+        public void CreateWallet(int userIdentifier)
         {
-            walletRepository.AddNewWallet(userId);
+            walletRepository.AddNewWallet(userIdentifier);
         }
-        public void PurchasePoints(PointsOffer offer)
+        public void PurchasePoints(PointsOffer pointsOffer)
         {
-            if (offer == null)
+            if (pointsOffer == null)
             {
-                throw new ArgumentNullException(nameof(offer));
+                throw new ArgumentNullException(nameof(pointsOffer));
             }
 
             // Check if user has enough balance
-            if (GetBalance() < offer.Price)
+            if (GetBalance() < pointsOffer.Price)
             {
                 throw new InvalidOperationException("Insufficient funds");
             }
 
-            walletRepository.PurchasePoints(offer, userService.GetCurrentUser().UserId);
+            walletRepository.PurchasePoints(pointsOffer, userService.GetCurrentUser().UserId);
         }
 
         // Moved from WalletViewModel

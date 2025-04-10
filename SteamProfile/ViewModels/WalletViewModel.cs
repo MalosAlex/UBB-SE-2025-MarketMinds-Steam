@@ -34,14 +34,14 @@ namespace SteamProfile.ViewModels
 
         public string PointsText
         {
-            get { return $"{Points} pts"; }
+            get { return $"{Points} points"; }
         }
 
         public WalletViewModel(IWalletService walletService, IPointsOffersRepository pointsOffersRepository)
         {
             this.walletService = walletService ?? throw new ArgumentNullException(nameof(walletService));
             this.pointsOffersRepository = pointsOffersRepository ?? throw new ArgumentNullException(nameof(pointsOffersRepository));
-            PointsOffers = this.pointsOffersRepository.Offers;
+            PointsOffers = this.pointsOffersRepository.PointsOffers;
             RefreshWalletData();
         }
 
@@ -70,7 +70,7 @@ namespace SteamProfile.ViewModels
         }
 
         [RelayCommand]
-        public async Task<bool> AddPoints(PointsOffer pointsOffer)
+        public async Task<bool> PurchasePoints(PointsOffer pointsOffer)
         {
             // Business logic moved to WalletService
             bool success = walletService.TryPurchasePoints(pointsOffer);

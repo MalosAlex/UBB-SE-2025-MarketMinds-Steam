@@ -6,14 +6,14 @@ namespace BusinessLayer.Services.Interfaces
     public interface IAchievementsService
     {
         void InitializeAchievements();
-        GroupedAchievementsResult GetGroupedAchievementsForUser(int userId);
-        List<Achievement> GetAchievementsForUser(int userId);
-        void UnlockAchievementForUser(int userId);
-        void RemoveAchievement(int userId, int achievementId);
-        List<Achievement> GetUnlockedAchievementsForUser(int userId);
+        GroupedAchievementsResult GetGroupedAchievementsForUser(int userIdentifier);
+        List<Achievement> GetAchievementsForUser(int userIdentifier);
+        void UnlockAchievementForUser(int userIdentifier);
+        void RemoveAchievement(int userIdentifier, int achievementIdentifier);
+        List<Achievement> GetUnlockedAchievementsForUser(int userIdentifier);
         List<Achievement> GetAllAchievements();
-        AchievementUnlockedData GetUnlockedDataForAchievement(int userId, int achievementId);
-        List<AchievementWithStatus> GetAchievementsWithStatusForUser(int userId);
-        int GetPointsForUnlockedAchievement(int userId, int achievementId);
+        AchievementUnlockedData GetUnlockedDataForAchievement(int userIdentifier, int achievementIdentifier);
+        List<AchievementWithStatus> GetAchievementsWithStatusForUser(int userIdentifier);
+        int GetPointsForUnlockedAchievement(int userIdentifier, int achievementIdentifier);
     }
 }
