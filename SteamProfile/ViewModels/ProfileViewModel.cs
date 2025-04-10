@@ -571,13 +571,13 @@ namespace SteamProfile.ViewModels
             {
                 // Get all achievements for this category
                 var achievements = achievementsService.GetAchievementsWithStatusForUser(userId)
-                    .Where(a => a.Achievement.AchievementType == category)
+                    .Where(achievementWithStatus => achievementWithStatus.Achievement.AchievementType == category)
                     .ToList();
 
                 // First try to get the highest-points unlocked achievement
                 var topUnlockedAchievement = achievements
-                    .Where(a => a.IsUnlocked)
-                    .OrderByDescending(a => a.Achievement.Points)
+                    .Where(achievement => achievement.IsUnlocked)
+                    .OrderByDescending(achievement => achievement.Achievement.Points)
                     .FirstOrDefault();
 
                 // If we found an unlocked achievement, return it
@@ -589,8 +589,8 @@ namespace SteamProfile.ViewModels
 
                 // If no unlocked achievements, get the lowest-points locked achievement
                 var lowestLockedAchievement = achievements
-                    .Where(a => !a.IsUnlocked)
-                    .OrderBy(a => a.Achievement.Points)
+                    .Where(achievement => !achievement.IsUnlocked)
+                    .OrderBy(achievement => achievement.Achievement.Points)
                     .FirstOrDefault();
 
                 // If we found a locked achievement, return it

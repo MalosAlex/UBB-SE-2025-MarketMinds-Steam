@@ -266,9 +266,9 @@ namespace SteamProfile.Views
                 {
                     // Get the friendship ID for the current user and friend
                     var friendships = App.FriendsService.GetAllFriendships();
-                    var friendship = friendships.FirstOrDefault(f =>
-                        (f.UserId == App.UserService.GetCurrentUser().UserId && f.FriendId == userIdentifier) ||
-                        (f.UserId == userIdentifier && f.FriendId == App.UserService.GetCurrentUser().UserId));
+                    var friendship = friendships.FirstOrDefault(currentFriendship =>
+                        (currentFriendship.UserId == App.UserService.GetCurrentUser().UserId && currentFriendship.FriendId == userIdentifier) ||
+                        (currentFriendship.UserId == userIdentifier && currentFriendship.FriendId == App.UserService.GetCurrentUser().UserId));
 
                     if (friendship != null)
                     {
