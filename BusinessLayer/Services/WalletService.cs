@@ -1,7 +1,8 @@
-﻿using BusinessLayer.Services.Interfaces;
+﻿    using BusinessLayer.Services.Interfaces;
 using BusinessLayer.Models;
 using BusinessLayer.Repositories;
 using BusinessLayer.Repositories.Interfaces;
+using BusinessLayer.Exceptions;
 
 namespace BusinessLayer.Services
 {
@@ -28,14 +29,36 @@ namespace BusinessLayer.Services
 
         public decimal GetBalance()
         {
-            return walletRepository.GetMoneyFromWallet(walletRepository.GetWalletIdByUserId(userService.GetCurrentUser().UserId));
+            int userId = userService.GetCurrentUser().UserId;
+
+            try
+            {
+                int walletId = walletRepository.GetWalletIdByUserId(userId);
+                return walletRepository.GetMoneyFromWallet(walletId);
+            }
+            catch (RepositoryException ex) when (ex.Message.Contains("No wallet found"))
+            {
+                // No wallet found, create one
+                CreateWallet(userId);
+                return 0m; // New wallet has 0 balance
+            }
         }
 
         public int GetPoints()
         {
             int userId = userService.GetCurrentUser().UserId;
-            int walletId = walletRepository.GetWalletIdByUserId(userId);
-            return walletRepository.GetPointsFromWallet(walletId);
+
+            try
+            {
+                int walletId = walletRepository.GetWalletIdByUserId(userId);
+                return walletRepository.GetPointsFromWallet(walletId);
+            }
+            catch (RepositoryException ex) when (ex.Message.Contains("No wallet found"))
+            {
+                // No wallet found, create one
+                CreateWallet(userId);
+                return 0; // New wallet has 0 points
+            }
         }
 
         public void CreateWallet(int userId)

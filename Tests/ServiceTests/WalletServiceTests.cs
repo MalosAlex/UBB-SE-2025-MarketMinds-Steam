@@ -5,6 +5,7 @@ using BusinessLayer.Services;
 using BusinessLayer.Models;
 using BusinessLayer.Repositories.Interfaces;
 using BusinessLayer.Services.Interfaces;
+using BusinessLayer.Exceptions;
 
 namespace Tests.ServiceTests
 {
@@ -108,6 +109,36 @@ namespace Tests.ServiceTests
 
             // Assert
             Assert.That(result, Is.EqualTo(expectedPoints));
+        }
+
+        [Test]
+        public void GetBalance_NoWalletFound_CreatesNewWalletAndReturnsZero()
+        {
+            // Arrange
+            mockWalletRepository.Setup(mockWalletRepository => mockWalletRepository.GetWalletIdByUserId(USER_ID))
+                                .Throws(new RepositoryException("No wallet found for user ID 1."));
+
+            // Act
+            decimal result = walletService.GetBalance();
+
+            // Assert
+            Assert.That(result, Is.EqualTo(0m));
+            mockWalletRepository.Verify(mockWalletRepository => mockWalletRepository.AddNewWallet(USER_ID), Times.Once);
+        }
+
+        [Test]
+        public void GetPoints_NoWalletFound_CreatesNewWalletAndReturnsZero()
+        {
+            // Arrange
+            mockWalletRepository.Setup(mockWalletRepository => mockWalletRepository.GetWalletIdByUserId(USER_ID))
+                                .Throws(new RepositoryException("No wallet found for user ID 1."));
+
+            // Act
+            int result = walletService.GetPoints();
+
+            // Assert
+            Assert.That(result, Is.EqualTo(0));
+            mockWalletRepository.Verify(mockWalletRepository => mockWalletRepository.AddNewWallet(USER_ID), Times.Once);
         }
 
         [Test]
