@@ -39,9 +39,9 @@ namespace BusinessLayer.Repositories.Fakes
         }
 
         // Helper method to create an OwnedGame using the new constructor.
-        private OwnedGame CreateOwnedGame(int userId, int gameId, string title, string description, string coverPicture)
+        private OwnedGame CreateOwnedGame(int userId, int gameId, string gameTitle, string description, string coverPicture)
         {
-            var ownedGame = new OwnedGame(userId, title, description, coverPicture);
+            var ownedGame = new OwnedGame(userId, gameTitle, description, coverPicture);
             ownedGame.GameId = gameId;
             return ownedGame;
         }

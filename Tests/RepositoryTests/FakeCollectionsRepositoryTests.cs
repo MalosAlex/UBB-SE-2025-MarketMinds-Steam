@@ -61,7 +61,7 @@ namespace Tests.RepositoryTests
             // Act: Retrieve the collection with CollectionId 2 for user with ID 1.
             var retrievedCollection = fakeCollectionsRepository.GetCollectionById(2, 1);
             // Assert: The collection's name should be "Test Collection 2".
-            Assert.That(retrievedCollection.Name, Is.EqualTo("Test Collection 2"));
+            Assert.That(retrievedCollection.CollectionName, Is.EqualTo("Test Collection 2"));
         }
 
         [Test]
@@ -160,11 +160,11 @@ namespace Tests.RepositoryTests
             // Arrange: Retrieve an existing collection for user 1.
             var existingCollection = fakeCollectionsRepository.GetCollectionById(2, 1);
             // Act: Change its name and then save the updated collection.
-            existingCollection.Name = "Updated Name";
+            existingCollection.CollectionName = "Updated Name";
             fakeCollectionsRepository.SaveCollection("1", existingCollection);
             // Assert: The updated collection should reflect the new name.
             var updatedCollection = fakeCollectionsRepository.GetCollectionById(2, 1);
-            Assert.That(updatedCollection.Name, Is.EqualTo("Updated Name"));
+            Assert.That(updatedCollection.CollectionName, Is.EqualTo("Updated Name"));
         }
 
         [Test]
@@ -200,7 +200,7 @@ namespace Tests.RepositoryTests
             fakeCollectionsRepository.UpdateCollection(2, 1, "Updated Collection", "updated.jpg", false);
             // Assert: The collection's name should be updated to "Updated Collection".
             var updatedCollection = fakeCollectionsRepository.GetCollectionById(2, 1);
-            Assert.That(updatedCollection.Name, Is.EqualTo("Updated Collection"));
+            Assert.That(updatedCollection.CollectionName, Is.EqualTo("Updated Collection"));
         }
 
         [Test]

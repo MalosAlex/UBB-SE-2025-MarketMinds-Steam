@@ -72,7 +72,7 @@ namespace Tests.Models
         }
 
         [Test]
-        public void Constructor_AssignsFriendshipIdCorrectly()
+        public void Constructor_AssignsFriendshipId_AssignsCorrectly()
         {
             // Arrange
             var expected = 5;
@@ -85,7 +85,7 @@ namespace Tests.Models
         }
 
         [Test]
-        public void Constructor_AssignsUserIdCorrectly()
+        public void Constructor_AssignsUserId_AssignsCorrectly()
         {
             // Arrange
             var expected = 10;
@@ -98,7 +98,7 @@ namespace Tests.Models
         }
 
         [Test]
-        public void Constructor_AssignsFriendIdCorrectly()
+        public void Constructor_AssignsFriendId_AssignsCorrectly()
         {
             // Arrange
             var expected = 20;
@@ -111,7 +111,7 @@ namespace Tests.Models
         }
 
         [Test]
-        public void Constructor_AssignsFriendUsernameCorrectly()
+        public void Constructor_AssignsFriendUsername_AssignsCorrectly()
         {
             // Arrange
             var expected = "co_op_buddy";
@@ -124,7 +124,7 @@ namespace Tests.Models
         }
 
         [Test]
-        public void Constructor_AssignsFriendProfilePictureCorrectly()
+        public void Constructor_AssignsFriendProfilePicture_AssignsCorrectly()
         {
             // Arrange
             var expected = "https://img.url/pic.png";

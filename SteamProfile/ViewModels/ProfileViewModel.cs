@@ -173,7 +173,7 @@ namespace SteamProfile.ViewModels
             IFriendsService friendsService,
             DispatcherQueue dispatcherQueue,
             UserProfilesRepository userProfileRepository,
-            CollectionsRepository collectionsRepository,
+            CollectionsRepository gameCollectionsRepository,
             FeaturesService featuresService,
             IAchievementsService achievementsService)
         {
@@ -182,7 +182,7 @@ namespace SteamProfile.ViewModels
                 throw new InvalidOperationException("ProfileViewModel is already initialized");
             }
 
-            profileViewModelInstance = new ProfileViewModel(userService, friendsService, dispatcherQueue, userProfileRepository, collectionsRepository, featuresService, achievementsService);
+            profileViewModelInstance = new ProfileViewModel(userService, friendsService, dispatcherQueue, userProfileRepository, gameCollectionsRepository, featuresService, achievementsService);
         }
 
         public ProfileViewModel(
@@ -190,7 +190,7 @@ namespace SteamProfile.ViewModels
             IFriendsService friendsService,
             DispatcherQueue dispatcherQueue,
             UserProfilesRepository userProfileRepository,
-            CollectionsRepository collectionsRepository,
+            ICollectionsRepository gameCollectionsRepository,
             FeaturesService featuresService,
             IAchievementsService achievementsService)
         {
@@ -198,7 +198,7 @@ namespace SteamProfile.ViewModels
             this.friendsService = friendsService ?? throw new ArgumentNullException(nameof(friendsService));
             this.dispatcherQueue = dispatcherQueue ?? throw new ArgumentNullException(nameof(dispatcherQueue));
             this.userProfileRepository = userProfileRepository ?? throw new ArgumentNullException(nameof(userProfileRepository));
-            gameCollectionsRepository = collectionsRepository ?? throw new ArgumentNullException(nameof(collectionsRepository));
+            ProfileViewModel.gameCollectionsRepository = (CollectionsRepository)(gameCollectionsRepository ?? throw new ArgumentNullException(nameof(gameCollectionsRepository)));
             this.featuresService = featuresService ?? throw new ArgumentNullException(nameof(featuresService));
             this.achievementsService = achievementsService ?? throw new ArgumentNullException(nameof(achievementsService));
 

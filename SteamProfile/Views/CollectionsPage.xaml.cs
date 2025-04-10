@@ -54,7 +54,7 @@ namespace SteamProfile.Views
         {
             if (sender is Button button && button.CommandParameter is Collection collection)
             {
-                Frame.Navigate(typeof(CollectionGamesPage), (collection.CollectionId, collection.Name));
+                Frame.Navigate(typeof(CollectionGamesPage), (collection.CollectionId, collection.CollectionName));
             }
         }
 
@@ -84,7 +84,7 @@ namespace SteamProfile.Views
                 var nameTextBox = new TextBox
                 {
                     Header = CollectionNameHeader,
-                    Text = collection.Name,
+                    Text = collection.CollectionName,
                     PlaceholderText = CollectionNamePlaceholder
                 };
 
@@ -116,7 +116,7 @@ namespace SteamProfile.Views
                         collectionsViewModel.UpdateCollectionCommand.Execute(new UpdateCollectionParams
                         {
                             CollectionId = collection.CollectionId,
-                            Name = nameTextBox.Text,
+                            CollectionName = nameTextBox.Text,
                             CoverPicture = coverPictureTextBox.Text,
                             IsPublic = isPublicToggle.IsOn
                         });
@@ -181,7 +181,7 @@ namespace SteamProfile.Views
                 {
                     collectionsViewModel.CreateCollectionCommand.Execute(new CreateCollectionParams
                     {
-                        Name = nameTextBox.Text,
+                        CollectionName = nameTextBox.Text,
                         CoverPicture = coverPictureTextBox.Text,
                         IsPublic = isPublicToggle.IsOn,
                         CreatedAt = DateOnly.FromDateTime(DateTime.Now)

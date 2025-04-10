@@ -16,11 +16,11 @@ namespace SteamProfile.ViewModels
     {
         #region Constants
         // Error message constants
-        private const string ErrLoadFriends = "Error loading friends: ";
-        private const string ErrUnexpectedLoadFriends = "Unexpected error loading friends: ";
-        private const string ErrRemoveFriend = "Error removing friend: ";
-        private const string ErrUnexpectedRemoveFriend = "Unexpected error removing friend: ";
-        private const string ErrDetailsPrefix = "\nDetails: ";
+        private const string ErrorLoadFriends = "Error loading friends: ";
+        private const string ErrorUnexpectedLoadFriends = "Unexpected error loading friends: ";
+        private const string ErrorRemoveFriend = "Error removing friend: ";
+        private const string ErrorUnexpectedRemoveFriend = "Unexpected error removing friend: ";
+        private const string ErrorDetailsPrefix = "\nDetails: ";
         #endregion
 
         private readonly IFriendsService friendsService;
@@ -62,15 +62,15 @@ namespace SteamProfile.ViewModels
             }
             catch (ServiceException serviceException)
             {
-                ErrorMessage = ErrLoadFriends + serviceException.Message;
+                ErrorMessage = ErrorLoadFriends + serviceException.Message;
                 if (serviceException.InnerException != null)
                 {
-                    ErrorMessage += ErrDetailsPrefix + serviceException.InnerException.Message;
+                    ErrorMessage += ErrorDetailsPrefix + serviceException.InnerException.Message;
                 }
             }
             catch (Exception generalException)
             {
-                ErrorMessage = ErrUnexpectedLoadFriends + generalException.Message;
+                ErrorMessage = ErrorUnexpectedLoadFriends + generalException.Message;
             }
             finally
             {
@@ -98,15 +98,15 @@ namespace SteamProfile.ViewModels
             }
             catch (ServiceException serviceException)
             {
-                ErrorMessage = ErrRemoveFriend + serviceException.Message;
+                ErrorMessage = ErrorRemoveFriend + serviceException.Message;
                 if (serviceException.InnerException != null)
                 {
-                    ErrorMessage += ErrDetailsPrefix + serviceException.InnerException.Message;
+                    ErrorMessage += ErrorDetailsPrefix + serviceException.InnerException.Message;
                 }
             }
             catch (Exception generalException)
             {
-                ErrorMessage = ErrUnexpectedRemoveFriend + generalException.Message;
+                ErrorMessage = ErrorUnexpectedRemoveFriend + generalException.Message;
             }
             finally
             {

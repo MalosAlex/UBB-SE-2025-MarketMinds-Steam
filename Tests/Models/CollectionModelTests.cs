@@ -40,10 +40,10 @@ namespace Tests.Models
             var collection = CreateValidCollection();
 
             // Act
-            collection.Name = "Strategy Games";
+            collection.CollectionName = "Strategy Games";
 
             // Assert
-            Assert.That(collection.Name, Is.EqualTo("Strategy Games"));
+            Assert.That(collection.CollectionName, Is.EqualTo("Strategy Games"));
         }
 
         [Test]
@@ -101,13 +101,13 @@ namespace Tests.Models
         {
             // Arrange
             var collection = CreateValidCollection();
-            var game = new OwnedGame(1, "Test", "Test"); // Assuming this is a simple model
+            var ownedGame = new OwnedGame(1, "Test", "Test"); // Assuming this is a simple model
 
             // Act
-            collection.Games.Add(game);
+            collection.Games.Add(ownedGame);
 
             // Assert
-            Assert.That(collection.Games, Contains.Item(game));
+            Assert.That(collection.Games, Contains.Item(ownedGame));
         }
 
         [Test]

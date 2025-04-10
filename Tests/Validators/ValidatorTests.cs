@@ -16,7 +16,7 @@ namespace Tests.Validators
             // Arrange
             var collection = new Collection(
                 userId: 1,
-                name: "My Collection",
+                collectionName: "My Collection",
                 createdAt: DateOnly.FromDateTime(DateTime.Today),
                 coverPicture: "http://example.com/pic.jpg",
                 isPublic: true);
@@ -30,7 +30,7 @@ namespace Tests.Validators
             // Arrange
             var collection = new Collection(
                 userId: 0,
-                name: "My Collection",
+                collectionName: "My Collection",
                 createdAt: DateOnly.FromDateTime(DateTime.Today));
             // Act & Assert
             Assert.That(() => CollectionValidator.ValidateCollection(collection),
@@ -43,7 +43,7 @@ namespace Tests.Validators
             // Arrange
             var collection = new Collection(
                 userId: 1,
-                name: new string('x', 101),
+                collectionName: new string('x', 101),
                 createdAt: DateOnly.FromDateTime(DateTime.Today));
             // Act & Assert
             Assert.That(() => CollectionValidator.ValidateCollection(collection),
@@ -56,7 +56,7 @@ namespace Tests.Validators
             // Arrange
             var collection = new Collection(
                 userId: 1,
-                name: "Valid",
+                collectionName: "Valid",
                 createdAt: DateOnly.FromDateTime(DateTime.Today),
                 coverPicture: new string('x', 256));
             // Act & Assert
@@ -258,25 +258,25 @@ namespace Tests.Validators
         public void ValidateOwnedGame_ValidGame_DoesNotThrow()
         {
             // Arrange
-            var game = new OwnedGame(
+            var ownedGame = new OwnedGame(
                 userId: 1,
-                title: "Elden Ring",
+                gameTitile: "Elden Ring",
                 description: "Awesome RPG",
                 coverPicture: null);
             // Act & Assert
-            Assert.That(() => OwnedGameValidator.ValidateOwnedGame(game), Throws.Nothing);
+            Assert.That(() => OwnedGameValidator.ValidateOwnedGame(ownedGame), Throws.Nothing);
         }
 
         [Test]
         public void ValidateOwnedGame_InvalidUserId_ThrowsException()
         {
             // Arrange
-            var game = new OwnedGame(
+            var ownedGame = new OwnedGame(
                 userId: 0,
-                title: "Valid Game",
+                gameTitile: "Valid Game",
                 description: "Test Game");
             // Act & Assert
-            Assert.That(() => OwnedGameValidator.ValidateOwnedGame(game),
+            Assert.That(() => OwnedGameValidator.ValidateOwnedGame(ownedGame),
                 Throws.TypeOf<ValidationException>());
         }
 
@@ -284,12 +284,12 @@ namespace Tests.Validators
         public void ValidateOwnedGame_InvalidTitle_ThrowsException()
         {
             // Arrange
-            var game = new OwnedGame(
+            var ownedGame = new OwnedGame(
                 userId: 1,
-                title: string.Empty,
+                gameTitile: string.Empty,
                 description: "Test Game");
             // Act & Assert
-            Assert.That(() => OwnedGameValidator.ValidateOwnedGame(game),
+            Assert.That(() => OwnedGameValidator.ValidateOwnedGame(ownedGame),
                 Throws.TypeOf<ValidationException>());
         }
 
@@ -297,13 +297,13 @@ namespace Tests.Validators
         public void ValidateOwnedGame_TooLongCoverPicture_ThrowsException()
         {
             // Arrange
-            var game = new OwnedGame(
+            var ownedGame = new OwnedGame(
                 userId: 1,
-                title: "Valid Game",
+                gameTitile: "Valid Game",
                 description: "Great Game",
                 coverPicture: new string('x', 256));
             // Act & Assert
-            Assert.That(() => OwnedGameValidator.ValidateOwnedGame(game),
+            Assert.That(() => OwnedGameValidator.ValidateOwnedGame(ownedGame),
                 Throws.TypeOf<ValidationException>());
         }
 

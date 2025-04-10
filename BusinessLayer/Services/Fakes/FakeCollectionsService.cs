@@ -179,7 +179,7 @@ namespace BusinessLayer.Services.Fakes
             {
                 if (collection.CollectionId == collectionId && collection.UserId == userId)
                 {
-                    collection.Name = name;
+                    collection.CollectionName = name;
                     collection.CoverPicture = coverPicture;
                     collection.IsPublic = isPublic;
                     collection.CreatedAt = DateOnly.FromDateTime(DateTime.Now);
