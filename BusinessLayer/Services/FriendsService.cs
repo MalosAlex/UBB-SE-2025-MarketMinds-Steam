@@ -8,12 +8,12 @@ namespace BusinessLayer.Services
     public class FriendsService : IFriendsService
     {
         // Error message constants
-        private const string Err_RetrieveFriendships = "Error retrieving friendships for user.";
-        private const string Err_RemoveFriend = "Error removing friend.";
-        private const string Err_RetrieveFriendshipCount = "Error retrieving friendship count.";
-        private const string Err_CheckFriendshipStatus = "Error checking friendship status.";
-        private const string Err_RetrieveFriendshipId = "Error retrieving friendship ID.";
-        private const string Err_AddFriend = "Error adding friend.";
+        private const string Error_RetrieveFriendships = "Error retrieving friendships for user.";
+        private const string Error_RemoveFriend = "Error removing friend.";
+        private const string Error_RetrieveFriendshipCount = "Error retrieving friendship count.";
+        private const string Error_CheckFriendshipStatus = "Error checking friendship status.";
+        private const string Error_RetrieveFriendshipId = "Error retrieving friendship ID.";
+        private const string Error_AddFriend = "Error adding friend.";
 
         private readonly IFriendshipsRepository friendshipsRepository;
         private readonly IUserService userService;
@@ -34,7 +34,7 @@ namespace BusinessLayer.Services
             }
             catch (RepositoryException repositoryException)
             {
-                throw new ServiceException(Err_RetrieveFriendships, repositoryException);
+                throw new ServiceException(Error_RetrieveFriendships, repositoryException);
             }
         }
 
@@ -46,7 +46,7 @@ namespace BusinessLayer.Services
             }
             catch (RepositoryException repositoryException)
             {
-                throw new ServiceException(Err_RemoveFriend, repositoryException);
+                throw new ServiceException(Error_RemoveFriend, repositoryException);
             }
         }
 
@@ -59,7 +59,7 @@ namespace BusinessLayer.Services
             }
             catch (RepositoryException repositoryException)
             {
-                throw new ServiceException(Err_RetrieveFriendshipCount, repositoryException);
+                throw new ServiceException(Error_RetrieveFriendshipCount, repositoryException);
             }
         }
 
@@ -79,7 +79,7 @@ namespace BusinessLayer.Services
             }
             catch (RepositoryException repositoryException)
             {
-                throw new ServiceException(Err_CheckFriendshipStatus, repositoryException);
+                throw new ServiceException(Error_CheckFriendshipStatus, repositoryException);
             }
         }
 
@@ -99,7 +99,7 @@ namespace BusinessLayer.Services
             }
             catch (RepositoryException repositoryException)
             {
-                throw new ServiceException(Err_RetrieveFriendshipId, repositoryException);
+                throw new ServiceException(Error_RetrieveFriendshipId, repositoryException);
             }
         }
 
@@ -111,7 +111,7 @@ namespace BusinessLayer.Services
             }
             catch (RepositoryException repositoryException)
             {
-                throw new ServiceException(Err_AddFriend, repositoryException);
+                throw new ServiceException(Error_AddFriend, repositoryException);
             }
         }
     }

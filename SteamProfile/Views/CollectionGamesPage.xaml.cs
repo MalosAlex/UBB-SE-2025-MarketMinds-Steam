@@ -49,7 +49,7 @@ namespace SteamProfile.Views
                 var collection = collectionsViewModel.GetCollectionById(collectionIdentifier, userId);
                 if (collection != null)
                 {
-                    collectionName = collection.Name;
+                    collectionName = collection.CollectionName;
                     LoadCollectionGames();
                 }
             }

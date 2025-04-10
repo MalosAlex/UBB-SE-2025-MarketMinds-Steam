@@ -32,15 +32,23 @@ namespace Tests.ServiceTests
         #region Exception Tests using Moq
 
         [Test]
-        public void FriendsService_Constructor_NullFriendshipRepository_ThrowsArgumentNullException()
+        public void FriendsServiceConstructor_NullFriendshipRepository_ThrowsArgumentNullException()
         {
+            // Arrange
+
+            // Act
+
             // Assert: A null friendship repository should trigger an ArgumentNullException.
             Assert.Throws<ArgumentNullException>(() => new FriendsService(null, new FakeUserService()));
         }
 
         [Test]
-        public void FriendsService_Constructor_NullUserService_ThrowsArgumentNullException()
+        public void FriendsServiceConstructor_NullUserService_ThrowsArgumentNullException()
         {
+            // Arrange
+
+            // Act
+
             // Assert: A null user service should trigger an ArgumentNullException.
             Assert.Throws<ArgumentNullException>(() => new FriendsService(new FakeFriendshipsRepository(), null));
         }
@@ -50,7 +58,7 @@ namespace Tests.ServiceTests
         {
             // Arrange
             var mockFriendshipsRepository = new Mock<IFriendshipsRepository>();
-            mockFriendshipsRepository.Setup(repo => repo.GetAllFriendships(It.IsAny<int>()))
+            mockFriendshipsRepository.Setup(mockFriendshipsRepository => mockFriendshipsRepository.GetAllFriendships(It.IsAny<int>()))
                                      .Throws(new RepositoryException("Repository error"));
             var serviceWithFaultyRepo = new FriendsService(mockFriendshipsRepository.Object, fakeUserService);
 
@@ -64,7 +72,7 @@ namespace Tests.ServiceTests
         {
             // Arrange
             var mockFriendshipsRepository = new Mock<IFriendshipsRepository>();
-            mockFriendshipsRepository.Setup(repo => repo.RemoveFriendship(It.IsAny<int>()))
+            mockFriendshipsRepository.Setup(mockFriendshipsRepository => mockFriendshipsRepository.RemoveFriendship(It.IsAny<int>()))
                                      .Throws(new RepositoryException("Repository error"));
             var serviceWithFaultyRepo = new FriendsService(mockFriendshipsRepository.Object, fakeUserService);
 
@@ -78,7 +86,7 @@ namespace Tests.ServiceTests
         {
             // Arrange
             var mockFriendshipsRepository = new Mock<IFriendshipsRepository>();
-            mockFriendshipsRepository.Setup(repo => repo.GetFriendshipCount(It.IsAny<int>()))
+            mockFriendshipsRepository.Setup(mockFriendshipsRepository => mockFriendshipsRepository.GetFriendshipCount(It.IsAny<int>()))
                                      .Throws(new RepositoryException("Repository error"));
             var serviceWithFaultyRepo = new FriendsService(mockFriendshipsRepository.Object, fakeUserService);
 
@@ -92,7 +100,7 @@ namespace Tests.ServiceTests
         {
             // Arrange
             var mockFriendshipsRepository = new Mock<IFriendshipsRepository>();
-            mockFriendshipsRepository.Setup(repo => repo.GetAllFriendships(It.IsAny<int>()))
+            mockFriendshipsRepository.Setup(mockFriendshipsRepository => mockFriendshipsRepository.GetAllFriendships(It.IsAny<int>()))
                                      .Throws(new RepositoryException("Repository error"));
             var serviceWithFaultyRepo = new FriendsService(mockFriendshipsRepository.Object, fakeUserService);
 
@@ -106,7 +114,7 @@ namespace Tests.ServiceTests
         {
             // Arrange
             var mockFriendshipsRepository = new Mock<IFriendshipsRepository>();
-            mockFriendshipsRepository.Setup(repo => repo.GetAllFriendships(It.IsAny<int>()))
+            mockFriendshipsRepository.Setup(mockFriendshipsRepository => mockFriendshipsRepository.GetAllFriendships(It.IsAny<int>()))
                                      .Throws(new RepositoryException("Repository error"));
             var serviceWithFaultyRepo = new FriendsService(mockFriendshipsRepository.Object, fakeUserService);
 
@@ -120,7 +128,7 @@ namespace Tests.ServiceTests
         {
             // Arrange
             var mockFriendshipsRepository = new Mock<IFriendshipsRepository>();
-            mockFriendshipsRepository.Setup(repo => repo.AddFriendship(It.IsAny<int>(), It.IsAny<int>()))
+            mockFriendshipsRepository.Setup(mockFriendshipsRepository => mockFriendshipsRepository.AddFriendship(It.IsAny<int>(), It.IsAny<int>()))
                                      .Throws(new RepositoryException("Repository error"));
             var serviceWithFaultyRepo = new FriendsService(mockFriendshipsRepository.Object, fakeUserService);
 
@@ -196,6 +204,8 @@ namespace Tests.ServiceTests
         [Test]
         public void AreUsersFriends_Friends_ReturnsTrue()
         {
+            // Arrange
+
             // Act: Check friendship status between user 1 and user 2 (existing friendship).
             bool friendshipStatus = friendsService.AreUsersFriends(1, 2);
 
@@ -206,6 +216,8 @@ namespace Tests.ServiceTests
         [Test]
         public void AreUsersFriends_NotFriends_ReturnsFalse()
         {
+            // Arrange
+
             // Act: Check friendship status between user 1 and a non-existing friend id.
             bool friendshipStatus = friendsService.AreUsersFriends(1, 999);
 
@@ -216,6 +228,8 @@ namespace Tests.ServiceTests
         [Test]
         public void GetFriendshipId_ExistingRelationship_ReturnsNonNullId()
         {
+            // Arrange
+
             // Act: Retrieve friendship id between user 1 and user 2.
             int? friendshipId = friendsService.GetFriendshipId(1, 2);
 
@@ -226,6 +240,8 @@ namespace Tests.ServiceTests
         [Test]
         public void GetFriendshipId_ExistingRelationship_ReturnsExpectedId()
         {
+            // Arrange
+
             // Act: Retrieve friendship id between user 1 and user 2.
             int? friendshipId = friendsService.GetFriendshipId(1, 2);
 
@@ -236,6 +252,8 @@ namespace Tests.ServiceTests
         [Test]
         public void GetFriendshipId_NonExistingRelationship_ReturnsNull()
         {
+            // Arrange
+
             // Act: Attempt to retrieve friendship id between user 1 and a non-existent friend.
             int? friendshipId = friendsService.GetFriendshipId(1, 999);
 

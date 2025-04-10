@@ -34,7 +34,7 @@ namespace BusinessLayer.Repositories.Fakes
                 throw new Exception("Friendship already exists.");
             }
 
-            int newFriendshipId = friendshipsList.Any() ? friendshipsList.Max(f => f.FriendshipId) + 1 : 1;
+            int newFriendshipId = friendshipsList.Any() ? friendshipsList.Max(friendship => friendship.FriendshipId) + 1 : 1;
             friendshipsList.Add(new Friendship(newFriendshipId, userId, friendId)
             {
                 FriendUsername = $"User{friendId}",

@@ -29,7 +29,6 @@ namespace SteamProfile
         public static readonly UsersViewModel UsersViewModel;
         public static readonly FriendsViewModel FriendsViewModel;
 
-        // MUST BE ELIMINATED WHAT EVEN IS THIS !!!!!!!!!!!!!!!!!
         public static PasswordResetService PasswordResetService { get; private set; }
         public static readonly SessionService SessionService;
         public static UserProfilesRepository UserProfileRepository { get; private set; }
@@ -50,8 +49,8 @@ namespace SteamProfile
             UserProfileRepository = new UserProfilesRepository(dataLink);
             CollectionsRepository = new CollectionsRepository(dataLink);
             IWalletRepository walletRepository = new WalletRepository(dataLink);
-            var friendshipsRepository = new FriendshipsRepository(dataLink);
-            var ownedGamesRepossitory = new OwnedGamesRepository(dataLink);
+            IFriendshipsRepository friendshipsRepository = new FriendshipsRepository(dataLink);
+            IOwnedGamesRepository ownedGamesRepossitory = new OwnedGamesRepository(dataLink);
             var sessionRepository = new SessionRepository(dataLink);
             PasswordResetRepository = new PasswordResetRepository(dataLink);
 

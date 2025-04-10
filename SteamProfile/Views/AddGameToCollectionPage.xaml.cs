@@ -18,22 +18,22 @@ namespace SteamProfile.Views
             this.DataContext = addGamesToCollectionViewModel;
         }
 
-        protected override void OnNavigatedTo(NavigationEventArgs e)
+        protected override void OnNavigatedTo(NavigationEventArgs eventArgs)
         {
-            base.OnNavigatedTo(e);
-            if (e.Parameter is int collectionId)
+            base.OnNavigatedTo(eventArgs);
+            if (eventArgs.Parameter is int collectionId)
             {
                 collectionIdentifier = collectionId;
                 addGamesToCollectionViewModel.Initialize(collectionId);
             }
         }
 
-        private void BackButton_Click(object sender, RoutedEventArgs e)
+        private void BackButton_Click(object sender, RoutedEventArgs eventArgs)
         {
             Frame.Navigate(typeof(CollectionGamesPage), (collectionIdentifier, string.Empty));
         }
 
-        private void AddGame_Click(object sender, RoutedEventArgs e)
+        private void AddGame_Click(object sender, RoutedEventArgs eventArgs)
         {
             if (sender is Button button && button.DataContext is OwnedGame game)
             {

@@ -183,7 +183,7 @@ namespace Tests.ServiceTests
             var remainingCollections = fakeCollectionsService.GetAllCollections(1);
 
             // Assert: Expect no collection with CollectionId == 2.
-            Assert.That(remainingCollections.Any(c => c.CollectionId == 2), Is.False);
+            Assert.That(remainingCollections.Any(remainingCollections => remainingCollections.CollectionId == 2), Is.False);
         }
 
         [Test]
@@ -217,7 +217,7 @@ namespace Tests.ServiceTests
             var collectionsAfterSave = fakeCollectionsService.GetAllCollections(1);
 
             // Assert: Expect a collection with the name "New Collection" to exist.
-            Assert.That(collectionsAfterSave.Any(c => c.Name == "New Collection"), Is.True);
+            Assert.That(collectionsAfterSave.Any(collectionsAfterSave => collectionsAfterSave.CollectionName == "New Collection"), Is.True);
         }
 
         [Test]
@@ -226,14 +226,14 @@ namespace Tests.ServiceTests
             // Arrange
             var fakeCollectionsService = new FakeCollectionsService();
             var existingCollection = fakeCollectionsService.GetAllCollections(1).First();
-            existingCollection.Name = "Updated Name";
+            existingCollection.CollectionName = "Updated Name";
 
             // Act: Save (update) the existing collection.
             fakeCollectionsService.SaveCollection("1", existingCollection);
             var updatedCollection = fakeCollectionsService.GetCollectionById(existingCollection.CollectionId, 1);
 
             // Assert: Expect the updated collection's name to be "Updated Name".
-            Assert.That(updatedCollection.Name, Is.EqualTo("Updated Name"));
+            Assert.That(updatedCollection.CollectionName, Is.EqualTo("Updated Name"));
         }
 
         [Test]
@@ -321,7 +321,7 @@ namespace Tests.ServiceTests
             var updatedCollection = fakeCollectionsService.GetCollectionById(2, 1);
 
             // Assert: Expect the collection's name to be "Updated Collection".
-            Assert.That(updatedCollection.Name, Is.EqualTo("Updated Collection"));
+            Assert.That(updatedCollection.CollectionName, Is.EqualTo("Updated Collection"));
         }
 
         #endregion
@@ -355,7 +355,7 @@ namespace Tests.ServiceTests
             var gamesNotInCollection = fakeCollectionsService.GetGamesNotInCollection(5, 1);
 
             // Assert: Expect at least one game with GameId equal to 3.
-            Assert.That(gamesNotInCollection.Any(g => g.GameId == 3), Is.True);
+            Assert.That(gamesNotInCollection.Any(gamesNotInCollection => gamesNotInCollection.GameId == 3), Is.True);
         }
 
         #endregion

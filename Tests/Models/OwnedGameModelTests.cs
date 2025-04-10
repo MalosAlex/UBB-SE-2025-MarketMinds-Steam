@@ -10,65 +10,65 @@ namespace Tests.Models
         public void GameId_SetValue_GetterReturnsSameValue()
         {
             // Arrange
-            var game = CreateValidOwnedGame();
+            var ownedGame = CreateValidOwnedGame();
 
             // Act
-            game.GameId = 10;
+            ownedGame.GameId = 10;
 
             // Assert
-            Assert.That(game.GameId, Is.EqualTo(10));
+            Assert.That(ownedGame.GameId, Is.EqualTo(10));
         }
 
         [Test]
         public void UserId_SetValue_GetterReturnsSameValue()
         {
             // Arrange
-            var game = CreateValidOwnedGame();
+            var ownedGame = CreateValidOwnedGame();
 
             // Act
-            game.UserId = 99;
+            ownedGame.UserId = 99;
 
             // Assert
-            Assert.That(game.UserId, Is.EqualTo(99));
+            Assert.That(ownedGame.UserId, Is.EqualTo(99));
         }
 
         [Test]
         public void Title_SetValue_GetterReturnsSameValue()
         {
             // Arrange
-            var game = CreateValidOwnedGame();
+            var ownedGame = CreateValidOwnedGame();
 
             // Act
-            game.Title = "Stardew Valley";
+            ownedGame.GameTitle = "Stardew Valley";
 
             // Assert
-            Assert.That(game.Title, Is.EqualTo("Stardew Valley"));
+            Assert.That(ownedGame.GameTitle, Is.EqualTo("Stardew Valley"));
         }
 
         [Test]
         public void Description_SetValue_GetterReturnsSameValue()
         {
             // Arrange
-            var game = CreateValidOwnedGame();
+            var ownedGame = CreateValidOwnedGame();
 
             // Act
-            game.Description = "Farming simulator";
+            ownedGame.Description = "Farming simulator";
 
             // Assert
-            Assert.That(game.Description, Is.EqualTo("Farming simulator"));
+            Assert.That(ownedGame.Description, Is.EqualTo("Farming simulator"));
         }
 
         [Test]
         public void CoverPicture_SetValue_GetterReturnsSameValue()
         {
             // Arrange
-            var game = CreateValidOwnedGame();
+            var ownedGame = CreateValidOwnedGame();
 
             // Act
-            game.CoverPicture = "https://example.com/pic.jpg";
+            ownedGame.CoverPicture = "https://example.com/pic.jpg";
 
             // Assert
-            Assert.That(game.CoverPicture, Is.EqualTo("https://example.com/pic.jpg"));
+            Assert.That(ownedGame.CoverPicture, Is.EqualTo("https://example.com/pic.jpg"));
         }
 
         [Test]
@@ -78,10 +78,10 @@ namespace Tests.Models
             var expected = 7;
 
             // Act
-            var game = new OwnedGame(expected, "Title", "Description");
+            var ownedGame = new OwnedGame(expected, "GameTitle", "Description");
 
             // Assert
-            Assert.That(game.UserId, Is.EqualTo(expected));
+            Assert.That(ownedGame.UserId, Is.EqualTo(expected));
         }
 
         [Test]
@@ -91,10 +91,10 @@ namespace Tests.Models
             var expected = "Terraria";
 
             // Act
-            var game = new OwnedGame(1, expected, "Description");
+            var ownedGame = new OwnedGame(1, expected, "Description");
 
             // Assert
-            Assert.That(game.Title, Is.EqualTo(expected));
+            Assert.That(ownedGame.GameTitle, Is.EqualTo(expected));
         }
 
         [Test]
@@ -104,10 +104,10 @@ namespace Tests.Models
             var expected = "Adventure game";
 
             // Act
-            var game = new OwnedGame(1, "Title", expected);
+            var ownedGame = new OwnedGame(1, "GameTitle", expected);
 
             // Assert
-            Assert.That(game.Description, Is.EqualTo(expected));
+            Assert.That(ownedGame.Description, Is.EqualTo(expected));
         }
 
         [Test]
@@ -117,10 +117,10 @@ namespace Tests.Models
             var expected = "https://cover.jpg";
 
             // Act
-            var game = new OwnedGame(1, "Title", "Description", expected);
+            var ownedGame = new OwnedGame(1, "GameTitle", "Description", expected);
 
             // Assert
-            Assert.That(game.CoverPicture, Is.EqualTo(expected));
+            Assert.That(ownedGame.CoverPicture, Is.EqualTo(expected));
         }
 
         private OwnedGame CreateValidOwnedGame()

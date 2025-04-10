@@ -11,16 +11,16 @@ namespace SteamProfile.Views
             this.InitializeComponent();
         }
 
-        protected override void OnNavigatedTo(NavigationEventArgs e)
+        protected override void OnNavigatedTo(NavigationEventArgs eventArgs)
         {
-            base.OnNavigatedTo(e);
-            if (e.Parameter is int featureId)
+            base.OnNavigatedTo(eventArgs);
+            if (eventArgs.Parameter is int featureId)
             {
                 // Initialize shop with specific feature
             }
         }
 
-        private void BackButton_Click(object sender, RoutedEventArgs e)
+        private void BackButton_Click(object sender, RoutedEventArgs eventArgs)
         {
             if (this.Frame.CanGoBack)
             {

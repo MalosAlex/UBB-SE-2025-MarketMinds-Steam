@@ -15,10 +15,10 @@ namespace SteamProfile.Views
             this.InitializeComponent();
         }
 
-        protected override void OnNavigatedTo(NavigationEventArgs e)
+        protected override void OnNavigatedTo(NavigationEventArgs eventArgs)
         {
-            base.OnNavigatedTo(e);
-            if (e.Parameter is int gameId)
+            base.OnNavigatedTo(eventArgs);
+            if (eventArgs.Parameter is int gameId)
             {
                 gameIdentifier = gameId;
                 GameIdText.Text = gameId.ToString();

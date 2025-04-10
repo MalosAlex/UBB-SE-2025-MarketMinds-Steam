@@ -1,12 +1,13 @@
-﻿using System.ComponentModel.DataAnnotations;
+﻿using System.Collections;
+using System.ComponentModel.DataAnnotations;
 
 namespace BusinessLayer.Models
 {
     public class Collection
     {
         // Constants for validation rules and error messages
-        private const int NameMaxLength = 100;
-        private const int NameMinLength = 1;
+        private const int NameMaximumLength = 100;
+        private const int NameMinimumLength = 1;
         private const int CoverPictureMaxLength = 255;
 
         private const string NameLengthError = "Name must be between 1 and 100 characters";
@@ -18,8 +19,8 @@ namespace BusinessLayer.Models
         public int UserId { get; set; }
 
         [Required]
-        [StringLength(NameMaxLength, MinimumLength = NameMinLength, ErrorMessage = NameLengthError)]
-        public string Name { get; set; } = string.Empty;
+        [StringLength(NameMaximumLength, MinimumLength = NameMinimumLength, ErrorMessage = NameLengthError)]
+        public string CollectionName { get; set; } = string.Empty;
 
         [StringLength(CoverPictureMaxLength, ErrorMessage = CoverPictureLengthError)]
         public string? CoverPicture { get; set; }
@@ -32,10 +33,10 @@ namespace BusinessLayer.Models
         public List<OwnedGame> Games { get; set; } = new();
         public bool IsAllOwnedGamesCollection { get; }
 
-        public Collection(int userId, string name, DateOnly createdAt, string? coverPicture = null, bool isPublic = false)
+        public Collection(int userId, string collectionName, DateOnly createdAt, string? coverPicture = null, bool isPublic = false)
         {
             UserId = userId;
-            Name = name;
+            CollectionName = collectionName;
             CreatedAt = createdAt;
             CoverPicture = coverPicture;
             IsPublic = isPublic;
