@@ -13,10 +13,10 @@ namespace BusinessLayer.Repositories
     public class CollectionsRepository : ICollectionsRepository
     {
         // SQL Parameter Names
-        private const string ParameterUserId = "@user_id";
-        private const string ParameterCollectionIdCamel = "@collectionId";   // used in GetCollectionById
-        private const string ParameterCollectionIdUnderscore = "@collection_id"; // used in other methods
-        private const string ParameterGameId = "@game_id";
+        private const string ParameterUserIdentifier = "@user_id";
+        private const string ParameterCollectionIdentifierCamel = "@collectionId";   // used in GetCollectionById
+        private const string ParameterCollectionIdentifierUnderscore = "@collection_id"; // used in other methods
+        private const string ParameterGameIdentifier = "@game_id";
         private const string ParameterName = "@name";
         private const string ParameterCoverPicture = "@cover_picture";
         private const string ParameterIsPublic = "@is_public";
@@ -24,7 +24,7 @@ namespace BusinessLayer.Repositories
 
         // Stored Procedure Names
         private const string StoredProcedure_GetAllCollectionsForUser = "GetAllCollectionsForUser";
-        private const string StoredProcedure_GetCollectionById = "GetCollectionById";
+        private const string StoredProcedure_GetCollectionByIdentifier = "GetCollectionById";
         private const string StoredProcedure_GetGamesInCollection = "GetGamesInCollection";
         private const string StoredProcedure_GetAllGamesForUser = "GetAllGamesForUser";
         private const string StoredProcedure_AddGameToCollection = "AddGameToCollection";
@@ -64,7 +64,7 @@ namespace BusinessLayer.Repositories
         private const string Error_GetGamesNotInCollection_Unexpected = "An unexpected error occurred while getting games not in collection.";
 
         // Column Names in DataRows
-        private const string ColumnUserId = "user_id";
+        private const string ColumnUserIdentifier = "user_id";
         private const string ColumnName = "name";
         private const string ColumnCreatedAt = "created_at";
         private const string ColumnCoverPicture = "cover_picture";
@@ -81,13 +81,13 @@ namespace BusinessLayer.Repositories
             this.dataLink = dataLink ?? throw new ArgumentNullException(nameof(dataLink));
         }
 
-        public List<Collection> GetAllCollections(int userId)
+        public List<Collection> GetAllCollections(int userIdentifier)
         {
             try
             {
                 var sqlParameters = new SqlParameter[]
                 {
-                    new SqlParameter(ParameterUserId, userId)
+                    new SqlParameter(ParameterUserIdentifier, userIdentifier)
                 };
 
                 var resultTable = dataLink.ExecuteReader(StoredProcedure_GetAllCollectionsForUser, sqlParameters);
@@ -110,11 +110,11 @@ namespace BusinessLayer.Repositories
             }
         }
 
-        public List<Collection> GetLastThreeCollectionsForUser(int userId)
+        public List<Collection> GetLastThreeCollectionsForUser(int userIdentifier)
         {
             try
             {
-                var allUserCollections = GetAllCollections(userId);
+                var allUserCollections = GetAllCollections(userIdentifier);
 
                 var lastThreeCollections = allUserCollections
                     .OrderByDescending(collection => collection.CreatedAt)
@@ -129,17 +129,17 @@ namespace BusinessLayer.Repositories
             }
         }
 
-        public Collection GetCollectionById(int collectionId, int userId)
+        public Collection GetCollectionById(int collectionIdentifier, int userIdentifier)
         {
             try
             {
                 var sqlParameters = new SqlParameter[]
                 {
-                    new SqlParameter(ParameterCollectionIdCamel, collectionId),
-                    new SqlParameter(ParameterUserId, userId)
+                    new SqlParameter(ParameterCollectionIdentifierCamel, collectionIdentifier),
+                    new SqlParameter(ParameterUserIdentifier, userIdentifier)
                 };
 
-                var resultTable = dataLink.ExecuteReader(StoredProcedure_GetCollectionById, sqlParameters);
+                var resultTable = dataLink.ExecuteReader(StoredProcedure_GetCollectionByIdentifier, sqlParameters);
 
                 if (resultTable == null || resultTable.Rows.Count == 0)
                 {
@@ -159,13 +159,13 @@ namespace BusinessLayer.Repositories
             }
         }
 
-        public List<OwnedGame> GetGamesInCollection(int collectionId)
+        public List<OwnedGame> GetGamesInCollection(int collectionIdentifier)
         {
             try
             {
                 var sqlParameters = new SqlParameter[]
                 {
-                    new SqlParameter(ParameterCollectionIdUnderscore, collectionId)
+                    new SqlParameter(ParameterCollectionIdentifierUnderscore, collectionIdentifier)
                 };
 
                 var resultTable = dataLink.ExecuteReader(StoredProcedure_GetGamesInCollection, sqlParameters);
@@ -178,7 +178,7 @@ namespace BusinessLayer.Repositories
                 var gamesInCollection = resultTable.AsEnumerable().Select(row =>
                 {
                     var ownedGame = new OwnedGame(
-                        Convert.ToInt32(row[ColumnUserId]),
+                        Convert.ToInt32(row[ColumnUserIdentifier]),
                         row[ColumnTitle].ToString(),
                         row[ColumnDescription]?.ToString(),
                         row[ColumnCoverPicture]?.ToString());
@@ -199,15 +199,15 @@ namespace BusinessLayer.Repositories
             }
         }
 
-        public List<OwnedGame> GetGamesInCollection(int collectionId, int userId)
+        public List<OwnedGame> GetGamesInCollection(int collectionIdentifier, int userIdentifier)
         {
             try
             {
-                if (collectionId == 1)
+                if (collectionIdentifier == 1)
                 {
                     var sqlParameters = new SqlParameter[]
                     {
-                        new SqlParameter(ParameterUserId, userId)
+                        new SqlParameter(ParameterUserIdentifier, userIdentifier)
                     };
 
                     var resultTable = dataLink.ExecuteReader(StoredProcedure_GetAllGamesForUser, sqlParameters);
@@ -220,7 +220,7 @@ namespace BusinessLayer.Repositories
                     var userOwnedGames = resultTable.AsEnumerable().Select(row =>
                     {
                         var ownedGame = new OwnedGame(
-                            Convert.ToInt32(row[ColumnUserId]),
+                            Convert.ToInt32(row[ColumnUserIdentifier]),
                             row[ColumnTitle].ToString(),
                             row[ColumnDescription]?.ToString(),
                             row[ColumnCoverPicture]?.ToString());
@@ -233,7 +233,7 @@ namespace BusinessLayer.Repositories
                 }
                 else
                 {
-                    return GetGamesInCollection(collectionId);
+                    return GetGamesInCollection(collectionIdentifier);
                 }
             }
             catch (SqlException sqlException)
@@ -246,14 +246,14 @@ namespace BusinessLayer.Repositories
             }
         }
 
-        public void AddGameToCollection(int collectionId, int gameId, int userId)
+        public void AddGameToCollection(int collectionIdentifier, int gameIdentifier, int userIdentifier)
         {
             try
             {
                 var sqlParameters = new SqlParameter[]
                 {
-                    new SqlParameter(ParameterCollectionIdUnderscore, collectionId),
-                    new SqlParameter(ParameterGameId, gameId)
+                    new SqlParameter(ParameterCollectionIdentifierUnderscore, collectionIdentifier),
+                    new SqlParameter(ParameterGameIdentifier, gameIdentifier)
                 };
 
                 dataLink.ExecuteNonQuery(StoredProcedure_AddGameToCollection, sqlParameters);
@@ -268,14 +268,14 @@ namespace BusinessLayer.Repositories
             }
         }
 
-        public void RemoveGameFromCollection(int collectionId, int gameId)
+        public void RemoveGameFromCollection(int collectionIdentifier, int gameIdentifier)
         {
             try
             {
                 var sqlParameters = new SqlParameter[]
                 {
-                    new SqlParameter(ParameterCollectionIdUnderscore, collectionId),
-                    new SqlParameter(ParameterGameId, gameId)
+                    new SqlParameter(ParameterCollectionIdentifierUnderscore, collectionIdentifier),
+                    new SqlParameter(ParameterGameIdentifier, gameIdentifier)
                 };
 
                 dataLink.ExecuteNonQuery(StoredProcedure_RemoveGameFromCollection, sqlParameters);
@@ -290,61 +290,61 @@ namespace BusinessLayer.Repositories
             }
         }
 
-        public void MakeCollectionPrivateForUser(string userId, string collectionId)
+        public void MakeCollectionPrivateForUser(string userIdentifier, string collectionIdentifier)
         {
             try
             {
                 var sqlParameters = new SqlParameter[]
                 {
-                    new SqlParameter(ParameterUserId, userId),
-                    new SqlParameter(ParameterCollectionIdUnderscore, collectionId)
+                    new SqlParameter(ParameterUserIdentifier, userIdentifier),
+                    new SqlParameter(ParameterCollectionIdentifierUnderscore, collectionIdentifier)
                 };
 
                 dataLink.ExecuteReader(StoredProcedure_MakeCollectionPrivate, sqlParameters);
             }
             catch (DatabaseOperationException dbOperationException)
             {
-                throw new RepositoryException(string.Format(Error_MakeCollectionPrivate, collectionId, userId), dbOperationException);
+                throw new RepositoryException(string.Format(Error_MakeCollectionPrivate, collectionIdentifier, userIdentifier), dbOperationException);
             }
         }
 
-        public void MakeCollectionPublicForUser(string userId, string collectionId)
+        public void MakeCollectionPublicForUser(string userIdentifier, string collectionIdentifier)
         {
             try
             {
                 var sqlParameters = new SqlParameter[]
                 {
-                    new SqlParameter(ParameterUserId, userId),
-                    new SqlParameter(ParameterCollectionIdUnderscore, collectionId)
+                    new SqlParameter(ParameterUserIdentifier, userIdentifier),
+                    new SqlParameter(ParameterCollectionIdentifierUnderscore, collectionIdentifier)
                 };
 
                 dataLink.ExecuteReader(StoredProcedure_MakeCollectionPublic, sqlParameters);
             }
             catch (DatabaseOperationException dbOperationException)
             {
-                throw new RepositoryException(string.Format(Error_MakeCollectionPublic, collectionId, userId), dbOperationException);
+                throw new RepositoryException(string.Format(Error_MakeCollectionPublic, collectionIdentifier, userIdentifier), dbOperationException);
             }
         }
 
-        public void RemoveCollectionForUser(string userId, string collectionId)
+        public void RemoveCollectionForUser(string userIdentifier, string collectionIdentifier)
         {
             try
             {
                 var sqlParameters = new SqlParameter[]
                 {
-                    new SqlParameter(ParameterUserId, userId),
-                    new SqlParameter(ParameterCollectionIdUnderscore, collectionId)
+                    new SqlParameter(ParameterUserIdentifier, userIdentifier),
+                    new SqlParameter(ParameterCollectionIdentifierUnderscore, collectionIdentifier)
                 };
 
                 dataLink.ExecuteReader(StoredProcedure_DeleteCollection, sqlParameters);
             }
             catch (DatabaseOperationException dbOperationException)
             {
-                throw new RepositoryException(string.Format(Error_RemoveCollection, collectionId, userId), dbOperationException);
+                throw new RepositoryException(string.Format(Error_RemoveCollection, collectionIdentifier, userIdentifier), dbOperationException);
             }
         }
 
-        public void SaveCollection(string userId, Collection collection)
+        public void SaveCollection(string userIdentifier, Collection collection)
         {
             try
             {
@@ -352,7 +352,7 @@ namespace BusinessLayer.Repositories
                 {
                     var sqlParameters = new SqlParameter[]
                     {
-                        new SqlParameter(ParameterUserId, userId),
+                        new SqlParameter(ParameterUserIdentifier, userIdentifier),
                         new SqlParameter(ParameterName, collection.CollectionName),
                         new SqlParameter(ParameterCoverPicture, collection.CoverPicture),
                         new SqlParameter(ParameterIsPublic, collection.IsPublic),
@@ -365,8 +365,8 @@ namespace BusinessLayer.Repositories
                 {
                     var sqlParameters = new SqlParameter[]
                     {
-                        new SqlParameter(ParameterCollectionIdUnderscore, collection.CollectionId),
-                        new SqlParameter(ParameterUserId, userId),
+                        new SqlParameter(ParameterCollectionIdentifierUnderscore, collection.CollectionId),
+                        new SqlParameter(ParameterUserIdentifier, userIdentifier),
                         new SqlParameter(ParameterName, collection.CollectionName),
                         new SqlParameter(ParameterCoverPicture, collection.CoverPicture),
                         new SqlParameter(ParameterIsPublic, collection.IsPublic),
@@ -378,18 +378,18 @@ namespace BusinessLayer.Repositories
             }
             catch (DatabaseOperationException dbOperationException)
             {
-                throw new RepositoryException(string.Format(Error_SaveCollection, userId), dbOperationException);
+                throw new RepositoryException(string.Format(Error_SaveCollection, userIdentifier), dbOperationException);
             }
         }
 
-        public void DeleteCollection(int collectionId, int userId)
+        public void DeleteCollection(int collectionIdentifier, int userIdentifier)
         {
             try
             {
                 var sqlParameters = new SqlParameter[]
                 {
-                    new SqlParameter(ParameterCollectionIdUnderscore, collectionId),
-                    new SqlParameter(ParameterUserId, userId)
+                    new SqlParameter(ParameterCollectionIdentifierUnderscore, collectionIdentifier),
+                    new SqlParameter(ParameterUserIdentifier, userIdentifier)
                 };
 
                 dataLink.ExecuteNonQuery(StoredProcedure_DeleteCollection, sqlParameters);
@@ -404,13 +404,13 @@ namespace BusinessLayer.Repositories
             }
         }
 
-        public void CreateCollection(int userId, string collectionName, string coverPicture, bool isPublic, DateOnly createdAt)
+        public void CreateCollection(int userIdentifier, string collectionName, string coverPicture, bool isPublic, DateOnly createdAt)
         {
             try
             {
                 var sqlParameters = new SqlParameter[]
                 {
-                    new SqlParameter(ParameterUserId, userId),
+                    new SqlParameter(ParameterUserIdentifier, userIdentifier),
                     new SqlParameter(ParameterName, collectionName),
                     new SqlParameter(ParameterCoverPicture, coverPicture),
                     new SqlParameter(ParameterIsPublic, isPublic),
@@ -429,14 +429,14 @@ namespace BusinessLayer.Repositories
             }
         }
 
-        public void UpdateCollection(int collectionId, int userId, string collectionName, string coverPicture, bool isPublic)
+        public void UpdateCollection(int collectionIdentifier, int userIdentifier, string collectionName, string coverPicture, bool isPublic)
         {
             try
             {
                 var sqlParameters = new SqlParameter[]
                 {
-                    new SqlParameter(ParameterCollectionIdUnderscore, collectionId),
-                    new SqlParameter(ParameterUserId, userId),
+                    new SqlParameter(ParameterCollectionIdentifierUnderscore, collectionIdentifier),
+                    new SqlParameter(ParameterUserIdentifier, userIdentifier),
                     new SqlParameter(ParameterName, collectionName),
                     new SqlParameter(ParameterCoverPicture, coverPicture),
                     new SqlParameter(ParameterIsPublic, isPublic),
@@ -455,13 +455,13 @@ namespace BusinessLayer.Repositories
             }
         }
 
-        public List<Collection> GetPublicCollectionsForUser(int userId)
+        public List<Collection> GetPublicCollectionsForUser(int userIdentifier)
         {
             try
             {
                 var sqlParameters = new SqlParameter[]
                 {
-                    new SqlParameter(ParameterUserId, userId)
+                    new SqlParameter(ParameterUserIdentifier, userIdentifier)
                 };
 
                 var resultTable = dataLink.ExecuteReader(StoredProcedure_GetPublicCollectionsForUser, sqlParameters);
@@ -484,14 +484,14 @@ namespace BusinessLayer.Repositories
             }
         }
 
-        public List<OwnedGame> GetGamesNotInCollection(int collectionId, int userId)
+        public List<OwnedGame> GetGamesNotInCollection(int collectionIdentifier, int userIdentifier)
         {
             try
             {
                 var sqlParameters = new SqlParameter[]
                 {
-                    new SqlParameter(ParameterCollectionIdUnderscore, collectionId),
-                    new SqlParameter(ParameterUserId, userId)
+                    new SqlParameter(ParameterCollectionIdentifierUnderscore, collectionIdentifier),
+                    new SqlParameter(ParameterUserIdentifier, userIdentifier)
                 };
 
                 var resultTable = dataLink.ExecuteReader(StoredProcedure_GetGamesNotInCollection, sqlParameters);
@@ -504,7 +504,7 @@ namespace BusinessLayer.Repositories
                 var unassignedGames = resultTable.AsEnumerable().Select(row =>
                 {
                     var ownedGame = new OwnedGame(
-                        Convert.ToInt32(row[ColumnUserId]),
+                        Convert.ToInt32(row[ColumnUserIdentifier]),
                         row[ColumnTitle].ToString(),
                         row[ColumnDescription]?.ToString(),
                         row[ColumnCoverPicture]?.ToString());
@@ -529,7 +529,7 @@ namespace BusinessLayer.Repositories
             var collectionList = dataTable.AsEnumerable().Select(row =>
             {
                 var collection = new Collection(
-                    userId: Convert.ToInt32(row[ColumnUserId]),
+                    userId: Convert.ToInt32(row[ColumnUserIdentifier]),
                     collectionName: row[ColumnName].ToString(),
                     createdAt: DateOnly.FromDateTime(Convert.ToDateTime(row[ColumnCreatedAt])),
                     coverPicture: row[ColumnCoverPicture]?.ToString(),
@@ -545,7 +545,7 @@ namespace BusinessLayer.Repositories
         private static Collection MapDataRowToCollection(DataRow dataRow)
         {
             var collection = new Collection(
-                userId: Convert.ToInt32(dataRow[ColumnUserId]),
+                userId: Convert.ToInt32(dataRow[ColumnUserIdentifier]),
                 collectionName: dataRow[ColumnName].ToString(),
                 createdAt: DateOnly.FromDateTime(Convert.ToDateTime(dataRow[ColumnCreatedAt])),
                 coverPicture: dataRow[ColumnCoverPicture]?.ToString(),

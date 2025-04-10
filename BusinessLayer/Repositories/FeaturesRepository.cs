@@ -62,7 +62,7 @@ namespace BusinessLayer.Repositories
                 var features = new List<Feature>();
                 var dataTable = dataLink.ExecuteReader("GetFeaturesByType", parameters);
 
-                const string featureIdString = "feature_id";
+                const string featureIdentifierString = "feature_id";
                 const string nameString = "name";
                 const string valueString = "value";
                 const string descriptionString = "description";
@@ -73,7 +73,7 @@ namespace BusinessLayer.Repositories
                 {
                     features.Add(new Feature
                     {
-                        FeatureId = Convert.ToInt32(row[featureIdString]),
+                        FeatureId = Convert.ToInt32(row[featureIdentifierString]),
                         Name = row[nameString].ToString(),
                         Value = Convert.ToInt32(row[valueString]),
                         Description = row[descriptionString].ToString(),
@@ -90,13 +90,13 @@ namespace BusinessLayer.Repositories
             }
         }
 
-        public List<Feature> GetUserFeatures(int userId)
+        public List<Feature> GetUserFeatures(int userIdentifier)
         {
             try
             {
                 var parameters = new SqlParameter[]
                 {
-                    new SqlParameter("@userId", userId)
+                    new SqlParameter("@userIdentifier", userIdentifier)
                 };
 
                 var features = new List<Feature>();
@@ -120,19 +120,19 @@ namespace BusinessLayer.Repositories
             }
             catch (DatabaseOperationException exception)
             {
-                throw new DatabaseOperationException($"Failed to retrieve features for user {userId}.", exception);
+                throw new DatabaseOperationException($"Failed to retrieve features for user {userIdentifier}.", exception);
             }
         }
 
-        public bool EquipFeature(int userId, int featureId)
+        public bool EquipFeature(int userIdentifier, int featureIdentifier)
         {
             try
             {
                 // Check if the relationship exists
                 var checkParameters = new SqlParameter[]
                 {
-                    new SqlParameter("@userId", userId),
-                    new SqlParameter("@featureId", featureId)
+                    new SqlParameter("@userIdentifier", userIdentifier),
+                    new SqlParameter("@featureIdentifier", featureIdentifier)
                 };
 
                 var relationshipTable = dataLink.ExecuteReader("GetFeatureUserRelationship", checkParameters);
@@ -142,8 +142,8 @@ namespace BusinessLayer.Repositories
                     // Update existing relationship
                     var updateParameters = new SqlParameter[]
                     {
-                        new SqlParameter("@userId", userId),
-                        new SqlParameter("@featureId", featureId),
+                        new SqlParameter("@userId", userIdentifier),
+                        new SqlParameter("@featureId", featureIdentifier),
                         new SqlParameter("@equipped", 1)
                     };
 
@@ -155,20 +155,20 @@ namespace BusinessLayer.Repositories
             }
             catch (DatabaseOperationException exception)
             {
-                System.Diagnostics.Debug.WriteLine($"Failed to equip feature {featureId} for user {userId}: {exception.Message}");
+                System.Diagnostics.Debug.WriteLine($"Failed to equip feature {featureIdentifier} for user {userIdentifier}: {exception.Message}");
                 return false;
             }
         }
 
-        public bool UnequipFeature(int userId, int featureId)
+        public bool UnequipFeature(int userIdentifier, int featureIdentifier)
         {
             try
             {
                 // Check if the relationship exists
                 var checkParameters = new SqlParameter[]
                 {
-                    new SqlParameter("@userId", userId),
-                    new SqlParameter("@featureId", featureId)
+                    new SqlParameter("@userId", userIdentifier),
+                    new SqlParameter("@featureId", featureIdentifier)
                 };
 
                 var relationshipTable = dataLink.ExecuteReader("GetFeatureUserRelationship", checkParameters);
@@ -177,8 +177,8 @@ namespace BusinessLayer.Repositories
                 {
                     var parameters = new SqlParameter[]
                     {
-                        new SqlParameter("@userId", userId),
-                        new SqlParameter("@featureId", featureId),
+                        new SqlParameter("@userId", userIdentifier),
+                        new SqlParameter("@featureId", featureIdentifier),
                         new SqlParameter("@equipped", 0)
                     };
 
@@ -190,18 +190,18 @@ namespace BusinessLayer.Repositories
             }
             catch (DatabaseOperationException exception)
             {
-                System.Diagnostics.Debug.WriteLine($"Failed to unequip feature {featureId} for user {userId}: {exception.Message}");
+                System.Diagnostics.Debug.WriteLine($"Failed to unequip feature {featureIdentifier} for user {userId}: {exception.Message}");
                 return false;
             }
         }
 
-        public bool UnequipFeaturesByType(int userId, string featureType)
+        public bool UnequipFeaturesByType(int userIdentifier, string featureType)
         {
             try
             {
                 var parameters = new SqlParameter[]
                 {
-                    new SqlParameter("@userId", userId),
+                    new SqlParameter("@userId", userIdentifier),
                     new SqlParameter("@featureType", featureType)
                 };
 
@@ -214,14 +214,14 @@ namespace BusinessLayer.Repositories
             }
         }
 
-        public bool IsFeaturePurchased(int userId, int featureId)
+        public bool IsFeaturePurchased(int userIdentifier, int featureIdentifier)
         {
             try
             {
                 var parameters = new SqlParameter[]
                 {
-                    new SqlParameter("@userId", userId),
-                    new SqlParameter("@featureId", featureId)
+                    new SqlParameter("@userId", userIdentifier),
+                    new SqlParameter("@featureId", featureIdentifier)
                 };
 
                 var relationshipTable = dataLink.ExecuteReader("GetFeatureUserRelationship", parameters);
@@ -233,12 +233,12 @@ namespace BusinessLayer.Repositories
             }
         }
 
-        public bool AddUserFeature(int userId, int featureId)
+        public bool AddUserFeature(int userIdentifier, int featureIdentifier)
         {
             try
             {
                 // First check if the user already has this feature
-                if (IsFeaturePurchased(userId, featureId))
+                if (IsFeaturePurchased(userIdentifier, featureIdentifier))
                 {
                     return false;
                 }
@@ -246,7 +246,7 @@ namespace BusinessLayer.Repositories
                 // Add the feature to the user's purchased features
                 var parameters = new SqlParameter[]
                 {
-                    new SqlParameter("@userId", userId),
+                    new SqlParameter("@userId", userIdentifier),
                     new SqlParameter("@featureId", featureId),
                     new SqlParameter("@equipped", false) // New features are unequipped by default
                 };
