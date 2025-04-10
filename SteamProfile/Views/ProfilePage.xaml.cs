@@ -65,20 +65,20 @@ namespace SteamProfile.Views
                         App.CollectionsRepository,
                         App.FeaturesService,
                         App.AchievementsService);
-                    Debug.WriteLine("ProfileViewModel initialized with services.");
 
+                    Debug.WriteLine("ProfileViewModel initialized with services.");
                     ViewModel = ProfileViewModel.Instance;
                 }
 
                 DataContext = ViewModel; // Ensure this is set correctly
                 Debug.WriteLine("Profile data loading initiated.");
             }
-            catch (Exception ex)
+            catch (Exception exception)
             {
-                Debug.WriteLine($"Error initializing ProfilePage: {ex.Message}");
-                if (ex.InnerException != null)
+                Debug.WriteLine($"Error initializing ProfilePage: {exception.Message}");
+                if (exception.InnerException != null)
                 {
-                    Debug.WriteLine($"Inner exception: {ex.InnerException.Message}");
+                    Debug.WriteLine($"Inner exception: {exception.InnerException.Message}");
                 }
 
                 // Show error dialog to user
@@ -144,6 +144,7 @@ namespace SteamProfile.Views
                 // Load the profile data
                 _ = ViewModel.LoadProfileAsync(userIdentifier);
             }
+
             // If no parameter but we're returning to the page and ViewModel has a user ID
             else if (ViewModel.UserIdentifier > 0)
             {
@@ -234,15 +235,15 @@ namespace SteamProfile.Views
                     Title = "Error",
                     Content = message,
                     CloseButtonText = "OK",
-                    XamlRoot = this.XamlRoot
+                    XamlRoot = this.XamlRoot,
                 };
 
                 await errorDialog.ShowAsync();
                 Debug.WriteLine("Error dialog shown.");
             }
-            catch (Exception ex)
+            catch (Exception exception)
             {
-                Debug.WriteLine($"Error showing dialog: {ex.Message}");
+                Debug.WriteLine($"Error showing dialog: {exception.Message}");
             }
         }
 
@@ -257,7 +258,7 @@ namespace SteamProfile.Views
                     PrimaryButtonText = "Yes",
                     CloseButtonText = "No",
                     DefaultButton = ContentDialogButton.Close,
-                    XamlRoot = this.XamlRoot
+                    XamlRoot = this.XamlRoot,
                 };
 
                 var result = await confirmDialog.ShowAsync();
@@ -265,9 +266,9 @@ namespace SteamProfile.Views
                 {
                     // Get the friendship ID for the current user and friend
                     var friendships = App.FriendsService.GetAllFriendships();
-                    var friendship = friendships.FirstOrDefault(f =>
-                        (f.UserId == App.UserService.GetCurrentUser().UserId && f.FriendId == userIdentifier) ||
-                        (f.UserId == userIdentifier && f.FriendId == App.UserService.GetCurrentUser().UserId));
+                    var friendship = friendships.FirstOrDefault(currentFriendship =>
+                        (currentFriendship.UserId == App.UserService.GetCurrentUser().UserId && currentFriendship.FriendId == userIdentifier) ||
+                        (currentFriendship.UserId == userIdentifier && currentFriendship.FriendId == App.UserService.GetCurrentUser().UserId));
 
                     if (friendship != null)
                     {
@@ -280,9 +281,9 @@ namespace SteamProfile.Views
                     }
                 }
             }
-            catch (Exception ex)
+            catch (Exception exception)
             {
-                ShowErrorDialog($"Error unfriending user: {ex.Message}");
+                ShowErrorDialog($"Error unfriending user: {exception.Message}");
             }
         }
 

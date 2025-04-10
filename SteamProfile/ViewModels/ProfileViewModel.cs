@@ -180,6 +180,7 @@ namespace SteamProfile.ViewModels
             {
                 throw new InvalidOperationException("ProfileViewModel is already initialized");
             }
+
             profileViewModelInstance = new ProfileViewModel(userService, friendsService, dispatcherQueue, userProfileRepository, collectionsRepository, featuresService, achievementsService);
         }
 
@@ -228,12 +229,13 @@ namespace SteamProfile.ViewModels
                     });
                     return;
                 }
+
                 // Load user first, with careful error handling
                 User currentUser = null;
                 try
                 {
-                   // Instead of using Task.Run, try direct call to reduce complexity
-                   currentUser = userService.GetUserById(user_id);
+                    // Instead of using Task.Run, try direct call to reduce complexity
+                    currentUser = userService.GetUserById(user_id);
 
                     if (currentUser == null)
                     {
@@ -248,14 +250,14 @@ namespace SteamProfile.ViewModels
 
                     Debug.WriteLine($"Retrieved user: {currentUser.Username}");
                 }
-                catch (Exception ex)
+                catch (Exception exception)
                 {
-                    Debug.WriteLine($"Error getting user: {ex.Message}");
-                    if (ex.InnerException != null)
+                    Debug.WriteLine($"Error getting user: {exception.Message}");
+                    if (exception.InnerException != null)
                     {
-                        Debug.WriteLine($"Inner exception: {ex.InnerException.Message}");
+                        Debug.WriteLine($"Inner exceptionception: {exception.InnerException.Message}");
                     }
-                    Debug.WriteLine($"Stack trace: {ex.StackTrace}");
+                    Debug.WriteLine($"Stack trace: {exception.StackTrace}");
 
                     await dispatcherQueue.EnqueueAsync(() =>
                     {
@@ -275,9 +277,10 @@ namespace SteamProfile.ViewModels
                         userProfile = userProfileRepository.GetUserProfileByUserId(currentUser.UserId);
                         Debug.WriteLine($"Retrieved profile ID: {userProfile?.ProfileId.ToString() ?? "null"}");
                     }
-                    catch (Exception ex)
+                    catch (Exception exception)
                     {
-                        Debug.WriteLine($"Error getting user profile: {ex.Message}");
+                        Debug.WriteLine($"Error getting user profile: {exception.Message}");
+
                         // Continue without profile info
                     }
 
@@ -291,9 +294,10 @@ namespace SteamProfile.ViewModels
                         equippedFeatures = featuresService.GetUserEquippedFeatures(currentUser.UserId);
                         Debug.WriteLine($"Retrieved {equippedFeatures.Count} equipped features");
                     }
-                    catch (Exception ex)
+                    catch (Exception exception)
                     {
-                        Debug.WriteLine($"Error getting equipped features: {ex.Message}");
+                        Debug.WriteLine($"Error getting equipped features: {exception.Message}");
+
                         // Continue with empty features list
                     }
 
@@ -324,18 +328,21 @@ namespace SteamProfile.ViewModels
                                         : $"ms-appx:///{userProfile.ProfilePicture}")
                                     : "ms-appx:///Assets/default-profile.png";
                             }
+
                             // Process equipped features
                             ProcessEquippedFeatures(equippedFeatures);
+
                             // Load friend count
                             try
                             {
                                 FriendCount = friendsService.GetFriendshipCount(currentUser.UserId);
                             }
-                            catch (Exception ex)
+                            catch (Exception exception)
                             {
-                                Debug.WriteLine($"Error getting friend count: {ex.Message}");
+                                Debug.WriteLine($"Error getting friend count: {exception.Message}");
                                 FriendCount = 0;
                             }
+
                             // Set achievement values
                             // First unlock any achievements the user has earned
                             achievementsService.UnlockAchievementForUser(currentUser.UserId);
@@ -369,22 +376,23 @@ namespace SteamProfile.ViewModels
                                     gameCollections.Add(collection);
                                 }
                             }
-                            catch (Exception ex)
+                            catch (Exception exception)
                             {
-                                Debug.WriteLine($"Error loading collections: {ex.Message}");
+                                Debug.WriteLine($"Error loading collections: {exception.Message}");
                             }
                         }
+
                         IsLoading = false;
                     });
                 }
-                catch (Exception ex)
+                catch (Exception exception)
                 {
-                    Debug.WriteLine($"Error in profile loading process: {ex.Message}");
-                    if (ex.InnerException != null)
+                    Debug.WriteLine($"Error in profile loading process: {exception.Message}");
+                    if (exception.InnerException != null)
                     {
-                        Debug.WriteLine($"Inner exception: {ex.InnerException.Message}");
+                        Debug.WriteLine($"Inner exception: {exception.InnerException.Message}");
                     }
-                    Debug.WriteLine($"Stack trace: {ex.StackTrace}");
+                    Debug.WriteLine($"Stack trace: {exception.StackTrace}");
 
                     await dispatcherQueue.EnqueueAsync(() =>
                     {
@@ -393,16 +401,18 @@ namespace SteamProfile.ViewModels
                     });
                 }
             }
-            catch (Exception ex)
+            catch (Exception exception)
             {
-                Debug.WriteLine($"Critical error in LoadProfileAsync: {ex.Message}");
-                if (ex.InnerException != null)
+                Debug.WriteLine($"Critical error in LoadProfileAsync: {exception.Message}");
+                if (exception.InnerException != null)
                 {
-                    Debug.WriteLine($"Inner exception: {ex.InnerException.Message}");
+                    Debug.WriteLine($"Inner exception: {exception.InnerException.Message}");
                 }
-                Debug.WriteLine($"Stack trace: {ex.StackTrace}");
+
+                Debug.WriteLine($"Stack trace: {exception.StackTrace}");
             }
         }
+
         private void ProcessEquippedFeatures(List<Feature> equippedFeatures)
         {
             try
@@ -494,9 +504,9 @@ namespace SteamProfile.ViewModels
                                         break;
                                 }
                             }
-                            catch (Exception ex)
+                            catch (Exception exception)
                             {
-                                Debug.WriteLine($"Error processing feature {feature.FeatureId}: {ex.Message}");
+                                Debug.WriteLine($"Error processing feature {feature.FeatureId}: {exception.Message}");
                             }
                         }
                     }
@@ -504,15 +514,14 @@ namespace SteamProfile.ViewModels
 
                 Debug.WriteLine($"Feature visibility - Frame: {HasEquippedFrame}, Hat: {HasEquippedHat}, Pet: {HasEquippedPet}, Emoji: {HasEquippedEmoji}, Background: {HasEquippedBackground}");
             }
-            catch (Exception ex)
+            catch (Exception exception)
             {
-                Debug.WriteLine($"Error in ProcessEquippedFeatures: {ex.Message}");
-                if (ex.InnerException != null)
+                Debug.WriteLine($"Error in ProcessEquippedFeatures: {exception.Message}");
+                if (exception.InnerException != null)
                 {
-                    Debug.WriteLine($"Inner exception: {ex.InnerException.Message}");
+                    Debug.WriteLine($"Inner exception: {exception.InnerException.Message}");
                 }
-                Debug.WriteLine($"Stack trace: {ex.StackTrace}");
-
+                Debug.WriteLine($"Stack trace: {exception.StackTrace}");
                 // In case of error, ensure we have valid image sources
                 const string DEFAULT_IMAGE = "ms-appx:///Assets/default-profile.png";
                 EquippedFrameSource = DEFAULT_IMAGE;
@@ -522,6 +531,7 @@ namespace SteamProfile.ViewModels
                 EquippedBackgroundSource = DEFAULT_IMAGE;
             }
         }
+
         [RelayCommand]
         private async Task ToggleFriendship()
         {
@@ -548,25 +558,26 @@ namespace SteamProfile.ViewModels
                     FriendCount = friendsService.GetFriendshipCount(userIdentifier);
                 }
             }
-            catch (Exception ex)
+            catch (Exception exception)
             {
-                Debug.WriteLine($"Error toggling friendship: {ex.Message}");
+                Debug.WriteLine($"Error toggling friendship: {exception.Message}");
                 ErrorMessage = "Failed to update friendship status. Please try again later.";
             }
         }
+
         private AchievementWithStatus GetTopAchievement(int userId, string category)
         {
             try
             {
                 // Get all achievements for this category
                 var achievements = achievementsService.GetAchievementsWithStatusForUser(userId)
-                    .Where(a => a.Achievement.AchievementType == category)
+                    .Where(achievementWithStatus => achievementWithStatus.Achievement.AchievementType == category)
                     .ToList();
 
                 // First try to get the highest-points unlocked achievement
                 var topUnlockedAchievement = achievements
-                    .Where(a => a.IsUnlocked)
-                    .OrderByDescending(a => a.Achievement.Points)
+                    .Where(achievement => achievement.IsUnlocked)
+                    .OrderByDescending(achievement => achievement.Achievement.Points)
                     .FirstOrDefault();
 
                 // If we found an unlocked achievement, return it
@@ -578,8 +589,8 @@ namespace SteamProfile.ViewModels
 
                 // If no unlocked achievements, get the lowest-points locked achievement
                 var lowestLockedAchievement = achievements
-                    .Where(a => !a.IsUnlocked)
-                    .OrderBy(a => a.Achievement.Points)
+                    .Where(achievement => !achievement.IsUnlocked)
+                    .OrderBy(achievement => achievement.Achievement.Points)
                     .FirstOrDefault();
 
                 // If we found a locked achievement, return it
@@ -604,9 +615,9 @@ namespace SteamProfile.ViewModels
                     IsUnlocked = false
                 };
             }
-            catch (Exception ex)
+            catch (Exception exception)
             {
-                Debug.WriteLine($"Error getting top achievement for {category}: {ex.Message}");
+                Debug.WriteLine($"Error getting top achievement for {category}: {exception.Message}");
                 return new AchievementWithStatus
                 {
                     Achievement = new Achievement
@@ -700,23 +711,24 @@ namespace SteamProfile.ViewModels
     {
         public static Task EnqueueAsync(this DispatcherQueue dispatcher, Action action)
         {
-            var tcs = new TaskCompletionSource();
+            var taskCompletionSource = new TaskCompletionSource();
             if (!dispatcher.TryEnqueue(() =>
             {
                 try
                 {
                     action();
-                    tcs.SetResult();
+                    taskCompletionSource.SetResult();
                 }
-                catch (Exception ex)
+                catch (Exception exception)
                 {
-                    tcs.SetException(ex);
+                    taskCompletionSource.SetException(exception);
                 }
             }))
             {
-                tcs.SetException(new InvalidOperationException("Failed to enqueue task to dispatcher"));
+                taskCompletionSource.SetException(new InvalidOperationException("Failed to enqueue task to dispatcher"));
             }
-            return tcs.Task;
+
+            return taskCompletionSource.Task;
         }
     }
 }
