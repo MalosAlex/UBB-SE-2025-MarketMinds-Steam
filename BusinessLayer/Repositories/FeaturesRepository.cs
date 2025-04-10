@@ -62,16 +62,23 @@ namespace BusinessLayer.Repositories
                 var features = new List<Feature>();
                 var dataTable = dataLink.ExecuteReader("GetFeaturesByType", parameters);
 
+                const string featureIdString = "feature_id";
+                const string nameString = "name";
+                const string valueString = "value";
+                const string descriptionString = "description";
+                const string typeString = "type";
+                const string sourceString = "source";
+
                 foreach (DataRow row in dataTable.Rows)
                 {
                     features.Add(new Feature
                     {
-                        FeatureId = Convert.ToInt32(row["feature_id"]),
-                        Name = row["name"].ToString(),
-                        Value = Convert.ToInt32(row["value"]),
-                        Description = row["description"].ToString(),
-                        Type = row["type"].ToString(),
-                        Source = row["source"].ToString()
+                        FeatureId = Convert.ToInt32(row[featureIdString]),
+                        Name = row[nameString].ToString(),
+                        Value = Convert.ToInt32(row[valueString]),
+                        Description = row[descriptionString].ToString(),
+                        Type = row[typeString].ToString(),
+                        Source = row[sourceString].ToString()
                     });
                 }
 
@@ -199,11 +206,10 @@ namespace BusinessLayer.Repositories
                 };
 
                 dataLink.ExecuteNonQuery("UnequipFeaturesByType", parameters);
-                return true;  // If no exception, consider it successful
+                return true;
             }
-            catch (DatabaseOperationException exception)
+            catch (DatabaseOperationException)
             {
-                System.Diagnostics.Debug.WriteLine($"Failed to unequip features of type {featureType} for user {userId}: {exception.Message}");
                 return false;
             }
         }
@@ -224,6 +230,33 @@ namespace BusinessLayer.Repositories
             catch (DatabaseOperationException exception)
             {
                 throw new DatabaseOperationException($"Failed to check feature purchase status.", exception);
+            }
+        }
+
+        public bool AddUserFeature(int userId, int featureId)
+        {
+            try
+            {
+                // First check if the user already has this feature
+                if (IsFeaturePurchased(userId, featureId))
+                {
+                    return false;
+                }
+
+                // Add the feature to the user's purchased features
+                var parameters = new SqlParameter[]
+                {
+                    new SqlParameter("@userId", userId),
+                    new SqlParameter("@featureId", featureId),
+                    new SqlParameter("@equipped", false) // New features are unequipped by default
+                };
+
+                dataLink.ExecuteNonQuery("AddUserFeature", parameters);
+                return true;
+            }
+            catch (DatabaseOperationException)
+            {
+                return false;
             }
         }
     }

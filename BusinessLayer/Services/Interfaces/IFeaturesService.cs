@@ -10,6 +10,8 @@ namespace BusinessLayer.Services.Interfaces
         (bool, string) UnequipFeature(int userId, int featureId);
         List<Feature> GetUserEquippedFeatures(int userId);
         bool IsFeaturePurchased(int userId, int featureId);
+        (bool success, string message) PurchaseFeature(int userId, int featureId);
+        (string profilePicturePath, string bioText, List<Feature> equippedFeatures) GetFeaturePreviewData(int userId, int featureId);
         IUserService UserService { get; }
     }
 }

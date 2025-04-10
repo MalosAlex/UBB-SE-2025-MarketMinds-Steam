@@ -5,6 +5,7 @@ using BusinessLayer.Exceptions;
 using BusinessLayer.Services.Interfaces;
 using BusinessLayer.Validators;
 using BusinessLayer.Repositories;
+using BusinessLayer.Repositories.Interfaces;
 
 namespace BusinessLayer.Services
 {
@@ -13,9 +14,9 @@ namespace BusinessLayer.Services
         private readonly string resetCodesPath;
         private readonly IUserService userService;
         private readonly PasswordResetValidator validator;
-        private readonly PasswordResetRepository passwordResetRepository;
+        private readonly IPasswordResetRepository passwordResetRepository;
 
-        public PasswordResetService(PasswordResetRepository passwordResetRepository, IUserService userService)
+        public PasswordResetService(IPasswordResetRepository passwordResetRepository, IUserService userService)
         {
             this.userService = userService ?? throw new ArgumentNullException(nameof(userService));
             validator = new PasswordResetValidator();

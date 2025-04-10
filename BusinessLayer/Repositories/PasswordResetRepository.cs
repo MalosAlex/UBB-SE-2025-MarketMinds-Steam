@@ -61,10 +61,10 @@ namespace BusinessLayer.Repositories
                 {
                     DataRow row = result.Rows[0];
                     DateTime expirationTime = (DateTime)row["expiration_time"];
-                    bool used = (bool)row["used"];
+                    bool isCodeUsed = (bool)row["used"];
 
                     // Check if code is valid, unexpired, and unused
-                    return !used && expirationTime > DateTime.UtcNow;
+                    return !isCodeUsed && expirationTime > DateTime.UtcNow;
                 }
 
                 return false;

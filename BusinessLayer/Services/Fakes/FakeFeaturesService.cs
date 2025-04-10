@@ -76,6 +76,19 @@ namespace BusinessLayer.Services.Fakes
             return featuresRepository.IsFeaturePurchased(userId, featureId);
         }
 
+        public (bool success, string message) PurchaseFeature(int userId, int featureId)
+        {
+            // Fake implementation for testing purposes
+            return (true, "Feature purchased successfully in test environment");
+        }
+
+        public (string profilePicturePath, string bioText, List<Feature> equippedFeatures) GetFeaturePreviewData(int userId, int featureId)
+        {
+            // Return fake data for testing
+            var equippedFeatures = GetUserEquippedFeatures(userId);
+            return ("ms-appx:///Assets/default-profile.png", "This is a test bio", equippedFeatures);
+        }
+
         public List<Feature> GetUserFeatures(int userId)
         {
             return featuresRepository.GetUserFeatures(userId);
