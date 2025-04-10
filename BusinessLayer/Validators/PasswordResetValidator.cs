@@ -5,7 +5,7 @@ namespace BusinessLayer.Validators
 {
     public class PasswordResetValidator
     {
-        public (bool isValid, string message) ValidateEmail(string email)
+        public (bool isValid, string errorMessage) ValidateEmail(string email)
         {
             if (string.IsNullOrWhiteSpace(email))
             {
@@ -21,7 +21,7 @@ namespace BusinessLayer.Validators
             return (true, string.Empty);
         }
 
-        public (bool isValid, string message) ValidateResetCode(string code)
+        public (bool isValid, string errorMessage) ValidateResetCode(string code)
         {
             if (string.IsNullOrWhiteSpace(code))
             {
@@ -36,7 +36,7 @@ namespace BusinessLayer.Validators
             return (true, string.Empty);
         }
 
-        public (bool isValid, string message) ValidatePassword(string newPassword)
+        public (bool isValid, string errorMessage) ValidatePassword(string newPassword)
         {
             if (string.IsNullOrWhiteSpace(newPassword))
             {

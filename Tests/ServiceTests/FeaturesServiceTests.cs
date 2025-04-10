@@ -15,7 +15,7 @@ namespace Tests.ServiceTests
     [TestFixture]
     public class FeaturesServiceTests
     {
-        private FeaturesService service;
+        private IFeaturesService service;
         private Mock<IFeaturesRepository> mockFeaturesRepository;
         private Mock<IUserService> mockUserService;
 

@@ -16,7 +16,7 @@ namespace Tests.RepositoryTests
     public class FeaturesRepositoryTests
     {
         private Mock<IDataLink> mockDataLink;
-        private FeaturesRepository featuresRepository;
+        private IFeaturesRepository featuresRepository;
 
         [SetUp]
         public void Setup()
