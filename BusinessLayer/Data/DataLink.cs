@@ -17,7 +17,7 @@ namespace BusinessLayer.Data
 
         private const string LocalDataSourceKey = "LocalDataSource";
         private const string InitialCatalogKey = "InitialCatalog";
-        private const string UserIdKey = "UserId";
+        private const string UserIdentifierKey = "UserIdentifier";
         private const string PasswordKey = "Password";
 
         private const string MissingConfigErrorMessage = "Database connection settings are missing in appsettings.json";
@@ -57,8 +57,8 @@ namespace BusinessLayer.Data
 
                 string? localDataSource = config[LocalDataSourceKey];
                 string? initialCatalog = config[InitialCatalogKey];
-                string? userId = config[UserIdKey];
-                string? password = config[PasswordKey];
+                string? userIdentifier = config[UserIdentifierKey];
+                string? connectionPassword = config[PasswordKey];
 
                 if (string.IsNullOrWhiteSpace(localDataSource) || string.IsNullOrWhiteSpace(initialCatalog))
                 {
@@ -72,13 +72,13 @@ namespace BusinessLayer.Data
                 using var testConnection = new SqlConnection(connectionString);
                 testConnection.Open();
             }
-            catch (SqlException ex)
+            catch (SqlException exception)
             {
-                throw new DatabaseConnectionException(ConnectionFailedErrorMessage, ex);
+                throw new DatabaseConnectionException(ConnectionFailedErrorMessage, exception);
             }
-            catch (Exception ex)
+            catch (Exception exception)
             {
-                throw new ConfigurationErrorsException(ConnectionInitErrorMessage, ex);
+                throw new ConfigurationErrorsException(ConnectionInitErrorMessage, exception);
             }
         }
 
@@ -110,27 +110,27 @@ namespace BusinessLayer.Data
                 }
 
                 connection.Open();
-                var result = command.ExecuteScalar();
+                var executionResult = command.ExecuteScalar();
 
-                if (result == null || result == DBNull.Value)
+                if (executionResult == null || executionResult == DBNull.Value)
                 {
                     return default;
                 }
 
                 if (typeof(T).IsGenericType && typeof(T).GetGenericTypeDefinition() == typeof(Nullable<>))
                 {
-                    return (T)Convert.ChangeType(result, Nullable.GetUnderlyingType(typeof(T))!);
+                    return (T)Convert.ChangeType(executionResult, Nullable.GetUnderlyingType(typeof(T))!);
                 }
 
-                return (T)Convert.ChangeType(result, typeof(T));
+                return (T)Convert.ChangeType(executionResult, typeof(T));
             }
-            catch (SqlException ex)
+            catch (SqlException exception)
             {
-                throw new DatabaseOperationException(ExecuteScalarErrorMessage + ex.Message, ex);
+                throw new DatabaseOperationException(ExecuteScalarErrorMessage + exception.Message, exception);
             }
-            catch (InvalidCastException ex)
+            catch (InvalidCastException exception)
             {
-                throw new DatabaseOperationException(ExecuteScalarCastErrorMessage + ex.Message, ex);
+                throw new DatabaseOperationException(ExecuteScalarCastErrorMessage + exception.Message, exception);
             }
             catch (Exception ex)
             {
@@ -160,13 +160,13 @@ namespace BusinessLayer.Data
                 dataTable.Load(reader);
                 return dataTable;
             }
-            catch (SqlException ex)
+            catch (SqlException exception)
             {
-                throw new DatabaseOperationException(ExecuteReaderErrorMessage + ex.Message, ex);
+                throw new DatabaseOperationException(ExecuteReaderErrorMessage + exception.Message, exception);
             }
-            catch (Exception ex)
+            catch (Exception exception)
             {
-                throw new DatabaseOperationException(ExecuteReaderUnexpectedErrorMessage + ex.Message, ex);
+                throw new DatabaseOperationException(ExecuteReaderUnexpectedErrorMessage + exception.Message, exception);
             }
         }
 
@@ -189,13 +189,13 @@ namespace BusinessLayer.Data
 
                 return command.ExecuteNonQuery();
             }
-            catch (SqlException ex)
+            catch (SqlException exception)
             {
-                throw new DatabaseOperationException(ExecuteNonQueryErrorMessage + ex.Message, ex);
+                throw new DatabaseOperationException(ExecuteNonQueryErrorMessage + exception.Message, exception);
             }
-            catch (Exception ex)
+            catch (Exception exception)
             {
-                throw new DatabaseOperationException(ExecuteNonQueryUnexpectedErrorMessage + ex.Message, ex);
+                throw new DatabaseOperationException(ExecuteNonQueryUnexpectedErrorMessage + exception.Message, exception);
             }
         }
 
@@ -220,13 +220,13 @@ namespace BusinessLayer.Data
                 dataTable.Load(reader);
                 return dataTable;
             }
-            catch (SqlException ex)
+            catch (SqlException exception)
             {
-                throw new DatabaseOperationException(ExecuteReaderAsyncErrorMessage + ex.Message, ex);
+                throw new DatabaseOperationException(ExecuteReaderAsyncErrorMessage + exception.Message, exception);
             }
-            catch (Exception ex)
+            catch (Exception exception)
             {
-                throw new DatabaseOperationException(ExecuteReaderAsyncUnexpectedErrorMessage + ex.Message, ex);
+                throw new DatabaseOperationException(ExecuteReaderAsyncUnexpectedErrorMessage + exception.Message, exception);
             }
         }
 
@@ -248,13 +248,13 @@ namespace BusinessLayer.Data
                 await connection.OpenAsync();
                 await command.ExecuteNonQueryAsync();
             }
-            catch (SqlException ex)
+            catch (SqlException exception)
             {
-                throw new DatabaseOperationException(ExecuteNonQueryAsyncErrorMessage + ex.Message, ex);
+                throw new DatabaseOperationException(ExecuteNonQueryAsyncErrorMessage + exception.Message, exception);
             }
-            catch (Exception ex)
+            catch (Exception exception)
             {
-                throw new DatabaseOperationException(ExecuteNonQueryAsyncUnexpectedErrorMessage + ex.Message, ex);
+                throw new DatabaseOperationException(ExecuteNonQueryAsyncUnexpectedErrorMessage + exception.Message, exception);
             }
         }
 

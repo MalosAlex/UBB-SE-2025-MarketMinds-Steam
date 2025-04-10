@@ -6,18 +6,18 @@ namespace BusinessLayer.Validators
     public static class CollectionValidator
     {
         // Validation constants
-        private const int MinUserId = 1;
+        private const int MinUserIdentifier = 1;
         private const int MaxNameLength = 100;
         private const int MaxCoverPictureLength = 255;
 
         // Validation error message constants
-        private const string ErrInvalidUserId = "User ID must be greater than 0";
+        private const string ErrInvalidUserIdentifier = "User ID must be greater than 0";
         private const string ErrInvalidName = "Name cannot be empty or longer than 100 characters";
         private const string ErrInvalidCoverPicture = "Cover picture URL cannot exceed 255 characters";
 
-        public static bool IsUserIdValid(int userId)
+        public static bool IsUserIdValid(int userIdentifier)
         {
-            return userId >= MinUserId;
+            return userIdentifier >= MinUserIdentifier;
         }
 
         public static bool IsNameValid(string collectionName)
@@ -34,7 +34,7 @@ namespace BusinessLayer.Validators
         {
             if (!IsUserIdValid(collection.UserId))
             {
-                throw new ValidationException(ErrInvalidUserId);
+                throw new ValidationException(ErrInvalidUserIdentifier);
             }
 
             if (!IsNameValid(collection.Name))
