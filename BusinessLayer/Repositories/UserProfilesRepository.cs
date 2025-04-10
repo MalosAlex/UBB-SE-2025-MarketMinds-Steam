@@ -29,9 +29,9 @@ namespace BusinessLayer.Repositories
                 var dataTable = dataLink.ExecuteReader("GetUserProfileByUserId", parameters);
                 return dataTable.Rows.Count > 0 ? MapDataRowToUserProfile(dataTable.Rows[0]) : null;
             }
-            catch (DatabaseOperationException ex)
+            catch (DatabaseOperationException exception)
             {
-                throw new RepositoryException($"Failed to retrieve user profile with ID {userId} from the database.", ex);
+                throw new RepositoryException($"Failed to retrieve user profile with ID {userId} from the database.", exception);
             }
         }
 
@@ -55,9 +55,9 @@ namespace BusinessLayer.Repositories
                 var dataTable = dataLink.ExecuteReader("UpdateUserProfile", parameters);
                 return dataTable.Rows.Count > 0 ? MapDataRowToUserProfile(dataTable.Rows[0]) : null;
             }
-            catch (DatabaseOperationException ex)
+            catch (DatabaseOperationException exception)
             {
-                throw new RepositoryException($"Failed to update profile for user {profile.UserId}.", ex);
+                throw new RepositoryException($"Failed to update profile for user {profile.UserId}.", exception);
             }
         }
 
@@ -74,9 +74,9 @@ namespace BusinessLayer.Repositories
                 var dataTable = dataLink.ExecuteReader("CreateUserProfile", parameters);
                 return dataTable.Rows.Count > 0 ? MapDataRowToUserProfile(dataTable.Rows[0]) : null;
             }
-            catch (DatabaseOperationException ex)
+            catch (DatabaseOperationException exception)
             {
-                throw new RepositoryException($"Failed to create profile for user {userId}.", ex);
+                throw new RepositoryException($"Failed to create profile for user {userId}.", exception);
             }
         }
 
@@ -94,9 +94,9 @@ namespace BusinessLayer.Repositories
                 };
                 var dataTable = dataLink.ExecuteReader("UpdateUserProfileBio", parameters);
             }
-            catch (DatabaseOperationException ex)
+            catch (DatabaseOperationException exception)
             {
-                throw new RepositoryException($"Failed to update profile for user {user_id}.", ex);
+                throw new RepositoryException($"Failed to update profile for user {user_id}.", exception);
             }
         }
 
@@ -115,9 +115,9 @@ namespace BusinessLayer.Repositories
 
                 var dataTable = dataLink.ExecuteReader("UpdateUserProfilePicture", parameters);
             }
-            catch (DatabaseOperationException ex)
+            catch (DatabaseOperationException exception)
             {
-                throw new RepositoryException($"Failed to update profile for user {user_id}.", ex);
+                throw new RepositoryException($"Failed to update profile for user {user_id}.", exception);
             }
         }
 
